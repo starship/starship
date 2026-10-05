@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, StarshipConfig};
+use crate::config::{ConfigSources, ModuleConfig, StarshipConfig};
 use crate::configs::StarshipRootConfig;
 use crate::module::Module;
 use crate::utils::{CommandOutput, PathExt, create_command, exec_timeout, read_file};
@@ -145,7 +145,8 @@ impl<'a> Context<'a> {
         logical_path: PathBuf,
         env: Env<'a>,
     ) -> Self {
-        let config = StarshipConfig::initialize(get_config_path_os(&env).as_deref());
+        let config_sources = ConfigSources::from_env(&env);
+        let config = StarshipConfig::initialize_from_sources(&config_sources);
 
         // If the vector is zero-length, we should pretend that we didn't get a
         // pipestatus at all (since this is the input `--pipestatus=""`)
@@ -507,7 +508,13 @@ impl<'a> Context<'a> {
     }
 
     pub fn get_config_path_os(&self) -> Option<OsString> {
-        get_config_path_os(&self.env)
+        self.get_config_sources()
+            .primary_edit_path()
+            .map(OsString::from)
+    }
+
+    pub fn get_config_sources(&self) -> ConfigSources {
+        ConfigSources::from_env(&self.env)
     }
 
     /// Checks if it is a SSH session
@@ -536,20 +543,13 @@ pub enum Detected {
     No,
 }
 
-fn home_dir(env: &Env) -> Option<PathBuf> {
+pub(crate) fn home_dir(env: &Env) -> Option<PathBuf> {
     if cfg!(test)
         && let Some(home) = env.get_env("HOME")
     {
         return Some(PathBuf::from(home));
     }
     utils::home_dir()
-}
-
-fn get_config_path_os(env: &Env) -> Option<OsString> {
-    if let Some(config_path) = env.get_env_os("STARSHIP_CONFIG") {
-        return Some(config_path);
-    }
-    Some(home_dir(env)?.join(".config").join("starship.toml").into())
 }
 
 #[derive(Debug)]
