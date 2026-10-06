@@ -1,6 +1,7 @@
-use crate::utils::create_command;
+use crate::utils::{create_command, exec_timeout};
 use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
+use std::time::Duration;
 use std::{env, io};
 
 use which::which;
@@ -184,7 +185,14 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             r"eval `({} init tcsh --print-full-init)`",
             starship.sprint_posix()?
         ),
-        "nu" => print_script(NU_INIT, &StarshipPath::init()?.sprint()?),
+        "nu" => print_script(
+            if nu_streams() {
+                NU_STREAMING_INIT
+            } else {
+                NU_INIT
+            },
+            &StarshipPath::init()?.sprint()?,
+        ),
         "xonsh" => print!(
             r"execx($({} init xonsh --print-full-init))",
             starship.sprint_posix()?
@@ -274,6 +282,25 @@ const ELVISH_INIT: &str = include_str!("starship.elv");
 const TCSH_INIT: &str = include_str!("starship.tcsh");
 
 const NU_INIT: &str = include_str!("starship.nu");
+
+const NU_STREAMING_INIT: &str = include_str!("starship_stream.nu");
+
+/// Whether the `nu` that will run the init script can stream prompts, which
+/// takes `commandline set-prompt` and the job mailbox. A script calling a
+/// command that does not exist fails to parse, so the check cannot be made in
+/// the script itself.
+fn nu_streams() -> bool {
+    const PROBE: &str = r#"["commandline set-prompt" "job flush" "job kill" "job list" "job recv" "job send" "job spawn"] | all {|name| $name in (scope commands | get name) }"#;
+    create_command("nu")
+        .ok()
+        .and_then(|mut nu| {
+            exec_timeout(
+                nu.args(["--no-config-file", "-c", PROBE]),
+                Duration::from_secs(2),
+            )
+        })
+        .is_some_and(|output| output.stdout.trim() == "true")
+}
 
 const XONSH_INIT: &str = include_str!("starship.xsh");
 

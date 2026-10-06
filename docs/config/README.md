@@ -387,7 +387,7 @@ shrinks the longer a module takes, from `bus.fallback` for one that takes no
 time to half of that for one that takes as long as `bus.fallback`. A module
 starship knows nothing about yet is waited for up to `bus.fallback`.
 
-The shells that support it are zsh and fish.
+The shells that support it are zsh, fish, and Nushell 0.115 or later.
 
 ### Options
 
