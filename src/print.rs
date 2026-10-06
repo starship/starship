@@ -1,7 +1,5 @@
 use clap::{ValueEnum, builder::PossibleValue};
-use rayon::prelude::*;
 use regex::Regex;
-use std::collections::BTreeSet;
 use std::fmt::{Debug, Write as FmtWrite};
 use std::io::{self, Write};
 use std::path::PathBuf;
@@ -11,16 +9,13 @@ use terminal_size::terminal_size;
 use unicode_segmentation::UnicodeSegmentation;
 use unicode_width::UnicodeWidthChar;
 
-use crate::configs::PROMPT_ORDER;
 use crate::context::{Context, Properties, Shell, Target};
-use crate::formatter::{StringFormatter, VariableHolder};
-use crate::module::ALL_MODULES;
 use crate::module::Module;
 use crate::modules;
 use crate::painted::Painted;
-use crate::segment::Segment;
+use crate::plan::Plan;
 use crate::shadow;
-use crate::utils::wrap_colorseq_for_shell;
+use crate::workers;
 
 pub struct Grapheme<'a>(pub &'a str);
 
@@ -90,78 +85,23 @@ pub fn prompt_with_claude_code(args: Properties, target: Target) {
     write!(handle, "{}", get_prompt(&context)).unwrap();
 }
 
+/// What starship shows in place of a prompt under a terminal that cannot draw one.
+pub(crate) const DUMB_TERMINAL_PROMPT: &str = "Starship disabled due to TERM=dumb > ";
+
+pub(crate) fn is_dumb_terminal() -> bool {
+    std::env::var_os("TERM").is_some_and(|term| term == "dumb")
+}
+
 pub fn get_prompt(context: &Context) -> String {
-    let config = &context.root_config;
-    let mut buf = String::new();
-
-    match std::env::var_os("TERM") {
-        Some(term) if term == "dumb" => {
-            log::error!("Under a 'dumb' terminal (TERM=dumb).");
-            buf.push_str("Starship disabled due to TERM=dumb > ");
-            return buf;
-        }
-        _ => {}
+    if is_dumb_terminal() {
+        log::error!("Under a 'dumb' terminal (TERM=dumb).");
+        return DUMB_TERMINAL_PROMPT.to_owned();
     }
 
-    // A workaround for a fish bug (see #739,#279). Applying it to all shells
-    // breaks things (see #808,#824,#834). Should only be printed in fish.
-    if Shell::Fish == context.shell && context.target == Target::Main {
-        buf.push_str("\x1b[J"); // An ASCII control code to clear screen
-    }
-
-    let (formatter, modules) = load_formatter_and_modules(context);
-
-    let formatter = formatter.map_variables_to_segments(|module| {
-        // Make $all display all modules not explicitly referenced
-        if module == "all" {
-            Some(Ok(all_modules_uniq(&modules)
-                .par_iter()
-                .flat_map(|module| {
-                    handle_module(module, context, &modules)
-                        .into_iter()
-                        .flat_map(|module| module.segments)
-                        .collect::<Vec<Segment>>()
-                })
-                .collect::<Vec<_>>()))
-        } else if context.is_module_disabled_in_config(module) {
-            None
-        } else {
-            // Get segments from module
-            Some(Ok(handle_module(module, context, &modules)
-                .into_iter()
-                .flat_map(|module| module.segments)
-                .collect::<Vec<Segment>>()))
-        }
-    });
-
-    let segments = formatter
-        .parse(None, Some(context))
-        .expect("Unexpected error returned in root format variables");
-    let painted = Painted::new(&segments, Some(context.width));
-
-    if config.add_newline && context.target != Target::Continuation {
-        // continuation prompts normally do not include newlines, but they can
-        writeln!(buf).unwrap();
-    }
-    // Painting collapses redundant ANSI color sequences, so apply it before modifying the ANSI
-    // color sequences for this specific shell
-    let shell_wrapped_output =
-        wrap_colorseq_for_shell(painted.escaped_for(context.shell), context.shell);
-    write!(buf, "{shell_wrapped_output}").unwrap();
-
-    if context.target == Target::Right {
-        // right prompts generally do not allow newlines
-        buf = buf.replace('\n', "");
-    }
-
-    // escape \n and ! characters for tcsh
-    if context.shell == Shell::Tcsh {
-        buf = buf.replace('!', "\\!");
-        // space is required before newline
-        buf = buf.replace('\n', " \\n");
-    }
-
-    buf
+    let plan = Plan::new(context, [context.target.clone()]);
+    let rendered = workers::render_all(context, &plan.modules);
+    let [prompt] = plan.prompts(&|position| &rendered[position], context);
+    prompt
 }
 
 pub fn module(module_name: &str, args: Properties) {
@@ -315,100 +255,11 @@ pub fn explain(args: Properties) {
 }
 
 fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
-    let mut prompt_order: Vec<Module<'a>> = Vec::new();
-
-    let (_formatter, modules) = load_formatter_and_modules(context);
-
-    for module in &modules {
-        // Manually add all modules if `$all` is encountered
-        if module == "all" {
-            for module in all_modules_uniq(&modules) {
-                let modules = handle_module(&module, context, &modules);
-                prompt_order.extend(modules);
-            }
-        } else {
-            let modules = handle_module(module, context, &modules);
-            prompt_order.extend(modules);
-        }
-    }
-
-    prompt_order
-}
-
-fn handle_module<'a>(
-    module: &str,
-    context: &'a Context,
-    module_list: &BTreeSet<String>,
-) -> Vec<Module<'a>> {
-    let mut modules: Vec<Module> = Vec::new();
-
-    if ALL_MODULES.contains(&module) {
-        // Write out a module if it isn't disabled
-        if !context.is_module_disabled_in_config(module) {
-            modules.extend(modules::handle(module, context));
-        }
-    } else if module.starts_with("custom.") || module.starts_with("env_var.") {
-        // custom.<name> and env_var.<name> are special cases and handle disabled modules themselves
-        modules.extend(modules::handle(module, context));
-    } else if matches!(module, "custom" | "env_var") {
-        // env var is a spacial case and may contain a top-level module definition
-        if module == "env_var" {
-            modules.extend(modules::handle(module, context));
-        }
-
-        // Write out all custom modules, except for those that are explicitly set
-        modules.extend(
-            context
-                .config
-                .get_config(&[module])
-                .and_then(|config| config.as_table().map(toml::map::Map::iter))
-                .into_iter()
-                .flatten()
-                .collect::<Vec<_>>()
-                .par_iter()
-                .filter_map(|(child, config)| {
-                    // Some env var keys may be part of a top-level module definition
-                    if module == "env_var" && !config.is_table() {
-                        None
-                    } else if should_add_implicit_module(module, child, config, module_list) {
-                        Some(modules::handle(&format!("{module}.{child}"), context))
-                    } else {
-                        None
-                    }
-                })
-                .flatten()
-                .collect::<Vec<Module>>(),
-        );
-    } else {
-        log::debug!(
-            "Expected top level format to contain value from {ALL_MODULES:?}. Instead received {module}",
-        );
-    }
-
-    modules
-}
-
-fn should_add_implicit_module(
-    parent_module: &str,
-    child_module: &str,
-    config: &toml::Value,
-    module_list: &BTreeSet<String>,
-) -> bool {
-    let explicit_module_name = format!("{parent_module}.{child_module}");
-    let is_explicitly_specified = module_list.contains(&explicit_module_name);
-
-    if is_explicitly_specified {
-        // The module is already specified explicitly, so we skip it
-        return false;
-    }
-
-    let false_value = toml::Value::Boolean(false);
-
-    !config
-        .get("disabled")
-        .unwrap_or(&false_value)
-        .as_bool()
-        .unwrap_or(false)
+    Plan::new(context, [Target::Main, Target::Right])
+        .modules
+        .iter()
+        .filter_map(|module| modules::handle(module, context))
+        .collect()
 }
 
 pub fn format_duration(duration: &Duration) -> String {
@@ -417,89 +268,6 @@ pub fn format_duration(duration: &Duration) -> String {
         "<1ms".to_string()
     } else {
         format!("{milis:?}ms")
-    }
-}
-
-/// Return the modules from $all that are not already in the list
-fn all_modules_uniq(module_list: &BTreeSet<String>) -> Vec<String> {
-    let mut prompt_order: Vec<String> = Vec::new();
-    for module in PROMPT_ORDER {
-        if !module_list.contains(*module) {
-            prompt_order.push(String::from(*module));
-        }
-    }
-
-    prompt_order
-}
-
-/// Load the correct formatter for the context (ie left prompt or right prompt)
-/// and the list of all modules used in a format string
-fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>, BTreeSet<String>) {
-    let config = &context.root_config;
-
-    if context.target == Target::Continuation {
-        let cf = &config.continuation_prompt;
-        let formatter = StringFormatter::new(cf);
-        return match formatter {
-            Ok(f) => {
-                let modules = f.get_variables().into_iter().collect();
-                (f, modules)
-            }
-            Err(e) => {
-                log::error!("Error parsing continuation prompt: {e}");
-                (StringFormatter::raw(">"), BTreeSet::new())
-            }
-        };
-    }
-
-    let (left_format_str, right_format_str): (&str, &str) = match context.target {
-        Target::Main | Target::Right => (&config.format, &config.right_format),
-        Target::Profile(ref name) => {
-            if let Some(lf) = config
-                .user_profiles
-                .get(name)
-                .or_else(|| config.internal_profiles.get(name))
-            {
-                (lf, "")
-            } else {
-                log::error!("Profile {name:?} not found");
-                return (StringFormatter::raw(">"), BTreeSet::new());
-            }
-        }
-        Target::Continuation => unreachable!("Continuation prompt should have been handled above"),
-    };
-
-    let lf = StringFormatter::new(left_format_str);
-    let rf = StringFormatter::new(right_format_str);
-
-    if let Err(ref e) = lf {
-        let name = if let Target::Profile(ref profile_name) = context.target {
-            format!("profile.{profile_name}")
-        } else {
-            "format".to_string()
-        };
-        log::error!("Error parsing {name:?}: {e}");
-    }
-
-    if let Err(ref e) = rf {
-        log::error!("Error parsing right_format: {e}");
-    }
-
-    let modules = [&lf, &rf]
-        .into_iter()
-        .flatten()
-        .flat_map(VariableHolder::get_variables)
-        .collect();
-
-    let main_formatter = match context.target {
-        Target::Main | Target::Profile(_) => lf,
-        Target::Right => rf,
-        Target::Continuation => unreachable!("Continuation prompt should have been handled above"),
-    };
-
-    match main_formatter {
-        Ok(f) => (f, modules),
-        _ => (StringFormatter::raw(">"), BTreeSet::new()),
     }
 }
 

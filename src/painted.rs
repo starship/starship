@@ -43,6 +43,12 @@ impl<'a> Painted<'a> {
         }
     }
 
+    /// This prompt drawn below an empty line.
+    pub fn below_a_line_break(mut self) -> Self {
+        self.lines.insert(0, Vec::new());
+        self
+    }
+
     /// The text a shell's prompt variable holds for this prompt: what the
     /// terminal draws, with each run escaped so that the shell displays it
     /// literally, except where a run is verbatim.
