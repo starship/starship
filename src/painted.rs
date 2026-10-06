@@ -1,16 +1,20 @@
 //! Segments painted for the terminal: every style resolved, every fill stretched.
 
+use std::borrow::Cow;
 use std::fmt;
 
 use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
+use unicode_segmentation::UnicodeSegmentation;
 
-use crate::segment::Segment;
+use crate::print::{Grapheme, UnicodeWidthGraphemes};
+use crate::segment::{Kind, Segment};
 
-/// Text drawn in a single style.
+/// Text drawn in a single style, borrowed from the segment it was painted
+/// from unless it is a stretched fill.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Run {
-    text: String,
+struct Run<'a> {
     style: AnsiStyle,
+    text: Cow<'a, str>,
 }
 
 /// Segments painted into lines of runs.
@@ -21,19 +25,35 @@ pub struct Run {
 /// one, and a prompt that ends in a line break ends with an empty line for the
 /// cursor to sit on.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Painted {
-    lines: Vec<Vec<Run>>,
+pub struct Painted<'a> {
+    lines: Vec<Vec<Run<'a>>>,
 }
 
-impl Painted {
+impl<'a> Painted<'a> {
     /// Paints `segments`, stretching fills to `width` when one is known.
-    pub fn new(segments: &[Segment], width: Option<usize>) -> Self {
+    pub fn new(segments: &'a [Segment], width: Option<usize>) -> Self {
         Self {
             lines: segments
-                .split(|segment| matches!(segment, Segment::LineTerm))
+                .split(|segment| matches!(segment, Segment::LineBreak))
                 .map(|line| paint_line(line, width))
                 .collect(),
         }
+    }
+
+    /// Every run in the style it is drawn in, with a plain line break between
+    /// lines, ready for `AnsiStrings` to collapse into the fewest escape codes.
+    fn ansi_strings<'s>(
+        &'s self,
+        text: impl Fn(&'s Run<'a>) -> Cow<'s, str>,
+    ) -> Vec<AnsiString<'s>> {
+        let mut strings = Vec::new();
+        for (index, line) in self.lines.iter().enumerate() {
+            if index > 0 {
+                strings.push(AnsiString::from("\n"));
+            }
+            strings.extend(line.iter().map(|run| run.style.paint(text(run))));
+        }
+        strings
     }
 }
 
@@ -43,15 +63,19 @@ impl Painted {
 /// A run inherits from its left neighbor on the same line, except that nothing
 /// inherits across a fill: the fill resolves against the run before it, and
 /// the run after it starts afresh.
-fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run> {
-    let is_fill = |segment: &&Segment| matches!(segment, Segment::Fill(_));
-    let fills = segments.iter().filter(is_fill).count();
+fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
+    let styled = || {
+        segments.iter().filter_map(|segment| match segment {
+            Segment::Styled { kind, style, value } => Some((*kind, *style, value.as_str())),
+            Segment::LineBreak => None,
+        })
+    };
+    let fills = styled().filter(|&(kind, ..)| kind == Kind::Fill).count();
     // Measuring text takes a pass over every grapheme, which only a fill needs.
     let fill_width = width.filter(|_| fills > 0).and_then(|width| {
-        let used: usize = segments
-            .iter()
-            .filter(|segment| !is_fill(segment))
-            .map(Segment::width_graphemes)
+        let used: usize = styled()
+            .filter(|&(kind, ..)| kind != Kind::Fill)
+            .map(|(.., value)| value.width_graphemes())
             .sum();
         width
             .checked_sub(used)
@@ -60,35 +84,47 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run> {
     });
 
     let mut previous: Option<AnsiStyle> = None;
-    segments
-        .iter()
-        .map(|segment| {
-            let painted = match segment {
-                Segment::Fill(fill) => fill.ansi_string(fill_width, previous.take().as_ref()),
-                segment => {
-                    let painted = segment.ansi_string(previous.as_ref());
-                    previous = Some(*painted.style_ref());
-                    painted
+    styled()
+        .map(|(kind, style, value)| {
+            let resolve = |previous: Option<AnsiStyle>| {
+                style.map_or_else(AnsiStyle::default, |style| {
+                    style.to_ansi_style(previous.as_ref())
+                })
+            };
+            let (style, text) = match kind {
+                Kind::Fill => (
+                    resolve(previous.take()),
+                    fill_width.map_or(Cow::Borrowed(value), |width| stretch(value, width)),
+                ),
+                Kind::Text => {
+                    let style = resolve(previous);
+                    previous = Some(style);
+                    (style, Cow::Borrowed(value))
                 }
             };
-            Run {
-                style: *painted.style_ref(),
-                text: painted.as_str().to_owned(),
-            }
+            Run { style, text }
         })
         .collect()
 }
 
+/// `pattern` repeated grapheme by grapheme for as long as it fits in `width`.
+fn stretch(pattern: &str, width: usize) -> Cow<'_, str> {
+    Cow::Owned(
+        pattern
+            .graphemes(true)
+            .cycle()
+            .scan(0, |used, grapheme| {
+                *used += Grapheme(grapheme).width();
+                (*used <= width).then_some(grapheme)
+            })
+            .collect(),
+    )
+}
+
 /// The bytes a terminal draws, with escape sequences collapsed between runs.
-impl fmt::Display for Painted {
+impl fmt::Display for Painted<'_> {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let mut strings: Vec<AnsiString> = Vec::new();
-        for (index, line) in self.lines.iter().enumerate() {
-            if index > 0 {
-                strings.push(AnsiString::from("\n"));
-            }
-            strings.extend(line.iter().map(|run| run.style.paint(run.text.as_str())));
-        }
+        let strings = self.ansi_strings(|run| Cow::Borrowed(&run.text));
         write!(formatter, "{}", AnsiStrings(&strings))
     }
 }
@@ -109,14 +145,12 @@ mod tests {
 
     #[test]
     fn previous_colors_resolve_against_the_run_to_the_left_as_painted() {
-        let painted = Painted::new(
-            &[
-                text("fg:red bg:blue", "a"),
-                text("fg:prev_bg bg:prev_fg", "b"),
-                text("fg:prev_bg", "c"),
-            ],
-            None,
-        );
+        let segments = [
+            text("fg:red bg:blue", "a"),
+            text("fg:prev_bg bg:prev_fg", "b"),
+            text("fg:prev_bg", "c"),
+        ];
+        let painted = Painted::new(&segments, None);
 
         assert_eq!(
             Color::Blue.on(Color::Red),
@@ -132,17 +166,15 @@ mod tests {
 
     #[test]
     fn nothing_inherits_across_a_line_break_or_a_fill() {
-        let painted = Painted::new(
-            &[
-                text("red", "a"),
-                Segment::LineTerm,
-                text("fg:prev_fg", "b"),
-                text("green", "c"),
-                fill("."),
-                text("fg:prev_fg", "d"),
-            ],
-            None,
-        );
+        let segments = [
+            text("red", "a"),
+            Segment::LineBreak,
+            text("fg:prev_fg", "b"),
+            text("green", "c"),
+            fill("."),
+            text("fg:prev_fg", "d"),
+        ];
+        let painted = Painted::new(&segments, None);
 
         let foregrounds: Vec<_> = painted.lines[1]
             .iter()
@@ -153,40 +185,50 @@ mod tests {
 
     #[test]
     fn a_fill_inherits_from_the_run_before_it() {
-        let painted = Painted::new(
-            &[
-                text("fg:red bg:blue", "a"),
-                Segment::fill(parse_style_string("fg:prev_bg", None), "."),
-            ],
-            Some(3),
-        );
+        let segments = [
+            text("fg:red bg:blue", "a"),
+            Segment::fill(parse_style_string("fg:prev_bg", None), "."),
+        ];
+        let painted = Painted::new(&segments, Some(3));
 
         assert_eq!(Color::Blue.normal(), painted.lines[0][1].style);
     }
 
     #[test]
     fn fills_share_the_width_their_line_leaves() {
-        let painted = Painted::new(
-            &[
-                text("", "a"),
-                fill("."),
-                text("", "b"),
-                fill("-"),
-                text("", "c"),
-                Segment::LineTerm,
-                text("", "next"),
-                fill("."),
-            ],
-            Some(12),
-        );
+        let segments = [
+            text("", "a"),
+            fill("."),
+            text("", "b"),
+            fill("-"),
+            text("", "c"),
+            Segment::LineBreak,
+            text("", "next"),
+            fill("."),
+        ];
+        let painted = Painted::new(&segments, Some(12));
 
         assert_eq!("a....b----c\nnext........", painted.to_string());
     }
 
     #[test]
+    fn a_fill_repeats_whole_graphemes_that_fit() {
+        for (pattern, stretched) in [
+            (".", ".........."),
+            (".:", ".:.:.:.:.:"),
+            ("-:-", "-:--:--:--"),
+            ("🟦", "🟦🟦🟦🟦🟦"),
+            ("🟢🔵🟡", "🟢🔵🟡🟢🔵"),
+        ] {
+            assert_eq!(stretched, stretch(pattern, 10), "{pattern}");
+        }
+    }
+
+    #[test]
     fn a_fill_keeps_its_natural_width_without_room_to_stretch() {
+        let segments = [text("", "ab"), fill("-:-")];
         for width in [None, Some(2)] {
-            let painted = Painted::new(&[text("", "ab"), fill("-:-")], width);
+            let painted = Painted::new(&segments, width);
             assert_eq!("ab-:-", painted.to_string(), "for width {width:?}");
         }
     }
@@ -196,7 +238,7 @@ mod tests {
         assert_eq!(1, Painted::new(&[], None).lines.len());
         assert_eq!(
             2,
-            Painted::new(&[text("", "a"), Segment::LineTerm], None)
+            Painted::new(&[text("", "a"), Segment::LineBreak], None)
                 .lines
                 .len()
         );
@@ -204,19 +246,28 @@ mod tests {
 
     #[test]
     fn escape_sequences_collapse_across_runs_and_reset_before_a_line_break() {
-        let painted = Painted::new(
-            &[
-                text("red", "a"),
-                text("red bold", "b"),
-                Segment::LineTerm,
-                text("red", "c"),
-            ],
-            None,
-        );
+        let segments = [
+            text("red", "a"),
+            text("red bold", "b"),
+            Segment::LineBreak,
+            text("red", "c"),
+        ];
 
         assert_eq!(
             "\u{1b}[31ma\u{1b}[1mb\u{1b}[0m\n\u{1b}[31mc\u{1b}[0m",
-            painted.to_string()
+            Painted::new(&segments, None).to_string()
+        );
+    }
+
+    #[test]
+    fn text_is_painted_without_copying_it() {
+        let segments = [text("red", "a"), fill("-")];
+        let painted = Painted::new(&segments, None);
+
+        assert!(
+            painted.lines[0]
+                .iter()
+                .all(|run| matches!(run.text, Cow::Borrowed(_)))
         );
     }
 }
