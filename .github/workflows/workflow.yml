@@ -213,6 +213,10 @@ jobs:
           make --directory "$RUNNER_TEMP/ble.sh"
           echo "STARSHIP_TEST_BLE=$RUNNER_TEMP/ble.sh/out/ble.sh" >> "$GITHUB_ENV"
 
+      - name: Setup | xonsh
+        if: matrix.os != 'windows-latest'
+        run: pipx install 'xonsh[full]==0.24.2'
+
       # Run the ignored tests that expect the above setup
       - name: Build | Test
         run: "cargo llvm-cov
