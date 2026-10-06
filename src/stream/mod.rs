@@ -1,14 +1,16 @@
 //! Prompts streamed to a shell: drawn as soon as what renders quickly has,
-//! and refined as the rest does.
+//! refined as the rest does, and kept current while they are shown.
 
 mod bus;
 mod frame;
 mod timings;
 
 use std::io;
-use std::time::Instant;
+use std::mem;
+use std::time::{Duration, Instant, SystemTime};
 
 use crate::context::{Context, Properties, Target};
+use crate::modules;
 use crate::plan::Plan;
 use crate::print::{self, DUMB_TERMINAL_PROMPT};
 use crate::segment::Segment;
@@ -51,7 +53,13 @@ fn run(context: &Context, timings: &str, output: &mut impl Sink) -> io::Result<(
         .filter(|&&estimate| Estimate::waits(estimate))
         .count();
     workers::with_workers(context, &plan.modules, Some(waiting), |mut workers| {
-        Session::new(context, &plan, estimates, Instant::now()).run(&mut workers, output)
+        let clock = Clock {
+            start: Instant::now(),
+            wall: SystemTime::now()
+                .duration_since(SystemTime::UNIX_EPOCH)
+                .unwrap_or_default(),
+        };
+        Session::new(context, &plan, estimates, clock).run(&mut workers, output)
     })
 }
 
@@ -76,12 +84,31 @@ impl Renderer for &Workers<'_> {
     }
 }
 
+/// The time a stream keeps.
+struct Clock {
+    /// When the stream started.
+    start: Instant,
+    /// The wall-clock time then, since the Unix epoch.
+    wall: Duration,
+}
+
+impl Clock {
+    /// The first instant after `now` at which wall-clock time is a multiple of
+    /// `period`, if there is one this side of the end of time. Modules that
+    /// refresh at such instants refresh together, so they are drawn together,
+    /// and a clock turns over as the second does.
+    fn next_multiple(&self, now: Instant, period: Duration) -> Option<Instant> {
+        let wall = self.wall + (now - self.start);
+        let into = u64::try_from(wall.as_nanos().checked_rem(period.as_nanos())?).ok()?;
+        now.checked_add(period - Duration::from_nanos(into))
+    }
+}
+
 /// A stream under way: what each module shows, and what has been drawn.
 struct Session<'a> {
     context: &'a Context<'a>,
     plan: &'a Plan<'a, 2>,
-    /// When the stream started.
-    start: Instant,
+    clock: Clock,
     /// Whether the bus expects modules to do what they did for the previous
     /// prompt.
     adaptive: bool,
@@ -90,6 +117,9 @@ struct Session<'a> {
     bus: Bus,
     /// The main and right prompts as last drawn.
     drawn: Option<[String; 2]>,
+    /// Whether a module rendered again without changing anything, which the
+    /// stream answers with a heartbeat.
+    unchanged: bool,
     /// Whether the stream has reported that every module has rendered.
     complete: bool,
 }
@@ -98,6 +128,9 @@ struct Session<'a> {
 struct Slot {
     /// What the module last rendered.
     segments: Vec<Segment>,
+    /// How often the module renders again while the prompt is shown, if it
+    /// does.
+    period: Option<Duration>,
     /// What the module did for the previous prompt, and once it has rendered,
     /// for this one as well.
     estimate: Option<Estimate>,
@@ -106,8 +139,28 @@ struct Slot {
 
 #[derive(Clone, Copy)]
 enum State {
-    Rendering,
-    Rendered,
+    /// Rendering, as it has been since `since`.
+    Rendering { since: Instant, render: Render },
+    /// Rendered, and due to render again at `due`, if ever.
+    Rendered { due: Option<Instant> },
+}
+
+/// Which of a module's renders is under way.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Render {
+    /// Its first, which the next prompt expects it to repeat.
+    First,
+    /// A later one, as what it shows goes stale.
+    Again,
+}
+
+impl Slot {
+    fn due(&self) -> Option<Instant> {
+        match self.state {
+            State::Rendered { due } => due,
+            State::Rendering { .. } => None,
+        }
+    }
 }
 
 impl<'a> Session<'a> {
@@ -115,25 +168,32 @@ impl<'a> Session<'a> {
         context: &'a Context<'a>,
         plan: &'a Plan<'a, 2>,
         estimates: Vec<Option<Estimate>>,
-        start: Instant,
+        clock: Clock,
     ) -> Self {
         let configuration = &context.root_config.asynchronous;
-        let slots = estimates
-            .into_iter()
-            .map(|estimate| Slot {
+        let slots = plan
+            .modules
+            .iter()
+            .zip(estimates)
+            .map(|(module, estimate)| Slot {
                 segments: Vec::new(),
+                period: modules::period(module, context).filter(|_| configuration.refresh),
                 estimate,
-                state: State::Rendering,
+                state: State::Rendering {
+                    since: clock.start,
+                    render: Render::First,
+                },
             })
             .collect();
         Self {
             context,
             plan,
-            bus: Bus::new(start, configuration.bus.fallback()),
+            bus: Bus::new(clock.start, configuration.bus.fallback()),
             adaptive: configuration.bus.adaptive,
-            start,
+            clock,
             slots,
             drawn: None,
+            unchanged: false,
             complete: false,
         }
     }
@@ -147,10 +207,10 @@ impl<'a> Session<'a> {
         for position in order {
             renderer.render(position);
         }
-        let mut now = self.start;
+        let mut now = self.clock.start;
         loop {
-            let deadline = self.advance(now, output)?;
-            if self.complete {
+            let deadline = self.advance(now, renderer, output)?;
+            if self.finished() {
                 return Ok(());
             }
             let (time, landed) = renderer.wait(deadline);
@@ -162,20 +222,41 @@ impl<'a> Session<'a> {
     }
 
     /// Does what is due by `now`: draws what is aboard the bus if it leaves,
-    /// and reports once every module has rendered and been drawn. Returns
-    /// when the bus leaves, if no module lands first.
-    fn advance(&mut self, now: Instant, output: &mut impl Sink) -> io::Result<Option<Instant>> {
+    /// reports once every module has rendered and been drawn, and starts
+    /// rendering again each module due to. Returns when something is due
+    /// next, if no module lands first.
+    fn advance(
+        &mut self,
+        now: Instant,
+        renderer: &mut impl Renderer,
+        output: &mut impl Sink,
+    ) -> io::Result<Option<Instant>> {
+        let unchanged = mem::take(&mut self.unchanged);
         if self
             .departure(now)
             .is_some_and(|departure| departure <= now)
         {
             self.draw(output)?;
+        } else if unchanged {
+            // Writing is how a stream kept running by modules that render
+            // again notices a shell that has gone.
+            output.send(Frame::Heartbeat)?;
         }
         if !self.complete && self.bus.is_empty() && self.rendering().next().is_none() {
             output.send(Frame::Complete(&self.report()))?;
             self.complete = true;
         }
-        Ok(self.departure(now))
+        for (position, slot) in self.slots.iter_mut().enumerate() {
+            if slot.due().is_some_and(|due| due <= now) {
+                slot.state = State::Rendering {
+                    since: now,
+                    render: Render::Again,
+                };
+                renderer.render(position);
+            }
+        }
+        let refreshes = self.slots.iter().filter_map(Slot::due);
+        Ok(self.departure(now).into_iter().chain(refreshes).min())
     }
 
     fn draw(&mut self, output: &mut impl Sink) -> io::Result<()> {
@@ -193,26 +274,34 @@ impl<'a> Session<'a> {
     }
 
     /// Takes in a module that landed at `now`: what it shows boards the bus
-    /// if it changed, and how it went is measured.
+    /// if it changed, and how its first render went is measured.
     fn land(&mut self, rendered: Rendered, now: Instant) {
         let slot = &mut self.slots[rendered.position];
         // Only a module that is rendering lands.
-        let State::Rendering = slot.state else {
+        let State::Rendering { since, render } = slot.state else {
             return;
         };
-        let took = now - self.start;
+        let took = now - since;
         let changed = slot.segments != rendered.segments;
-        let measured = if changed {
-            Estimate::Changed(took)
-        } else {
-            Estimate::Unchanged
-        };
-        slot.estimate = Some(Estimate::after(slot.estimate, measured));
+        if render == Render::First {
+            let measured = if changed {
+                Estimate::Changed(took)
+            } else {
+                Estimate::Unchanged
+            };
+            slot.estimate = Some(Estimate::after(slot.estimate, measured));
+        }
         if changed {
             slot.segments = rendered.segments;
             self.bus.board(now, took);
+        } else {
+            self.unchanged |= self.complete;
         }
-        slot.state = State::Rendered;
+        slot.state = State::Rendered {
+            due: slot
+                .period
+                .and_then(|period| self.clock.next_multiple(now, period)),
+        };
     }
 
     /// When the bus leaves, given every module still rendering.
@@ -223,11 +312,11 @@ impl<'a> Session<'a> {
     /// Every module still rendering, and what the bus expects of it.
     fn rendering(&self) -> impl Iterator<Item = Rendering> + '_ {
         self.slots.iter().filter_map(|slot| match slot.state {
-            State::Rendering => Some(Rendering {
-                since: self.start,
+            State::Rendering { since, .. } => Some(Rendering {
+                since,
                 estimate: slot.estimate.filter(|_| self.adaptive),
             }),
-            State::Rendered => None,
+            State::Rendered { .. } => None,
         })
     }
 
@@ -241,6 +330,17 @@ impl<'a> Session<'a> {
                 .filter_map(|(module, slot)| Some((module.as_str(), slot.estimate?))),
         )
     }
+
+    /// Whether the stream has nothing left to do: everything has been drawn
+    /// and reported, and no module renders again.
+    fn finished(&self) -> bool {
+        self.complete
+            && self.bus.is_empty()
+            && self
+                .slots
+                .iter()
+                .all(|slot| matches!(slot.state, State::Rendered { due: None }))
+    }
 }
 
 #[cfg(test)]
@@ -252,8 +352,8 @@ mod tests {
     use proptest::prelude::*;
     use std::cell::Cell;
     use std::collections::{HashMap, VecDeque};
+    use std::io::Write;
     use std::rc::Rc;
-    use std::time::Duration;
 
     fn context(configuration: toml::Table) -> Context<'static> {
         let mut context = default_context().set_config(configuration);
@@ -385,6 +485,9 @@ mod tests {
 
     /// The circumstances of a simulated stream.
     struct Setting {
+        /// The wall-clock time the stream starts at, in milliseconds since
+        /// the epoch.
+        wall: u64,
         /// When the shell stops reading, in milliseconds.
         horizon: u64,
         workers: usize,
@@ -393,6 +496,7 @@ mod tests {
     impl Default for Setting {
         fn default() -> Self {
             Self {
+                wall: 0,
                 horizon: 60_000,
                 workers: usize::MAX,
             }
@@ -435,8 +539,12 @@ mod tests {
             horizon: milliseconds(setting.horizon),
             frames: Vec::new(),
         };
+        let clock = Clock {
+            start,
+            wall: milliseconds(setting.wall),
+        };
         recording.send(Frame::Process).unwrap();
-        let session = Session::new(context, &plan, timings::read(timings, &plan.modules), start);
+        let session = Session::new(context, &plan, timings::read(timings, &plan.modules), clock);
         match session.run(&mut simulation, &mut recording) {
             Ok(()) => {}
             Err(error) => assert_eq!(io::ErrorKind::BrokenPipe, error.kind()),
@@ -449,6 +557,14 @@ mod tests {
 
     fn simulate(context: &Context, timings: &str, script: Script) -> Vec<(u64, [String; 3])> {
         simulate_in(Setting::default(), context, timings, script).frames
+    }
+
+    /// The keyword of each frame, with the time it was written at.
+    fn keywords(frames: &[(u64, [String; 3])]) -> Vec<(u64, &str)> {
+        frames
+            .iter()
+            .map(|(at, [keyword, ..])| (*at, keyword.as_str()))
+            .collect()
     }
 
     /// Each main prompt drawn, with the time it was drawn at.
@@ -675,6 +791,184 @@ mod tests {
             .map(|(at, [_, main, right])| (*at, main.as_str(), right.as_str()))
             .collect();
         assert_eq!(vec![(0, ">", ""), (500, ">", "right")], drawn);
+    }
+
+    #[test]
+    fn refreshes_fall_due_on_the_wall_clock_and_are_drawn_together() {
+        let frames = simulate_in(
+            Setting {
+                wall: 300,
+                horizon: 5_000,
+                ..Setting::default()
+            },
+            &context(toml::toml! {
+                add_newline = false
+                format = "$time $memory_usage"
+                time.disabled = false
+                memory_usage.disabled = false
+            }),
+            "time=1,memory_usage=2",
+            &[
+                (
+                    "time",
+                    &[
+                        (1, "t0"),
+                        (1, "t1"),
+                        (1, "t2"),
+                        (1, "t3"),
+                        (1, "t4"),
+                        (1, "t5"),
+                    ],
+                ),
+                ("memory_usage", &[(2, "m0"), (2, "m1")]),
+            ],
+        )
+        .frames;
+
+        assert_eq!(
+            vec![
+                (2, "t0 m0"),
+                (701, "t1 m0"),
+                (1701, "t2 m0"),
+                (2701, "t3 m0"),
+                (3701, "t4 m0"),
+                (4702, "t5 m1")
+            ],
+            prompts(&frames),
+            "the time turns over each second, and memory every five, both on \
+             the wall clock, which reads whole seconds 700 milliseconds after one"
+        );
+    }
+
+    #[test]
+    fn a_refresh_that_changes_nothing_still_shows_the_stream_is_alive() {
+        let frames = simulate(
+            &context(toml::toml! {
+                add_newline = false
+                format = "$time"
+                time.disabled = false
+            }),
+            "time=0",
+            &[("time", &[(0, "12:00")])],
+        );
+
+        assert_eq!(
+            vec![
+                (0, "PROCESS"),
+                (0, "PROMPT"),
+                (0, "COMPLETE"),
+                (1000, "HEARTBEAT"),
+                (2000, "HEARTBEAT")
+            ],
+            keywords(&frames)[..5]
+        );
+    }
+
+    #[test]
+    fn only_the_first_render_of_a_module_is_reported() {
+        let frames = simulate_in(
+            Setting {
+                horizon: 5_000,
+                ..Setting::default()
+            },
+            &context(toml::toml! {
+                add_newline = false
+                format = "$time${custom.slow}"
+                time.disabled = false
+            }),
+            "time=1,custom.slow=2500",
+            &[("time", &[(1, "t0")]), ("custom.slow", &[(2500, "s")])],
+        )
+        .frames;
+
+        let report = frames
+            .iter()
+            .find(|(_, [keyword, ..])| keyword == "COMPLETE")
+            .map(|(_, [_, report, _])| report.as_str());
+        assert_eq!(
+            Some("custom.slow=2500,time=1"),
+            report,
+            "the time, rendering again unchanged while the slow module rendered, \
+             is reported as it first rendered"
+        );
+    }
+
+    #[test]
+    fn a_stream_finishes_once_nothing_renders_again() {
+        for (configuration, finishes) in [
+            (toml::toml! { format = "$time" }, true),
+            (
+                toml::toml! { format = "$time"
+                time.disabled = false },
+                false,
+            ),
+            (
+                toml::toml! { format = "$time"
+                time.disabled = false
+                time.time_format = "today" },
+                true,
+            ),
+            (
+                toml::toml! { format = "$time"
+                time.disabled = false
+                time.refresh = false },
+                true,
+            ),
+            (
+                toml::toml! { format = "$time"
+                time.disabled = false
+                async.refresh = false },
+                true,
+            ),
+        ] {
+            let frames = simulate_in(
+                Setting {
+                    horizon: 5_000,
+                    ..Setting::default()
+                },
+                &context(configuration.clone()),
+                "",
+                &[("time", &[(0, "")])],
+            )
+            .frames;
+            let last = frames
+                .last()
+                .map(|(at, [keyword, ..])| (*at, keyword.as_str()));
+
+            assert_eq!(
+                finishes,
+                last == Some((0, "COMPLETE")),
+                "{configuration}: {last:?}"
+            );
+        }
+    }
+
+    #[test]
+    fn a_custom_module_runs_again_as_often_as_it_is_configured_to() {
+        let frames = simulate_in(
+            Setting {
+                horizon: 2_500,
+                ..Setting::default()
+            },
+            &context(toml::toml! {
+                add_newline = false
+                format = "${custom.song}"
+                [custom.song]
+                command = "now-playing"
+                when = true
+                refresh = 1000
+            }),
+            "custom.song=3",
+            &[("custom.song", &[(3, "first"), (3, "first"), (3, "second")])],
+        )
+        .frames;
+
+        assert_eq!(
+            vec![(3, "first"), (2003, "second")],
+            prompts(&frames),
+            "run again each second, it is redrawn once its output changes"
+        );
+        assert!(keywords(&frames).contains(&(1003, "HEARTBEAT")));
     }
 
     const LETTERS: [&str; 6] = ["a", "b", "c", "d", "e", "f"];
@@ -911,6 +1205,50 @@ mod tests {
             jobs,
             "without jobs, jobs shows nothing"
         );
+    }
+
+    /// Output that fails once its deadline passes, as a pipe does once the
+    /// shell has stopped reading it.
+    struct ClosesAt {
+        written: Vec<u8>,
+        deadline: Instant,
+    }
+
+    impl Write for ClosesAt {
+        fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+            if Instant::now() >= self.deadline {
+                return Err(io::ErrorKind::BrokenPipe.into());
+            }
+            self.written.write(bytes)
+        }
+
+        fn flush(&mut self) -> io::Result<()> {
+            Ok(())
+        }
+    }
+
+    #[test]
+    fn a_stream_keeps_its_prompt_current_until_the_shell_stops_reading() {
+        let context = context(toml::toml! {
+            add_newline = false
+            format = "$time"
+            time.disabled = false
+            time.time_format = "%T%.f"
+        });
+        let mut output = ClosesAt {
+            written: Vec::new(),
+            deadline: Instant::now() + milliseconds(1100),
+        };
+
+        let error = run(&context, "", &mut output).unwrap_err();
+        assert_eq!(io::ErrorKind::BrokenPipe, error.kind());
+        let prompts: Vec<String> = read_frames(&output.written)
+            .into_iter()
+            .filter(|[keyword, ..]| keyword == "PROMPT")
+            .map(|[_, prompt, _]| prompt)
+            .collect();
+        assert!(prompts.len() >= 2, "the time turned over: {prompts:?}");
+        assert!(prompts.windows(2).all(|pair| pair[0] != pair[1]));
     }
 
     /// Whatever a stream draws first, the prompts it leaves a shell showing

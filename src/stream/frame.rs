@@ -20,6 +20,9 @@ pub enum Frame<'a> {
     /// Every module has rendered, and the prompt drawn shows it: how long each
     /// took, which a shell hands back unread to stream the next prompt.
     Complete(&'a str),
+    /// Nothing has changed, but the stream is still keeping the prompt
+    /// current. Writing it is how a stream notices its shell has gone.
+    Heartbeat,
 }
 
 impl Frame<'_> {
@@ -32,6 +35,7 @@ impl Frame<'_> {
             }
             Self::Prompt { main, right } => ["PROMPT", main, right],
             Self::Complete(timings) => ["COMPLETE", timings, ""],
+            Self::Heartbeat => ["HEARTBEAT", "", ""],
         };
         for field in fields {
             // A NUL would end its field early, and nothing a prompt shows needs one.
@@ -101,12 +105,12 @@ mod tests {
         #[test]
         fn prompts_travel_verbatim_between_terminators(main in any::<String>(), right in any::<String>()) {
             let mut bytes = written(Frame::Prompt { main: &main, right: &right });
-            bytes.extend(written(Frame::Complete("")));
+            bytes.extend(written(Frame::Heartbeat));
 
             prop_assert_eq!(
                 vec![
                     ["PROMPT".to_owned(), main.replace('\0', ""), right.replace('\0', "")],
-                    ["COMPLETE".to_owned(), String::new(), String::new()],
+                    ["HEARTBEAT".to_owned(), String::new(), String::new()],
                 ],
                 read_frames(&bytes)
             );

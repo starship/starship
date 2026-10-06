@@ -4,10 +4,41 @@ use jiff::{
     tz::{Offset, TimeZone},
 };
 
+use std::time::Duration;
+
 use super::{Context, Module, ModuleConfig};
 use crate::config::Either;
 use crate::configs::time::{TimeConfig, TimezoneWrapper};
 use crate::formatter::StringFormatter;
+
+/// How often the time shown turns over, if it is shown: every second if its
+/// format shows seconds, and otherwise every minute, which is as often as any
+/// hour or date it shows can turn over.
+pub fn period(context: &Context) -> Option<Duration> {
+    let configuration = TimeConfig::try_load(context.config.get_module_config("time"));
+    if configuration.disabled || !configuration.refresh {
+        return None;
+    }
+    let format = configuration
+        .time_format
+        .unwrap_or(if configuration.use_12hr { "%r" } else { "%T" });
+    let mut characters = format.chars();
+    let mut period = None;
+    while characters.by_ref().any(|character| character == '%') {
+        // Flags, padding and precision come before what is shown.
+        let shown = characters
+            .by_ref()
+            .find(|character| !matches!(character, '-' | '_' | '^' | '#' | '.' | ':' | '0'..='9'));
+        let turns_over = match shown {
+            None => break,
+            Some('%' | 'n' | 't') => continue,
+            Some('S' | 'T' | 's' | 'f' | 'N' | 'c' | 'r' | 'X') => Duration::from_secs(1),
+            Some(_) => Duration::from_secs(60),
+        };
+        period = Some(period.map_or(turns_over, |period: Duration| period.min(turns_over)));
+    }
+    period
+}
 
 /// Outputs the current time
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -166,6 +197,37 @@ mod tests {
 
     const FMT_12: &str = "%r";
     const FMT_24: &str = "%T";
+
+    #[test]
+    fn the_time_shown_turns_over_as_often_as_its_format_shows() {
+        let second = Some(Duration::from_secs(1));
+        let minute = Some(Duration::from_secs(60));
+        for (time_format, period) in [
+            (None, second),
+            (Some("%-I:%M %p"), minute),
+            (Some("%Y-%m-%d"), minute),
+            (Some("%H:%M:%S%.3f"), second),
+            (Some("%:z %R"), minute),
+            (Some("100%% done"), None),
+            (Some("at noon"), None),
+            (Some("trailing %"), None),
+        ] {
+            let mut time = toml::Table::new();
+            time.insert("disabled".to_owned(), false.into());
+            if let Some(time_format) = time_format {
+                time.insert("time_format".to_owned(), time_format.into());
+            }
+            let context = crate::test::default_context()
+                .set_config(toml::Table::from_iter([("time".to_owned(), time.into())]));
+
+            assert_eq!(period, super::period(&context), "{time_format:?}");
+        }
+        assert_eq!(
+            None,
+            super::period(&crate::test::default_context()),
+            "disabled"
+        );
+    }
 
     #[test]
     fn test_midnight_12hr() {
