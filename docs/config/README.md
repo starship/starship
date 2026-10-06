@@ -387,7 +387,11 @@ shrinks the longer a module takes, from `bus.fallback` for one that takes no
 time to half of that for one that takes as long as `bus.fallback`. A module
 starship knows nothing about yet is waited for up to `bus.fallback`.
 
-The shells that support it are zsh, fish, Nushell 0.115 or later, bash 4.2 or later with [ble.sh](https://github.com/akinomyoga/ble.sh), and xonsh with its prompt_toolkit shell outside Windows.
+The shells that support it are zsh, fish, Nushell 0.115 or later, bash 4.2 or
+later with [ble.sh](https://github.com/akinomyoga/ble.sh), xonsh with its
+prompt_toolkit shell outside Windows, and PowerShell with PSReadLine.
+PowerShell redraws the prompt once, when every module has rendered, if nothing
+has been typed by then.
 
 ### Options
 

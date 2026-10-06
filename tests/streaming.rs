@@ -46,6 +46,7 @@ enum Shell {
     Bash,
     BashWithBle,
     Xonsh,
+    Pwsh,
 }
 
 impl Shell {
@@ -56,6 +57,7 @@ impl Shell {
             Self::Nushell => "nu",
             Self::Bash | Self::BashWithBle => "bash",
             Self::Xonsh => "xonsh",
+            Self::Pwsh => "pwsh",
         }
     }
 
@@ -74,11 +76,13 @@ impl Shell {
                 "printf 'RESULT:%s\\n' typed"
             }
             Self::Nushell | Self::Xonsh => "print ('RESULT:' + 'typed')",
+            Self::Pwsh => "Write-Output ('RESULT:' + 'typed')",
         }
     }
 
     /// A command line that waits until the prompt it was typed at is long
-    /// finished, then prints `RESULT:typed`.
+    /// finished, then prints `RESULT:typed`. PowerShell sleeps in steps,
+    /// since it runs events between them.
     const fn sleep_then_input(self) -> &'static str {
         match self {
             Self::Zsh | Self::Fish | Self::Bash | Self::BashWithBle => {
@@ -86,6 +90,9 @@ impl Shell {
             }
             Self::Nushell => "sleep 3sec; print ('RESULT:' + 'typed')",
             Self::Xonsh => "import time; time.sleep(3); print('RESULT:' + 'typed')",
+            Self::Pwsh => {
+                "1..15 | ForEach-Object { Start-Sleep -Milliseconds 200 }; Write-Output ('RESULT:' + 'typed')"
+            }
         }
     }
 
@@ -144,6 +151,16 @@ impl Shell {
                 ],
                 None,
             ),
+            Self::Pwsh => (
+                vec![
+                    "-NoLogo".into(),
+                    "-NoProfile".into(),
+                    "-NoExit".into(),
+                    "-Command".into(),
+                    "Invoke-Expression (Get-Content -Raw -LiteralPath $env:STARSHIP_INIT)".into(),
+                ],
+                None,
+            ),
         }
     }
 
@@ -155,6 +172,7 @@ impl Shell {
             Self::Nushell => &["init", "nu"],
             Self::Bash | Self::BashWithBle => &["init", "bash", "--print-full-init"],
             Self::Xonsh => &["init", "xonsh", "--print-full-init"],
+            Self::Pwsh => &["init", "powershell", "--print-full-init"],
         }
     }
 
@@ -474,6 +492,20 @@ fn streams(shell: Shell) {
     session.close();
 }
 
+/// A shell that redraws a prompt only once, while nothing has been typed,
+/// draws it before its slow module renders, and again once every module has.
+fn redraws_once_finished(shell: Shell) {
+    let mut session = Session::start(shell, FAST_AND_SLOW);
+    let first = session.wait_for(">");
+    assert!(!first.contains("SLOW"), "the first paint waited:\n{first}");
+    session.wait_for("FAST SLOW");
+
+    session.send(shell.input());
+    session.enter();
+    session.wait_for("RESULT:typed");
+    session.close();
+}
+
 /// A prompt is not refined once its line has been accepted: the line under
 /// it, and what the command printed, would be drawn over.
 fn an_accepted_line_is_left_alone(shell: Shell) {
@@ -766,4 +798,28 @@ fn xonsh_keeps_a_leading_blank_line() {
 #[ignore = "requires xonsh"]
 fn xonsh_keeps_the_right_prompt_current() {
     the_right_prompt_is_kept_current(Shell::Xonsh);
+}
+
+#[test]
+#[ignore = "requires pwsh"]
+fn pwsh_redraws_once_finished() {
+    redraws_once_finished(Shell::Pwsh);
+}
+
+#[test]
+#[ignore = "requires pwsh"]
+fn pwsh_leaves_an_accepted_line_alone() {
+    an_accepted_line_is_left_alone(Shell::Pwsh);
+}
+
+#[test]
+#[ignore = "requires pwsh"]
+fn pwsh_shows_text_as_it_is() {
+    text_is_shown_as_it_is(Shell::Pwsh);
+}
+
+#[test]
+#[ignore = "requires pwsh"]
+fn pwsh_keeps_a_leading_blank_line() {
+    a_leading_blank_line_survives(Shell::Pwsh);
 }
