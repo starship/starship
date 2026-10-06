@@ -35,6 +35,7 @@
       "$ref": "#/$defs/AsynchronousConfig",
       "default": {
         "enabled": true,
+        "refresh": true,
         "bus": {
           "adaptive": true,
           "fallback": 50
@@ -114,7 +115,8 @@
           }
         ],
         "disabled": false,
-        "format": "[$symbol$percentage]($style) "
+        "format": "[$symbol$percentage]($style) ",
+        "refresh": true
       }
     },
     "buf": {
@@ -1105,7 +1107,8 @@
         "ssh_only": true,
         "format": "[$localipv4]($style) ",
         "style": "yellow bold",
-        "disabled": true
+        "disabled": true,
+        "refresh": true
       }
     },
     "lua": {
@@ -1151,7 +1154,8 @@
         "format": "via $symbol[$ram( | $swap)]($style) ",
         "style": "white bold dimmed",
         "symbol": "🐏 ",
-        "disabled": true
+        "disabled": true,
+        "refresh": true
       }
     },
     "meson": {
@@ -1870,7 +1874,8 @@
         "use_12hr": false,
         "disabled": true,
         "utc_time_offset": "local",
-        "time_range": "-"
+        "time_range": "-",
+        "refresh": true
       }
     },
     "typst": {
@@ -2009,6 +2014,11 @@
       "properties": {
         "enabled": {
           "description": "Draw a prompt before every module has rendered, then refine it as they\ndo. When disabled, the prompt is drawn once every module has rendered.",
+          "type": "boolean",
+          "default": true
+        },
+        "refresh": {
+          "description": "While the prompt is shown, render again the modules whose values go\nstale on their own, and redraw the prompt when they change. Each such\nmodule can be kept from it with its own `refresh` option.",
           "type": "boolean",
           "default": true
         },
@@ -2168,6 +2178,11 @@
         "format": {
           "type": "string",
           "default": "[$symbol$percentage]($style) "
+        },
+        "refresh": {
+          "description": "Redraw the charge every thirty seconds while the prompt is shown.",
+          "type": "boolean",
+          "default": true
         }
       },
       "additionalProperties": false
@@ -5063,6 +5078,11 @@
         "disabled": {
           "type": "boolean",
           "default": true
+        },
+        "refresh": {
+          "description": "Redraw the address every thirty seconds while the prompt is shown.",
+          "type": "boolean",
+          "default": true
         }
       },
       "additionalProperties": false
@@ -5198,6 +5218,11 @@
           "default": "🐏 "
         },
         "disabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "refresh": {
+          "description": "Redraw the usage every five seconds while the prompt is shown.",
           "type": "boolean",
           "default": true
         }
@@ -7116,6 +7141,11 @@
         "time_range": {
           "type": "string",
           "default": "-"
+        },
+        "refresh": {
+          "description": "Redraw the time while the prompt is shown, as often as what it shows\nturns over.",
+          "type": "boolean",
+          "default": true
         }
       },
       "additionalProperties": false
@@ -7562,6 +7592,13 @@
         "unsafe_no_escape": {
           "type": "boolean",
           "default": false
+        },
+        "refresh": {
+          "description": "How often, in milliseconds, to run the command again while the prompt\nis shown, redrawing it if the output changes. `0` runs it once.",
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0,
+          "default": 0
         }
       },
       "additionalProperties": false

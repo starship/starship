@@ -12,6 +12,8 @@ pub struct LocalipConfig<'a> {
     pub format: &'a str,
     pub style: &'a str,
     pub disabled: bool,
+    /// Redraw the address every thirty seconds while the prompt is shown.
+    pub refresh: bool,
 }
 
 impl Default for LocalipConfig<'_> {
@@ -21,6 +23,7 @@ impl Default for LocalipConfig<'_> {
             format: "[$localipv4]($style) ",
             style: "yellow bold",
             disabled: true,
+            refresh: true,
         }
     }
 }

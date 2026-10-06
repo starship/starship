@@ -528,16 +528,17 @@ The module is only visible when the device's battery is below 10%.
 
 ### Options
 
-| Option               | Default                           | Description                                         |
-| -------------------- | --------------------------------- | --------------------------------------------------- |
-| `full_symbol`        | `'󰁹 '`                            | The symbol shown when the battery is full.          |
-| `charging_symbol`    | `'󰂄 '`                            | The symbol shown when the battery is charging.      |
-| `discharging_symbol` | `'󰂃 '`                            | The symbol shown when the battery is discharging.   |
-| `unknown_symbol`     | `'󰂑 '`                            | The symbol shown when the battery state is unknown. |
-| `empty_symbol`       | `'󰂎 '`                            | The symbol shown when the battery state is empty.   |
-| `format`             | `'[$symbol$percentage]($style) '` | The format for the module.                          |
-| `display`            | [link](#battery-display)          | Display threshold and style for the module.         |
-| `disabled`           | `false`                           | Disables the `battery` module.                      |
+| Option               | Default                           | Description                                                       |
+| -------------------- | --------------------------------- | ----------------------------------------------------------------- |
+| `full_symbol`        | `'󰁹 '`                            | The symbol shown when the battery is full.                        |
+| `charging_symbol`    | `'󰂄 '`                            | The symbol shown when the battery is charging.                    |
+| `discharging_symbol` | `'󰂃 '`                            | The symbol shown when the battery is discharging.                 |
+| `unknown_symbol`     | `'󰂑 '`                            | The symbol shown when the battery state is unknown.               |
+| `empty_symbol`       | `'󰂎 '`                            | The symbol shown when the battery state is empty.                 |
+| `format`             | `'[$symbol$percentage]($style) '` | The format for the module.                                        |
+| `display`            | [link](#battery-display)          | Display threshold and style for the module.                       |
+| `disabled`           | `false`                           | Disables the `battery` module.                                    |
+| `refresh`            | `true`                            | Redraw the charge every thirty seconds while the prompt is shown. |
 
 ### Example
 
@@ -3106,12 +3107,13 @@ The `localip` module shows the IPv4 address of the primary network interface.
 
 ### Options
 
-| Option     | Default                   | Description                                            |
-| ---------- | ------------------------- | ------------------------------------------------------ |
-| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
-| `format`   | `'[$localipv4]($style) '` | The format for the module.                             |
-| `style`    | `'bold yellow'`           | The style for the module.                              |
-| `disabled` | `true`                    | Disables the `localip` module.                         |
+| Option     | Default                   | Description                                                        |
+| ---------- | ------------------------- | ------------------------------------------------------------------ |
+| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session.             |
+| `format`   | `'[$localipv4]($style) '` | The format for the module.                                         |
+| `style`    | `'bold yellow'`           | The style for the module.                                          |
+| `disabled` | `true`                    | Disables the `localip` module.                                     |
+| `refresh`  | `true`                    | Redraw the address every thirty seconds while the prompt is shown. |
 
 ### Variables
 
@@ -3222,13 +3224,14 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ### Options
 
-| Option      | Default                                        | Description                                              |
-| ----------- | ---------------------------------------------- | -------------------------------------------------------- |
-| `threshold` | `75`                                           | Hide the memory usage unless it exceeds this percentage. |
-| `format`    | `'via $symbol [${ram}( \| ${swap})]($style) '` | The format for the module.                               |
-| `symbol`    | `'🐏'`                                         | The symbol used before displaying the memory usage.      |
-| `style`     | `'bold dimmed white'`                          | The style for the module.                                |
-| `disabled`  | `true`                                         | Disables the `memory_usage` module.                      |
+| Option      | Default                                        | Description                                                    |
+| ----------- | ---------------------------------------------- | -------------------------------------------------------------- |
+| `threshold` | `75`                                           | Hide the memory usage unless it exceeds this percentage.       |
+| `format`    | `'via $symbol [${ram}( \| ${swap})]($style) '` | The format for the module.                                     |
+| `symbol`    | `'🐏'`                                         | The symbol used before displaying the memory usage.            |
+| `style`     | `'bold dimmed white'`                          | The style for the module.                                      |
+| `disabled`  | `true`                                         | Disables the `memory_usage` module.                            |
+| `refresh`   | `true`                                         | Redraw the usage every five seconds while the prompt is shown. |
 
 ### Variables
 
@@ -5063,6 +5066,7 @@ The `format` configuration value is used by the [`jiff`](https://crates.io/crate
 | `style`           | `'bold yellow'`         | The style for the module time                                                                                                                             |
 | `utc_time_offset` | `'local'`               | Sets the UTC offset to use. Either an IANA time zone name or a range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
 | `disabled`        | `true`                  | Disables the `time` module.                                                                                                                               |
+| `refresh`         | `true`                  | Redraw the time while the prompt is shown, as often as what it shows turns over.                                                                          |
 | `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                     |
 
 If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`.
@@ -5461,6 +5465,7 @@ These modules will be shown if any of the following conditions are met:
 | `style`             | `'bold green'`                  | The style for the module.                                                                                                                                                                                                                                                                     |
 | `format`            | `'[$symbol($output )]($style)'` | The format for the module.                                                                                                                                                                                                                                                                    |
 | `disabled`          | `false`                         | Disables this `custom` module.                                                                                                                                                                                                                                                                |
+| `refresh`           | `0`                             | How often, in milliseconds, to run `command` again while the prompt is shown, redrawing the prompt if the output changes. `0` runs it once.                                                                                                                                                   |
 | `os`                |                                 | Operating System name on which the module will be shown (unix, linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                                                 |
 | `use_stdin`         |                                 | An optional boolean value that overrides whether commands should be forwarded to the shell via the standard input or as an argument. If unset standard input is used by default, unless the shell does not support it (cmd, nushell). Setting this disables shell-specific argument handling. |
 | `ignore_timeout`    | `false`                         | Ignore global `command_timeout` setting and keep running external commands, no matter how long they take.                                                                                                                                                                                     |
