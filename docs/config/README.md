@@ -373,6 +373,54 @@ modules you explicitly add to the format will not be duplicated. Eg.
 format = '$all$directory$character'
 ```
 
+## Async
+
+A shell that supports it draws the prompt before every module has rendered,
+and redraws it as the rest do. The prompt it ends up with is the one starship
+prints for shells that do not.
+
+Every module starts rendering at once. Starship decides when to draw from what
+each module did for the previous prompt, so that the prompt does not flash:
+modules that finish close together are drawn together, and one that takes a
+while is drawn on its own, as soon as it finishes. How close counts as together
+shrinks the longer a module takes, from `bus.fallback` for one that takes no
+time to half of that for one that takes as long as `bus.fallback`. A module
+starship knows nothing about yet is waited for up to `bus.fallback`.
+
+The shell that supports it is zsh.
+
+### Options
+
+| Option         | Default | Description                                                                                                        |
+| -------------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
+| `enabled`      | `true`  | Draw the prompt before every module has rendered. Otherwise wait for all of them first.                            |
+| `refresh`      | `true`  | Keep the modules whose values go stale current while the prompt is shown.                                          |
+| `bus.adaptive` | `true`  | Plan redraws from what each module did for the previous prompt. Otherwise wait for each as for one never measured. |
+| `bus.fallback` | `50`    | The longest, in milliseconds, the prompt waits for modules before it is first drawn.                               |
+
+While a prompt is shown, the modules whose values go stale render again, and
+the prompt is redrawn when they change: `time` as often as what it shows turns
+over, every second if its format shows seconds and otherwise every minute,
+`memory_usage` every five seconds, `battery` and `localip` every thirty, and a
+custom module as often as its `refresh` option says. They render again on the
+wall clock, so that those that render again together are redrawn together. A
+module's own `refresh` option keeps that module from it, and `refresh` here
+keeps every module from it.
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[async]
+# Draw each prompt as its modules finish, and leave it at that.
+refresh = false
+
+[async.bus]
+# Wait up to a tenth of a second for modules never measured.
+fallback = 100
+```
+
 ## AWS
 
 The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials.
