@@ -177,13 +177,6 @@ fn main() {
     // Configure the current terminal on windows to support ANSI escape sequences.
     #[cfg(windows)]
     let _ = nu_ansi_term::enable_ansi_support();
-    logger::init();
-    // Nothing a prompt shows waits for these.
-    std::thread::spawn(|| {
-        init_global_threadpool();
-        // Delete old log files
-        logger::cleanup_log_files(logger::get_log_dir());
-    });
 
     let args = match Cli::try_parse() {
         Ok(args) => args,
@@ -219,6 +212,13 @@ fn main() {
         }
     };
 
+    logger::init();
+    // Nothing a prompt shows waits for these.
+    std::thread::spawn(|| {
+        init_global_threadpool();
+        // Delete old log files
+        logger::cleanup_log_files(logger::get_log_dir());
+    });
     log::trace!("Parsed arguments: {args:#?}");
 
     match args.command {
