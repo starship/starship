@@ -1,5 +1,4 @@
 use pest::error::Error as PestError;
-use rayon::prelude::*;
 use std::borrow::Cow;
 use std::collections::{BTreeMap, BTreeSet};
 use std::error::Error;
@@ -54,6 +53,7 @@ impl From<String> for StringFormatterError {
     }
 }
 
+#[derive(Clone)]
 pub struct StringFormatter<'a> {
     format: Vec<FormatElement<'a>>,
     variables: VariableMapType<'a>,
@@ -114,10 +114,10 @@ impl<'a> StringFormatter<'a> {
     pub fn map<T, M>(mut self, mapper: M) -> Self
     where
         T: Into<Cow<'a, str>>,
-        M: Fn(&str) -> Option<Result<T, StringFormatterError>> + Sync,
+        M: Fn(&str) -> Option<Result<T, StringFormatterError>>,
     {
         self.variables
-            .par_iter_mut()
+            .iter_mut()
             .filter(|(_, value)| value.is_none())
             .for_each(|(key, value)| {
                 *value = mapper(key).map(|var| var.map(|var| VariableValue::Plain(var.into())));
@@ -135,10 +135,10 @@ impl<'a> StringFormatter<'a> {
     pub fn map_no_escaping<T, M>(mut self, mapper: M) -> Self
     where
         T: Into<Cow<'a, str>>,
-        M: Fn(&str) -> Option<Result<T, StringFormatterError>> + Sync,
+        M: Fn(&str) -> Option<Result<T, StringFormatterError>>,
     {
         self.variables
-            .par_iter_mut()
+            .iter_mut()
             .filter(|(_, value)| value.is_none())
             .for_each(|(key, value)| {
                 *value = mapper(key)
@@ -156,7 +156,7 @@ impl<'a> StringFormatter<'a> {
     #[must_use]
     pub fn map_meta<M>(mut self, mapper: M) -> Self
     where
-        M: Fn(&str, &BTreeSet<String>) -> Option<&'a str> + Sync,
+        M: Fn(&str, &BTreeSet<String>) -> Option<&'a str>,
     {
         let variables = self.get_variables();
         let (variables, style_variables) = self
@@ -198,10 +198,10 @@ impl<'a> StringFormatter<'a> {
     #[must_use]
     pub fn map_variables_to_segments<M>(mut self, mapper: M) -> Self
     where
-        M: Fn(&str) -> Option<Result<Vec<Segment>, StringFormatterError>> + Sync,
+        M: Fn(&str) -> Option<Result<Vec<Segment>, StringFormatterError>>,
     {
         self.variables
-            .par_iter_mut()
+            .iter_mut()
             .filter(|(_, value)| value.is_none())
             .for_each(|(key, value)| {
                 *value = mapper(key).map(|var| var.map(VariableValue::Styled));
@@ -216,10 +216,10 @@ impl<'a> StringFormatter<'a> {
     pub fn map_style<T, M>(mut self, mapper: M) -> Self
     where
         T: Into<Cow<'a, str>>,
-        M: Fn(&str) -> Option<Result<T, StringFormatterError>> + Sync,
+        M: Fn(&str) -> Option<Result<T, StringFormatterError>>,
     {
         self.style_variables
-            .par_iter_mut()
+            .iter_mut()
             .filter(|(_, value)| value.is_none())
             .for_each(|(key, value)| {
                 *value = mapper(key).map(|var| var.map(Into::into));
