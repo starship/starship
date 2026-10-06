@@ -107,8 +107,12 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
         .collect()
 }
 
-/// `pattern` repeated grapheme by grapheme for as long as it fits in `width`.
+/// `pattern` repeated grapheme by grapheme for as long as it fits in `width`,
+/// or as it is if it has no width to repeat.
 fn stretch(pattern: &str, width: usize) -> Cow<'_, str> {
+    if pattern.width_graphemes() == 0 {
+        return Cow::Borrowed(pattern);
+    }
     Cow::Owned(
         pattern
             .graphemes(true)
@@ -222,6 +226,11 @@ mod tests {
         ] {
             assert_eq!(stretched, stretch(pattern, 10), "{pattern}");
         }
+    }
+
+    #[test]
+    fn a_zero_width_fill_keeps_its_natural_text() {
+        assert_eq!("\u{301}", stretch("\u{301}", 8));
     }
 
     #[test]
