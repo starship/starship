@@ -40,12 +40,14 @@ static ONE_SHELL_AT_A_TIME: Mutex<()> = Mutex::new(());
 #[derive(Clone, Copy)]
 enum Shell {
     Zsh,
+    Fish,
 }
 
 impl Shell {
     const fn name(self) -> &'static str {
         match self {
             Self::Zsh => "zsh",
+            Self::Fish => "fish",
         }
     }
 
@@ -60,7 +62,7 @@ impl Shell {
     /// being refined.
     const fn input(self) -> &'static str {
         match self {
-            Self::Zsh => "printf 'RESULT:%s\\n' typed",
+            Self::Zsh | Self::Fish => "printf 'RESULT:%s\\n' typed",
         }
     }
 
@@ -68,7 +70,7 @@ impl Shell {
     /// finished, then prints `RESULT:typed`.
     const fn sleep_then_input(self) -> &'static str {
         match self {
-            Self::Zsh => "sleep 3; printf 'RESULT:%s\\n' typed",
+            Self::Zsh | Self::Fish => "sleep 3; printf 'RESULT:%s\\n' typed",
         }
     }
 
@@ -78,6 +80,7 @@ impl Shell {
         let source = Some("source \"$STARSHIP_INIT\"\n");
         match self {
             Self::Zsh => (vec!["-f".into(), "-i".into()], source),
+            Self::Fish => (vec!["--no-config".into(), "--interactive".into()], source),
         }
     }
 
@@ -85,6 +88,7 @@ impl Shell {
     const fn init_arguments(self) -> &'static [&'static str] {
         match self {
             Self::Zsh => &["init", "zsh", "--print-full-init"],
+            Self::Fish => &["init", "fish", "--print-full-init"],
         }
     }
 
@@ -568,4 +572,34 @@ fn zsh_keeps_the_right_prompt_current() {
 #[ignore = "requires zsh"]
 fn zsh_redraws_the_vi_mode_indicator() {
     vi_mode_redraws_the_indicator(Shell::Zsh);
+}
+
+#[test]
+#[ignore = "requires fish"]
+fn fish_streams() {
+    streams(Shell::Fish);
+}
+
+#[test]
+#[ignore = "requires fish"]
+fn fish_leaves_an_accepted_line_alone() {
+    an_accepted_line_is_left_alone(Shell::Fish);
+}
+
+#[test]
+#[ignore = "requires fish"]
+fn fish_shows_text_as_it_is() {
+    text_is_shown_as_it_is(Shell::Fish);
+}
+
+#[test]
+#[ignore = "requires fish"]
+fn fish_keeps_a_leading_blank_line() {
+    a_leading_blank_line_survives(Shell::Fish);
+}
+
+#[test]
+#[ignore = "requires fish"]
+fn fish_keeps_the_right_prompt_current() {
+    the_right_prompt_is_kept_current(Shell::Fish);
 }

@@ -190,7 +190,11 @@ jobs:
       # The streaming tests drive real shells in a pseudo-terminal
       - name: Setup | Shells (Linux)
         if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get update && sudo apt-get install --yes zsh
+        run: sudo apt-get update && sudo apt-get install --yes zsh fish
+
+      - name: Setup | Shells (macOS)
+        if: matrix.os == 'macOS-latest'
+        run: brew install fish
 
       # Run the ignored tests that expect the above setup
       - name: Build | Test
