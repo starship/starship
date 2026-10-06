@@ -8,6 +8,7 @@ use std::fmt;
 use crate::config::{Style, parse_style_string};
 use crate::context::{Context, Shell};
 use crate::segment::Segment;
+use crate::utils::shell_prompt_escape;
 
 use super::model::*;
 use super::parser::{Rule, parse};
@@ -435,28 +436,6 @@ fn clone_without_meta<'a>(variables: &VariableMapType<'a>) -> VariableMapType<'a
             (key.clone(), value)
         })
         .collect()
-}
-
-/// Escape interpretable characters for the shell prompt
-pub fn shell_prompt_escape<T>(text: T, shell: Shell) -> String
-where
-    T: Into<String>,
-{
-    // Handle other interpretable characters
-    match shell {
-        // Bash might interpret backslashes, backticks and $
-        // see #658 for more details
-        Shell::Bash => text
-            .into()
-            .replace('\\', r"\\")
-            .replace('$', r"\$")
-            .replace('`', r"\`"),
-        Shell::Zsh => {
-            // % is an escape in zsh, see PROMPT in `man zshmisc`
-            text.into().replace('%', "%%")
-        }
-        _ => text.into(),
-    }
 }
 
 #[cfg(test)]
