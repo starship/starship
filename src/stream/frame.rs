@@ -17,8 +17,9 @@ pub enum Frame<'a> {
     /// The main and right prompts as they are to be drawn now. The first is
     /// the first paint, and each after it refines it.
     Prompt { main: &'a str, right: &'a str },
-    /// Every module has rendered, and the prompt drawn shows it.
-    Complete,
+    /// Every module has rendered, and the prompt drawn shows it: how long each
+    /// took, which a shell hands back unread to stream the next prompt.
+    Complete(&'a str),
 }
 
 impl Frame<'_> {
@@ -30,7 +31,7 @@ impl Frame<'_> {
                 ["PROCESS", &process_id, ""]
             }
             Self::Prompt { main, right } => ["PROMPT", main, right],
-            Self::Complete => ["COMPLETE", "", ""],
+            Self::Complete(timings) => ["COMPLETE", timings, ""],
         };
         for field in fields {
             // A NUL would end its field early, and nothing a prompt shows needs one.
@@ -100,7 +101,7 @@ mod tests {
         #[test]
         fn prompts_travel_verbatim_between_terminators(main in any::<String>(), right in any::<String>()) {
             let mut bytes = written(Frame::Prompt { main: &main, right: &right });
-            bytes.extend(written(Frame::Complete));
+            bytes.extend(written(Frame::Complete("")));
 
             prop_assert_eq!(
                 vec![

@@ -3,6 +3,7 @@
 
 mod bus;
 mod frame;
+mod timings;
 
 use std::io;
 use std::time::Instant;
@@ -13,16 +14,17 @@ use crate::print::{self, DUMB_TERMINAL_PROMPT};
 use crate::segment::Segment;
 use crate::workers::{self, Rendered, Workers};
 
-use bus::Bus;
+use bus::{Bus, Estimate, Rendering};
 use frame::{Frame, Sink};
 
-/// Streams the main and right prompts to standard output.
-pub fn stream(properties: Properties) -> io::Result<()> {
+/// Streams the main and right prompts to standard output, expecting modules
+/// to do what `timings`, as the previous stream reported them, says they did.
+pub fn stream(properties: Properties, timings: &str) -> io::Result<()> {
     let context = Context::new(properties, Target::Main);
-    run(&context, &mut io::stdout().lock())
+    run(&context, timings, &mut io::stdout().lock())
 }
 
-fn run(context: &Context, output: &mut impl Sink) -> io::Result<()> {
+fn run(context: &Context, timings: &str, output: &mut impl Sink) -> io::Result<()> {
     output.send(Frame::Process)?;
     if print::is_dumb_terminal() {
         log::error!("Under a 'dumb' terminal (TERM=dumb).");
@@ -30,7 +32,7 @@ fn run(context: &Context, output: &mut impl Sink) -> io::Result<()> {
             main: DUMB_TERMINAL_PROMPT,
             right: DUMB_TERMINAL_PROMPT,
         })?;
-        return output.send(Frame::Complete);
+        return output.send(Frame::Complete(""));
     }
 
     let plan = Plan::new(context, [Target::Main, Target::Right]);
@@ -41,10 +43,15 @@ fn run(context: &Context, output: &mut impl Sink) -> io::Result<()> {
             main: &main,
             right: &right,
         })?;
-        return output.send(Frame::Complete);
+        return output.send(Frame::Complete(timings));
     }
-    workers::with_workers(context, &plan.modules, None, |mut workers| {
-        Session::new(context, &plan, Instant::now()).run(&mut workers, output)
+    let estimates = timings::read(timings, &plan.modules);
+    let waiting = estimates
+        .iter()
+        .filter(|&&estimate| Estimate::waits(estimate))
+        .count();
+    workers::with_workers(context, &plan.modules, Some(waiting), |mut workers| {
+        Session::new(context, &plan, estimates, Instant::now()).run(&mut workers, output)
     })
 }
 
@@ -75,6 +82,9 @@ struct Session<'a> {
     plan: &'a Plan<'a, 2>,
     /// When the stream started.
     start: Instant,
+    /// Whether the bus expects modules to do what they did for the previous
+    /// prompt.
+    adaptive: bool,
     /// One for each of the plan's modules, by position.
     slots: Vec<Slot>,
     bus: Bus,
@@ -88,6 +98,9 @@ struct Session<'a> {
 struct Slot {
     /// What the module last rendered.
     segments: Vec<Segment>,
+    /// What the module did for the previous prompt, and once it has rendered,
+    /// for this one as well.
+    estimate: Option<Estimate>,
     state: State,
 }
 
@@ -98,19 +111,26 @@ enum State {
 }
 
 impl<'a> Session<'a> {
-    fn new(context: &'a Context<'a>, plan: &'a Plan<'a, 2>, start: Instant) -> Self {
-        let slots = plan
-            .modules
-            .iter()
-            .map(|_| Slot {
+    fn new(
+        context: &'a Context<'a>,
+        plan: &'a Plan<'a, 2>,
+        estimates: Vec<Option<Estimate>>,
+        start: Instant,
+    ) -> Self {
+        let configuration = &context.root_config.asynchronous;
+        let slots = estimates
+            .into_iter()
+            .map(|estimate| Slot {
                 segments: Vec::new(),
+                estimate,
                 state: State::Rendering,
             })
             .collect();
         Self {
             context,
             plan,
-            bus: Bus::new(start, context.root_config.asynchronous.bus.fallback()),
+            bus: Bus::new(start, configuration.bus.fallback()),
+            adaptive: configuration.bus.adaptive,
             start,
             slots,
             drawn: None,
@@ -119,7 +139,12 @@ impl<'a> Session<'a> {
     }
 
     fn run(mut self, renderer: &mut impl Renderer, output: &mut impl Sink) -> io::Result<()> {
-        for position in 0..self.slots.len() {
+        // Modules never measured first, then those expected to change the
+        // prompt soonest, so that when there are more modules than workers,
+        // the bus waits on as few as it can.
+        let mut order: Vec<usize> = (0..self.slots.len()).collect();
+        order.sort_by_key(|&position| self.slots[position].estimate);
+        for position in order {
             renderer.render(position);
         }
         let mut now = self.start;
@@ -146,8 +171,8 @@ impl<'a> Session<'a> {
         {
             self.draw(output)?;
         }
-        if !self.complete && self.bus.is_empty() && !self.rendering() {
-            output.send(Frame::Complete)?;
+        if !self.complete && self.bus.is_empty() && self.rendering().next().is_none() {
+            output.send(Frame::Complete(&self.report()))?;
             self.complete = true;
         }
         Ok(self.departure(now))
@@ -168,30 +193,53 @@ impl<'a> Session<'a> {
     }
 
     /// Takes in a module that landed at `now`: what it shows boards the bus
-    /// if it changed.
+    /// if it changed, and how it went is measured.
     fn land(&mut self, rendered: Rendered, now: Instant) {
         let slot = &mut self.slots[rendered.position];
         // Only a module that is rendering lands.
         let State::Rendering = slot.state else {
             return;
         };
-        if slot.segments != rendered.segments {
+        let took = now - self.start;
+        let changed = slot.segments != rendered.segments;
+        let measured = if changed {
+            Estimate::Changed(took)
+        } else {
+            Estimate::Unchanged
+        };
+        slot.estimate = Some(Estimate::after(slot.estimate, measured));
+        if changed {
             slot.segments = rendered.segments;
-            self.bus.board(now, now - self.start);
+            self.bus.board(now, took);
         }
         slot.state = State::Rendered;
     }
 
-    /// When the bus leaves, given whether any module is still rendering.
+    /// When the bus leaves, given every module still rendering.
     fn departure(&self, now: Instant) -> Option<Instant> {
         self.bus.departure(now, self.rendering())
     }
 
-    /// Whether any module is still rendering.
-    fn rendering(&self) -> bool {
-        self.slots
-            .iter()
-            .any(|slot| matches!(slot.state, State::Rendering))
+    /// Every module still rendering, and what the bus expects of it.
+    fn rendering(&self) -> impl Iterator<Item = Rendering> + '_ {
+        self.slots.iter().filter_map(|slot| match slot.state {
+            State::Rendering => Some(Rendering {
+                since: self.start,
+                estimate: slot.estimate.filter(|_| self.adaptive),
+            }),
+            State::Rendered => None,
+        })
+    }
+
+    /// What each module did for this prompt, for the shell to hand the next.
+    fn report(&self) -> String {
+        timings::report(
+            self.plan
+                .modules
+                .iter()
+                .zip(&self.slots)
+                .filter_map(|(module, slot)| Some((module.as_str(), slot.estimate?))),
+        )
     }
 }
 
@@ -360,7 +408,12 @@ mod tests {
 
     /// Runs a stream of the prompts `context` configures, with the modules
     /// rendering as `script` says.
-    fn simulate_in(setting: Setting, context: &Context, script: Script) -> Simulated {
+    fn simulate_in(
+        setting: Setting,
+        context: &Context,
+        timings: &str,
+        script: Script,
+    ) -> Simulated {
         let plan = Plan::new(context, [Target::Main, Target::Right]);
         let start = Instant::now();
         let now = Rc::new(Cell::new(start));
@@ -383,7 +436,7 @@ mod tests {
             frames: Vec::new(),
         };
         recording.send(Frame::Process).unwrap();
-        let session = Session::new(context, &plan, start);
+        let session = Session::new(context, &plan, timings::read(timings, &plan.modules), start);
         match session.run(&mut simulation, &mut recording) {
             Ok(()) => {}
             Err(error) => assert_eq!(io::ErrorKind::BrokenPipe, error.kind()),
@@ -394,8 +447,8 @@ mod tests {
         }
     }
 
-    fn simulate(context: &Context, script: Script) -> Vec<(u64, [String; 3])> {
-        simulate_in(Setting::default(), context, script).frames
+    fn simulate(context: &Context, timings: &str, script: Script) -> Vec<(u64, [String; 3])> {
+        simulate_in(Setting::default(), context, timings, script).frames
     }
 
     /// Each main prompt drawn, with the time it was drawn at.
@@ -415,17 +468,100 @@ mod tests {
     }
 
     #[test]
-    fn a_module_is_waited_for_until_the_fallback() {
-        let frames = simulate(
-            &three_modules(),
-            &[
+    fn the_prompt_is_drawn_once_where_drawing_it_sooner_would_flash() {
+        let four = context(toml::toml! {
+            add_newline = false
+            format = "${custom.a}${custom.b}${custom.c}$character"
+        });
+        let script = |c| -> Vec<(&str, &[(u64, &str)])> {
+            vec![
                 ("character", &[(0, ">")]),
-                ("custom.a", &[(10, "a")]),
-                ("custom.b", &[(2000, "b")]),
-            ],
-        );
+                ("custom.a", &[(1, "a")]),
+                ("custom.b", &[(7, "b")]),
+                (
+                    "custom.c",
+                    if c == 16 { &[(16, "c")] } else { &[(300, "c")] },
+                ),
+            ]
+        };
 
-        assert_eq!(vec![(50, "a>"), (2000, "ab>")], prompts(&frames));
+        assert_eq!(
+            vec![(16, "abc>")],
+            prompts(&simulate(
+                &four,
+                "character=0,custom.a=1,custom.b=7,custom.c=16",
+                &script(16)
+            )),
+            "drawn sooner, the prompt would flash as c lands"
+        );
+        assert_eq!(
+            vec![(7, "ab>"), (300, "abc>")],
+            prompts(&simulate(
+                &four,
+                "character=0,custom.a=1,custom.b=7,custom.c=300",
+                &script(300)
+            )),
+            "but c, slow enough to look like a change of its own, gets a redraw"
+        );
+    }
+
+    #[test]
+    fn the_later_a_module_lands_the_less_the_bus_waits_for_others() {
+        let three = three_modules();
+        let script = |b: &'static [(u64, &'static str)]| -> Vec<(&'static str, &'static [(u64, &'static str)])> {
+            vec![
+                ("character", &[(0, ">")]),
+                ("custom.a", &[(300, "a")]),
+                ("custom.b", b),
+            ]
+        };
+
+        assert_eq!(
+            vec![(0, ">"), (300, "a>"), (320, "ab>")],
+            prompts(&simulate(
+                &three,
+                "character=0,custom.a=300,custom.b=320",
+                &script(&[(320, "b")])
+            )),
+            "twenty milliseconds apart, three hundred in, a and b are drawn apart"
+        );
+        assert_eq!(
+            vec![(0, ">"), (303, "ab>")],
+            prompts(&simulate(
+                &three,
+                "character=0,custom.a=300,custom.b=303",
+                &script(&[(303, "b")])
+            )),
+            "three apart, together"
+        );
+    }
+
+    #[test]
+    fn a_module_never_measured_is_waited_for_until_the_fallback() {
+        let script: Script = &[
+            ("character", &[(0, ">")]),
+            ("custom.a", &[(10, "a")]),
+            ("custom.b", &[(2000, "b")]),
+        ];
+        let not_adaptive = context(toml::toml! {
+            add_newline = false
+            format = "${custom.a}${custom.b}$character"
+            async.bus.adaptive = false
+        });
+        let timings = "character=0,custom.a=10,custom.b=2000";
+
+        assert_eq!(
+            vec![(10, "a>"), (2000, "ab>")],
+            prompts(&simulate(&three_modules(), timings, script)),
+            "b, known to be slow, holds nothing back"
+        );
+        let unmeasured = vec![(50, "a>"), (2000, "ab>")];
+        assert_eq!(unmeasured, prompts(&simulate(&three_modules(), "", script)));
+        assert_eq!(
+            unmeasured,
+            prompts(&simulate(&not_adaptive, timings, script)),
+            "without adaptive, whatever the previous prompt says"
+        );
     }
 
     #[test]
@@ -436,6 +572,7 @@ mod tests {
                 format = "${custom.a}${custom.b}$character"
                 async.bus.fallback = 30
             }),
+            "",
             &[
                 ("character", &[(0, ">")]),
                 ("custom.a", &[(6, "a")]),
@@ -447,24 +584,29 @@ mod tests {
     }
 
     #[test]
-    fn the_later_a_change_lands_the_less_it_waits_for_others() {
-        let script = |b: &'static [(u64, &'static str)]| -> Vec<(&'static str, &'static [(u64, &'static str)])> {
-            vec![
-                ("character", &[(0, ">")]),
-                ("custom.a", &[(300, "a")]),
-                ("custom.b", b),
-            ]
-        };
+    fn a_module_that_changed_nothing_is_not_waited_for() {
+        let script: Script = &[
+            ("character", &[(0, ">")]),
+            ("custom.a", &[(10, "a")]),
+            ("custom.b", &[(15, "")]),
+        ];
 
         assert_eq!(
-            vec![(50, ">"), (305, "ab>")],
-            prompts(&simulate(&three_modules(), &script(&[(305, "b")]))),
-            "a, landing three hundred milliseconds in, waits for b five later"
+            vec![(10, "a>")],
+            prompts(&simulate(
+                &three_modules(),
+                "character=0,custom.a=10,custom.b",
+                script
+            ))
         );
         assert_eq!(
-            vec![(50, ">"), (307, "a>"), (320, "ab>")],
-            prompts(&simulate(&three_modules(), &script(&[(320, "b")]))),
-            "but not twenty"
+            vec![(15, "a>")],
+            prompts(&simulate(
+                &three_modules(),
+                "character=0,custom.a=10,custom.b=15",
+                script
+            )),
+            "unless the previous prompt says it changes the prompt"
         );
     }
 
@@ -475,16 +617,41 @@ mod tests {
                 add_newline = false
                 format = "${custom.a}${custom.b}${custom.c}${custom.d}$character"
             }),
+            "character=0,custom.a=10,custom.b,custom.c,custom.d",
             &[
                 ("character", &[(0, ">")]),
-                ("custom.a", &[(20, "a")]),
+                ("custom.a", &[(10, "a")]),
                 ("custom.b", &[(1, "")]),
                 ("custom.c", &[(1, "")]),
                 ("custom.d", &[(1, "")]),
             ],
         );
 
-        assert_eq!(vec![(20, "a>")], prompts(&frames));
+        assert_eq!(vec![(10, "a>")], prompts(&frames));
+    }
+
+    #[test]
+    fn with_fewer_workers_than_modules_the_quickest_render_first() {
+        let frames = simulate_in(
+            Setting {
+                workers: 1,
+                ..Setting::default()
+            },
+            &three_modules(),
+            "character=0,custom.a=1000,custom.b=5",
+            &[
+                ("character", &[(0, ">")]),
+                ("custom.a", &[(1000, "a")]),
+                ("custom.b", &[(5, "b")]),
+            ],
+        )
+        .frames;
+
+        assert_eq!(
+            vec![(5, "b>"), (1005, "ab>")],
+            prompts(&frames),
+            "the plan puts a, the slowest, before b"
+        );
     }
 
     #[test]
@@ -495,6 +662,7 @@ mod tests {
                 format = "$character"
                 right_format = "${custom.right}"
             }),
+            "character=0,custom.right=500",
             &[
                 ("character", &[(0, ">")]),
                 ("custom.right", &[(500, "right")]),
@@ -506,17 +674,18 @@ mod tests {
             .filter(|(_, [keyword, ..])| keyword == "PROMPT")
             .map(|(at, [_, main, right])| (*at, main.as_str(), right.as_str()))
             .collect();
-        assert_eq!(vec![(50, ">", ""), (500, ">", "right")], drawn);
+        assert_eq!(vec![(0, ">", ""), (500, ">", "right")], drawn);
     }
 
     const LETTERS: [&str; 6] = ["a", "b", "c", "d", "e", "f"];
 
-    /// How a module renders in a generated stream: when it lands, and
-    /// whether it shows anything.
+    /// How a module renders in a generated stream: when it lands, whether it
+    /// shows anything, and what the previous prompt says of it.
     #[derive(Clone, Debug)]
     struct Generated {
         landing: u64,
         shows: bool,
+        told: Option<Estimate>,
     }
 
     /// A stream of up to six modules, `custom.0` to `custom.5`, each showing
@@ -537,6 +706,12 @@ mod tests {
             .zip(&renders)
             .map(|(name, render)| (name.as_str(), render.as_slice()))
             .collect();
+        let timings = timings::report(
+            names
+                .iter()
+                .zip(modules)
+                .filter_map(|(name, module)| Some((name.as_str(), module.told?))),
+        );
         let mut configuration = toml::Table::new();
         configuration.insert("add_newline".into(), false.into());
         configuration.insert("format".into(), format.into());
@@ -546,6 +721,7 @@ mod tests {
                 ..Setting::default()
             },
             &context(configuration),
+            &timings,
             &script,
         )
     }
@@ -560,17 +736,30 @@ mod tests {
             .collect()
     }
 
+    fn any_estimate() -> impl Strategy<Value = Option<Estimate>> {
+        prop_oneof![
+            Just(None),
+            Just(Some(Estimate::Unchanged)),
+            (0_u64..3000).prop_map(|took| Some(Estimate::Changed(milliseconds(took)))),
+        ]
+    }
+
     fn generated(landing: std::ops::Range<u64>) -> impl Strategy<Value = Generated> {
-        (landing, any::<bool>()).prop_map(|(landing, shows)| Generated { landing, shows })
+        (landing, any::<bool>(), any_estimate()).prop_map(|(landing, shows, told)| Generated {
+            landing,
+            shows,
+            told,
+        })
     }
 
     proptest! {
         #![proptest_config(ProptestConfig::with_cases(512))]
 
-        /// However few the workers, every change is drawn within the
-        /// fallback of landing, and the first paint within the fallback of the
-        /// start. Every prompt drawn differs from the last, and the stream ends
-        /// on everything drawn and reports so once, last.
+        /// However wrong the previous prompt, and however few the workers,
+        /// every change is drawn within the fallback of landing, and the first
+        /// paint within the fallback of the start. Every prompt drawn differs
+        /// from the last, and the stream ends on everything drawn and reports
+        /// so once, last.
         #[test]
         fn what_the_bus_promises(
             modules in prop::collection::vec(generated(0..3000), 1..=6),
@@ -604,15 +793,68 @@ mod tests {
             prop_assert_eq!(Some(everything.as_str()), drawn.last().map(|&(_, prompt)| prompt));
         }
 
-        /// The first paint waits until every module has landed, or for the
-        /// fallback, and shows what has landed by then.
+        /// While the previous prompt holds, no timetable costs less than the
+        /// one a stream draws on: counting, for each redraw, the size of the
+        /// bus that drew it, and for every paint, how long what it drew waited,
+        /// the prompt itself from the start.
         #[test]
-        fn modules_are_waited_for_until_the_fallback(
+        fn true_estimates_make_the_cheapest_timetable(
+            modules in prop::collection::vec((0_u64..300, any::<bool>()), 1..=6),
+        ) {
+            let modules: Vec<Generated> = modules
+                .into_iter()
+                .map(|(landing, shows)| Generated {
+                    landing,
+                    shows,
+                    told: Some(if shows { Estimate::Changed(milliseconds(landing)) } else { Estimate::Unchanged }),
+                })
+                .collect();
+            let frames = simulate_generated(&modules, usize::MAX).frames;
+            let drawn = prompts(&frames);
+
+            let shown: Vec<(u64, &str)> = modules
+                .iter()
+                .zip(LETTERS)
+                .filter(|(module, _)| module.shows)
+                .map(|(module, letter)| (module.landing, letter))
+                .collect();
+            let fallback = milliseconds(50);
+            let mut drawn_on = milliseconds(drawn[0].0);
+            for pair in drawn.windows(2) {
+                let [(_, before), (at, after)] = pair else { unreachable!("pairs of two") };
+                let opened = shown
+                    .iter()
+                    .filter(|(_, letter)| after.contains(letter) && !before.contains(letter))
+                    .map(|&(landing, _)| landing)
+                    .min()
+                    .expect("a redraw draws a change");
+                drawn_on += bus::size(fallback, milliseconds(opened)) + milliseconds(at - opened);
+            }
+
+            let mut landings: Vec<bus::Landing> = shown
+                .iter()
+                .map(|&(landing, _)| bus::Landing {
+                    after: milliseconds(landing),
+                    size: bus::size(fallback, milliseconds(landing)),
+                })
+                .collect();
+            landings.sort_unstable_by_key(|landing| landing.after);
+            let cheapest = bus::tests::every_timetable(bus::Passengers::Prompt, fallback, &landings)
+                .into_iter()
+                .map(|(_, cost)| cost)
+                .min();
+            prop_assert_eq!(cheapest, Some(drawn_on), "{:?}", drawn);
+        }
+
+        /// Without estimates, the first paint waits until every module has
+        /// landed, or for the fallback, and shows what has landed by then.
+        #[test]
+        fn modules_never_measured_are_waited_for_until_the_fallback(
             landings in prop::collection::vec(0_u64..120, 1..=6),
         ) {
             let modules: Vec<Generated> = landings
                 .iter()
-                .map(|&landing| Generated { landing, shows: true })
+                .map(|&landing| Generated { landing, shows: true, told: None })
                 .collect();
             let frames = simulate_generated(&modules, usize::MAX).frames;
             let (first, prompt) = prompts(&frames)[0];
@@ -637,13 +879,38 @@ mod tests {
             async.enabled = false
         });
         let mut output = Vec::new();
-        run(&context, &mut output).unwrap();
+        run(&context, "character=3", &mut output).unwrap();
 
         let keywords: Vec<String> = read_frames(&output)
             .into_iter()
             .map(|[keyword, ..]| keyword)
             .collect();
         assert_eq!(["PROCESS", "PROMPT", "COMPLETE"], keywords.as_slice());
+    }
+
+    #[test]
+    fn a_stream_reports_its_timings_blended_with_those_it_was_given() {
+        let context = context(toml::toml! {
+            format = "$character$jobs"
+        });
+        let mut output = Vec::new();
+        run(&context, "character=1000,jobs=1000", &mut output).unwrap();
+
+        let [keyword, report, _] = read_frames(&output).pop().unwrap();
+        assert_eq!("COMPLETE", keyword);
+        let modules = indexmap::IndexSet::from(["character".to_owned(), "jobs".to_owned()]);
+        let [Some(Estimate::Changed(estimate)), jobs] = timings::read(&report, &modules)[..] else {
+            panic!("character changes the prompt: {report}");
+        };
+        assert!(
+            (milliseconds(750)..milliseconds(800)).contains(&estimate),
+            "{estimate:?}"
+        );
+        assert_eq!(
+            Some(Estimate::Unchanged),
+            jobs,
+            "without jobs, jobs shows nothing"
+        );
     }
 
     /// Whatever a stream draws first, the prompts it leaves a shell showing
@@ -685,7 +952,7 @@ mod tests {
                 context
             };
             let mut output = Vec::new();
-            run(&prompt_of(Target::Main), &mut output).unwrap();
+            run(&prompt_of(Target::Main), "", &mut output).unwrap();
             let frames = read_frames(&output);
 
             let [keyword, main, right] = frames
