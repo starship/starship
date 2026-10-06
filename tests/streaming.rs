@@ -452,7 +452,7 @@ impl Drop for Session {
     }
 }
 
-/// A prompt with a module that renders at once and one that takes two
+/// A prompt with a module that renders at once and one that takes five
 /// seconds.
 const FAST_AND_SLOW: &str = r#"
 format = "${custom.fast}${custom.slow}$line_break$character"
@@ -464,7 +464,7 @@ when = true
 shell = ["/bin/sh"]
 
 [custom.slow]
-command = "sleep 2; printf SLOW"
+command = "sleep 5; printf SLOW"
 when = true
 shell = ["/bin/sh"]
 ignore_timeout = true
