@@ -33,6 +33,25 @@ use crate::formatter::StringFormatter;
 /// **Truncation**
 /// Paths will be limited in length to `3` path components by default.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    render(context, Lookups::Allowed)
+}
+
+/// The directory as it can be drawn before anything slow has run: without
+/// the repository it is in, which takes a search up the directory tree, and
+/// without whether it is read-only, which takes a `stat` that can hang on a
+/// slow mount.
+pub fn approximate<'a>(context: &'a Context) -> Option<Module<'a>> {
+    render(context, Lookups::Skipped)
+}
+
+/// Whether rendering may look up what takes a search of the filesystem.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Lookups {
+    Allowed,
+    Skipped,
+}
+
+fn render<'a>(context: &'a Context, lookups: Lookups) -> Option<Module<'a>> {
     let mut module = context.new_module("directory");
     let config: DirectoryConfig = DirectoryConfig::try_load(module.config);
 
@@ -52,7 +71,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Attempt repository path contraction (if we are in a git repository)
     // Otherwise use the logical path, automatically contracting
-    let repo = if config.truncate_to_repo || config.repo_root_style.is_some() {
+    let repo = if lookups == Lookups::Allowed
+        && (config.truncate_to_repo || config.repo_root_style.is_some())
+    {
         context.get_git_repo().ok()
     } else {
         None
@@ -168,7 +189,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "before_root_path" => Some(Ok(path_vec[0].as_str())),
                 "repo_root" => Some(Ok(path_vec[1].as_str())),
                 "read_only" => {
-                    if is_readonly_dir(physical_dir) {
+                    if lookups == Lookups::Allowed && is_readonly_dir(physical_dir) {
                         Some(Ok(config.read_only))
                     } else {
                         None
@@ -659,6 +680,30 @@ mod tests {
 
             assert_eq!(expected, actual);
         }
+    }
+
+    #[cfg(not(target_os = "windows"))]
+    #[test]
+    fn an_approximation_never_asks_whether_the_directory_is_read_only() -> io::Result<()> {
+        use std::os::unix::fs::PermissionsExt;
+
+        // Permissions do not keep the superuser from writing.
+        if nix::unistd::Uid::effective().is_root() {
+            return Ok(());
+        }
+        let directory = tempfile::tempdir()?;
+        fs::set_permissions(directory.path(), fs::Permissions::from_mode(0o555))?;
+        let context = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                format = "$read_only"
+            })
+            .path(directory.path())
+            .into();
+
+        assert!(!module(&context).unwrap().is_empty());
+        assert!(approximate(&context).unwrap().is_empty());
+        fs::set_permissions(directory.path(), fs::Permissions::from_mode(0o755))
     }
 
     #[test]

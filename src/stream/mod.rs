@@ -126,7 +126,7 @@ struct Session<'a> {
 
 /// One module of the plan, as a stream tracks it.
 struct Slot {
-    /// What the module last rendered.
+    /// What the module last rendered, or what it shows until it first has.
     segments: Vec<Segment>,
     /// How often the module renders again while the prompt is shown, if it
     /// does.
@@ -206,6 +206,13 @@ impl<'a> Session<'a> {
         order.sort_by_key(|&position| self.slots[position].estimate);
         for position in order {
             renderer.render(position);
+        }
+        // What the first paint shows of a module yet to land, worked out while
+        // the modules render.
+        for (slot, module) in self.slots.iter_mut().zip(&self.plan.modules) {
+            if let Some(approximation) = modules::approximate(module, self.context) {
+                slot.segments = approximation.segments;
+            }
         }
         let mut now = self.clock.start;
         loop {
@@ -969,6 +976,43 @@ mod tests {
             "run again each second, it is redrawn once its output changes"
         );
         assert!(keywords(&frames).contains(&(1003, "HEARTBEAT")));
+    }
+
+    #[test]
+    fn the_first_paint_shows_the_directory_before_its_repository_is_found() {
+        let repository = tempfile::tempdir().unwrap();
+        crate::utils::create_command("git")
+            .unwrap()
+            .arg("init")
+            .current_dir(repository.path())
+            .output()
+            .unwrap();
+        let working = repository.path().join("src");
+        std::fs::create_dir(&working).unwrap();
+        let mut context = context(toml::toml! {
+            add_newline = false
+            format = "$directory$character"
+            directory.format = "$path"
+            directory.truncation_length = 8
+        });
+        context.current_dir = working.clone();
+        context.logical_dir = working;
+
+        let frames = simulate(
+            &context,
+            "character=0,directory=500",
+            &[("character", &[(0, ">")]), ("directory", &[(500, "found")])],
+        );
+
+        let repository_name = repository.path().file_name().unwrap().to_string_lossy();
+        let [(0, first), (500, refined)] = prompts(&frames)[..] else {
+            panic!("a first paint and one refinement, not {frames:?}");
+        };
+        assert!(
+            first.ends_with(&format!("{repository_name}/src>")),
+            "{first}"
+        );
+        assert_eq!("found>", refined);
     }
 
     const LETTERS: [&str; 6] = ["a", "b", "c", "d", "e", "f"];

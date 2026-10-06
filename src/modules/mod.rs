@@ -299,6 +299,16 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
     m
 }
 
+/// What `module` shows before it renders, where it can show anything at a
+/// bounded cost: only the directory, without which a first paint would be hard
+/// to recognize.
+pub fn approximate<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
+    match module {
+        "directory" => directory::approximate(context),
+        _ => None,
+    }
+}
+
 /// How often `module` renders again while a prompt is shown, if it is enabled
 /// and its `refresh` option says to: a clock as often as it turns over, a
 /// battery, memory and an address every so often, and a custom module as often
