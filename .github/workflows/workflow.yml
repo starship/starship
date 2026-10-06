@@ -190,11 +190,13 @@ jobs:
       # The streaming tests drive real shells in a pseudo-terminal
       - name: Setup | Shells (Linux)
         if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get update && sudo apt-get install --yes zsh fish
+        run: sudo apt-get update && sudo apt-get install --yes zsh fish gawk
 
       - name: Setup | Shells (macOS)
         if: matrix.os == 'macOS-latest'
-        run: brew install fish
+        run: |
+          brew install bash fish gawk
+          echo "STARSHIP_TEST_BASH=$(brew --prefix bash)/bin/bash" >> "$GITHUB_ENV"
 
       - name: Setup | Nushell
         if: matrix.os != 'windows-latest'
@@ -202,6 +204,14 @@ jobs:
           release=nu-0.116.0-${{ matrix.os == 'ubuntu-latest' && 'x86_64-unknown-linux-gnu' || 'aarch64-apple-darwin' }}
           curl --fail --location --silent --show-error "https://github.com/nushell/nushell/releases/download/0.116.0/$release.tar.gz" | tar --extract --gzip --directory "$RUNNER_TEMP"
           echo "STARSHIP_TEST_NU=$RUNNER_TEMP/$release/nu" >> "$GITHUB_ENV"
+
+      # Building ble.sh takes gawk, which the shell steps above install
+      - name: Setup | ble.sh
+        if: matrix.os != 'windows-latest'
+        run: |
+          git clone --recursive --depth 1 --shallow-submodules --branch v0.4.0-devel3 https://github.com/akinomyoga/ble.sh.git "$RUNNER_TEMP/ble.sh"
+          make --directory "$RUNNER_TEMP/ble.sh"
+          echo "STARSHIP_TEST_BLE=$RUNNER_TEMP/ble.sh/out/ble.sh" >> "$GITHUB_ENV"
 
       # Run the ignored tests that expect the above setup
       - name: Build | Test
