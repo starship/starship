@@ -170,12 +170,11 @@ fn main() {
     #[cfg(windows)]
     let _ = nu_ansi_term::enable_ansi_support();
     logger::init();
-    init_global_threadpool();
-
-    // Delete old log files
-    rayon::spawn(|| {
-        let log_dir = logger::get_log_dir();
-        logger::cleanup_log_files(log_dir);
+    // Nothing a prompt shows waits for these.
+    std::thread::spawn(|| {
+        init_global_threadpool();
+        // Delete old log files
+        logger::cleanup_log_files(logger::get_log_dir());
     });
 
     let args = match Cli::try_parse() {
@@ -317,8 +316,11 @@ fn main() {
 
 /// Initialize global `rayon` thread pool
 fn init_global_threadpool() {
-    rayon::ThreadPoolBuilder::new()
+    // A module that needs the pool before then starts it with every core.
+    if let Err(error) = rayon::ThreadPoolBuilder::new()
         .num_threads(num_rayon_threads())
         .build_global()
-        .expect("Failed to initialize worker thread pool");
+    {
+        log::debug!("The worker thread pool started before it was configured: {error}");
+    }
 }
