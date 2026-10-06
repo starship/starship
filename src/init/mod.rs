@@ -1,6 +1,7 @@
-use crate::utils::create_command;
+use crate::utils::{create_command, exec_timeout};
 use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
+use std::time::Duration;
 use std::{env, io};
 
 use which::which;
@@ -49,6 +50,13 @@ impl StarshipPath {
         self.str_path()
             .map(|s| s.replace('\'', "''"))
             .map(|s| format!("'{s}'"))
+    }
+
+    /// `Xonsh` specific path escaping: a Python string literal, which a JSON
+    /// string always is
+    fn sprint_xonsh(&self) -> io::Result<String> {
+        self.str_path()
+            .and_then(|path| serde_json::to_string(path).map_err(io::Error::other))
     }
 
     /// `Elvish` specific path escaping
@@ -184,7 +192,14 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             r"eval `({} init tcsh --print-full-init)`",
             starship.sprint_posix()?
         ),
-        "nu" => print_script(NU_INIT, &StarshipPath::init()?.sprint()?),
+        "nu" => print_script(
+            if nu_streams() {
+                NU_STREAMING_INIT
+            } else {
+                NU_INIT
+            },
+            &StarshipPath::init()?.sprint()?,
+        ),
         "xonsh" => print!(
             r"execx($({} init xonsh --print-full-init))",
             starship.sprint_posix()?
@@ -227,7 +242,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
         "ion" => print_script(ION_INIT, &starship_path.sprint()?),
         "elvish" => print_script(ELVISH_INIT, &starship_path.sprint_elv()?),
         "tcsh" => print_script(TCSH_INIT, &starship_path.sprint_posix()?),
-        "xonsh" => print_script(XONSH_INIT, &starship_path.sprint_posix()?),
+        "xonsh" => print_script(XONSH_INIT, &starship_path.sprint_xonsh()?),
         _ => {
             println!(
                 "printf \"Shell name detection failed on phase two init.\\n\
@@ -275,6 +290,25 @@ const TCSH_INIT: &str = include_str!("starship.tcsh");
 
 const NU_INIT: &str = include_str!("starship.nu");
 
+const NU_STREAMING_INIT: &str = include_str!("starship_stream.nu");
+
+/// Whether the `nu` that will run the init script can stream prompts, which
+/// takes `commandline set-prompt` and the job mailbox. A script calling a
+/// command that does not exist fails to parse, so the check cannot be made in
+/// the script itself.
+fn nu_streams() -> bool {
+    const PROBE: &str = r#"["commandline set-prompt" "job flush" "job kill" "job list" "job recv" "job send" "job spawn"] | all {|name| $name in (scope commands | get name) }"#;
+    create_command("nu")
+        .ok()
+        .and_then(|mut nu| {
+            exec_timeout(
+                nu.args(["--no-config-file", "-c", PROBE]),
+                Duration::from_secs(2),
+            )
+        })
+        .is_some_and(|output| output.stdout.trim() == "true")
+}
+
 const XONSH_INIT: &str = include_str!("starship.xsh");
 
 const CMDEXE_INIT: &str = include_str!("starship.lua");
@@ -282,6 +316,18 @@ const CMDEXE_INIT: &str = include_str!("starship.lua");
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn escape_xonsh() -> io::Result<()> {
+        let starship_path = StarshipPath {
+            native_path: PathBuf::from("C:\\Cool Tools\\starship\".exe"),
+        };
+        assert_eq!(
+            starship_path.sprint_xonsh()?,
+            r#""C:\\Cool Tools\\starship\".exe""#
+        );
+        Ok(())
+    }
+
     #[test]
     fn escape_pwsh() -> io::Result<()> {
         let starship_path = StarshipPath {

@@ -23,7 +23,7 @@ $null = New-Module starship {
         }
     }
 
-    function Invoke-Native {
+    function Start-Native {
         param($Executable, $Arguments)
         $startInfo = New-Object System.Diagnostics.ProcessStartInfo -ArgumentList $Executable -Property @{
             StandardOutputEncoding = [System.Text.Encoding]::UTF8;
@@ -51,7 +51,12 @@ $null = New-Module starship {
             }
             $startInfo.Arguments = $escaped -Join ' ';
         }
-        $process = [System.Diagnostics.Process]::Start($startInfo)
+        [System.Diagnostics.Process]::Start($startInfo)
+    }
+
+    function Invoke-Native {
+        param($Executable, $Arguments)
+        $process = Start-Native $Executable $Arguments
 
         # Read the output and error streams asynchronously
         # Avoids potential deadlocks when the child process fills one of the buffers
@@ -68,6 +73,129 @@ $null = New-Module starship {
         }
 
         $stdout.Result;
+    }
+
+    # The prompt is streamed: `starship prompt --stream` draws it as soon as
+    # what renders quickly has, and refines it as the rest does. PSReadLine redraws
+    # a prompt only from its own thread, by running engine events while it
+    # waits for a key with nothing typed, and stops running them for the rest
+    # of the line once one has redrawn the prompt. So the stream is read on a
+    # runspace of its own, and once every module has rendered, an event redraws
+    # the prompt, once.
+    $script:StreamPump = {
+        param($Stream, $Events)
+        $block = [char[]]::new(65536)
+        $received = ''
+        try {
+            while (($read = $Stream.Process.StandardOutput.Read($block, 0, $block.Length)) -gt 0) {
+                # A frame is a keyword and two fields, each ending in a NUL. Of a
+                # prompt frame, only the first field, the main prompt, is shown
+                # here: PSReadLine has no right prompt.
+                $fields = ($received + [string]::new($block, 0, $read)).Split([char] 0)
+                $frames = [math]::Floor(($fields.Count - 1) / 3)
+                for ($frame = 0; $frame -lt $frames; $frame++) {
+                    $first = $fields[3 * $frame + 1]
+                    switch ($fields[3 * $frame]) {
+                        'PROMPT' {
+                            $Stream.Prompt = $first
+                            if ($Stream.Ready.IsSet) { $Stream.Refined = $true } else { $Stream.Ready.Set() }
+                        }
+                        'COMPLETE' {
+                            $Stream.Timings = $first
+                            if ($Stream.Refined) {
+                                $null = $Events.GenerateEvent('Starship.Refined', $Stream, $null, $null)
+                            }
+                            # The one redraw is spent on the finished prompt, so
+                            # keeping time-varying modules current is wasted work.
+                            Stop-Process -Id $Stream.Id -ErrorAction Ignore
+                            return
+                        }
+                    }
+                }
+                $received = $fields[(3 * $frames)..($fields.Count - 1)] -join [char] 0
+            }
+        } finally {
+            $Stream.Ready.Set()
+        }
+    }
+
+    # Whether PSReadLine is reading a line, which is when it calls the prompt
+    # function to redraw the prompt, and when it runs engine events.
+    function Test-StarshipReadingLine {
+        (Get-PSCallStack).Command -contains 'PSConsoleHostReadLine'
+    }
+
+    # Redraws the prompt the stream draws, refined. Run any later than while
+    # PSReadLine reads the line under that prompt, as after the line has been
+    # accepted, the redraw would land on whatever follows it.
+    function Update-StarshipPrompt {
+        param($Stream)
+        if ([object]::ReferenceEquals($Stream, $script:Stream) -and (Test-StarshipReadingLine)) {
+            $script:Refining = $true
+            try {
+                [Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
+            } finally {
+                $script:Refining = $false
+            }
+        }
+    }
+
+    # Starts a stream for a new prompt, and returns its first paint, which the
+    # stream draws within its fallback. A stream that fails draws nothing, as a
+    # failing `starship prompt` would.
+    function Start-StarshipStream {
+        param($Arguments)
+        $arguments = @("prompt", "--stream", "--timings=$script:StreamTimings") + $Arguments
+        $stream = [hashtable]::Synchronized(@{
+            Ready = [System.Threading.ManualResetEventSlim]::new()
+            Prompt = $null
+            Refined = $false
+            Timings = $null
+            # An event's action runs in a module of its own, so the stream that
+            # raises one carries the function that redraws its prompt in this one.
+            Redraw = ${function:Update-StarshipPrompt}
+        })
+        # What the stream logs has nowhere to go while the prompt is shown.
+        if ($script:Unix) {
+            # On unix, a child of the shell that exits while PSReadLine reads a
+            # line stops it running events until the next key press, so the
+            # stream runs as a grandchild, started by a shell that exits at once,
+            # reporting the stream's process id.
+            $stream.Process = Start-Native '/bin/sh' (
+                @('-c', '"$0" "$@" 2>/dev/null & echo $! >&2', ::STARSHIP::) + $arguments)
+            $stream.Id = [int] $stream.Process.StandardError.ReadToEnd()
+            $stream.Process.WaitForExit()
+        } else {
+            $stream.Process = Start-Native ::STARSHIP:: $arguments
+            $stream.Id = $stream.Process.Id
+            # Read all the same, since a pipe nobody reads stalls the stream.
+            $null = $stream.Process.StandardError.ReadToEndAsync()
+        }
+        $script:Pump.Commands.Clear()
+        $stream.Pumping = $script:Pump.AddScript($script:StreamPump).
+            AddArgument($stream).AddArgument($ExecutionContext.Events).BeginInvoke()
+        $script:Stream = $stream
+        $stream.Ready.Wait()
+        if ($null -ne $stream.Prompt) {
+            $stream.Prompt
+        } else {
+            Stop-StarshipStream
+            ''
+        }
+    }
+
+    function Stop-StarshipStream {
+        $stream = $script:Stream
+        if ($null -eq $stream) { return }
+        $script:Stream = $null
+        # Once the pump is done, so is the stream, and its process id may name
+        # another process by now.
+        if (-not $stream.Pumping.IsCompleted) {
+            Stop-Process -Id $stream.Id -ErrorAction Ignore
+        }
+        $null = $script:Pump.EndInvoke($stream.Pumping)
+        $stream.Process.Dispose()
+        if ($stream.Timings) { $script:StreamTimings = $stream.Timings }
     }
 
     function Enable-TransientPrompt {
@@ -116,7 +244,6 @@ $null = New-Module starship {
 
         $cwd = Get-Cwd
         $arguments = @(
-            "prompt"
             "--path=$($cwd.Path)",
             "--logical-path=$($cwd.LogicalPath)",
             "--terminal-width=$($Host.UI.RawUI.WindowSize.Width)",
@@ -146,15 +273,29 @@ $null = New-Module starship {
         }
 
         # Invoke Starship
-        $promptText = if ($script:TransientPrompt) {
-            $script:TransientPrompt = $false
-            if (Test-Path function:Invoke-Starship-TransientFunction) {
-                Invoke-Starship-TransientFunction
-            } else {
-                "$([char]0x1B)[1;32m❯$([char]0x1B)[0m "
-            }
+        $promptText = if ($script:Refining) {
+            $script:Stream.Prompt
         } else {
-            Invoke-Native -Executable ::STARSHIP:: -Arguments $arguments
+            Stop-StarshipStream
+            if ($script:TransientPrompt) {
+                $script:TransientPrompt = $false
+                if (Test-Path function:Invoke-Starship-TransientFunction) {
+                    Invoke-Starship-TransientFunction
+                } else {
+                    "$([char]0x1B)[1;32m❯$([char]0x1B)[0m "
+                }
+            } else {
+                # A prompt redrawn within a line, as when the vi mode changes, is
+                # drawn in full: the line may have spent its one redraw already.
+                $streamed = if ($script:Pump -and -not (Test-StarshipReadingLine)) {
+                    Start-StarshipStream $arguments
+                }
+                if ($null -ne $streamed) {
+                    $streamed
+                } else {
+                    Invoke-Native -Executable ::STARSHIP:: -Arguments (@("prompt") + $arguments)
+                }
+            }
         }
 
         # Set the number of extra lines in the prompt for PSReadLine prompt redraw.
@@ -192,6 +333,24 @@ $null = New-Module starship {
 
     $script:TransientPrompt = $false
     $script:DoesUseLists = (Get-PSReadLineOption).PredictionViewStyle -eq 'ListView'
+
+    $script:Stream = $null
+    $script:StreamTimings = ''
+    $script:Refining = $false
+    $script:Pump = $null
+    $script:Unix = $PSVersionTable.PSVersion.Major -gt 5 -and -not $IsWindows
+    # Only PSReadLine redraws a prompt it shows; without it, each prompt is
+    # drawn in full.
+    if (Get-Command PSConsoleHostReadLine -ErrorAction Ignore) {
+        $script:Pump = [powershell]::Create()
+        $script:Pump.Runspace = [runspacefactory]::CreateRunspace()
+        $script:Pump.Runspace.Open()
+        # Raised by a stream once every module has rendered. Not a support
+        # event, which PSReadLine does not run as it waits for a key.
+        $null = Register-EngineEvent -SourceIdentifier Starship.Refined -Action {
+            $null = $Sender.Redraw.Invoke($Sender)
+        }
+    }
 
     if ($PSVersionTable.PSVersion.Major -gt 5) {
         $ENV:STARSHIP_SHELL = "pwsh"

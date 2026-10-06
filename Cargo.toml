@@ -114,7 +114,7 @@ features = [
 ]
 
 [target.'cfg(not(windows))'.dependencies]
-nix = { version = "0.31.3", default-features = false, features = ["feature", "fs", "user"] }
+nix = { version = "0.31.3", default-features = false, features = ["feature", "fs", "process", "signal", "user"] }
 
 [build-dependencies]
 shadow-rs = { version = "2.0.0", default-features = false, features = ["build"] }
@@ -124,7 +124,10 @@ dunce = "1.0.5"
 winresource = "0.1.31"
 
 [dev-dependencies]
+# Runs shells in a pseudo-terminal, and emulates the screen they draw.
+alacritty_terminal = "0.26.0"
 mockall = "=0.15.0"
+proptest = "1.11.0"
 
 [profile.release]
 codegen-units = 1

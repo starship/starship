@@ -38,7 +38,7 @@ function fish_prompt
             printf "\e[1;32m❯\e[0m "
         end
     else
-        ::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+        __starship_prompt 1 --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
     end
 end
 
@@ -66,7 +66,83 @@ function fish_right_prompt
             printf ""
         end
     else
-        ::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+        __starship_prompt 2 --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+    end
+end
+
+# Prints one side of the prompt, 1 for the main and 2 for the right.
+if test "$OS" = Windows_NT
+    # A starship built for Windows cannot stream in the background, so each
+    # prompt is drawn once every module has rendered.
+    function __starship_prompt --argument-names side
+        if test $side = 1
+            ::STARSHIP:: prompt $argv[2..-1]
+        else
+            ::STARSHIP:: prompt --right $argv[2..-1]
+        end
+    end
+else
+    # The prompt is streamed: `starship prompt --stream` draws it as soon as
+    # what renders quickly has, and refines it as the rest does. fish cannot
+    # read a pipe while it waits for input, so the stream runs in the
+    # background, rewriting a file named after its process that holds both
+    # sides and the timings, `main\0right\0timings\0`, and signalling fish to
+    # read it.
+    set -g __starship_stream_directory (command mktemp -d)
+    set -g __starship_stream_prompts '' ''
+    set -g __starship_stream_timings ''
+
+    # A stream starts for each new prompt, and whenever the arguments change,
+    # as they do with the width or the mode.
+    function __starship_prompt --argument-names side
+        if test "$__starship_stream_arguments" != "$argv[2..-1]"
+            __starship_stream_start $argv[2..-1]
+            set -g __starship_stream_arguments $argv[2..-1]
+        end
+        printf %s $__starship_stream_prompts[$side]
+    end
+
+    # Waits for the first prompts, which the stream announces on the pipe as
+    # `main\0right\0pid\0` before the pipe ends. A stream that fails draws
+    # nothing, as a failing `starship prompt` would.
+    function __starship_stream_start
+        __starship_stream_stop
+        ::STARSHIP:: prompt --stream --publish-state=$__starship_stream_directory --signal-pid=$fish_pid --timings=$__starship_stream_timings $argv 2>/dev/null | begin
+            read -z main; read -z right; read -z pid
+        end
+        set -g __starship_stream_pid $pid
+        set -g __starship_stream_prompts "$main" "$right"
+    end
+
+    # Stops the stream, handing the timings it reported to the next one.
+    function __starship_stream_stop --on-event fish_preexec --on-event fish_exit
+        if test -n "$__starship_stream_pid"
+            command kill $__starship_stream_pid 2>/dev/null
+            set -l state $__starship_stream_directory/$__starship_stream_pid
+            if test -f $state
+                begin
+                    read -z main; read -z right; read -z timings
+                end <$state
+                set -g __starship_stream_timings $timings
+                command rm -f $state
+            end
+        end
+        set -g __starship_stream_pid
+        set -g __starship_stream_arguments
+    end
+
+    function __starship_stream_update --on-signal USR1
+        test -n "$__starship_stream_pid"; or return
+        begin
+            read -z main; read -z right
+        end <$__starship_stream_directory/$__starship_stream_pid
+        set -g __starship_stream_prompts "$main" "$right"
+        # A prompt drawn as the command line is accepted is drawn once, as is.
+        test "$TRANSIENT" = 1; or commandline -f repaint
+    end
+
+    function __starship_stream_cleanup --on-event fish_exit
+        command rm -r $__starship_stream_directory
     end
 end
 
