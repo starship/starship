@@ -3,7 +3,12 @@
 
 mod bus;
 mod frame;
+#[cfg(unix)]
+mod snapshot;
 mod timings;
+
+#[cfg(unix)]
+pub use snapshot::detach;
 
 use std::io;
 use std::mem;
@@ -24,6 +29,23 @@ use frame::{Frame, Sink};
 pub fn stream(properties: Properties, timings: &str) -> io::Result<()> {
     let context = Context::new(properties, Target::Main);
     run(&context, timings, &mut io::stdout().lock())
+}
+
+/// Streams the main and right prompts to a file in `directory`, for a shell
+/// that cannot read a pipe while it waits for input; see [`snapshot`].
+#[cfg(unix)]
+pub fn publish(
+    properties: Properties,
+    timings: &str,
+    directory: std::path::PathBuf,
+    shell: i32,
+) -> io::Result<()> {
+    let context = Context::new(properties, Target::Main);
+    run(
+        &context,
+        timings,
+        &mut snapshot::Snapshot::new(directory, shell),
+    )
 }
 
 fn run(context: &Context, timings: &str, output: &mut impl Sink) -> io::Result<()> {
