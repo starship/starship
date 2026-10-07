@@ -2710,7 +2710,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ## JJ Status
 
-The `jj_status` module shows symbols representing the state of the [Jujutsu](https://docs.jj-vcs.dev/) repo in your current directory.
+The `jj_status` module shows symbols for file changes across the whole [Jujutsu](https://docs.jj-vcs.dev/) working-copy change, including paths outside the current directory.
 
 > [!TIP]
 > Jujutsu modules are not in the default `format` entry nor is JJ first in the [`vcs` module](#vcs), you can either:
