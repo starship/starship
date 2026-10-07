@@ -197,4 +197,37 @@ mod tests {
         assert_eq!(expected, actual);
         dir.close()
     }
+
+    #[test]
+    #[cfg(target_os = "macos")]
+    fn folder_with_swift_file_finds_frontend_via_xcrun() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("main.swift"))?.sync_all()?;
+        let actual = ModuleRenderer::new("swift")
+            .cmd("swift-frontend --version", None)
+            .cmd(
+                "xcrun --find swift-frontend",
+                Some(CommandOutput {
+                    stdout: String::from("swift-frontend-from-xcrun\n"),
+                    stderr: String::default(),
+                }),
+            )
+            .cmd(
+                "swift-frontend-from-xcrun --version",
+                Some(CommandOutput {
+                    stdout: String::from(
+                        "Apple Swift version 6.3.1 (swiftlang-6.3.1.1.2 clang-2100.0.123.102)\nTarget: arm64-apple-macosx26.0\n",
+                    ),
+                    stderr: String::default(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Fixed(202).bold().paint("🐦 v6.3.1 ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
 }
