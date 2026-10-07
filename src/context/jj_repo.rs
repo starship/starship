@@ -130,7 +130,7 @@ impl JJRepo {
                             diff.stat().total_added(),
                             diff.stat().total_removed(),
                             self
-                                .diff(".")
+                                .diff()
                                 .files()
                                 .filter(|file| !conflict || conflicted_files.all(|c| c.path().display() != file.path().display()))
                                 .map(|file| file.status_char())
@@ -391,7 +391,7 @@ pub fn mock_jj_cmd(s: &str) -> Option<crate::utils::CommandOutput> {
             "100",
             // lines deleted
             "90",
-            // files status in current directory
+            // whole working-copy file status characters
             "ACDMR",
         ];
 
@@ -407,6 +407,9 @@ pub fn mock_jj_cmd(s: &str) -> Option<crate::utils::CommandOutput> {
 
     if !s.contains("show @") {
         panic!("Found non-mocked JJ command: {s}");
+    }
+    if !s.contains(".diff()") || s.contains(r#".diff(".")"#) {
+        panic!("JJ show template must count files across the whole working copy: {s}");
     }
 
     // Voluntarily unformatted to allow easy modifications that don't conflict all the time
