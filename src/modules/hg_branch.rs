@@ -312,7 +312,7 @@ mod tests {
 
         let mut expect_branch_name = "default";
         let mut expect_style = Color::Purple.bold();
-        let mut expect_symbol = "\u{e0a0}";
+        let mut expect_symbol = "\u{2387}";
         let mut expect_truncation_symbol = "…";
 
         for expect in expectations {
