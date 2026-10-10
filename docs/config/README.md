@@ -373,6 +373,27 @@ modules you explicitly add to the format will not be duplicated. Eg.
 format = '$all$directory$character'
 ```
 
+## Async
+
+`starship prompt --stream` emits the main and right prompts as modules finish rendering.
+The first prompt can appear before slow modules finish. Later frames include their results.
+The completed prompts use the same formatting as ordinary `starship prompt` output.
+Shell integrations that consume these frames are introduced separately.
+
+### Options
+
+| Option         | Default | Description                                                                                                            |
+| -------------- | ------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `enabled`      | `true`  | Allow a partial prompt while modules render. Set to `false` to wait for all modules.                                   |
+| `bus.fallback` | `50`    | Maximum initial waiting budget for modules, in milliseconds. Process startup and configuration loading are additional. |
+
+### Example
+
+```toml
+[async]
+enabled = false
+```
+
 ## AWS
 
 The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials.
