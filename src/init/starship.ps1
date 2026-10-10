@@ -23,7 +23,7 @@ $null = New-Module starship {
         }
     }
 
-    function Invoke-Native {
+    function Start-Native {
         param($Executable, $Arguments)
         $startInfo = New-Object System.Diagnostics.ProcessStartInfo -ArgumentList $Executable -Property @{
             StandardOutputEncoding = [System.Text.Encoding]::UTF8;
@@ -51,7 +51,12 @@ $null = New-Module starship {
             }
             $startInfo.Arguments = $escaped -Join ' ';
         }
-        $process = [System.Diagnostics.Process]::Start($startInfo)
+        [System.Diagnostics.Process]::Start($startInfo)
+    }
+
+    function Invoke-Native {
+        param($Executable, $Arguments)
+        $process = Start-Native $Executable $Arguments
 
         # Read the output and error streams asynchronously
         # Avoids potential deadlocks when the child process fills one of the buffers
