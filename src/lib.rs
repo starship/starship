@@ -22,6 +22,7 @@ mod painted;
 mod plan;
 pub mod print;
 mod segment;
+pub mod stream;
 mod utils;
 mod workers;
 
