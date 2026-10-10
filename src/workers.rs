@@ -66,7 +66,10 @@ impl Workers<'_> {
     fn collect_segments(&self, module_count: usize) -> Vec<Vec<Segment>> {
         let mut segments = vec![Vec::new(); module_count];
 
-        for rendered in self.result_receiver.iter().take(module_count) {
+        for rendered in std::iter::repeat_with(|| self.wait(None))
+            .flatten()
+            .take(module_count)
+        {
             segments[rendered.position] = rendered.segments;
         }
 
