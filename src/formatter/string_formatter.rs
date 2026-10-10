@@ -6,9 +6,8 @@ use std::error::Error;
 use std::fmt;
 
 use crate::config::{Style, parse_style_string};
-use crate::context::{Context, Shell};
+use crate::context::Context;
 use crate::segment::Segment;
-use crate::utils::shell_prompt_escape;
 
 use super::model::*;
 use super::parser::{Rule, parse};
@@ -292,16 +291,7 @@ impl<'a> StringFormatter<'a> {
                 .into_iter()
                 .map(|el| {
                     match el {
-                        FormatElement::Text(text) => Ok(Segment::from_text(
-                            style,
-                            shell_prompt_escape(
-                                text,
-                                match context {
-                                    None => Shell::Unknown,
-                                    Some(c) => c.shell,
-                                },
-                            ),
-                        )),
+                        FormatElement::Text(text) => Ok(Segment::from_text(style, text)),
                         FormatElement::TextGroup(textgroup) => {
                             parse_textgroup(textgroup, variables, style_variables, context)
                         }
@@ -320,18 +310,11 @@ impl<'a> StringFormatter<'a> {
                                             segment
                                         })
                                         .collect()),
-                                    VariableValue::Plain(text) => Ok(Segment::from_text(
-                                        style,
-                                        shell_prompt_escape(
-                                            text,
-                                            match context {
-                                                None => Shell::Unknown,
-                                                Some(c) => c.shell,
-                                            },
-                                        ),
-                                    )),
-                                    VariableValue::NoEscapingPlain(text) => {
+                                    VariableValue::Plain(text) => {
                                         Ok(Segment::from_text(style, text))
+                                    }
+                                    VariableValue::NoEscapingPlain(text) => {
+                                        Ok(Segment::verbatim(style, text))
                                     }
                                     VariableValue::Meta(format) => {
                                         let formatter = StringFormatter {
@@ -832,47 +815,5 @@ mod tests {
                 .parse(None, None)
         });
         assert!(segments.is_err());
-    }
-
-    #[test]
-    fn test_bash_escape() {
-        let test = "$(echo a)";
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::Bash),
-            r"\$(echo a)"
-        );
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
-            test
-        );
-
-        let test = r"\$(echo a)";
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::Bash),
-            r"\\\$(echo a)"
-        );
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
-            test
-        );
-
-        let test = r"`echo a`";
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::Bash),
-            r"\`echo a\`"
-        );
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
-            test
-        );
-    }
-    #[test]
-    fn test_zsh_escape() {
-        let test = "10%";
-        assert_eq!(shell_prompt_escape(test.to_owned(), Shell::Zsh), "10%%");
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
-            test
-        );
     }
 }
