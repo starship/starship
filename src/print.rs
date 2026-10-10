@@ -1,5 +1,4 @@
 use clap::{ValueEnum, builder::PossibleValue};
-use nu_ansi_term::AnsiStrings;
 use rayon::prelude::*;
 use regex::Regex;
 use std::collections::BTreeSet;
@@ -18,6 +17,7 @@ use crate::formatter::{StringFormatter, VariableHolder};
 use crate::module::ALL_MODULES;
 use crate::module::Module;
 use crate::modules;
+use crate::painted::Painted;
 use crate::segment::Segment;
 use crate::shadow;
 use crate::utils::wrap_colorseq_for_shell;
@@ -134,23 +134,18 @@ pub fn get_prompt(context: &Context) -> String {
         }
     });
 
-    // Creates a root module and prints it.
-    let mut root_module = Module::new("Starship Root", "The root module", None);
-    root_module.set_segments(
-        formatter
-            .parse(None, Some(context))
-            .expect("Unexpected error returned in root format variables"),
-    );
+    let segments = formatter
+        .parse(None, Some(context))
+        .expect("Unexpected error returned in root format variables");
+    let painted = Painted::new(&segments, Some(context.width));
 
-    let module_strings = root_module.ansi_strings_for_width(Some(context.width));
     if config.add_newline && context.target != Target::Continuation {
         // continuation prompts normally do not include newlines, but they can
         writeln!(buf).unwrap();
     }
-    // AnsiStrings strips redundant ANSI color sequences, so apply it before modifying the ANSI
+    // Painting collapses redundant ANSI color sequences, so apply it before modifying the ANSI
     // color sequences for this specific shell
-    let shell_wrapped_output =
-        wrap_colorseq_for_shell(AnsiStrings(&module_strings).to_string(), context.shell);
+    let shell_wrapped_output = wrap_colorseq_for_shell(painted.to_string(), context.shell);
     write!(buf, "{shell_wrapped_output}").unwrap();
 
     if context.target == Target::Right {
@@ -195,9 +190,7 @@ pub fn timings(args: Properties) {
         .map(|module| ModuleTiming {
             name: String::from(module.get_name().as_str()),
             name_len: module.get_name().width_graphemes(),
-            value: nu_ansi_term::AnsiStrings(&module.ansi_strings())
-                .to_string()
-                .replace('\n', "\\n"),
+            value: module.to_string().replace('\n', "\\n"),
             duration: module.duration,
             duration_len: format_duration(&module.duration).width_graphemes(),
         })
@@ -244,7 +237,7 @@ pub fn explain(args: Properties) {
         .map(|module| {
             let value = module.get_segments().join("");
             ModuleInfo {
-                value: nu_ansi_term::AnsiStrings(&module.ansi_strings()).to_string(),
+                value: module.to_string(),
                 value_len: value.width_graphemes()
                     + format_duration(&module.duration).width_graphemes(),
                 desc: module.get_description().clone(),
