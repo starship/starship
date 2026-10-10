@@ -14,6 +14,7 @@ pub struct AsynchronousConfig {
     /// Draw a prompt before every module has rendered, then refine it as they
     /// do. When disabled, the prompt is drawn once every module has rendered.
     pub enabled: bool,
+
     /// While the prompt is shown, render again the modules whose values go
     /// stale on their own, and redraw the prompt when they change. Each such
     /// module can be kept from it with its own `refresh` option.
@@ -43,6 +44,7 @@ pub struct BusConfig {
     /// Plan redraws from what each module did for the previous prompt. When
     /// disabled, every module is waited for as one never measured is.
     pub adaptive: bool,
+
     /// The longest, in milliseconds, the first paint waits for modules, and
     /// how much a redraw that soon is worth in waiting. Later redraws are worth
     /// less, the longer the module that makes them took.
