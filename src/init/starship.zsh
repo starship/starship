@@ -53,7 +53,8 @@ prompt_starship_precmd() {
     # quotes so we set it here and then use the value later on.
     STARSHIP_JOBS_COUNT="${#jobstates[*]}"
 
-    starship_stream_start
+    # Run after every precmd hook has updated the shell environment.
+    sched +0 starship_stream_start
 }
 
 # Runs after the user submits the command line, but before it is executed and

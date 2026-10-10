@@ -553,3 +553,25 @@ fn zsh_keeps_the_right_prompt_current() {
 fn zsh_redraws_the_vi_mode_indicator() {
     vi_mode_redraws_the_indicator(Shell::Zsh);
 }
+
+#[test]
+#[ignore = "requires zsh"]
+fn zsh_draws_what_later_precmd_hooks_leave() {
+    let mut session = Session::start(
+        Shell::Zsh,
+        r#"
+format = "${env_var.STREAM_TEST}>"
+add_newline = false
+
+[env_var.STREAM_TEST]
+default = "old"
+format = "$env_value"
+"#,
+    );
+    session.wait_for("old>");
+    session.send("late() { export STREAM_TEST=updated }; add-zsh-hook precmd late");
+    session.wait_for("add-zsh-hook precmd late");
+    session.enter();
+    session.wait_for("updated>");
+    session.close();
+}
