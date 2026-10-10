@@ -761,6 +761,12 @@ fn pwsh_redraws_once_finished() {
 
 #[test]
 #[ignore = "requires pwsh"]
+fn pwsh_leaves_an_accepted_line_alone() {
+    an_accepted_line_is_left_alone(Shell::Pwsh);
+}
+
+#[test]
+#[ignore = "requires pwsh"]
 fn pwsh_shows_text_as_it_is() {
     text_is_shown_as_it_is(Shell::Pwsh);
 }
