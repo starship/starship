@@ -1547,4 +1547,72 @@ mod tests {
             );
         }
     }
+    #[test]
+    fn zero_refresh_period_has_no_deadline() {
+        let started_at = Instant::now();
+        let clock = Clock {
+            started_at,
+            wall_time_at_start: Duration::ZERO,
+        };
+        assert_eq!(None, clock.next_refresh_at(started_at, Duration::ZERO));
+    }
+
+    #[test]
+    fn refresh_deadlines_follow_wall_clock_boundaries_strictly_after_now() {
+        let started_at = Instant::now();
+        let period = Duration::from_secs(1);
+        let clock = Clock {
+            started_at,
+            wall_time_at_start: milliseconds(300),
+        };
+        let first_boundary = started_at + milliseconds(700);
+        assert_eq!(
+            Some(first_boundary),
+            clock.next_refresh_at(started_at, period)
+        );
+        assert_eq!(
+            Some(first_boundary + period),
+            clock.next_refresh_at(first_boundary, period),
+            "a refresh on a boundary advances to the following boundary"
+        );
+    }
+
+    #[test]
+    fn nanosecond_conversion_accepts_the_entire_duration_range() {
+        let maximum_nanoseconds = Duration::MAX.as_nanos();
+        assert_eq!(
+            Some(Duration::MAX),
+            duration_from_nanoseconds(maximum_nanoseconds)
+        );
+        assert_eq!(None, duration_from_nanoseconds(maximum_nanoseconds + 1));
+    }
+
+    #[test]
+    fn overflowing_wall_time_has_no_refresh_deadline() {
+        let started_at = Instant::now();
+        let clock = Clock {
+            started_at,
+            wall_time_at_start: Duration::MAX,
+        };
+        assert_eq!(
+            None,
+            clock.next_refresh_at(started_at + Duration::from_nanos(1), Duration::from_secs(1),)
+        );
+    }
+
+    #[test]
+    fn long_refresh_periods_preserve_nearby_deadlines() {
+        let started_at = Instant::now();
+        let period = Duration::from_secs(u64::MAX);
+        let one_nanosecond = Duration::from_nanos(1);
+        let clock = Clock {
+            started_at,
+            wall_time_at_start: period - one_nanosecond,
+        };
+        assert_eq!(
+            Some(started_at + one_nanosecond),
+            clock.next_refresh_at(started_at, period),
+            "the wall-clock remainder may exceed u64 nanoseconds"
+        );
+    }
 }
