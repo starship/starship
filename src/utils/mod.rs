@@ -711,8 +711,10 @@ where
             // % is an escape in zsh, see PROMPT in `man zshmisc`
             text.into().replace('%', "%%")
         }
-        // Percent introduces prompt expansions in tcsh.
+        // % is an escape in tcsh too, see prompt in `man tcsh`
         Shell::Tcsh => text.into().replace('%', "%%"),
+        // xonsh formats a prompt, filling in fields such as {user}
+        Shell::Xonsh => text.into().replace('{', "{{").replace('}', "}}"),
         _ => text.into(),
     }
 }
@@ -1006,6 +1008,11 @@ mod tests {
     #[test]
     fn test_tcsh_escape() {
         assert_eq!(shell_prompt_escape("%n", Shell::Tcsh), "%%n");
+    }
+
+    #[test]
+    fn test_xonsh_escape() {
+        assert_eq!(shell_prompt_escape("{user}", Shell::Xonsh), "{{user}}");
     }
 
     #[test]
