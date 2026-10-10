@@ -390,6 +390,7 @@ Supported shell integrations:
 - Nushell 0.115 or later streams both prompts through its job mailbox. Older supported versions use synchronous prompts.
 - Bash 4.2 or newer with ble.sh 0.4 or newer. Bash without compatible ble.sh draws each prompt in full.
 - xonsh with prompt_toolkit on Unix. Other editors and platforms wait for the complete prompt.
+- PowerShell with PSReadLine draws an initial prompt and can redraw once after all modules finish, provided typing has not started. It does not refresh modules afterward. Without PSReadLine, each prompt is drawn in full.
 
 ### Options
 
