@@ -145,7 +145,7 @@ impl<'a> Context<'a> {
         logical_path: PathBuf,
         env: Env<'a>,
     ) -> Self {
-        let config = StarshipConfig::initialize(get_config_path_os(&env).as_deref());
+        let config = StarshipConfig::initialize(config_file_to_read(&env).as_deref());
 
         // If the vector is zero-length, we should pretend that we didn't get a
         // pipestatus at all (since this is the input `--pipestatus=""`)
@@ -543,6 +543,16 @@ fn home_dir(env: &Env) -> Option<PathBuf> {
         return Some(PathBuf::from(home));
     }
     utils::home_dir()
+}
+
+/// The configuration file a new context reads.
+///
+/// A test reads only configuration it set up, itself. This prevents annoying cross-contamination of pre-setup local configs
+fn config_file_to_read(env: &Env) -> Option<OsString> {
+    if cfg!(test) && env.get_env_os("STARSHIP_CONFIG").is_none() && env.get_env("HOME").is_none() {
+        return None;
+    }
+    get_config_path_os(env)
 }
 
 fn get_config_path_os(env: &Env) -> Option<OsString> {
