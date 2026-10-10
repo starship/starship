@@ -42,7 +42,9 @@ enum Shell {
     Zsh,
     Fish,
     Nushell,
+    /// bash with readline, which draws each prompt once.
     Bash,
+    BashWithBle,
 }
 
 impl Shell {
@@ -51,7 +53,7 @@ impl Shell {
             Self::Zsh => "zsh",
             Self::Fish => "fish",
             Self::Nushell => "nu",
-            Self::Bash => "bash",
+            Self::Bash | Self::BashWithBle => "bash",
         }
     }
 
@@ -66,7 +68,9 @@ impl Shell {
     /// being refined.
     const fn input(self) -> &'static str {
         match self {
-            Self::Zsh | Self::Fish | Self::Bash => "printf 'RESULT:%s\\n' typed",
+            Self::Zsh | Self::Fish | Self::Bash | Self::BashWithBle => {
+                "printf 'RESULT:%s\\n' typed"
+            }
             Self::Nushell => "print ('RESULT:' + 'typed')",
         }
     }
@@ -76,7 +80,9 @@ impl Shell {
     /// since it runs events between them.
     const fn sleep_then_input(self) -> &'static str {
         match self {
-            Self::Zsh | Self::Fish | Self::Bash => "sleep 3; printf 'RESULT:%s\\n' typed",
+            Self::Zsh | Self::Fish | Self::Bash | Self::BashWithBle => {
+                "sleep 3; printf 'RESULT:%s\\n' typed"
+            }
             Self::Nushell => "sleep 3sec; print ('RESULT:' + 'typed')",
         }
     }
@@ -106,8 +112,15 @@ impl Shell {
                     None,
                 )
             }
-            Self::Bash => {
-                let ble = "";
+            Self::Bash | Self::BashWithBle => {
+                let ble = match self {
+                    Self::BashWithBle => {
+                        let ble = std::env::var_os("STARSHIP_TEST_BLE")
+                            .expect("STARSHIP_TEST_BLE names ble.sh");
+                        format!("source '{}'\n", Path::new(&ble).display())
+                    }
+                    _ => String::new(),
+                };
                 let rcfile = fixture.directory.path().join("bashrc");
                 fs::write(&rcfile, format!("{ble}source \"$STARSHIP_INIT\"\n"))
                     .expect("a bash rcfile");
@@ -130,7 +143,7 @@ impl Shell {
             Self::Zsh => &["init", "zsh", "--print-full-init"],
             Self::Fish => &["init", "fish", "--print-full-init"],
             Self::Nushell => &["init", "nu"],
-            Self::Bash => &["init", "bash", "--print-full-init"],
+            Self::Bash | Self::BashWithBle => &["init", "bash", "--print-full-init"],
         }
     }
 
@@ -546,42 +559,6 @@ vimcmd_symbol = "NORMAL"
 }
 
 #[test]
-#[ignore = "requires bash"]
-fn bash_shows_text_as_it_is() {
-    text_is_shown_as_it_is(Shell::Bash);
-}
-
-#[test]
-#[ignore = "requires zsh"]
-fn zsh_shows_text_as_it_is() {
-    text_is_shown_as_it_is(Shell::Zsh);
-}
-
-#[test]
-#[ignore = "requires zsh"]
-fn zsh_streams() {
-    streams(Shell::Zsh);
-}
-
-#[test]
-#[ignore = "requires zsh"]
-fn zsh_leaves_an_accepted_line_alone() {
-    an_accepted_line_is_left_alone(Shell::Zsh);
-}
-
-#[test]
-#[ignore = "requires zsh"]
-fn zsh_keeps_the_right_prompt_current() {
-    the_right_prompt_is_kept_current(Shell::Zsh);
-}
-
-#[test]
-#[ignore = "requires zsh"]
-fn zsh_redraws_the_vi_mode_indicator() {
-    vi_mode_redraws_the_indicator(Shell::Zsh);
-}
-
-#[test]
 #[ignore = "requires zsh"]
 fn zsh_draws_what_later_precmd_hooks_leave() {
     let mut session = Session::start(
@@ -604,6 +581,36 @@ format = "$env_value"
 }
 
 #[test]
+#[ignore = "requires zsh"]
+fn zsh_streams() {
+    streams(Shell::Zsh);
+}
+
+#[test]
+#[ignore = "requires zsh"]
+fn zsh_leaves_an_accepted_line_alone() {
+    an_accepted_line_is_left_alone(Shell::Zsh);
+}
+
+#[test]
+#[ignore = "requires zsh"]
+fn zsh_shows_text_as_it_is() {
+    text_is_shown_as_it_is(Shell::Zsh);
+}
+
+#[test]
+#[ignore = "requires zsh"]
+fn zsh_keeps_the_right_prompt_current() {
+    the_right_prompt_is_kept_current(Shell::Zsh);
+}
+
+#[test]
+#[ignore = "requires zsh"]
+fn zsh_redraws_the_vi_mode_indicator() {
+    vi_mode_redraws_the_indicator(Shell::Zsh);
+}
+
+#[test]
 #[ignore = "requires fish"]
 fn fish_streams() {
     streams(Shell::Fish);
@@ -611,14 +618,14 @@ fn fish_streams() {
 
 #[test]
 #[ignore = "requires fish"]
-fn fish_shows_text_as_it_is() {
-    text_is_shown_as_it_is(Shell::Fish);
+fn fish_leaves_an_accepted_line_alone() {
+    an_accepted_line_is_left_alone(Shell::Fish);
 }
 
 #[test]
 #[ignore = "requires fish"]
-fn fish_leaves_an_accepted_line_alone() {
-    an_accepted_line_is_left_alone(Shell::Fish);
+fn fish_shows_text_as_it_is() {
+    text_is_shown_as_it_is(Shell::Fish);
 }
 
 #[test]
@@ -635,18 +642,36 @@ fn nushell_streams() {
 
 #[test]
 #[ignore = "requires nu 0.115 or later"]
-fn nushell_shows_text_as_it_is() {
-    text_is_shown_as_it_is(Shell::Nushell);
-}
-
-#[test]
-#[ignore = "requires nu 0.115 or later"]
 fn nushell_leaves_an_accepted_line_alone() {
     an_accepted_line_is_left_alone(Shell::Nushell);
 }
 
 #[test]
 #[ignore = "requires nu 0.115 or later"]
+fn nushell_shows_text_as_it_is() {
+    text_is_shown_as_it_is(Shell::Nushell);
+}
+
+#[test]
+#[ignore = "requires nu 0.115 or later"]
 fn nushell_keeps_the_right_prompt_current() {
     the_right_prompt_is_kept_current(Shell::Nushell);
+}
+
+#[test]
+#[ignore = "requires bash"]
+fn bash_shows_text_as_it_is() {
+    text_is_shown_as_it_is(Shell::Bash);
+}
+
+#[test]
+#[ignore = "requires bash 4.2 or later, and STARSHIP_TEST_BLE naming ble.sh"]
+fn bash_with_ble_streams() {
+    streams(Shell::BashWithBle);
+}
+
+#[test]
+#[ignore = "requires bash 4.2 or later, and STARSHIP_TEST_BLE naming ble.sh"]
+fn bash_with_ble_shows_text_as_it_is() {
+    text_is_shown_as_it_is(Shell::BashWithBle);
 }

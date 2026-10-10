@@ -20,6 +20,10 @@ starship_preexec() {
     # Save previous command's last argument, otherwise it will be set to "starship_preexec"
     local PREV_LAST_ARG=$1
 
+    if [[ ${STARSHIP_BLE_STREAM-} ]]; then
+        starship_ble_stream_stop
+    fi
+
     # Avoid restarting the timer for commands in the same pipeline
     if [ "${STARSHIP_PREEXEC_READY:-}" = "true" ]; then
         STARSHIP_PREEXEC_READY=false
@@ -77,21 +81,28 @@ starship_precmd() {
         ARGS+=( --cmd-duration="${STARSHIP_DURATION}")
         STARSHIP_START_TIME=""
     fi
-    PS1="$(::STARSHIP:: prompt "${ARGS[@]}")"
-    local nlns=${PS1//[!$'\n']}
-    if [[ ${BLE_ATTACHED-} ]]; then
-        bleopt prompt_rps1="$nlns$(::STARSHIP:: prompt --right "${ARGS[@]}")"
-    elif [[ ${FLYLINE_VERSION-} ]]; then
-        RPS1="$nlns$(::STARSHIP:: prompt --right "${ARGS[@]}")"
+    if [[ ${STARSHIP_BLE_STREAM-} ]]; then
+        starship_ble_stream_start "${ARGS[@]}"
+        PS1='\q{starship}'
+    else
+        PS1="$(::STARSHIP:: prompt "${ARGS[@]}")"
+        local nlns=${PS1//[!$'\n']}
+        if [[ ${BLE_ATTACHED-} ]]; then
+            bleopt prompt_rps1="$nlns$(::STARSHIP:: prompt --right "${ARGS[@]}")"
+        elif [[ ${FLYLINE_VERSION-} ]]; then
+            RPS1="$nlns$(::STARSHIP:: prompt --right "${ARGS[@]}")"
+        fi
     fi
     STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
 }
 
 # If the user appears to be using https://github.com/akinomyoga/ble.sh,
-# then hook our functions into their framework.
+# then hook our functions into their framework, and stream the prompt where
+# bash names descriptors by variables and declares globals inside functions.
 if [[ ${BLE_VERSION-} && _ble_version -ge 400 ]]; then
     blehook PREEXEC!='starship_preexec "$_"'
     blehook PRECMD!='starship_precmd'
+    ((BASH_VERSINFO[0] * 100 + BASH_VERSINFO[1] >= 402)) && STARSHIP_BLE_STREAM=1
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
 # then hook our functions into their framework.
 elif [[ -n "${bash_preexec_imported:-}" || -n "${__bp_imported:-}" || -n "${preexec_functions-}" || -n "${precmd_functions-}" ]]; then
