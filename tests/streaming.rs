@@ -529,3 +529,27 @@ fn bash_shows_text_as_it_is() {
 fn zsh_shows_text_as_it_is() {
     text_is_shown_as_it_is(Shell::Zsh);
 }
+
+#[test]
+#[ignore = "requires zsh"]
+fn zsh_streams() {
+    streams(Shell::Zsh);
+}
+
+#[test]
+#[ignore = "requires zsh"]
+fn zsh_leaves_an_accepted_line_alone() {
+    an_accepted_line_is_left_alone(Shell::Zsh);
+}
+
+#[test]
+#[ignore = "requires zsh"]
+fn zsh_keeps_the_right_prompt_current() {
+    the_right_prompt_is_kept_current(Shell::Zsh);
+}
+
+#[test]
+#[ignore = "requires zsh"]
+fn zsh_redraws_the_vi_mode_indicator() {
+    vi_mode_redraws_the_indicator(Shell::Zsh);
+}
