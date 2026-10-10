@@ -119,11 +119,15 @@ pub use self::battery::BatteryInfo;
 pub use self::battery::{BatteryInfoProvider, BatteryInfoProviderImpl};
 
 use crate::config::ModuleConfig;
+#[cfg(feature = "battery")]
+use crate::configs::battery::BatteryConfig;
+use crate::configs::localip::LocalipConfig;
+use crate::configs::memory_usage::MemoryConfig;
 use crate::context::{Context, Detected, Shell};
 use crate::module::Module;
-use std::time::Instant;
+use std::time::{Duration, Instant};
 
-/// Declares each built-in module once: the name a format string uses, which is
+/// Convenient macro that declares each built-in module once: the name a format string uses, which is
 /// also the name of the module that renders it, and its description.
 macro_rules! builtin_modules {
     ($($(#[$attribute:meta])* $name:ident: $description:literal,)*) => {
@@ -295,6 +299,31 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
     m
 }
 
+/// Refresh cadence for an enabled module with refresh configured.
+pub fn period(module: &str, context: &Context) -> Option<Duration> {
+    let configuration = || context.config.get_module_config(module);
+    let every = |seconds, refresh: bool, disabled: bool| {
+        (refresh && !disabled).then(|| Duration::from_secs(seconds))
+    };
+    match module {
+        "time" => time::period(context),
+        #[cfg(feature = "battery")]
+        "battery" => {
+            let battery = BatteryConfig::try_load(configuration());
+            every(30, battery.refresh, battery.disabled)
+        }
+        "memory_usage" => {
+            let memory = MemoryConfig::try_load(configuration());
+            every(5, memory.refresh, memory.disabled)
+        }
+        "localip" => {
+            let localip = LocalipConfig::try_load(configuration());
+            every(30, localip.refresh, localip.disabled)
+        }
+        custom => custom::period(custom.strip_prefix("custom.")?, context),
+    }
+}
+
 pub fn description(module: &str) -> &'static str {
     builtin(module).map_or("<no description>", |builtin| builtin.description)
 }
@@ -302,6 +331,51 @@ pub fn description(module: &str) -> &'static str {
 #[cfg(test)]
 mod test {
     use super::*;
+
+    #[test]
+    fn only_enabled_modules_that_go_stale_render_again() {
+        let context = crate::test::default_context().set_config(toml::toml! {
+            memory_usage.disabled = false
+            localip.disabled = true
+            [custom.weather]
+            command = "forecast"
+            refresh = 600_000
+            [custom.once]
+            command = "true"
+        });
+
+        assert_eq!(
+            Some(Duration::from_secs(5)),
+            period("memory_usage", &context)
+        );
+        assert_eq!(None, period("localip", &context));
+        assert_eq!(None, period("time", &context), "disabled unless configured");
+        assert_eq!(None, period("git_status", &context));
+        assert_eq!(
+            Some(Duration::from_secs(600)),
+            period("custom.weather", &context)
+        );
+        assert_eq!(None, period("custom.once", &context));
+        assert_eq!(None, period("custom.missing", &context));
+    }
+
+    #[test]
+    fn a_module_set_not_to_refresh_renders_once() {
+        let context = crate::test::default_context().set_config(toml::toml! {
+            memory_usage.disabled = false
+            memory_usage.refresh = false
+            time.disabled = false
+            time.refresh = false
+            [custom.weather]
+            command = "forecast"
+            refresh = 600_000
+            disabled = true
+        });
+
+        for module in ["memory_usage", "time", "custom.weather"] {
+            assert_eq!(None, period(module, &context), "{module}");
+        }
+    }
 
     #[test]
     fn all_modules_have_description() {
