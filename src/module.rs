@@ -1,6 +1,7 @@
+use crate::painted::Painted;
 use crate::segment;
 use crate::segment::{FillSegment, Segment};
-use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
+use nu_ansi_term::{AnsiString, Style as AnsiStyle};
 use std::fmt;
 use std::time::Duration;
 
@@ -199,8 +200,7 @@ impl<'a> Module<'a> {
 
 impl fmt::Display for Module<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let ansi_strings = self.ansi_strings();
-        write!(f, "{}", AnsiStrings(&ansi_strings))
+        write!(f, "{}", Painted::new(&self.segments, None))
     }
 }
 
