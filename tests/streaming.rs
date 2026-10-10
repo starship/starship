@@ -45,6 +45,7 @@ enum Shell {
     /// bash with readline, which draws each prompt once.
     Bash,
     BashWithBle,
+    Xonsh,
 }
 
 impl Shell {
@@ -54,6 +55,7 @@ impl Shell {
             Self::Fish => "fish",
             Self::Nushell => "nu",
             Self::Bash | Self::BashWithBle => "bash",
+            Self::Xonsh => "xonsh",
         }
     }
 
@@ -71,7 +73,7 @@ impl Shell {
             Self::Zsh | Self::Fish | Self::Bash | Self::BashWithBle => {
                 "printf 'RESULT:%s\\n' typed"
             }
-            Self::Nushell => "print ('RESULT:' + 'typed')",
+            Self::Nushell | Self::Xonsh => "print ('RESULT:' + 'typed')",
         }
     }
 
@@ -84,6 +86,7 @@ impl Shell {
                 "sleep 3; printf 'RESULT:%s\\n' typed"
             }
             Self::Nushell => "sleep 3sec; print ('RESULT:' + 'typed')",
+            Self::Xonsh => "import time; time.sleep(3); print('RESULT:' + 'typed')",
         }
     }
 
@@ -134,6 +137,14 @@ impl Shell {
                     None,
                 )
             }
+            Self::Xonsh => (
+                vec![
+                    "--rc".into(),
+                    fixture.init.display().to_string(),
+                    "--interactive".into(),
+                ],
+                None,
+            ),
         }
     }
 
@@ -144,6 +155,7 @@ impl Shell {
             Self::Fish => &["init", "fish", "--print-full-init"],
             Self::Nushell => &["init", "nu"],
             Self::Bash | Self::BashWithBle => &["init", "bash", "--print-full-init"],
+            Self::Xonsh => &["init", "xonsh", "--print-full-init"],
         }
     }
 
@@ -686,4 +698,28 @@ fn bash_with_ble_shows_text_as_it_is() {
 #[ignore = "requires bash 4.2 or later, and STARSHIP_TEST_BLE naming ble.sh"]
 fn bash_with_ble_keeps_the_right_prompt_current() {
     the_right_prompt_is_kept_current(Shell::BashWithBle);
+}
+
+#[test]
+#[ignore = "requires xonsh"]
+fn xonsh_streams() {
+    streams(Shell::Xonsh);
+}
+
+#[test]
+#[ignore = "requires xonsh"]
+fn xonsh_leaves_an_accepted_line_alone() {
+    an_accepted_line_is_left_alone(Shell::Xonsh);
+}
+
+#[test]
+#[ignore = "requires xonsh"]
+fn xonsh_shows_text_as_it_is() {
+    text_is_shown_as_it_is(Shell::Xonsh);
+}
+
+#[test]
+#[ignore = "requires xonsh"]
+fn xonsh_keeps_the_right_prompt_current() {
+    the_right_prompt_is_kept_current(Shell::Xonsh);
 }
