@@ -18,6 +18,8 @@ pub struct BatteryConfig<'a> {
     pub display: Vec<BatteryDisplayConfig<'a>>,
     pub disabled: bool,
     pub format: &'a str,
+    /// Redraw the charge every thirty seconds while the prompt is shown.
+    pub refresh: bool,
 }
 
 impl Default for BatteryConfig<'_> {
@@ -32,6 +34,7 @@ impl Default for BatteryConfig<'_> {
             format: "[$symbol$percentage]($style) ",
             display: vec![BatteryDisplayConfig::default()],
             disabled: false,
+            refresh: true,
         }
     }
 }
