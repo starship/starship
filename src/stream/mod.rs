@@ -3,6 +3,8 @@
 
 mod bus;
 mod frame;
+#[cfg(test)]
+mod testing;
 mod timings;
 
 use std::io;
@@ -802,15 +804,15 @@ mod tests {
                 drawn_on += bus::size(fallback, milliseconds(opened)) + milliseconds(at - opened);
             }
 
-            let mut landings: Vec<bus::Landing> = shown
+            let mut landings: Vec<testing::Landing> = shown
                 .iter()
-                .map(|&(landing, _)| bus::Landing {
+                .map(|&(landing, _)| testing::Landing {
                     after: milliseconds(landing),
                     size: bus::size(fallback, milliseconds(landing)),
                 })
                 .collect();
             landings.sort_unstable_by_key(|landing| landing.after);
-            let cheapest = bus::tests::every_timetable(bus::Passengers::Prompt, fallback, &landings)
+            let cheapest = testing::every_timetable(bus::Passengers::Prompt, fallback, &landings)
                 .into_iter()
                 .map(|(_, cost)| cost)
                 .min();
