@@ -8,11 +8,14 @@ use unicode_segmentation::UnicodeSegmentation;
 
 use crate::config::Style;
 use crate::print::{UnicodeWidthGraphemes, printable};
+use crate::context::Shell;
 use crate::segment::{Kind, Segment};
+use crate::utils::shell_prompt_escape;
 
 /// Text in one style, borrowed from its segment unless it is a stretched fill.
 #[derive(Clone, Debug, PartialEq, Eq)]
 struct Run<'a> {
+    kind: Kind,
     style: AnsiStyle,
     text: Cow<'a, str>,
 }
@@ -34,6 +37,15 @@ impl<'a> Painted<'a> {
                 .map(|line| paint_line(line, width))
                 .collect(),
         }
+    }
+
+    /// Escape text and fills for the shell, preserving verbatim runs.
+    pub fn escaped_for(&self, shell: Shell) -> String {
+        AnsiStrings(&self.ansi_strings(|run| match run.kind {
+            Kind::Text | Kind::Fill => Cow::Owned(shell_prompt_escape(&*run.text, shell)),
+            Kind::Verbatim => Cow::Borrowed(&run.text),
+        }))
+        .to_string()
     }
 
     /// Preserve line breaks while allowing ANSI sequences to collapse.
@@ -90,10 +102,11 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
             continue;
         };
         match kind {
-            Kind::Text => {
+            Kind::Text | Kind::Verbatim => {
                 let style = resolve(*style, previous.as_ref());
                 previous = Some(style);
                 runs.push(Run {
+                    kind: *kind,
                     style,
                     text: Cow::Borrowed(value),
                 });
@@ -127,6 +140,7 @@ fn paint_fill<'a>(
 ) {
     if !style.is_some_and(|style| style.references_previous()) {
         runs.push(Run {
+            kind: Kind::Fill,
             style: resolve(style, inherited.as_ref()),
             text,
         });
@@ -137,6 +151,7 @@ fn paint_fill<'a>(
         let style = resolve(style, previous.as_ref());
         previous = Some(style);
         runs.push(Run {
+            kind: Kind::Fill,
             style,
             text: Cow::Owned(grapheme.to_owned()),
         });
@@ -468,5 +483,16 @@ mod tests {
                 prop_assert_eq!(width, painted.to_string().width_graphemes());
             }
         }
+    }
+
+    #[test]
+    fn a_shell_receives_every_run_escaped_except_verbatim_ones() {
+        let mut segments = Segment::from_text(None, "50% ");
+        segments.extend(Segment::verbatim(None, "%~ "));
+        segments.push(fill("%"));
+        let painted = Painted::new(&segments, Some(10));
+
+        assert_eq!("50% %~ %%%", painted.to_string());
+        assert_eq!("50%% %~ %%%%%%", painted.escaped_for(Shell::Zsh));
     }
 }
