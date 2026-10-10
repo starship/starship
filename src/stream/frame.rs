@@ -11,6 +11,8 @@ pub enum Frame<'a> {
     Prompt { main: &'a str, right: &'a str },
     /// Initial rendering is complete; carry timings to the next stream.
     Complete(&'a str),
+    /// No visible change; detects a closed reader during refresh.
+    Heartbeat,
 }
 
 impl Frame<'_> {
@@ -23,6 +25,7 @@ impl Frame<'_> {
             }
             Self::Prompt { main, right } => ["PROMPT", main, right],
             Self::Complete(timings) => ["COMPLETE", timings, ""],
+            Self::Heartbeat => ["HEARTBEAT", "", ""],
         };
         for field in fields {
             for part in field.split('\0') {
@@ -74,6 +77,7 @@ mod tests {
                 Frame::Process,
                 Frame::Prompt { main: &main, right: &right },
                 Frame::Complete("rust=12.500"),
+                Frame::Heartbeat,
             ] {
                 frame.write_to(&mut bytes).unwrap();
             }
@@ -82,6 +86,7 @@ mod tests {
                     ["PROCESS".to_owned(), std::process::id().to_string(), String::new()],
                     ["PROMPT".to_owned(), main.replace('\0', ""), right.replace('\0', "")],
                     ["COMPLETE".to_owned(), "rust=12.500".to_owned(), String::new()],
+                    ["HEARTBEAT".to_owned(), String::new(), String::new()],
                 ],
                 read_frames(&bytes)
             );

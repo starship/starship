@@ -14,6 +14,13 @@ use crate::{
     utils::create_command,
 };
 
+/// How often the custom module `name` runs again while a prompt is shown, if
+/// it is enabled and configured to.
+pub fn period(name: &str, context: &Context) -> Option<Duration> {
+    let config = CustomConfig::load(get_config(name, context)?);
+    (!config.disabled && config.refresh > 0).then(|| Duration::from_millis(config.refresh))
+}
+
 /// Creates a custom module with some configuration
 ///
 /// The relevant TOML config will set the files, extensions, and directories needed
