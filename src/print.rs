@@ -15,7 +15,7 @@ use crate::modules;
 use crate::painted::Painted;
 use crate::plan::Plan;
 use crate::shadow;
-use rayon::prelude::*;
+use crate::workers;
 
 pub struct Grapheme<'a>(pub &'a str);
 
@@ -99,13 +99,7 @@ pub fn get_prompt(context: &Context) -> String {
     }
 
     let plan = Plan::new(context, [context.target.clone()]);
-    let rendered = plan
-        .modules
-        .iter()
-        .collect::<Vec<_>>()
-        .into_par_iter()
-        .map(|name| modules::handle(name, context).map_or_else(Vec::new, |module| module.segments))
-        .collect::<Vec<_>>();
+    let rendered = workers::render_all(context, &plan.modules);
     let [prompt] = plan.prompts(&|position| &rendered[position], context);
     prompt
 }
