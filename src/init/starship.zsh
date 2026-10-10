@@ -8,6 +8,7 @@
 # ever drawn once (for the prompt immediately after it is run).
 
 zmodload zsh/parameter  # Needed to access jobstates variable for STARSHIP_JOBS_COUNT
+zmodload zsh/sched  # Debounce terminal resizing without starting another process
 
 # Defines a function `__starship_get_time` that sets the time since epoch in millis in STARSHIP_CAPTURED_TIME.
 if [[ $ZSH_VERSION == ([1-4]*) ]]; then
@@ -139,6 +140,22 @@ starship_stream_start() {
         esac
     done
     starship_stream_stop
+}
+
+# Debounce resize rendering for one second with a nonblocking, fork-free timer.
+(( ${+functions[TRAPWINCH]} )) && functions[starship_preserved_winch]=$functions[TRAPWINCH]
+starship_stream_resize() {
+    zle && starship_stream_start adopt
+}
+TRAPWINCH() {
+    (( ${+functions[starship_preserved_winch]} )) && starship_preserved_winch "$@"
+    zle || return
+    local pending=$zsh_scheduled_events[(I)*starship_stream_resize*]
+    (( pending )) && sched -$pending
+    sched +1 starship_stream_resize
+    # Rewrap the prompt already shown until the new one arrives.
+    zle -I
+    zle reset-prompt
 }
 
 # Restart asynchronously when vi mode changes.
