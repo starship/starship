@@ -698,6 +698,28 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
     Some(out)
 }
 
+/// Escape interpretable characters for the shell prompt
+pub fn shell_prompt_escape<T>(text: T, shell: Shell) -> String
+where
+    T: Into<String>,
+{
+    // Handle other interpretable characters
+    match shell {
+        // Bash might interpret backslashes, backticks and $
+        // see #658 for more details
+        Shell::Bash => text
+            .into()
+            .replace('\\', r"\\")
+            .replace('$', r"\$")
+            .replace('`', r"\`"),
+        Shell::Zsh => {
+            // % is an escape in zsh, see PROMPT in `man zshmisc`
+            text.into().replace('%', "%%")
+        }
+        _ => text.into(),
+    }
+}
+
 /// Wraps ANSI color escape sequences in the shell-appropriate wrappers.
 /// Many shells cannot deal with raw unprintable characters and miscompute the cursor position,
 /// leading to strange visual bugs like duplicated/missing chars. This function wraps every
@@ -935,6 +957,49 @@ mod tests {
     use tempfile::tempdir;
 
     use super::*;
+
+    #[test]
+    fn test_bash_escape() {
+        let test = "$(echo a)";
+        assert_eq!(
+            shell_prompt_escape(test.to_owned(), Shell::Bash),
+            r"\$(echo a)"
+        );
+        assert_eq!(
+            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
+            test
+        );
+
+        let test = r"\$(echo a)";
+        assert_eq!(
+            shell_prompt_escape(test.to_owned(), Shell::Bash),
+            r"\\\$(echo a)"
+        );
+        assert_eq!(
+            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
+            test
+        );
+
+        let test = r"`echo a`";
+        assert_eq!(
+            shell_prompt_escape(test.to_owned(), Shell::Bash),
+            r"\`echo a\`"
+        );
+        assert_eq!(
+            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
+            test
+        );
+    }
+
+    #[test]
+    fn test_zsh_escape() {
+        let test = "10%";
+        assert_eq!(shell_prompt_escape(test.to_owned(), Shell::Zsh), "10%%");
+        assert_eq!(
+            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
+            test
+        );
+    }
 
     #[test]
     fn render_time_test_0ms() {
