@@ -19,6 +19,7 @@ pub mod logger;
 pub mod module;
 mod modules;
 mod painted;
+mod plan;
 pub mod print;
 mod segment;
 mod utils;

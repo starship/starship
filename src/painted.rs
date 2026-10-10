@@ -37,6 +37,12 @@ impl<'a> Painted<'a> {
         }
     }
 
+    /// This prompt drawn below an empty line.
+    pub fn below_a_line_break(mut self) -> Self {
+        self.lines.insert(0, Vec::new());
+        self
+    }
+
     /// Escape text and fills for the shell, preserving verbatim runs.
     pub fn escaped_for(&self, shell: Shell) -> String {
         AnsiStrings(&self.ansi_strings(|run| match run.kind {
