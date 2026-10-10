@@ -69,7 +69,6 @@ fn undistract_me<'a>(
     elapsed: u128,
 ) -> Module<'a> {
     use notify_rust::{Notification, Timeout};
-    use nu_ansi_term::{AnsiStrings, unstyle};
 
     if config.show_notifications && config.min_time_to_notify as u128 <= elapsed {
         if cfg!(target_os = "linux") {
@@ -88,10 +87,7 @@ fn undistract_me<'a>(
         #[cfg(target_os = "macos")]
         let _ = notify_rust::set_application("com.apple.Terminal");
 
-        let body = format!(
-            "Command execution {}",
-            unstyle(&AnsiStrings(&module.ansi_strings()))
-        );
+        let body = format!("Command execution {}", module.get_segments().join(""));
 
         let timeout = match config.notification_timeout {
             Some(v) => Timeout::Milliseconds(v),
