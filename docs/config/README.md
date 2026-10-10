@@ -378,6 +378,8 @@ format = '$all$directory$character'
 `starship prompt --stream` emits the main and right prompts as modules finish rendering.
 The first prompt can appear before slow modules finish. Later frames include their results.
 The completed prompts use the same formatting as ordinary `starship prompt` output.
+The scheduler uses previous module timings to group results expected close together. Slow modules
+can update the prompt independently. Missing or late estimates use the fallback waiting budget.
 Shell integrations that consume these frames are introduced separately.
 
 ### Options
@@ -385,6 +387,7 @@ Shell integrations that consume these frames are introduced separately.
 | Option         | Default | Description                                                                                                            |
 | -------------- | ------- | ---------------------------------------------------------------------------------------------------------------------- |
 | `enabled`      | `true`  | Allow a partial prompt while modules render. Set to `false` to wait for all modules.                                   |
+| `bus.adaptive` | `true`  | Use previous module timings to schedule redraws. Disable to treat every module as unmeasured.                          |
 | `bus.fallback` | `50`    | Maximum initial waiting budget for modules, in milliseconds. Process startup and configuration loading are additional. |
 
 ### Example
