@@ -213,3 +213,49 @@ pub fn render_all(context: &Context, module_names: &IndexSet<String>) -> Vec<Vec
         workers.collect_segments(module_names.len())
     })
 }
+
+#[cfg(all(test, unix))]
+mod tests {
+    use super::*;
+    use crate::test::default_context;
+
+    const COMMAND_TIMEOUT_MILLISECONDS: i64 = 10_000;
+    const FILE_POLL_INTERVAL_SECONDS: &str = "0.01";
+
+    fn rendezvous_command(marker: &str, peer_marker: &str) -> String {
+        format!(
+            "touch {marker}; \
+             until test -f {peer_marker}; do sleep {FILE_POLL_INTERVAL_SECONDS}; done; \
+             echo {marker}"
+        )
+    }
+
+    #[test]
+    fn workers_render_modules_at_the_same_time() {
+        let directory = tempfile::tempdir().unwrap();
+        let first_command = rendezvous_command("first", "second");
+        let second_command = rendezvous_command("second", "first");
+        let mut context = default_context().set_config(toml::toml! {
+            command_timeout = COMMAND_TIMEOUT_MILLISECONDS
+            [custom.first]
+            command = first_command
+            when = true
+            shell = ["/bin/sh"]
+            format = "$output"
+            [custom.second]
+            command = second_command
+            when = true
+            shell = ["/bin/sh"]
+            format = "$output"
+        });
+        context.current_dir = directory.path().to_path_buf();
+        let module_names = IndexSet::from(["custom.first".to_owned(), "custom.second".to_owned()]);
+
+        let rendered: Vec<String> = render_all(&context, &module_names)
+            .iter()
+            .map(|segments| segments.iter().map(Segment::value).collect())
+            .collect();
+
+        assert_eq!(["first", "second"], rendered.as_slice());
+    }
+}
