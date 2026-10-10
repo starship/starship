@@ -150,6 +150,7 @@ impl Bus {
     }
 
     /// Choose a departure using temporary planning storage.
+    #[cfg(test)]
     pub fn departure(
         &self,
         now: Instant,
