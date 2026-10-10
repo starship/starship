@@ -10,7 +10,7 @@ use clap_complete::generate;
 use rand::RngExt;
 use starship::context::{Context, Properties, Target};
 use starship::module::ALL_MODULES;
-use starship::{bug_report, configure, init, logger, num_rayon_threads, print, shadow};
+use starship::{bug_report, configure, init, logger, num_rayon_threads, print, shadow, stream};
 
 #[derive(Parser, Debug)]
 #[clap(
@@ -133,6 +133,10 @@ enum Commands {
         /// Print the continuation prompt (instead of the standard left prompt)
         #[clap(long, conflicts_with = "right", conflicts_with = "profile")]
         continuation: bool,
+        /// Stream the main and right prompts as frames instead, drawing them
+        /// before slow modules finish and refining them as they do
+        #[clap(long, conflicts_with_all = ["right", "profile", "continuation"])]
+        stream: bool,
         #[clap(flatten)]
         properties: Properties,
     },
@@ -210,6 +214,7 @@ fn main() {
             std::process::exit(exit_code);
         }
     };
+
     log::trace!("Parsed arguments: {args:#?}");
 
     match args.command {
@@ -224,10 +229,24 @@ fn main() {
             }
         }
         Commands::Prompt {
+            stream: true,
+            properties,
+            ..
+        } => {
+            // A closed pipe is a shell that no longer wants this prompt.
+            if let Err(error) = stream::stream(properties)
+                && error.kind() != io::ErrorKind::BrokenPipe
+            {
+                eprintln!("Unable to stream the prompt: {error}");
+                std::process::exit(1);
+            }
+        }
+        Commands::Prompt {
             properties,
             right,
             profile,
             continuation,
+            ..
         } => {
             let target = match (right, profile, continuation) {
                 (true, _, _) => Target::Right,
