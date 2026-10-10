@@ -22,6 +22,9 @@ pub enum Segment {
 pub enum Kind {
     /// Shown as written.
     Text,
+    /// Handed to a shell exactly as written, so that the shell may expand it:
+    /// the output of a custom module with `unsafe_no_escape`.
+    Verbatim,
     /// Repeated across whatever width the rest of its line leaves.
     Fill,
 }
@@ -31,6 +34,11 @@ impl Segment {
     /// holds one.
     pub fn from_text(style: Option<Style>, value: impl Into<String>) -> Vec<Self> {
         Self::lines(Kind::Text, style, value.into())
+    }
+
+    /// Segments a shell receives unescaped; see [`Kind::Verbatim`].
+    pub fn verbatim(style: Option<Style>, value: impl Into<String>) -> Vec<Self> {
+        Self::lines(Kind::Verbatim, style, value.into())
     }
 
     /// A segment repeating `value` across the width its line leaves.
@@ -107,18 +115,18 @@ mod tests {
         assert_eq!(
             vec![
                 Segment::Styled {
-                    kind: Kind::Text,
+                    kind: Kind::Verbatim,
                     style: None,
                     value: "a".to_owned()
                 },
                 Segment::LineBreak,
                 Segment::Styled {
-                    kind: Kind::Text,
+                    kind: Kind::Verbatim,
                     style: None,
                     value: String::new()
                 },
             ],
-            Segment::from_text(None, "a\n")
+            Segment::verbatim(None, "a\n")
         );
     }
 

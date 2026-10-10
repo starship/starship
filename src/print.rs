@@ -145,7 +145,8 @@ pub fn get_prompt(context: &Context) -> String {
     }
     // Painting collapses redundant ANSI color sequences, so apply it before modifying the ANSI
     // color sequences for this specific shell
-    let shell_wrapped_output = wrap_colorseq_for_shell(painted.to_string(), context.shell);
+    let shell_wrapped_output =
+        wrap_colorseq_for_shell(painted.escaped_for(context.shell), context.shell);
     write!(buf, "{shell_wrapped_output}").unwrap();
 
     if context.target == Target::Right {
@@ -170,7 +171,8 @@ pub fn module(module_name: &str, args: Properties) {
 }
 
 pub fn get_module(module_name: &str, context: &Context) -> Option<String> {
-    modules::handle(module_name, context).map(|m| m.to_string())
+    modules::handle(module_name, context)
+        .map(|module| Painted::new(&module.segments, None).escaped_for(context.shell))
 }
 
 pub fn timings(args: Properties) {
@@ -621,6 +623,20 @@ mod test {
         let actual = get_prompt(&context);
         assert_eq!(expected, actual);
         dir.close()
+    }
+
+    #[test]
+    fn a_fill_measures_text_as_displayed_rather_than_as_escaped() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "100%$fill|"
+            [fill]
+            style = ""
+        });
+        context.shell = Shell::Zsh;
+        context.width = 10;
+
+        assert_eq!("100%%.....|", get_prompt(&context));
     }
 
     #[test]
