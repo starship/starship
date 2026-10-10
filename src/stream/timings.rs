@@ -142,4 +142,18 @@ mod tests {
             );
         }
     }
+    #[test]
+    fn malformed_duplicate_timings_preserve_the_last_valid_estimate() {
+        let modules = IndexSet::from(["rust".to_owned(), "character".to_owned()]);
+        assert_eq!(
+            vec![
+                Some(Estimate::Changed(Duration::from_micros(12_500))),
+                Some(Estimate::Unchanged)
+            ],
+            read(
+                "rust=3,rust=12.5,rust=invalid,character=4,character,missing=1",
+                &modules
+            )
+        );
+    }
 }
