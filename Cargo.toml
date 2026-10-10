@@ -125,6 +125,7 @@ winresource = "0.1.31"
 
 [dev-dependencies]
 mockall = "=0.15.0"
+proptest = "1.11.0"
 
 [profile.release]
 codegen-units = 1
