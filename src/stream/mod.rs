@@ -3,6 +3,11 @@
 
 mod bus;
 mod frame;
+#[cfg(unix)]
+mod snapshot;
+
+#[cfg(unix)]
+pub use snapshot::detach;
 #[cfg(test)]
 mod testing;
 mod timings;
@@ -31,6 +36,23 @@ type PromptPlan<'context> = Plan<'context, PROMPT_COUNT>;
 pub fn stream(properties: Properties, timings: &str) -> io::Result<()> {
     let context = Context::new(properties, Target::Main);
     run(&context, timings, &mut io::stdout().lock())
+}
+
+/// Stream both prompts to a file for a shell that cannot read a pipe while
+/// waiting for input; see [`snapshot`].
+#[cfg(unix)]
+pub fn publish(
+    properties: Properties,
+    timings: &str,
+    directory: std::path::PathBuf,
+    shell: i32,
+) -> io::Result<()> {
+    let context = Context::new(properties, Target::Main);
+    run(
+        &context,
+        timings,
+        &mut snapshot::Snapshot::new(directory, shell),
+    )
 }
 
 fn run(context: &Context, timings: &str, output: &mut impl Sink) -> io::Result<()> {
