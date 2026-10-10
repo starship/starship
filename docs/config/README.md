@@ -388,6 +388,7 @@ Supported shell integrations:
 - zsh streams both prompts, including refreshes, vi mode changes, and terminal resizing.
 - fish streams and refreshes both prompts on Unix. With a Windows Starship binary, prompts render synchronously.
 - Nushell 0.115 or later streams both prompts through its job mailbox. Older supported versions use synchronous prompts.
+- Bash 4.2 or newer with ble.sh 0.4 or newer. Bash without compatible ble.sh draws each prompt in full.
 
 ### Options
 
