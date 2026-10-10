@@ -6,13 +6,16 @@ use std::fmt;
 use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
 use unicode_segmentation::UnicodeSegmentation;
 
+use crate::context::Shell;
 use crate::print::{Grapheme, UnicodeWidthGraphemes};
 use crate::segment::{Kind, Segment};
+use crate::utils::shell_prompt_escape;
 
 /// Text drawn in a single style, borrowed from the segment it was painted
 /// from unless it is a stretched fill.
 #[derive(Clone, Debug, PartialEq, Eq)]
 struct Run<'a> {
+    kind: Kind,
     style: AnsiStyle,
     text: Cow<'a, str>,
 }
@@ -32,6 +35,15 @@ impl<'a> Painted<'a> {
                 .map(|line| paint_line(line, width))
                 .collect(),
         }
+    }
+
+    /// Escape text and fills for the shell, preserving verbatim runs.
+    pub fn escaped_for(&self, shell: Shell) -> String {
+        AnsiStrings(&self.ansi_strings(|run| match run.kind {
+            Kind::Text | Kind::Fill => Cow::Owned(shell_prompt_escape(&*run.text, shell)),
+            Kind::Verbatim => Cow::Borrowed(&run.text),
+        }))
+        .to_string()
     }
 
     /// Preserve line breaks while allowing ANSI sequences to collapse.
@@ -89,13 +101,13 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
                     resolve(previous.take()),
                     fill_width.map_or(Cow::Borrowed(value), |width| stretch(value, width)),
                 ),
-                Kind::Text => {
+                Kind::Text | Kind::Verbatim => {
                     let style = resolve(previous);
                     previous = Some(style);
                     (style, Cow::Borrowed(value))
                 }
             };
-            Run { style, text }
+            Run { kind, style, text }
         })
         .collect()
 }
@@ -257,5 +269,16 @@ mod tests {
             "\u{1b}[31ma\u{1b}[1mb\u{1b}[0m\n\u{1b}[31mc\u{1b}[0m",
             Painted::new(&segments, None).to_string()
         );
+    }
+
+    #[test]
+    fn a_shell_receives_every_run_escaped_except_verbatim_ones() {
+        let mut segments = Segment::from_text(None, "50% ");
+        segments.extend(Segment::verbatim(None, "%~ "));
+        segments.push(fill("%"));
+        let painted = Painted::new(&segments, Some(10));
+
+        assert_eq!("50% %~ %%%", painted.to_string());
+        assert_eq!("50%% %~ %%%%%%", painted.escaped_for(Shell::Zsh));
     }
 }
