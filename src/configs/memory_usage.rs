@@ -13,6 +13,8 @@ pub struct MemoryConfig<'a> {
     pub style: &'a str,
     pub symbol: &'a str,
     pub disabled: bool,
+    /// Redraw the usage every five seconds while the prompt is shown.
+    pub refresh: bool,
 }
 
 impl Default for MemoryConfig<'_> {
@@ -23,6 +25,7 @@ impl Default for MemoryConfig<'_> {
             style: "white bold dimmed",
             symbol: "🐏 ",
             disabled: true,
+            refresh: true,
         }
     }
 }

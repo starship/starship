@@ -14,6 +14,10 @@ pub struct AsynchronousConfig {
     /// Draw a prompt before every module has rendered, then refine it as they
     /// do. When disabled, the prompt is drawn once every module has rendered.
     pub enabled: bool,
+    /// While the prompt is shown, render again the modules whose values go
+    /// stale on their own, and redraw the prompt when they change. Each such
+    /// module can be kept from it with its own `refresh` option.
+    pub refresh: bool,
     pub bus: BusConfig,
 }
 
@@ -21,6 +25,7 @@ impl Default for AsynchronousConfig {
     fn default() -> Self {
         Self {
             enabled: true,
+            refresh: true,
             bus: BusConfig::default(),
         }
     }
