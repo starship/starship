@@ -377,6 +377,9 @@ format = '$all$directory$character'
 
 `starship prompt --stream` emits the main and right prompts as modules finish rendering.
 The first prompt can appear before slow modules finish. Later frames include their results.
+The initial directory can use an approximation that skips repository discovery and permission
+checks. Repository shortening, repository styling, and the read-only indicator appear when the
+full directory render finishes.
 The completed prompts use the same formatting as ordinary `starship prompt` output.
 The scheduler uses previous module timings to group results expected close together. Slow modules
 can update the prompt independently. Missing or late estimates use the fallback waiting budget.
