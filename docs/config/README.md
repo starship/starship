@@ -383,7 +383,9 @@ full directory render finishes.
 The completed prompts use the same formatting as ordinary `starship prompt` output.
 The scheduler uses previous module timings to group results expected close together. Slow modules
 can update the prompt independently. Missing or late estimates use the fallback waiting budget.
-Shell integrations that consume these frames are introduced separately.
+Supported shell integrations:
+
+- zsh streams both prompts, including refreshes, vi mode changes, and terminal resizing.
 
 ### Options
 

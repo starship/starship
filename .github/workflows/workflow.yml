@@ -213,6 +213,10 @@ jobs:
             --accept-source-agreements
           Add-Content -Path $env:GITHUB_PATH -Value "C:\Program Files\Mercurial" -Encoding utf8
 
+      - name: Setup | zsh (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install --yes zsh
+
       # Run the ignored tests that expect the above setup
       - name: Build | Test
         run: "cargo llvm-cov
