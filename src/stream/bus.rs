@@ -189,12 +189,26 @@ impl Bus {
 }
 
 /// The size of a bus opened for a change that took `took` to render.
-pub fn size(fallback: Duration, took: Duration) -> Duration {
-    let fallback = fallback.as_nanos();
-    let total = fallback + took.min(FOREVER).as_nanos();
-    // A fallback of an hour squared still fits a u128 many times over.
-    let nanoseconds = (fallback * fallback).checked_div(total).unwrap_or(0);
-    Duration::from_nanos(u64::try_from(nanoseconds).unwrap_or(u64::MAX))
+pub fn size(fallback: Duration, render_duration: Duration) -> Duration {
+    if fallback.is_zero() {
+        return Duration::ZERO;
+    }
+
+    let fallback_nanoseconds = fallback.as_nanos();
+    let render_nanoseconds = render_duration.min(FOREVER).as_nanos();
+    let total_nanoseconds = fallback_nanoseconds + render_nanoseconds;
+
+    // Square only the smaller operand, which is bounded by FOREVER.
+    // f² / (f + r) = f - r + r² / (f + r) when f >= r.
+    let window_nanoseconds = if fallback_nanoseconds >= render_nanoseconds {
+        fallback_nanoseconds - render_nanoseconds
+            + render_nanoseconds * render_nanoseconds / total_nanoseconds
+    } else {
+        fallback_nanoseconds * fallback_nanoseconds / total_nanoseconds
+    };
+
+    // Preserve the public function's existing u64-nanosecond output limit.
+    Duration::from_nanos(window_nanoseconds.min(u128::from(u64::MAX)) as u64)
 }
 
 /// A change expected to land `after` from now, which opens a bus of `size`
@@ -442,5 +456,15 @@ pub(crate) mod tests {
                 Estimate::Changed(Duration::MAX),
             ),
         );
+    }
+    #[test]
+    fn public_sizing_keeps_large_fallbacks_without_overflow() {
+        let larger_fallback = FOREVER * 2;
+        assert_eq!(larger_fallback, size(larger_fallback, Duration::ZERO));
+        assert_eq!(
+            Duration::from_nanos(u64::MAX),
+            size(Duration::MAX, Duration::MAX),
+        );
+        assert_eq!(Duration::ZERO, size(Duration::ZERO, Duration::MAX));
     }
 }
