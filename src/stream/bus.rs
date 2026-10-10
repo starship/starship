@@ -31,6 +31,23 @@ use std::time::{Duration, Instant};
 /// waiting the bus does.
 pub const FOREVER: Duration = Duration::from_secs(60 * 60);
 
+const PREVIOUS_ESTIMATE_WEIGHT: u128 = 3;
+const MEASUREMENT_WEIGHT: u128 = 1;
+const TOTAL_ESTIMATE_WEIGHT: u128 = PREVIOUS_ESTIMATE_WEIGHT + MEASUREMENT_WEIGHT;
+const NANOSECONDS_PER_SECOND: u128 = 1_000_000_000;
+
+fn smooth_duration(previous: Duration, measured: Duration) -> Duration {
+    // The weighted sum fits u128 even when both durations are Duration::MAX.
+    let nanoseconds = (previous.as_nanos() * PREVIOUS_ESTIMATE_WEIGHT
+        + measured.as_nanos() * MEASUREMENT_WEIGHT)
+        / TOTAL_ESTIMATE_WEIGHT;
+
+    Duration::new(
+        (nanoseconds / NANOSECONDS_PER_SECOND) as u64,
+        (nanoseconds % NANOSECONDS_PER_SECOND) as u32,
+    )
+}
+
 /// What a module did for the previous prompt.
 ///
 /// Ordered as a stream renders modules when they outnumber its workers, those
@@ -52,7 +69,7 @@ impl Estimate {
     pub fn after(previous: Option<Self>, measured: Self) -> Self {
         match (previous, measured) {
             (Some(Self::Changed(estimate)), Self::Changed(took)) => {
-                Self::Changed((estimate * 3 + took) / 4)
+                Self::Changed(smooth_duration(estimate, took))
             }
             _ => measured,
         }
@@ -406,5 +423,24 @@ pub(crate) mod tests {
                 .min();
             prop_assert_eq!(soonest, Some(leaves));
         }
+    }
+    #[test]
+    fn smoothing_preserves_nanosecond_rounding_and_handles_maximum_durations() {
+        for (previous, measured, expected) in [(10, 9, 9), (9, 10, 9), (1, 0, 0)] {
+            assert_eq!(
+                Estimate::Changed(Duration::from_nanos(expected)),
+                Estimate::after(
+                    Some(Estimate::Changed(Duration::from_nanos(previous))),
+                    Estimate::Changed(Duration::from_nanos(measured)),
+                ),
+            );
+        }
+        assert_eq!(
+            Estimate::Changed(Duration::MAX),
+            Estimate::after(
+                Some(Estimate::Changed(Duration::MAX)),
+                Estimate::Changed(Duration::MAX),
+            ),
+        );
     }
 }
