@@ -316,8 +316,20 @@ impl<'context> Session<'context> {
     /// Unmeasured modules first, followed by the earliest expected changes.
     /// Preserve plan order for equal estimates, including worker queue delays.
     fn start_initial_renders(&self, renderer: &mut impl Renderer) {
+        if self
+            .modules
+            .iter()
+            .map(|module| module.estimate)
+            .is_sorted()
+        {
+            for position in 0..self.modules.len() {
+                renderer.render(position);
+            }
+            return;
+        }
+
         let mut positions: Vec<usize> = (0..self.modules.len()).collect();
-        positions.sort_by_key(|&position| self.modules[position].estimate);
+        positions.sort_unstable_by_key(|&position| (self.modules[position].estimate, position));
         for position in positions {
             renderer.render(position);
         }
