@@ -141,6 +141,97 @@ fi
 # Ensure that $COLUMNS gets set
 shopt -s checkwinsize
 
+# ble.sh reads prompt frames in an idle task while the user types.
+if [[ ${STARSHIP_BLE_STREAM-} ]]; then
+    declare -gA STARSHIP_STREAM
+
+    # ble.sh draws a part of a prompt again only when one of its hashes expands
+    # differently, so the hash is the variable holding the main prompt.
+    function ble/prompt/backslash:starship {
+        ble/prompt/unit/add-hash '${STARSHIP_STREAM[1]}'
+        ble/prompt/process-prompt-string "${STARSHIP_STREAM[1]}"
+    }
+
+    # Align the right prompt with the last line of the main prompt.
+    starship_ble_set_prompts() {
+        STARSHIP_STREAM[1]=$1 STARSHIP_STREAM[2]=$2
+        local lines=${1//[!$'\n']}
+        bleopt prompt_rps1="$lines$2"
+    }
+
+    if [[ ${EPOCHREALTIME-} ]]; then
+        starship_ble_now() { local microseconds=${EPOCHREALTIME/[^0-9]/}; printf -v "$1" %s "${microseconds:0:-3}"; }
+    else
+        starship_ble_now() { printf -v "$1" %s "$(::STARSHIP:: time)"; }
+    fi
+
+    # Use builtin read: ble.sh overrides read to consume terminal input.
+    starship_ble_read_frame() {
+        IFS= builtin read -r -d '' -u "$1" "$2" &&
+            IFS= builtin read -r -d '' -u "$1" "$3" &&
+            IFS= builtin read -r -d '' -u "$1" "$4"
+    }
+
+    starship_ble_stream_stop() {
+        local fd=${STARSHIP_STREAM[f]-} pid=${STARSHIP_STREAM[p]-}
+        ble/util/idle.cancel starship_ble_stream_step
+        [[ $fd ]] && exec {fd}<&-
+        [[ $pid ]] && kill "$pid" 2>/dev/null
+        STARSHIP_STREAM[f]= STARSHIP_STREAM[p]= STARSHIP_STREAM[c]=
+    }
+
+    # Drain queued frames and draw the newest prompt pair once. ble.sh may
+    # defer rendering when the next idle task is less than 50 ms away, so draw
+    # explicitly after applying an update.
+    starship_ble_stream_step() {
+        local fd=${STARSHIP_STREAM[f]} kind first second main right drawn= ended=
+        while builtin read -t 0 -u "$fd"; do
+            if ! starship_ble_read_frame "$fd" kind first second; then
+                ended=1
+                break
+            fi
+            case $kind in
+                PROMPT) main=$first right=$second drawn=1 ;;
+                COMPLETE) STARSHIP_STREAM[t]=$first STARSHIP_STREAM[c]=1 ;;
+            esac
+        done
+        if [[ $drawn ]]; then
+            starship_ble_set_prompts "$main" "$right"
+            ble/application/render
+        fi
+        if [[ $ended ]]; then
+            starship_ble_stream_stop
+        elif [[ ${STARSHIP_STREAM[c]-} ]]; then
+            # After completion, poll just after each wall-clock second.
+            local now
+            starship_ble_now now
+            ble/util/idle.sleep $((1050 - now % 1000))
+        else
+            # Poll every 50 ms while the initial prompt is still rendering.
+            ble/util/idle.sleep 50
+        fi
+    }
+
+    starship_ble_stream_start() {
+        starship_ble_stream_stop
+        local fd kind first second
+        exec {fd}< <(::STARSHIP:: prompt --stream --timings="${STARSHIP_STREAM[t]-}" "$@" 2>/dev/null)
+        STARSHIP_STREAM[f]=$fd
+        starship_ble_set_prompts "" ""
+        while starship_ble_read_frame "$fd" kind first second; do
+            case $kind in
+                PROCESS) STARSHIP_STREAM[p]=$first ;;
+                PROMPT)
+                    starship_ble_set_prompts "$first" "$second"
+                    ble/util/idle.push starship_ble_stream_step
+                    return
+                    ;;
+            esac
+        done
+        starship_ble_stream_stop
+    }
+fi
+
 # Set up the start time and STARSHIP_SHELL, which controls shell-specific sequences
 STARSHIP_START_TIME=$(::STARSHIP:: time)
 export STARSHIP_SHELL="bash"
