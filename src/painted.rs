@@ -7,8 +7,8 @@ use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
 use unicode_segmentation::UnicodeSegmentation;
 
 use crate::config::Style;
-use crate::print::{UnicodeWidthGraphemes, printable};
 use crate::context::Shell;
+use crate::print::{UnicodeWidthGraphemes, printable};
 use crate::segment::{Kind, Segment};
 use crate::utils::shell_prompt_escape;
 
