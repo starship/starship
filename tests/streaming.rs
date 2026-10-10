@@ -672,6 +672,18 @@ fn bash_with_ble_streams() {
 
 #[test]
 #[ignore = "requires bash 4.2 or later, and STARSHIP_TEST_BLE naming ble.sh"]
+fn bash_with_ble_leaves_an_accepted_line_alone() {
+    an_accepted_line_is_left_alone(Shell::BashWithBle);
+}
+
+#[test]
+#[ignore = "requires bash 4.2 or later, and STARSHIP_TEST_BLE naming ble.sh"]
 fn bash_with_ble_shows_text_as_it_is() {
     text_is_shown_as_it_is(Shell::BashWithBle);
+}
+
+#[test]
+#[ignore = "requires bash 4.2 or later, and STARSHIP_TEST_BLE naming ble.sh"]
+fn bash_with_ble_keeps_the_right_prompt_current() {
+    the_right_prompt_is_kept_current(Shell::BashWithBle);
 }
