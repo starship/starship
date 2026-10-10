@@ -9,8 +9,8 @@ pub enum Frame<'a> {
     Process,
     /// Main and right prompts; replaces the previous pair.
     Prompt { main: &'a str, right: &'a str },
-    /// Every module has rendered, and the prompt drawn shows it.
-    Complete,
+    /// Initial rendering is complete; carry timings to the next stream.
+    Complete(&'a str),
 }
 
 impl Frame<'_> {
@@ -22,7 +22,7 @@ impl Frame<'_> {
                 ["PROCESS", &process_id, ""]
             }
             Self::Prompt { main, right } => ["PROMPT", main, right],
-            Self::Complete => ["COMPLETE", "", ""],
+            Self::Complete(timings) => ["COMPLETE", timings, ""],
         };
         for field in fields {
             for part in field.split('\0') {
@@ -73,7 +73,7 @@ mod tests {
             for frame in [
                 Frame::Process,
                 Frame::Prompt { main: &main, right: &right },
-                Frame::Complete,
+                Frame::Complete("rust=12.500"),
             ] {
                 frame.write_to(&mut bytes).unwrap();
             }
@@ -81,7 +81,7 @@ mod tests {
                 vec![
                     ["PROCESS".to_owned(), std::process::id().to_string(), String::new()],
                     ["PROMPT".to_owned(), main.replace('\0', ""), right.replace('\0', "")],
-                    ["COMPLETE".to_owned(), String::new(), String::new()],
+                    ["COMPLETE".to_owned(), "rust=12.500".to_owned(), String::new()],
                 ],
                 read_frames(&bytes)
             );
