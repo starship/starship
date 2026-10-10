@@ -40,6 +40,7 @@ static ONE_SHELL_AT_A_TIME: Mutex<()> = Mutex::new(());
 #[derive(Clone, Copy)]
 enum Shell {
     Zsh,
+    Fish,
     Bash,
 }
 
@@ -47,6 +48,7 @@ impl Shell {
     const fn name(self) -> &'static str {
         match self {
             Self::Zsh => "zsh",
+            Self::Fish => "fish",
             Self::Bash => "bash",
         }
     }
@@ -62,7 +64,7 @@ impl Shell {
     /// being refined.
     const fn input(self) -> &'static str {
         match self {
-            Self::Zsh | Self::Bash => "printf 'RESULT:%s\\n' typed",
+            Self::Zsh | Self::Fish | Self::Bash => "printf 'RESULT:%s\\n' typed",
         }
     }
 
@@ -71,7 +73,7 @@ impl Shell {
     /// since it runs events between them.
     const fn sleep_then_input(self) -> &'static str {
         match self {
-            Self::Zsh | Self::Bash => "sleep 3; printf 'RESULT:%s\\n' typed",
+            Self::Zsh | Self::Fish | Self::Bash => "sleep 3; printf 'RESULT:%s\\n' typed",
         }
     }
 
@@ -81,6 +83,7 @@ impl Shell {
         let source = Some("source \"$STARSHIP_INIT\"\n");
         match self {
             Self::Zsh => (vec!["-f".into(), "-i".into()], source),
+            Self::Fish => (vec!["--no-config".into(), "--interactive".into()], source),
             Self::Bash => {
                 let ble = "";
                 let rcfile = fixture.directory.path().join("bashrc");
@@ -103,6 +106,7 @@ impl Shell {
     const fn init_arguments(self) -> &'static [&'static str] {
         match self {
             Self::Zsh => &["init", "zsh", "--print-full-init"],
+            Self::Fish => &["init", "fish", "--print-full-init"],
             Self::Bash => &["init", "bash", "--print-full-init"],
         }
     }
@@ -574,4 +578,16 @@ format = "$env_value"
     session.enter();
     session.wait_for("updated>");
     session.close();
+}
+
+#[test]
+#[ignore = "requires fish"]
+fn fish_streams() {
+    streams(Shell::Fish);
+}
+
+#[test]
+#[ignore = "requires fish"]
+fn fish_shows_text_as_it_is() {
+    text_is_shown_as_it_is(Shell::Fish);
 }
