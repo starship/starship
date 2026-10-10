@@ -35,14 +35,21 @@ impl Default for AsynchronousConfig {
 )]
 #[serde(default)]
 pub struct BusConfig {
-    /// The longest, in milliseconds, the first paint waits for modules. A
-    /// change waits less for others the longer the module that made it took.
+    /// Plan redraws from what each module did for the previous prompt. When
+    /// disabled, every module is waited for as one never measured is.
+    pub adaptive: bool,
+    /// The longest, in milliseconds, the first paint waits for modules, and
+    /// how much a redraw that soon is worth in waiting. Later redraws are worth
+    /// less, the longer the module that makes them took.
     pub fallback: u64,
 }
 
 impl Default for BusConfig {
     fn default() -> Self {
-        Self { fallback: 50 }
+        Self {
+            adaptive: true,
+            fallback: 50,
+        }
     }
 }
 

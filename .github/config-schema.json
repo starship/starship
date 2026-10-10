@@ -36,6 +36,7 @@
       "default": {
         "enabled": true,
         "bus": {
+          "adaptive": true,
           "fallback": 50
         }
       }
@@ -2014,6 +2015,7 @@
         "bus": {
           "$ref": "#/$defs/BusConfig",
           "default": {
+            "adaptive": true,
             "fallback": 50
           }
         }
@@ -2024,8 +2026,13 @@
       "description": "When a streamed prompt is redrawn.",
       "type": "object",
       "properties": {
+        "adaptive": {
+          "description": "Plan redraws from what each module did for the previous prompt. When\ndisabled, every module is waited for as one never measured is.",
+          "type": "boolean",
+          "default": true
+        },
         "fallback": {
-          "description": "The longest, in milliseconds, the first paint waits for modules. A\nchange waits less for others the longer the module that made it took.",
+          "description": "The longest, in milliseconds, the first paint waits for modules, and\nhow much a redraw that soon is worth in waiting. Later redraws are worth\nless, the longer the module that makes them took.",
           "type": "integer",
           "format": "uint64",
           "minimum": 0,
