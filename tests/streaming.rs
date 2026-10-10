@@ -41,6 +41,7 @@ static ONE_SHELL_AT_A_TIME: Mutex<()> = Mutex::new(());
 enum Shell {
     Zsh,
     Fish,
+    Nushell,
     Bash,
 }
 
@@ -49,6 +50,7 @@ impl Shell {
         match self {
             Self::Zsh => "zsh",
             Self::Fish => "fish",
+            Self::Nushell => "nu",
             Self::Bash => "bash",
         }
     }
@@ -65,6 +67,7 @@ impl Shell {
     const fn input(self) -> &'static str {
         match self {
             Self::Zsh | Self::Fish | Self::Bash => "printf 'RESULT:%s\\n' typed",
+            Self::Nushell => "print ('RESULT:' + 'typed')",
         }
     }
 
@@ -74,6 +77,7 @@ impl Shell {
     const fn sleep_then_input(self) -> &'static str {
         match self {
             Self::Zsh | Self::Fish | Self::Bash => "sleep 3; printf 'RESULT:%s\\n' typed",
+            Self::Nushell => "sleep 3sec; print ('RESULT:' + 'typed')",
         }
     }
 
@@ -84,6 +88,24 @@ impl Shell {
         match self {
             Self::Zsh => (vec!["-f".into(), "-i".into()], source),
             Self::Fish => (vec!["--no-config".into(), "--interactive".into()], source),
+            Self::Nushell => {
+                let environment = fixture.directory.path().join("env.nu");
+                fs::write(&environment, "$env.config.show_banner = false\n")
+                    .expect("a nushell environment");
+                let arguments = [
+                    "--env-config".as_ref(),
+                    environment.as_os_str(),
+                    "--config".as_ref(),
+                    fixture.init.as_os_str(),
+                ];
+                (
+                    arguments
+                        .iter()
+                        .map(|argument| argument.to_string_lossy().into_owned())
+                        .collect(),
+                    None,
+                )
+            }
             Self::Bash => {
                 let ble = "";
                 let rcfile = fixture.directory.path().join("bashrc");
@@ -107,6 +129,7 @@ impl Shell {
         match self {
             Self::Zsh => &["init", "zsh", "--print-full-init"],
             Self::Fish => &["init", "fish", "--print-full-init"],
+            Self::Nushell => &["init", "nu"],
             Self::Bash => &["init", "bash", "--print-full-init"],
         }
     }
@@ -602,4 +625,16 @@ fn fish_leaves_an_accepted_line_alone() {
 #[ignore = "requires fish"]
 fn fish_keeps_the_right_prompt_current() {
     the_right_prompt_is_kept_current(Shell::Fish);
+}
+
+#[test]
+#[ignore = "requires nu 0.115 or later"]
+fn nushell_streams() {
+    streams(Shell::Nushell);
+}
+
+#[test]
+#[ignore = "requires nu 0.115 or later"]
+fn nushell_shows_text_as_it_is() {
+    text_is_shown_as_it_is(Shell::Nushell);
 }
