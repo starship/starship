@@ -16,7 +16,7 @@ use crate::print::{self, DUMB_TERMINAL_PROMPT};
 use crate::segment::Segment;
 use crate::workers::{self, Rendered, Workers};
 
-use bus::{Bus, Estimate, Rendering};
+use bus::{Bus, DeparturePlanner, Estimate, Rendering};
 use frame::{Frame, Sink};
 
 /// Streams the main and right prompts to standard output, expecting modules
@@ -90,6 +90,7 @@ struct Session<'a> {
     /// One for each of the plan's modules, by position.
     slots: Vec<Slot>,
     bus: Bus,
+    departure_planner: DeparturePlanner,
     /// The main and right prompts as last drawn.
     drawn: Option<[String; 2]>,
     /// Whether the stream has reported that every module has rendered.
@@ -132,6 +133,7 @@ impl<'a> Session<'a> {
             context,
             plan,
             bus: Bus::new(start, configuration.bus.fallback()),
+            departure_planner: DeparturePlanner::with_capacity(plan.modules.len()),
             adaptive: configuration.bus.adaptive,
             start,
             slots,
@@ -218,8 +220,16 @@ impl<'a> Session<'a> {
     }
 
     /// When the bus leaves, given every module still rendering.
-    fn departure(&self, now: Instant) -> Option<Instant> {
-        self.bus.departure(now, self.rendering())
+    fn departure(&mut self, now: Instant) -> Option<Instant> {
+        let rendering = self.slots.iter().filter_map(|slot| match slot.state {
+            State::Rendering => Some(Rendering {
+                since: self.start,
+                estimate: slot.estimate.filter(|_| self.adaptive),
+            }),
+            State::Rendered => None,
+        });
+        self.bus
+            .departure_with_planner(now, rendering, &mut self.departure_planner)
     }
 
     /// Every module still rendering, and what the bus expects of it.
