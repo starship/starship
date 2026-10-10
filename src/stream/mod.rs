@@ -358,6 +358,10 @@ impl<'context> Session<'context> {
             .prompts(&|position| &self.modules[position].segments, self.context);
 
         if self.last_prompts.as_ref() == Some(&prompts) {
+            // Different module segments can compose the same visible prompt.
+            if self.completion_reported {
+                output.send(Frame::Heartbeat)?;
+            }
             return Ok(());
         }
 
@@ -1614,5 +1618,36 @@ mod tests {
             clock.next_refresh_at(started_at, period),
             "the wall-clock remainder may exceed u64 nanoseconds"
         );
+    }
+    #[test]
+    fn changing_modules_with_an_unchanged_prompt_still_send_heartbeats() {
+        let frames = simulate_in(
+            SimulationSettings {
+                horizon_milliseconds: 2_500,
+                ..SimulationSettings::default()
+            },
+            &context(toml::toml! {
+                add_newline = false
+                format = "${custom.left}${custom.right}"
+                [custom.left]
+                command = "printf a"
+                when = true
+                refresh = 1000
+                [custom.right]
+                command = "printf b"
+                when = true
+                refresh = 1000
+            }),
+            "custom.left=1,custom.right=1",
+            &[
+                ("custom.left", &[(1, "a"), (1, ""), (1, "a")]),
+                ("custom.right", &[(1, "b"), (1, "ab"), (1, "b")]),
+            ],
+        )
+        .frames;
+
+        assert_eq!(vec![(1, "ab")], prompts(&frames));
+        assert!(keywords(&frames).contains(&(1_001, "HEARTBEAT")));
+        assert!(keywords(&frames).contains(&(2_001, "HEARTBEAT")));
     }
 }
