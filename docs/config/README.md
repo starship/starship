@@ -387,14 +387,29 @@ Shell integrations that consume these frames are introduced separately.
 | Option         | Default | Description                                                                                                            |
 | -------------- | ------- | ---------------------------------------------------------------------------------------------------------------------- |
 | `enabled`      | `true`  | Allow a partial prompt while modules render. Set to `false` to wait for all modules.                                   |
+| `refresh`      | `true`  | Refresh time-varying modules while the prompt is displayed.                                                            |
 | `bus.adaptive` | `true`  | Use previous module timings to schedule redraws. Disable to treat every module as unmeasured.                          |
 | `bus.fallback` | `50`    | Maximum initial waiting budget for modules, in milliseconds. Process startup and configuration loading are additional. |
+
+On shells that support ongoing updates, modules can refresh while the prompt is displayed. When enabled, `time` refreshes every
+second for formats containing seconds, otherwise every minute; literal formats need no refresh.
+`memory_usage` refreshes every five seconds, and `battery` and `localip` every thirty seconds.
+Custom modules repeat only when their `refresh` interval is greater than zero (milliseconds).
+Refreshes align to wall-clock boundaries and redraw only when the resulting prompt changes.
+Refreshing a disabled module does not enable it.
+
+Set `[async].refresh = false` to stop all periodic refreshes, or set an individual built-in
+module's `refresh = false`. Set a custom module's `refresh = 0` to run it once per prompt.
+Disabling `[async].enabled` also disables periodic refreshes.
 
 ### Example
 
 ```toml
 [async]
-enabled = false
+refresh = false
+
+[async.bus]
+fallback = 100
 ```
 
 ## AWS
