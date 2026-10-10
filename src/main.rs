@@ -137,6 +137,10 @@ enum Commands {
         /// before slow modules finish and refining them as they do
         #[clap(long, conflicts_with_all = ["right", "profile", "continuation"])]
         stream: bool,
+        /// What each module did for the previous prompt, as the last stream
+        /// reported
+        #[clap(long, requires = "stream", default_value = "")]
+        timings: String,
         #[clap(flatten)]
         properties: Properties,
     },
@@ -230,11 +234,12 @@ fn main() {
         }
         Commands::Prompt {
             stream: true,
+            timings,
             properties,
             ..
         } => {
             // A closed pipe is a shell that no longer wants this prompt.
-            if let Err(error) = stream::stream(properties)
+            if let Err(error) = stream::stream(properties, &timings)
                 && error.kind() != io::ErrorKind::BrokenPipe
             {
                 eprintln!("Unable to stream the prompt: {error}");
