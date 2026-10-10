@@ -299,6 +299,16 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
     m
 }
 
+/// What `module` shows before it renders, where it can show anything at a
+/// bounded cost: only the directory, without which a first paint would be hard
+/// to recognize.
+pub fn approximate<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
+    match module {
+        "directory" => directory::approximate(context),
+        _ => None,
+    }
+}
+
 /// Refresh cadence for an enabled module with refresh configured.
 pub fn period(module: &str, context: &Context) -> Option<Duration> {
     let configuration = || context.config.get_module_config(module);

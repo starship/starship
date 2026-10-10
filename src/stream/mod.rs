@@ -297,6 +297,7 @@ impl<'context> Session<'context> {
 
     fn run(mut self, renderer: &mut impl Renderer, output: &mut impl Sink) -> io::Result<()> {
         self.start_initial_renders(renderer);
+        self.populate_approximations();
 
         let mut now = self.clock.started_at;
         loop {
@@ -332,6 +333,16 @@ impl<'context> Session<'context> {
         positions.sort_unstable_by_key(|&position| (self.modules[position].estimate, position));
         for position in positions {
             renderer.render(position);
+        }
+    }
+
+    /// Compute placeholders after submitting all initial renders, so this work
+    /// overlaps rendering without consuming a partial completion batch.
+    fn populate_approximations(&mut self) {
+        for (module, name) in self.modules.iter_mut().zip(&self.plan.modules) {
+            if let Some(approximation) = modules::approximate(name, self.context) {
+                module.segments = approximation.segments;
+            }
         }
     }
 
@@ -1661,5 +1672,41 @@ mod tests {
         assert_eq!(vec![(1, "ab")], prompts(&frames));
         assert!(keywords(&frames).contains(&(1_001, "HEARTBEAT")));
         assert!(keywords(&frames).contains(&(2_001, "HEARTBEAT")));
+    }
+    #[test]
+    fn the_first_paint_shows_the_directory_before_its_repository_is_found() {
+        let repository = tempfile::tempdir().unwrap();
+        crate::utils::create_command("git")
+            .unwrap()
+            .arg("init")
+            .current_dir(repository.path())
+            .output()
+            .unwrap();
+        let working_directory = repository.path().join("src");
+        std::fs::create_dir(&working_directory).unwrap();
+        let mut context = context(toml::toml! {
+            add_newline = false
+            format = "$directory$character"
+            directory.format = "$path"
+            directory.truncation_length = 8
+        });
+        context.current_dir = working_directory.clone();
+        context.logical_dir = working_directory;
+
+        let frames = simulate(
+            &context,
+            "character=0,directory=500",
+            &[("character", &[(0, ">")]), ("directory", &[(500, "found")])],
+        );
+
+        let repository_name = repository.path().file_name().unwrap().to_string_lossy();
+        let [(0, first), (500, refined)] = prompts(&frames)[..] else {
+            panic!("a first paint and one refinement, not {frames:?}");
+        };
+        assert!(
+            first.ends_with(&format!("{repository_name}/src>")),
+            "{first}"
+        );
+        assert_eq!("found>", refined);
     }
 }
