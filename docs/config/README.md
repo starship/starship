@@ -386,6 +386,7 @@ can update the prompt independently. Missing or late estimates use the fallback 
 Supported shell integrations:
 
 - zsh streams both prompts, including refreshes, vi mode changes, and terminal resizing.
+- fish streams and refreshes both prompts on Unix. With a Windows Starship binary, prompts render synchronously.
 
 ### Options
 
