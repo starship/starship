@@ -638,3 +638,15 @@ fn nushell_streams() {
 fn nushell_shows_text_as_it_is() {
     text_is_shown_as_it_is(Shell::Nushell);
 }
+
+#[test]
+#[ignore = "requires nu 0.115 or later"]
+fn nushell_leaves_an_accepted_line_alone() {
+    an_accepted_line_is_left_alone(Shell::Nushell);
+}
+
+#[test]
+#[ignore = "requires nu 0.115 or later"]
+fn nushell_keeps_the_right_prompt_current() {
+    the_right_prompt_is_kept_current(Shell::Nushell);
+}
