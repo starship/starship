@@ -189,23 +189,28 @@ impl Segment {
     }
 }
 
-/// Width of `value` as rendered by `shell`, discounting escape sequences
-/// added by `shell_prompt_escape`.
+/// Width of `value` as rendered by `shell`, accounting for escape sequences:
+/// those already added by `shell_prompt_escape` (bash, zsh) and those added
+/// later by `get_prompt` (tcsh's `!` → `\!`).
 fn unescaped_width(value: &str, shell: Shell) -> usize {
-    if !value.contains(['$', '`', '\\', '%']) {
+    if !value.contains(['$', '`', '\\', '%', '!']) {
         return value.width_graphemes();
     }
-    match shell {
+    let value = match shell {
         // Inverse of shell_prompt_escape for bash: backtick and dollar
         // first, backslash last.
         Shell::Bash => value
             .replace("\\`", "`")
             .replace("\\$", "$")
-            .replace("\\\\", "\\")
-            .width_graphemes(),
-        Shell::Zsh => value.replace("%%", "%").width_graphemes(),
-        _ => value.width_graphemes(),
-    }
+            .replace("\\\\", "\\"),
+        Shell::Zsh => value.replace("%%", "%"),
+        // get_prompt escapes ! to \! for tcsh after fill widths are
+        // measured (see print::get_prompt), so each ! drinks one extra
+        // column of $fill unless we count it here.
+        Shell::Tcsh => value.replace('!', "\\!"),
+        _ => return value.width_graphemes(),
+    };
+    value.width_graphemes()
 }
 
 #[cfg(test)]
@@ -239,6 +244,15 @@ mod unescaped_width_tests {
     fn unknown_shell_keeps_stored_width() {
         let seg = Segment::from_text(None, "\\$".to_string()).remove(0);
         assert_eq!(seg.width_graphemes_shell(Shell::Unknown), 2);
+    }
+
+    #[test]
+    fn tcsh_exclamation_escape_counts_as_two() {
+        // get_prompt runs after fill widths are computed and escapes each !
+        // to \! for tcsh, so the measured width must include the backslash.
+        let seg = Segment::from_text(None, "dir!".to_string()).remove(0);
+        assert_eq!(seg.width_graphemes(), 4);
+        assert_eq!(seg.width_graphemes_shell(Shell::Tcsh), 5);
     }
 
     #[test]

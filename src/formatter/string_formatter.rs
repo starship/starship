@@ -924,5 +924,12 @@ mod tests {
         assert_eq!(stored, "10%%");
         let seg = Segment::from_text(None, stored).remove(0);
         assert_eq!(seg.width_graphemes_shell(ShellCtx::Zsh), 3);
+
+        // #7744: tcsh escapes ! to \! after the width pass, so the round trip
+        // must reserve a column for the injected backslash.
+        let stored = shell_prompt_escape("!", Shell::Tcsh);
+        assert_eq!(stored, "!"); // tcsh escape happens in get_prompt, not here
+        let seg = Segment::from_text(None, stored).remove(0);
+        assert_eq!(seg.width_graphemes_shell(ShellCtx::Tcsh), 2);
     }
 }

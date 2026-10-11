@@ -161,6 +161,9 @@ pub fn get_prompt(context: &Context) -> String {
 
     // escape \n and ! characters for tcsh
     if context.shell == Shell::Tcsh {
+        // The width of each injected escape is already accounted for in the
+        // fill calculation (see Segment::width_graphemes_shell), so this
+        // cannot overflow the requested terminal width.
         buf = buf.replace('!', "\\!");
         // space is required before newline
         buf = buf.replace('\n', " \\n");
