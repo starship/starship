@@ -230,4 +230,35 @@ mod tests {
         assert_eq!(expected, actual);
         dir.close()
     }
+
+    #[test]
+    #[cfg(target_os = "macos")]
+    fn folder_with_swift_file_xcrun_unparseable_falls_back_to_driver() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("main.swift"))?.sync_all()?;
+        let actual = ModuleRenderer::new("swift")
+            .cmd("swift-frontend --version", None)
+            .cmd(
+                "xcrun --find swift-frontend",
+                Some(CommandOutput {
+                    stdout: String::from("swift-frontend-from-xcrun\n"),
+                    stderr: String::default(),
+                }),
+            )
+            .cmd(
+                "swift-frontend-from-xcrun --version",
+                Some(CommandOutput {
+                    stdout: String::from("garbage output\n"),
+                    stderr: String::default(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Fixed(202).bold().paint("🐦 v5.2.2 ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
 }
