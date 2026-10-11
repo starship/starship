@@ -1726,7 +1726,10 @@ mod tests {
             panic!("a first paint and one refinement, not {frames:?}");
         };
         assert!(
-            first.ends_with(&format!("{repository_name}/src>")),
+            first.ends_with(&format!(
+                "{repository_name}{}src>",
+                std::path::MAIN_SEPARATOR
+            )),
             "{first}"
         );
         assert_eq!("found>", refined);
