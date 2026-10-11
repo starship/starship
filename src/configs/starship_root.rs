@@ -24,6 +24,7 @@ pub struct StarshipRootConfig {
     pub continuation_prompt: String,
     pub scan_timeout: u64,
     pub command_timeout: u64,
+    pub command_cache_ttl: u64,
     pub add_newline: bool,
     pub follow_symlinks: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -161,6 +162,7 @@ impl Default for StarshipRootConfig {
             internal_profiles: default_profiles(),
             scan_timeout: 30,
             command_timeout: 500,
+            command_cache_ttl: 0,
             add_newline: true,
             follow_symlinks: true,
             palette: None,

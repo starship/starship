@@ -6,7 +6,7 @@ use crate::{
     context::Context,
     formatter::{StringFormatter, VersionFormatter},
     module::Module,
-    utils,
+    utils::{self, command_cache},
 };
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -37,11 +37,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let properties = wrapper_properties.as_deref()?;
-                    let maven_version = parse_maven_version_from_properties(properties)?;
+                    let maven_version = match wrapper_properties.as_deref() {
+                        // Prefer the Maven version pinned by the project's wrapper, if any,
+                        // but fall back to the local `mvn` binary if the wrapper is unparsable.
+                        Some(properties) => parse_maven_version_from_properties(properties)
+                            .or_else(|| get_mvn_version(context, config.cache, config.cache_ttl)),
+                        // Otherwise fall back to the resolved `mvn` binary version, using a
+                        // short-lived persistent cache to avoid spawning the binary on each prompt.
+                        None => get_mvn_version(context, config.cache, config.cache_ttl),
+                    };
+                    let maven_version = maven_version.as_deref()?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
-                        &maven_version,
+                        maven_version,
                         config.version_format,
                     )
                     .map(Ok)
@@ -80,6 +88,47 @@ fn parse_maven_version_from_properties(wrapper_properties: &str) -> Option<Strin
     Some(version.to_string())
 }
 
+/// The version of the `mvn` binary installed on the machine, resolved if available.
+fn get_mvn_version(context: &Context, cache_enabled: bool, cache_ttl: u64) -> Option<String> {
+    let binary_name = if cfg!(windows) { "mvn.cmd" } else { "mvn" };
+    // The Maven version key is context-independent: the resolved binary (e.g. an SDKMAN-managed
+    // installation) fully determines the output, so a change of the underlying installation
+    // naturally invalidates the entry without being scoped to a directory.
+    let key = command_cache::key(None, binary_name, &["--version"]);
+
+    // Serve from the module cache first when it is enabled and the entry is fresh enough.
+    if cache_enabled
+        && let Some(output) = command_cache::get(&key, cache_ttl)
+        && let Some(version) = parse_mvn_version(&output.stdout)
+    {
+        return Some(version);
+    }
+
+    // Read directly from the binary, bypassing the global (directory-scoped) command cache, so a
+    // module-level `cache = false` disables caching for this lookup as the user asked.
+    let output = context.exec_cmd_no_cache(binary_name, &["--version"])?;
+    let version = parse_mvn_version(&output.stdout)?;
+
+    if cache_enabled {
+        command_cache::set(&key, output, cache_ttl);
+    }
+
+    Some(version)
+}
+
+/// Parses the Maven version from the first line of `mvn --version`, e.g.
+/// `Apache Maven 4.0.0-rc-6 (6a8189b24518daa120539fa41ce12f2b48ec09a8)`.
+fn parse_mvn_version(mvn_stdout: &str) -> Option<String> {
+    mvn_stdout
+        .lines()
+        .next()?
+        .split_once("Apache Maven")?
+        .1
+        .split_whitespace()
+        .next()
+        .map(str::to_string)
+}
+
 /// Tries to find the maven-wrapper.properties file.
 fn get_wrapper_properties_file(context: &Context, recursive: bool) -> Option<String> {
     let read_wrapper_properties = |base_dir: &Path| {
@@ -110,6 +159,7 @@ mod tests {
 
     use super::*;
     use crate::test::ModuleRenderer;
+    use crate::utils::{CommandOutput, display_command};
     use std::fs::{self, File};
     use std::io::{self, Write};
 
@@ -162,6 +212,77 @@ distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-mav
         let expected = Some(format!(
             "via {}",
             Color::LightCyan.bold().paint("🅼 v3.9.12 ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_maven_and_no_wrapper_falls_back_to_mvn() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("pom.xml"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("maven")
+            .config(toml::toml! {
+                [maven]
+                cache = false
+            })
+            .path(dir.path())
+            .cmd(
+                &display_command("mvn", &["--version"]),
+                Some(CommandOutput {
+                    stdout: String::from("Apache Maven 4.0.0-rc-6 (test-runner)"),
+                    stderr: String::new(),
+                }),
+            )
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::LightCyan.bold().paint("🅼 v4.0.0-rc-6 ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_unparsable_wrapper_falls_back_to_mvn() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("pom.xml"))?.sync_all()?;
+        let properties = dir
+            .path()
+            .join(".mvn")
+            .join("wrapper")
+            .join("maven-wrapper.properties");
+        fs::create_dir_all(properties.parent().unwrap())?;
+        let mut file = File::create(properties)?;
+        // A wrapper file present but lacking a usable `distributionUrl` line.
+        file.write_all(
+            b"\
+wrapperVersion=3.3.4
+distributionType=only-script
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("maven")
+            .config(toml::toml! {
+                [maven]
+                cache = false
+            })
+            .path(dir.path())
+            .cmd(
+                &display_command("mvn", &["--version"]),
+                Some(CommandOutput {
+                    stdout: String::from("Apache Maven 4.0.0-rc-6 (test-runner)"),
+                    stderr: String::new(),
+                }),
+            )
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::LightCyan.bold().paint("🅼 v4.0.0-rc-6 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -236,5 +357,38 @@ wrapperVersion=3.3.4
             parse_maven_version_from_properties(&input("3.9.0-SNAPSHOT")),
             Some("3.9.0-SNAPSHOT".to_string())
         );
+    }
+
+    #[test]
+    fn test_format_mvn_version_stable() {
+        assert_eq!(
+            parse_mvn_version("Apache Maven 3.9.12 (b89855c551a02db07e8f7b36c5e6a2e60f9e3a2b)\n"),
+            Some("3.9.12".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_mvn_version_rc() {
+        assert_eq!(
+            parse_mvn_version(
+                "Apache Maven 4.0.0-rc-6 (6a8189b24518daa120539fa41ce12f2b48ec09a8)\n"
+            ),
+            Some("4.0.0-rc-6".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_mvn_version_snapshot() {
+        assert_eq!(
+            parse_mvn_version(
+                "Apache Maven 3.9.0-SNAPSHOT (1234567890123456789012345678901234567890)\n"
+            ),
+            Some("3.9.0-SNAPSHOT".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_mvn_version_garbage() {
+        assert_eq!(parse_mvn_version("not a maven output\n"), None);
     }
 }
