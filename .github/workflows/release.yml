@@ -146,7 +146,7 @@ jobs:
         continue-on-error: true
         if: matrix.os == 'windows-latest'
         id: unsigned-artifacts
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: unsigned-${{ matrix.name }}
           path: |
@@ -181,7 +181,7 @@ jobs:
           cd -
 
       - name: Release | Upload artifacts
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ${{ matrix.name }}
           path: ${{ matrix.name }}
@@ -189,7 +189,7 @@ jobs:
       - name: Release | Upload installer artifacts [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: starship-${{ matrix.target }}.msi
           path: target/${{ matrix.target }}/release/starship-${{ matrix.target }}.msi
@@ -279,7 +279,7 @@ jobs:
         run: bash install/macos_packages/build_and_notarize.sh starship docs ${{ matrix.arch }} ${{ matrix.pkgname }}
 
       - name: Notarize | Upload Notarized Flat Installer
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ${{ matrix.pkgname }}
           path: ${{ matrix.pkgname }}
@@ -288,7 +288,7 @@ jobs:
         run: tar czvf ${{ matrix.name }} starship
 
       - name: Notarize | Upload Notarized Binary
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ${{ matrix.name }}
           path: ${{ matrix.name }}
