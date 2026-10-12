@@ -233,7 +233,7 @@ mod tests {
 
     #[test]
     #[cfg(target_os = "macos")]
-    fn folder_with_swift_file_xcrun_unparseable_falls_back_to_driver() -> io::Result<()> {
+    fn folder_with_swift_file_xcrun_unparsable_falls_back_to_driver() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.swift"))?.sync_all()?;
         let actual = ModuleRenderer::new("swift")
