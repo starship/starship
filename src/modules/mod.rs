@@ -374,6 +374,8 @@ mod test {
         let context = crate::test::default_context().set_config(toml::toml! {
             memory_usage.disabled = false
             memory_usage.refresh = false
+            localip.disabled = false
+            localip.refresh = false
             time.disabled = false
             time.refresh = false
             [custom.weather]
@@ -382,9 +384,39 @@ mod test {
             disabled = true
         });
 
-        for module in ["memory_usage", "time", "custom.weather"] {
+        let modules = ["memory_usage", "localip", "time", "custom.weather"];
+        for module in modules {
             assert_eq!(None, period(module, &context), "{module}");
         }
+    }
+
+    #[test]
+    fn enabled_builtin_refresh_periods_match_their_defaults() {
+        let context = crate::test::default_context().set_config(toml::toml! {
+            memory_usage.disabled = false
+            localip.disabled = false
+        });
+
+        assert_eq!(
+            Some(Duration::from_secs(5)),
+            period("memory_usage", &context)
+        );
+        assert_eq!(Some(Duration::from_secs(30)), period("localip", &context));
+    }
+
+    #[cfg(feature = "battery")]
+    #[test]
+    fn battery_refresh_period_is_enabled_by_default_and_can_be_disabled() {
+        assert_eq!(
+            Some(Duration::from_secs(30)),
+            period("battery", &crate::test::default_context()),
+            "battery refresh is enabled by default",
+        );
+
+        let context = crate::test::default_context().set_config(toml::toml! {
+            battery.refresh = false
+        });
+        assert_eq!(None, period("battery", &context));
     }
 
     #[test]

@@ -52,11 +52,47 @@ pub fn num_rayon_threads() -> usize {
 /// computes, and one more renders each module that waits; without knowing how
 /// many do, as many are taken to wait as to compute.
 fn num_module_threads(modules: usize, waiting: Option<usize>) -> usize {
-    num_configured_starship_threads()
-        .unwrap_or_else(|| {
-            let cores = available_parallelism().map_or(1, usize::from);
-            cores.saturating_add(waiting.unwrap_or(cores)).clamp(4, 64)
-        })
+    num_module_threads_with(
+        modules,
+        waiting,
+        num_configured_starship_threads(),
+        available_parallelism().map_or(1, usize::from),
+    )
+}
+
+fn num_module_threads_with(
+    modules: usize,
+    waiting: Option<usize>,
+    configured: Option<usize>,
+    cores: usize,
+) -> usize {
+    configured
+        .unwrap_or_else(|| cores.saturating_add(waiting.unwrap_or(cores)).clamp(4, 64))
         .max(1)
         .min(modules)
+}
+
+#[cfg(test)]
+mod scheduling_tests {
+    use super::num_module_threads_with;
+
+    #[test]
+    fn configured_thread_count_is_clamped_to_available_modules() {
+        assert_eq!(5, num_module_threads_with(5, None, Some(64), 8));
+    }
+
+    #[test]
+    fn configured_thread_count_has_a_one_thread_floor() {
+        assert_eq!(1, num_module_threads_with(3, None, Some(0), 8));
+    }
+
+    #[test]
+    fn configured_thread_count_does_not_create_workers_without_modules() {
+        assert_eq!(0, num_module_threads_with(0, None, Some(8), 8));
+    }
+
+    #[test]
+    fn default_thread_count_accounts_for_waiting_modules_on_one_core() {
+        assert_eq!(16, num_module_threads_with(32, Some(15), None, 1));
+    }
 }
