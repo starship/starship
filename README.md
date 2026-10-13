@@ -272,7 +272,8 @@ mkdir ($nu.data-dir | path join "vendor/autoload")
 starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
 ```
 
-Note: Only Nushell v0.96+ is supported; v0.115+ streams the prompt
+Note: Nushell 0.96+ is supported. Starship probes for the async prompt and job
+mailbox commands at runtime; when they are available, it streams the prompt.
 
 </details>
 
