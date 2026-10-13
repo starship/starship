@@ -233,7 +233,7 @@ fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String
     loop {
         match reader.read_event_into(&mut buf) {
             Ok(QXEvent::Start(ref e)) => {
-                in_ver = depth == 1 && e.name().as_ref() == b"version";
+                in_ver = depth == 1 && e.name().as_ref() == "version";
                 depth += 1;
             }
             Ok(QXEvent::End(_)) => {
@@ -241,12 +241,13 @@ fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String
                 depth -= 1;
             }
             Ok(QXEvent::Text(t)) if in_ver => {
-                let ver = t.decode().ok().map(std::borrow::Cow::into_owned);
-                return match ver {
-                    // Ignore version which is just a property reference
-                    Some(ref v) if !v.starts_with('$') => format_version(v, config.version_format),
-                    _ => None,
-                };
+                // Ignore version which is just a property reference
+                if !t.as_ref().starts_with('$') {
+                    let ver = t.as_ref();
+                    return format_version(ver, config.version_format);
+                }
+
+                return None;
             }
             Ok(QXEvent::Eof) => break,
             Ok(_) => (),

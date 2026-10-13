@@ -114,7 +114,7 @@ jobs:
 
       - name: Setup | Install Zig [riscv64]
         if: matrix.use_zigbuild
-        run: pip install ziglang==0.16.0
+        run: pip install ziglang==0.17.0
 
       - name: Setup | Install cargo-zigbuild [riscv64]
         if: matrix.use_zigbuild
@@ -146,7 +146,7 @@ jobs:
         continue-on-error: true
         if: matrix.os == 'windows-latest'
         id: unsigned-artifacts
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: unsigned-${{ matrix.name }}
           path: |
@@ -156,7 +156,7 @@ jobs:
       - name: Sign | Sign [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest'
-        uses: signpath/github-action-submit-signing-request@b9d91eadd323de506c0c81cf0c7fe7438f3360fd # v2.2
+        uses: signpath/github-action-submit-signing-request@f6d04783b4569d051e0c80105fe66e82819d0092 # v3.0
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
@@ -181,7 +181,7 @@ jobs:
           cd -
 
       - name: Release | Upload artifacts
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ${{ matrix.name }}
           path: ${{ matrix.name }}
@@ -189,7 +189,7 @@ jobs:
       - name: Release | Upload installer artifacts [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: starship-${{ matrix.target }}.msi
           path: target/${{ matrix.target }}/release/starship-${{ matrix.target }}.msi
@@ -258,7 +258,7 @@ jobs:
       - name: Setup | Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 24.19.0
+          node-version: 24.21.0
 
       - name: Notarize | Build docs
         run: |
@@ -267,7 +267,7 @@ jobs:
           npm run build
 
       - name: Notarize | Download artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: ${{ matrix.name }}
           path: artifacts
@@ -279,7 +279,7 @@ jobs:
         run: bash install/macos_packages/build_and_notarize.sh starship docs ${{ matrix.arch }} ${{ matrix.pkgname }}
 
       - name: Notarize | Upload Notarized Flat Installer
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ${{ matrix.pkgname }}
           path: ${{ matrix.pkgname }}
@@ -288,7 +288,7 @@ jobs:
         run: tar czvf ${{ matrix.name }} starship
 
       - name: Notarize | Upload Notarized Binary
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ${{ matrix.name }}
           path: ${{ matrix.name }}
@@ -307,7 +307,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
 
       - name: Setup | Checksums
         run: for file in starship-*/starship-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
@@ -392,7 +392,7 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Setup | Artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
       - run: pwsh ./install/windows/choco/update.ps1
         env:
           STARSHIP_VERSION: ${{ needs.release_please.outputs.tag_name }}

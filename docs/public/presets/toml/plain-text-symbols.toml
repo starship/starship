@@ -136,6 +136,16 @@ ssh_symbol = "ssh "
 [java]
 symbol = "java "
 
+[jj_bookmark]
+symbol = "jj "
+truncation_symbol = "..."
+
+[jj_status]
+description_empty = "e"
+immutable = "i"
+deleted = "x"
+renamed = "r"
+
 [jobs]
 symbol = "*"
 

@@ -640,6 +640,7 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
             stdout: String::from("22.1.3\n"),
             stderr: String::default(),
         }),
+        s if s.starts_with("jj --color never") => crate::context::mock_jj_cmd(s),
         _ => return None,
     };
     Some(out)

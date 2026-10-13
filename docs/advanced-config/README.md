@@ -283,7 +283,7 @@ function Invoke-Starship-PreCommand {
 Invoke-Expression (&starship init powershell)
 ```
 
-## Enable Right Prompt
+## Enable Right Prompt {#enable-right-prompt}
 
 Some shells support a right prompt which renders on the same line as the input. Starship can
 set the content of the right prompt using the `right_format` option. Any module that can be used
@@ -386,7 +386,7 @@ claude-code = "$claude_model$git_branch$claude_context$claude_cost"
 
 An additional module, `claude_rate_limits`, shows subscription rate limit usage. It is not part of the default profile, so add it to the profile format to use it.
 
-### Configuration
+### Configuration {#configuration}
 
 You can customize the Claude Code statusline by modifying the `claude-code` profile and individual module configurations in your `~/.config/starship.toml`:
 
@@ -755,7 +755,7 @@ threshold = 90
 style = "bold red"
 ```
 
-## Style Strings
+## Style Strings {#style-strings}
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
