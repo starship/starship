@@ -705,7 +705,9 @@ where
         Shell::Bash => text
             .into()
             .replace('\\', r"\\")
-            .replace('$', r"\$")
+            // In PS1, `\$` is a special root-sensitive prompt escape. The
+            // extra backslash makes the dollar literal after prompt expansion.
+            .replace('$', r"\\$")
             .replace('`', r"\`"),
         Shell::Zsh => {
             // % is an escape in zsh, see PROMPT in `man zshmisc`
@@ -964,10 +966,12 @@ mod tests {
 
     #[test]
     fn test_bash_escape() {
+        assert_eq!(shell_prompt_escape("$HOME", Shell::Bash), r"\\$HOME");
+
         let test = "$(echo a)";
         assert_eq!(
             shell_prompt_escape(test.to_owned(), Shell::Bash),
-            r"\$(echo a)"
+            r"\\$(echo a)"
         );
         assert_eq!(
             shell_prompt_escape(test.to_owned(), Shell::PowerShell),
@@ -977,7 +981,7 @@ mod tests {
         let test = r"\$(echo a)";
         assert_eq!(
             shell_prompt_escape(test.to_owned(), Shell::Bash),
-            r"\\\$(echo a)"
+            r"\\\\$(echo a)"
         );
         assert_eq!(
             shell_prompt_escape(test.to_owned(), Shell::PowerShell),
