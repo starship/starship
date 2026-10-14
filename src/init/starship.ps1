@@ -162,7 +162,7 @@ $null = New-Module starship {
             $stream.Prompt
         } else {
             Stop-StarshipStream
-            ''
+            $null
         }
     }
 
