@@ -1442,7 +1442,12 @@ mod tests {
 
         environment.insert("HOME", "/test-home".to_owned());
         assert_eq!(
-            Some(PathBuf::from("/test-home/.config/starship.toml").into_os_string()),
+            Some(
+                PathBuf::from("/test-home")
+                    .join(".config")
+                    .join("starship.toml")
+                    .into_os_string()
+            ),
             super::config_file_to_read(&environment),
         );
 
