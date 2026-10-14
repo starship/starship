@@ -38,6 +38,14 @@ pub fn period(context: &Context) -> Option<Duration> {
         period = Some(period.map_or(turns_over, |period: Duration| period.min(turns_over)));
     }
 
+    // A valid range can make the module appear or disappear even when its
+    // formatted value is constant, so revisit it at least once per second.
+    let (display_start, display_end) = parse_time_range(configuration.time_range);
+    if display_start.is_some() || display_end.is_some() {
+        let range_period = Duration::from_secs(1);
+        period = Some(period.map_or(range_period, |period| period.min(range_period)));
+    }
+
     period
 }
 
@@ -228,6 +236,30 @@ mod tests {
             super::period(&crate::test::default_context()),
             "disabled"
         );
+    }
+
+    #[test]
+    fn a_time_range_refreshes_even_when_the_format_is_literal() {
+        let context = crate::test::default_context().set_config(toml::toml! {
+            [time]
+            disabled = false
+            time_format = "at noon"
+            time_range = "10:00:00-14:00:00"
+        });
+
+        assert_eq!(Some(Duration::from_secs(1)), super::period(&context));
+    }
+
+    #[test]
+    fn an_invalid_time_range_does_not_add_a_refresh_period() {
+        let context = crate::test::default_context().set_config(toml::toml! {
+            [time]
+            disabled = false
+            time_format = "at noon"
+            time_range = "10:00:00-14:00:00-15:00:00"
+        });
+
+        assert_eq!(None, super::period(&context));
     }
 
     #[test]
