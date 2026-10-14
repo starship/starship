@@ -121,10 +121,13 @@ mod tests {
         let mut snapshot = Snapshot::new(directory.path().to_path_buf(), i32::MAX);
         snapshot.announced = true;
         // The shell PID deliberately does not exist; writing precedes signaling.
-        let _ = snapshot.send(Frame::Prompt {
-            main: "ma\0in",
-            right: "ri\0ght",
-        });
+        let error = snapshot
+            .send(Frame::Prompt {
+                main: "ma\0in",
+                right: "ri\0ght",
+            })
+            .unwrap_err();
+        assert_eq!(io::ErrorKind::BrokenPipe, error.kind());
         let path = directory.path().join(std::process::id().to_string());
         assert_eq!("main\0right\0\0", fs::read_to_string(path).unwrap());
         assert_eq!("main", snapshot.main);

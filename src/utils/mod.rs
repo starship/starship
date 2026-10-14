@@ -704,7 +704,9 @@ where
         // see #658 for more details
         Shell::Bash => text
             .into()
-            .replace('\\', r"\\")
+            // PS1 decodes prompt escapes before expanding the resulting text.
+            // Preserve each literal backslash through both stages.
+            .replace('\\', r"\\\\")
             // In PS1, `\$` is a special root-sensitive prompt escape. The
             // extra backslash makes the dollar literal after prompt expansion.
             .replace('$', r"\\$")
@@ -981,7 +983,7 @@ mod tests {
         let test = r"\$(echo a)";
         assert_eq!(
             shell_prompt_escape(test.to_owned(), Shell::Bash),
-            r"\\\\$(echo a)"
+            r"\\\\\\$(echo a)"
         );
         assert_eq!(
             shell_prompt_escape(test.to_owned(), Shell::PowerShell),

@@ -88,12 +88,12 @@ pub fn prompt_with_claude_code(args: Properties, target: Target) {
 /// What starship shows in place of a prompt under a terminal that cannot draw one.
 pub(crate) const DUMB_TERMINAL_PROMPT: &str = "Starship disabled due to TERM=dumb > ";
 
-pub(crate) fn is_dumb_terminal() -> bool {
-    std::env::var_os("TERM").is_some_and(|term| term == "dumb")
+pub(crate) fn is_dumb_terminal(context: &Context) -> bool {
+    context.get_env("TERM").as_deref() == Some("dumb")
 }
 
 pub fn get_prompt(context: &Context) -> String {
-    if is_dumb_terminal() {
+    if is_dumb_terminal(context) {
         log::error!("Under a 'dumb' terminal (TERM=dumb).");
         return DUMB_TERMINAL_PROMPT.to_owned();
     }

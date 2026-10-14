@@ -58,7 +58,7 @@ pub fn publish(
 fn run(context: &Context, timings: &str, output: &mut impl Sink) -> io::Result<()> {
     output.send(Frame::Process)?;
 
-    if print::is_dumb_terminal() {
+    if print::is_dumb_terminal(context) {
         return write_fallback_prompt(output);
     }
 
@@ -1490,6 +1490,29 @@ mod tests {
                 ],
             ],
             read_frames(&output),
+        );
+    }
+
+    #[test]
+    fn a_dumb_terminal_gets_the_standard_fallback() {
+        let mut context = context(toml::toml! { format = "$time" });
+        context.env.insert("TERM", "dumb".to_owned());
+        let mut output = Vec::new();
+        run(&context, "time=3", &mut output).unwrap();
+
+        assert_eq!(print::DUMB_TERMINAL_PROMPT, print::get_prompt(&context));
+        let frames = read_frames(&output);
+        assert_eq!(
+            [
+                "PROMPT",
+                print::DUMB_TERMINAL_PROMPT,
+                print::DUMB_TERMINAL_PROMPT
+            ],
+            frames[1].each_ref().map(String::as_str),
+        );
+        assert_eq!(
+            ["COMPLETE", "", ""],
+            frames[2].each_ref().map(String::as_str)
         );
     }
 
