@@ -404,6 +404,24 @@ mod test {
         assert_eq!(Some(Duration::from_secs(30)), period("localip", &context));
     }
 
+    #[test]
+    fn disabled_builtin_modules_do_not_refresh_when_refresh_is_enabled() {
+        let context = crate::test::default_context().set_config(toml::toml! {
+            memory_usage.disabled = true
+            memory_usage.refresh = true
+            localip.disabled = true
+            localip.refresh = true
+            time.disabled = true
+            time.refresh = true
+            battery.disabled = true
+            battery.refresh = true
+        });
+
+        for module in ["memory_usage", "localip", "time", "battery"] {
+            assert_eq!(None, period(module, &context), "{module}");
+        }
+    }
+
     #[cfg(feature = "battery")]
     #[test]
     fn battery_refresh_period_is_enabled_by_default_and_can_be_disabled() {
