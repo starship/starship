@@ -147,6 +147,17 @@ pub fn with_workers<Output>(
     body: impl FnOnce(&Workers) -> Output,
 ) -> Output {
     let worker_count = crate::num_module_threads(module_names.len(), waiting_module_count);
+    with_worker_count(context, module_names, worker_count, body)
+}
+
+/// Run `body` with an explicit number of workers.
+/// Kept separate so tests that require concurrency do not depend on user configuration.
+fn with_worker_count<Output>(
+    context: &Context,
+    module_names: &IndexSet<String>,
+    worker_count: usize,
+    body: impl FnOnce(&Workers) -> Output,
+) -> Output {
     let (job_sender, job_receiver) = channel();
     let (result_sender, result_receiver) = channel();
     let state = WorkerState {
@@ -254,10 +265,15 @@ mod tests {
         context.current_dir = directory.path().to_path_buf();
         let module_names = IndexSet::from(["custom.first".to_owned(), "custom.second".to_owned()]);
 
-        let rendered: Vec<String> = render_all(&context, &module_names)
-            .iter()
-            .map(|segments| segments.iter().map(Segment::value).collect())
-            .collect();
+        let rendered: Vec<String> = with_worker_count(&context, &module_names, 2, |workers| {
+            for position in 0..module_names.len() {
+                workers.render(position);
+            }
+            workers.collect_segments(module_names.len())
+        })
+        .iter()
+        .map(|segments| segments.iter().map(Segment::value).collect())
+        .collect();
 
         assert_eq!(["first", "second"], rendered.as_slice());
     }
