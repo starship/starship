@@ -230,6 +230,7 @@ impl DeparturePlanner {
                 Some(Estimate::Unchanged) => {}
                 Some(Estimate::Changed(render_duration)) => {
                     self.entries.push(TimedCost {
+                        input_order: self.entries.len(),
                         after: module.remaining_duration(now, render_duration)?,
                         cost_nanoseconds: size(fallback, render_duration).as_nanos(),
                     });
@@ -237,7 +238,8 @@ impl DeparturePlanner {
                 None => return None,
             }
         }
-        self.entries.sort_unstable_by_key(|entry| entry.after);
+        self.entries
+            .sort_unstable_by_key(|entry| (entry.after, entry.input_order));
         Some(&mut self.entries)
     }
 }
@@ -247,6 +249,7 @@ impl DeparturePlanner {
 /// Wide costs allow a delay plus future costs to exceed Duration::MAX safely.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 struct TimedCost {
+    input_order: usize,
     after: Duration,
     cost_nanoseconds: u128,
 }
@@ -271,6 +274,7 @@ fn cheapest_departure(
     for index in (0..entries.len()).rev() {
         let prediction = entries[index];
         let departure = TimedCost {
+            input_order: prediction.input_order,
             after: prediction.after,
             cost_nanoseconds: prediction.after.as_nanos() + remaining_cost_nanoseconds,
         };
@@ -358,7 +362,9 @@ mod tests {
     ) -> Duration {
         let mut entries: Vec<_> = landings
             .iter()
-            .map(|landing| TimedCost {
+            .enumerate()
+            .map(|(input_order, landing)| TimedCost {
+                input_order,
                 after: landing.after,
                 cost_nanoseconds: landing.size.as_nanos(),
             })
@@ -554,6 +560,25 @@ mod tests {
             Duration::ZERO,
             plan_departure(Passengers::Changes, milliseconds(1), &reordered),
         );
+    }
+
+    #[test]
+    fn prediction_sort_preserves_input_order_for_equal_arrivals() {
+        let now = Instant::now();
+        let render_durations: Vec<_> = (1..=32).map(milliseconds).collect();
+        let rendering = render_durations.iter().map(|&duration| Rendering {
+            since: now + milliseconds(40) - duration,
+            estimate: Some(Estimate::Changed(duration)),
+        });
+        let mut planner = DeparturePlanner::with_capacity(render_durations.len());
+        let entries = planner.predictions(now, FALLBACK, rendering).unwrap();
+        let costs: Vec<_> = entries.iter().map(|entry| entry.cost_nanoseconds).collect();
+        let expected: Vec<_> = render_durations
+            .iter()
+            .map(|&duration| size(FALLBACK, duration).as_nanos())
+            .collect();
+        assert_eq!(expected, costs);
+        assert!(entries.iter().all(|entry| entry.after == milliseconds(40)));
     }
 
     #[test]
