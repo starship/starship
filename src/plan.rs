@@ -53,7 +53,10 @@ impl<'a> PromptFormat<'a> {
         let variables = formatter
             .get_variables()
             .into_iter()
-            .filter(|variable| variable == "all" || !context.is_module_disabled_in_config(variable))
+            .filter(|variable| {
+                matches!(variable.as_str(), "all" | "env_var")
+                    || !context.is_module_disabled_in_config(variable)
+            })
             .map(|variable| {
                 let positions = modules_named(&variable, context, &module_list)
                     .into_iter()
@@ -145,7 +148,8 @@ fn modules_named(variable: &str, context: &Context, module_list: &BTreeSet<Strin
         vec![variable.to_owned()]
     } else if matches!(variable, "custom" | "env_var") {
         // env var is a special case and may contain a top-level module definition
-        let base = (variable == "env_var").then(|| variable.to_owned());
+        let base = (variable == "env_var" && !context.is_module_disabled_in_config(variable))
+            .then(|| variable.to_owned());
 
         // Write out all custom modules, except for those that are explicitly set
         let children = context
@@ -311,6 +315,24 @@ mod tests {
         });
 
         assert_eq!(["status"], modules.as_slice());
+    }
+
+    #[test]
+    fn disabled_env_var_base_preserves_enabled_children() {
+        for format in ["$env_var", "$all"] {
+            let modules = planned_modules(toml::toml! {
+                format = format
+                [env_var]
+                disabled = true
+                [env_var.ENABLED]
+                disabled = false
+                [env_var.DISABLED]
+                disabled = true
+            });
+            assert!(!modules.iter().any(|module| module == "env_var"));
+            assert!(modules.iter().any(|module| module == "env_var.ENABLED"));
+            assert!(!modules.iter().any(|module| module == "env_var.DISABLED"));
+        }
     }
 
     #[test]
