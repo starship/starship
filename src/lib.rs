@@ -94,5 +94,9 @@ mod scheduling_tests {
     #[test]
     fn default_thread_count_accounts_for_waiting_modules_on_one_core() {
         assert_eq!(16, num_module_threads_with(32, Some(15), None, 1));
+        assert_eq!(4, num_module_threads_with(32, None, None, 1));
+        assert_eq!(2, num_module_threads_with(2, None, None, 1));
+        assert_eq!(0, num_module_threads_with(0, None, None, 1));
+        assert_eq!(64, num_module_threads_with(128, None, None, 128));
     }
 }
