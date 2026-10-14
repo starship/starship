@@ -25,8 +25,9 @@ pub fn detach() {
                 let _ = unistd::dup2_stdin(null);
             }
         }
-        // In the foreground, the shell waits for the whole stream instead.
-        Err(_) => {}
+        // Fish waits for startup EOF; a foreground refresh loop would never
+        // finish. Fail promptly instead of starting the long-lived publisher.
+        Err(_) => std::process::exit(1),
     }
 }
 
@@ -92,8 +93,8 @@ impl Sink for Snapshot {
             // The shell learns the process id with the first prompts.
             Frame::Process => Ok(()),
             Frame::Prompt { main, right } => {
-                main.clone_into(&mut self.main);
-                right.clone_into(&mut self.right);
+                self.main = main.replace('\0', "");
+                self.right = right.replace('\0', "");
                 if self.announced {
                     self.write()?;
                     self.signal(Some(Signal::SIGUSR1))
@@ -113,6 +114,22 @@ impl Sink for Snapshot {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn nul_bytes_in_prompt_values_do_not_create_snapshot_fields() {
+        let directory = tempfile::tempdir().unwrap();
+        let mut snapshot = Snapshot::new(directory.path().to_path_buf(), i32::MAX);
+        snapshot.announced = true;
+        // The shell PID deliberately does not exist; writing precedes signaling.
+        let _ = snapshot.send(Frame::Prompt {
+            main: "ma\0in",
+            right: "ri\0ght",
+        });
+        let path = directory.path().join(std::process::id().to_string());
+        assert_eq!("main\0right\0\0", fs::read_to_string(path).unwrap());
+        assert_eq!("main", snapshot.main);
+        assert_eq!("right", snapshot.right);
+    }
 
     #[test]
     fn completion_updates_preserve_the_prompt_pair() {
