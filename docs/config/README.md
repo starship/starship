@@ -402,7 +402,8 @@ Supported shell integrations:
 | `bus.fallback` | `50`    | Maximum initial waiting budget for modules, in milliseconds. Process startup and configuration loading are additional. |
 
 On shells that support ongoing updates, modules can refresh while the prompt is displayed. When enabled, `time` refreshes every
-second for formats containing seconds, otherwise every minute; literal formats need no refresh.
+second for formats containing seconds or when a valid `time_range` controls its visibility.
+Other time formats refresh every minute; literal formats need no refresh unless a `time_range` is configured.
 `memory_usage` refreshes every five seconds, and `battery` and `localip` every thirty seconds.
 Custom modules repeat only when their `refresh` interval is greater than zero (milliseconds).
 Refreshes align to wall-clock boundaries and redraw only when the resulting prompt changes.
@@ -5099,7 +5100,7 @@ format = 'via [$symbol$workspace]($style) '
 ## Time
 
 The `time` module shows the current **local** time.
-The `format` configuration value is used by the [`jiff`](https://crates.io/crates/jiff) crate to control how the time is displayed. Take a look [at the jiff strftime docs](https://docs.rs/jiff/latest/jiff/fmt/strtime/index.html) to see what options are available.
+The `time_format` configuration value is used by the [`jiff`](https://crates.io/crates/jiff) crate to control how the time is displayed. Take a look [at the jiff strftime docs](https://docs.rs/jiff/latest/jiff/fmt/strtime/index.html) to see what options are available.
 
 > [!TIP]
 > This module is disabled by default.
@@ -5115,11 +5116,12 @@ The `format` configuration value is used by the [`jiff`](https://crates.io/crate
 | `style`           | `'bold yellow'`         | The style for the module time                                                                                                                             |
 | `utc_time_offset` | `'local'`               | Sets the UTC offset to use. Either an IANA time zone name or a range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
 | `disabled`        | `true`                  | Disables the `time` module.                                                                                                                               |
-| `refresh`         | `true`                  | Redraw the time while the prompt is shown, as often as what it shows turns over.                                                                          |
+| `refresh`         | `true`                  | Refresh the displayed time and any configured `time_range` visibility changes while the prompt is shown.                                                  |
 | `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                     |
 
 If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`.
 Manually setting `time_format` will override the `use_12hr` setting.
+During streaming, a valid `time_range` is checked every second, including with a literal `time_format`.
 
 ### Variables
 

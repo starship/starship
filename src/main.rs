@@ -237,11 +237,8 @@ fn main() {
     // Configure Rayon before commands can use its global pool. Starting this in
     // the background races the first `par_iter` against Rayon initialization.
     init_global_threadpool();
-    // Nothing a prompt shows waits for these.
-    std::thread::spawn(|| {
-        // Delete old log files
-        logger::cleanup_log_files(logger::get_log_dir());
-    });
+    // Clean old logs without delaying prompt rendering.
+    std::thread::spawn(|| logger::cleanup_log_files(logger::get_log_dir()));
     log::trace!("Parsed arguments: {args:#?}");
 
     match args.command {

@@ -320,18 +320,42 @@ mod tests {
     #[test]
     fn disabled_env_var_base_preserves_enabled_children() {
         for format in ["$env_var", "$all"] {
-            let modules = planned_modules(toml::toml! {
+            let mut config = toml::toml! {
                 format = format
+                right_format = format
+                add_newline = false
                 [env_var]
                 disabled = true
+                default = "BASE"
                 [env_var.ENABLED]
                 disabled = false
+                default = "CHILD"
+                format = "$env_value"
                 [env_var.DISABLED]
                 disabled = true
-            });
-            assert!(!modules.iter().any(|module| module == "env_var"));
-            assert!(modules.iter().any(|module| module == "env_var.ENABLED"));
-            assert!(!modules.iter().any(|module| module == "env_var.DISABLED"));
+                default = "HIDDEN"
+            };
+            // Isolate $all from filesystem, command, and platform modules.
+            for module in ALL_MODULES.iter().filter(|module| **module != "env_var") {
+                config.insert((*module).to_owned(), toml::toml! { disabled = true }.into());
+            }
+
+            let context = default_context().set_config(config);
+            let plan = Plan::new(&context, [Target::Main, Target::Right]);
+            assert_eq!(
+                ["env_var.ENABLED"],
+                plan.modules
+                    .iter()
+                    .map(String::as_str)
+                    .collect::<Vec<_>>()
+                    .as_slice()
+            );
+
+            let rendered = crate::workers::render_all(&context, &plan.modules);
+            assert_eq!(
+                ["CHILD", "CHILD"],
+                plan.prompts(&|position| &rendered[position], &context),
+            );
         }
     }
 

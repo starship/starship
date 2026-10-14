@@ -520,7 +520,7 @@ fn an_accepted_line_is_left_alone(shell: Shell) {
 }
 
 /// Text that a shell would expand, were it not escaped for that shell.
-const LITERAL: &str = r"$(echo EXPANDED) `echo EXPANDED` %n \w {user} 100%";
+const LITERAL: &str = r"$(echo EXPANDED) `echo EXPANDED` %n \w {user} 100% \$HOME \$(echo EXPANDED) \`echo EXPANDED` \\$HOME \\";
 
 fn text_is_shown_as_it_is(shell: Shell) {
     let config = r#"
@@ -674,6 +674,39 @@ fn fish_shows_text_as_it_is() {
 #[ignore = "requires fish"]
 fn fish_keeps_the_right_prompt_current() {
     the_right_prompt_is_kept_current(Shell::Fish);
+}
+
+#[test]
+#[ignore = "requires fish"]
+fn fish_strips_nul_bytes_from_initial_and_refreshed_prompts() {
+    let mut session = Session::start(
+        Shell::Fish,
+        r#"
+format = "${custom.main}END"
+right_format = "${custom.right}"
+add_newline = false
+
+[custom.main]
+command = "if test -f updated; then printf 'MA\\000IN_AFTER'; else printf 'MA\\000IN_BEFORE'; fi"
+when = true
+shell = ["/bin/sh"]
+format = "$output"
+refresh = 100
+
+[custom.right]
+command = "if test -f updated; then printf 'RI\\000GHT_AFTER'; else printf 'RI\\000GHT_BEFORE'; fi"
+when = true
+shell = ["/bin/sh"]
+format = "$output"
+refresh = 100
+"#,
+    );
+    session.wait_for("MAIN_BEFOREEND");
+    session.wait_for("RIGHT_BEFORE");
+    fs::write(session._fixture.directory.path().join("updated"), "").unwrap();
+    session.wait_for("MAIN_AFTEREND");
+    session.wait_for("RIGHT_AFTER");
+    session.close();
 }
 
 #[test]
