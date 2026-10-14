@@ -504,7 +504,8 @@ fn redraws_once_finished(shell: Shell) {
 
 fn an_accepted_line_is_left_alone(shell: Shell) {
     let mut session = Session::start(shell, FAST_AND_SLOW);
-    session.wait_for(">");
+    let first = session.wait_for(">");
+    assert!(!first.contains("SLOW"), "the first paint waited:\n{first}");
     session.send(shell.sleep_then_input());
     session.wait_for(shell.sleep_then_input());
     session.enter();
