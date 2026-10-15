@@ -394,15 +394,16 @@ Supported shell integrations:
 
 ### Options
 
-| Option         | Default | Description                                                                                                            |
-| -------------- | ------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `enabled`      | `true`  | Allow a partial prompt while modules render. Set to `false` to wait for all modules.                                   |
-| `refresh`      | `true`  | Refresh time-varying modules while the prompt is displayed.                                                            |
-| `bus.adaptive` | `true`  | Use previous module timings to schedule redraws. Disable to treat every module as unmeasured.                          |
-| `bus.fallback` | `50`    | Maximum initial waiting budget for modules, in milliseconds. Process startup and configuration loading are additional. |
+| Option         | Default | Description                                                                                                                                   |
+| -------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `enabled`      | `true`  | Allow a partial prompt while modules render. Set to `false` to wait for all modules.                                                          |
+| `refresh`      | `true`  | Refresh time-varying modules while the prompt is displayed.                                                                                   |
+| `bus.adaptive` | `true`  | Use previous module timings to schedule redraws. Disable to treat every module as unmeasured.                                                 |
+| `bus.fallback` | `50`    | Maximum waiting budget for initial paint and later redraw batches, in milliseconds. Process startup and configuration loading are additional. |
 
 On shells that support ongoing updates, modules can refresh while the prompt is displayed. When enabled, `time` refreshes every
 second for formats containing seconds or when a valid `time_range` controls its visibility.
+Fractional seconds (`%f`, `%.f`, `%N`) refresh at the displayed precision, with a minimum interval of 10 milliseconds to bound resource use.
 Other time formats refresh every minute; literal formats need no refresh unless a `time_range` is configured.
 `memory_usage` refreshes every five seconds, and `battery` and `localip` every thirty seconds.
 Custom modules repeat only when their `refresh` interval is greater than zero (milliseconds).

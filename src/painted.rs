@@ -83,16 +83,20 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
     };
     let fills = styled().filter(|&(kind, ..)| kind == Kind::Fill).count();
     // Measuring text takes a pass over every grapheme, which only a fill needs.
-    let fill_width = width.filter(|_| fills > 0).and_then(|width| {
-        let used: usize = styled()
-            .filter(|&(kind, ..)| kind != Kind::Fill)
-            .map(|(.., value)| value.width_graphemes())
-            .sum();
-        width
-            .checked_sub(used)
-            .filter(|&left| left > 0)?
-            .checked_div(fills)
-    });
+    let fill_width = width
+        .filter(|_| fills > 0)
+        // Shell-expandable text has no known display width until the shell renders it.
+        .filter(|_| !styled().any(|(kind, ..)| kind == Kind::Verbatim))
+        .and_then(|width| {
+            let used: usize = styled()
+                .filter(|&(kind, ..)| kind != Kind::Fill)
+                .map(|(.., value)| value.width_graphemes())
+                .sum();
+            width
+                .checked_sub(used)
+                .filter(|&left| left >= fills)?
+                .checked_div(fills)
+        });
 
     let mut previous: Option<AnsiStyle> = None;
     styled()
@@ -137,12 +141,12 @@ fn stretch(pattern: &str, width: usize) -> Cow<'_, str> {
             break;
         }
         remaining -= columns;
-        if columns > 0 {
+        if columns > 0 || partial_end > 0 {
             partial_end = start + grapheme.len();
         }
     }
-    // Preserve complete patterns, but end a partial one at a visible grapheme
-    // so its zero-width prefix cannot alter preceding text on its own.
+    // A partial repetition retains suffixes after any visible grapheme, but
+    // never emits a zero-width prefix without a visible grapheme of its own.
     text.push_str(&pattern[..partial_end]);
     Cow::Owned(text)
 }
@@ -262,6 +266,10 @@ mod tests {
         assert_eq!("\u{301}🟦", stretch("\u{301}🟦", 2));
         assert_eq!("\u{301}.\u{301}.", stretch("\u{301}.", 2));
         assert_eq!(".\u{7}.\u{7}", stretch(".\u{7}", 2));
+        assert_eq!(".\u{7}", stretch(".\u{7}🟦", 1));
+        assert_eq!("\u{301}.\u{7}", stretch("\u{301}.\u{7}🟦", 2));
+        assert_eq!(".\u{7}🟦.\u{7}", stretch(".\u{7}🟦", 4));
+        assert_eq!("", stretch("\u{7}🟦", 1));
     }
 
     #[test]
@@ -271,6 +279,9 @@ mod tests {
             let painted = Painted::new(&segments, width);
             assert_eq!("ab-:-", painted.to_string(), "for width {width:?}");
         }
+        let segments = [text("", "ab"), fill("-:-"), fill(".")];
+        assert_eq!("ab-:-.", Painted::new(&segments, Some(3)).to_string());
+        assert_eq!("ab-.", Painted::new(&segments, Some(4)).to_string());
     }
 
     #[test]
@@ -304,7 +315,25 @@ mod tests {
         segments.push(fill("%"));
         let painted = Painted::new(&segments, Some(10));
 
-        assert_eq!("50% %~ %%%", painted.to_string());
-        assert_eq!("50%% %~ %%%%%%", painted.escaped_for(Shell::Zsh));
+        assert_eq!("50% %~ %", painted.to_string());
+        assert_eq!("50%% %~ %%", painted.escaped_for(Shell::Zsh));
+
+        let segments = [text("", "50% "), fill("%")];
+        let painted = Painted::new(&segments, Some(7));
+        assert_eq!("50% %%%", painted.to_string());
+        assert_eq!("50%% %%%%%%", painted.escaped_for(Shell::Zsh));
+    }
+
+    #[test]
+    fn verbatim_text_leaves_fill_width_unknown_only_on_its_own_line() {
+        let mut segments = Segment::verbatim(None, "$HOME");
+        segments.push(fill("."));
+        segments.push(Segment::LineBreak);
+        segments.extend(Segment::from_text(None, "x"));
+        segments.push(fill("."));
+        let painted = Painted::new(&segments, Some(8));
+
+        assert_eq!("$HOME.\nx.......", painted.to_string());
+        assert_eq!("$HOME.\nx.......", painted.escaped_for(Shell::Bash));
     }
 }

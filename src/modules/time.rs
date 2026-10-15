@@ -21,18 +21,31 @@ pub fn period(context: &Context) -> Option<Duration> {
     let format = configuration
         .time_format
         .unwrap_or(if configuration.use_12hr { "%r" } else { "%T" });
-    let mut characters = format.chars();
+    let mut characters = format.chars().peekable();
     let mut period = None;
 
     while characters.by_ref().any(|character| character == '%') {
-        // Flags, padding and precision come before what is shown.
-        let shown = characters
-            .by_ref()
-            .find(|character| !matches!(character, '-' | '_' | '^' | '#' | '.' | ':' | '0'..='9'));
-        let turns_over = match shown {
+        // Jiff accepts one flag, then padding (precision for %f and %N).
+        let _ = characters.next_if(|character| matches!(character, '-' | '_' | '^' | '#' | '0'));
+        let mut precision = format_precision(&mut characters);
+        while characters.next_if_eq(&':').is_some() {}
+        if characters.next_if_eq(&'.').is_some() {
+            // %.f's precision overrides any padding before the dot.
+            precision = format_precision(&mut characters);
+        }
+        let turns_over = match characters.next() {
             None => break,
             Some('%' | 'n' | 't') => continue,
-            Some('S' | 'T' | 's' | 'f' | 'N' | 'c' | 'r' | 'X') => Duration::from_secs(1),
+            Some('f' | 'N') => {
+                let precision = precision.unwrap_or(9);
+                if precision == 0 {
+                    // %.0f is always empty; %00f and %0N are invalid.
+                    continue;
+                }
+                // Never spin at microsecond or nanosecond display precision.
+                Duration::from_nanos(10_u64.pow(9 - precision)).max(Duration::from_millis(10))
+            }
+            Some('S' | 'T' | 's' | 'c' | 'r' | 'X') => Duration::from_secs(1),
             Some(_) => Duration::from_secs(60),
         };
         period = Some(period.map_or(turns_over, |period: Duration| period.min(turns_over)));
@@ -47,6 +60,15 @@ pub fn period(context: &Context) -> Option<Duration> {
     }
 
     period
+}
+
+/// Jiff truncates fractional output to at most nine digits.
+fn format_precision(characters: &mut std::iter::Peekable<std::str::Chars<'_>>) -> Option<u32> {
+    let mut precision = None;
+    while let Some(digit) = characters.next_if(char::is_ascii_digit) {
+        precision = Some((precision.unwrap_or(0) * 10 + digit.to_digit(10).unwrap()).min(9));
+    }
+    precision
 }
 
 /// Outputs the current time
@@ -215,7 +237,7 @@ mod tests {
             (None, second),
             (Some("%-I:%M %p"), minute),
             (Some("%Y-%m-%d"), minute),
-            (Some("%H:%M:%S%.3f"), second),
+            (Some("%H:%M:%S%.3f"), Some(Duration::from_millis(10))),
             (Some("%:z %R"), minute),
             (Some("100%% done"), None),
             (Some("at noon"), None),
@@ -236,6 +258,48 @@ mod tests {
             super::period(&crate::test::default_context()),
             "disabled"
         );
+    }
+
+    #[test]
+    fn fractional_time_refreshes_at_its_precision_with_a_bounded_rate() {
+        for (time_format, milliseconds) in [
+            ("%1f", 100),
+            ("%.1f", 100),
+            ("%1N", 100),
+            ("%2f", 10),
+            ("%.3f", 10),
+            ("%f", 10),
+            ("%.f", 10),
+            ("%N", 10),
+            ("%9f", 10),
+            ("%01f", 100),
+            ("%5.1f", 100),
+            ("%S %.1f", 100),
+            ("%%f %S", 1_000),
+        ] {
+            let context = crate::test::default_context().set_config(toml::toml! {
+                [time]
+                disabled = false
+                time_format = time_format
+            });
+            assert_eq!(
+                Some(Duration::from_millis(milliseconds)),
+                super::period(&context),
+                "{time_format}",
+            );
+            // Exercise Jiff's formatter as well as our cadence parser.
+            let time = date(2026, 10, 15)
+                .at(12, 30, 40, 123_456_789)
+                .to_zoned(TimeZone::UTC)
+                .unwrap();
+            assert!(!format_time(time_format, time).is_empty());
+        }
+        let context = crate::test::default_context().set_config(toml::toml! {
+            [time]
+            disabled = false
+            time_format = "%.0f"
+        });
+        assert_eq!(None, super::period(&context));
     }
 
     #[test]
