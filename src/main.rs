@@ -137,6 +137,10 @@ enum Commands {
         /// before slow modules finish and refining them as they do
         #[clap(long, conflicts_with_all = ["right", "profile", "continuation"])]
         stream: bool,
+        /// Stop this stream when its owning adapter closes standard input.
+        #[clap(long, hide = true, requires = "stream")]
+        #[cfg_attr(unix, clap(conflicts_with = "publish_state"))]
+        stream_control_stdin: bool,
         /// What each module did for the previous prompt, as the last stream
         /// reported
         #[clap(long, requires = "stream", default_value = "")]
@@ -231,6 +235,16 @@ fn main() {
     } = args.command
     {
         stream::detach();
+    }
+
+    if let Commands::Prompt {
+        stream_control_stdin: true,
+        ..
+    } = &args.command
+        && let Err(error) = stream::watch_control_stdin()
+    {
+        eprintln!("Unable to watch stream ownership: {error}");
+        std::process::exit(1);
     }
 
     logger::init();

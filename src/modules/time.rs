@@ -39,7 +39,7 @@ pub fn period(context: &Context) -> Option<Duration> {
             Some('f' | 'N') => {
                 let precision = precision.unwrap_or(9);
                 if precision == 0 {
-                    // %.0f is always empty; %00f and %0N are invalid.
+                    // %.0f is always empty; %00f and %00N are invalid.
                     continue;
                 }
                 // Never spin at microsecond or nanosecond display precision.
@@ -271,6 +271,8 @@ mod tests {
             ("%f", 10),
             ("%.f", 10),
             ("%N", 10),
+            ("%0N", 10),
+            ("%0f", 10),
             ("%9f", 10),
             ("%01f", 100),
             ("%5.1f", 100),
@@ -292,7 +294,11 @@ mod tests {
                 .at(12, 30, 40, 123_456_789)
                 .to_zoned(TimeZone::UTC)
                 .unwrap();
-            assert!(!format_time(time_format, time).is_empty());
+            let rendered = format_time(time_format, time);
+            assert!(!rendered.is_empty());
+            if matches!(time_format, "%0N" | "%0f") {
+                assert_eq!("123456789", rendered, "{time_format} is valid in Jiff");
+            }
         }
         let context = crate::test::default_context().set_config(toml::toml! {
             [time]

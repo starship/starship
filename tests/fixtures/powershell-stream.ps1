@@ -30,7 +30,10 @@ public sealed class SingleByteStream : MemoryStream {
 '@
 function New-TestStream($reader) {
     [hashtable]::Synchronized(@{
-        Process = [pscustomobject]@{ StandardOutput = $reader }
+        Process = [pscustomobject]@{
+            StandardOutput = $reader
+            StandardInput = [IO.StreamWriter]::new([IO.MemoryStream]::new())
+        }
         Cancellation = [Threading.CancellationTokenSource]::new()
         Ready = [Threading.ManualResetEventSlim]::new()
         Prompt = $null

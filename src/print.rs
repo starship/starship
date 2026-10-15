@@ -34,8 +34,8 @@ pub trait UnicodeWidthGraphemes {
 
 static ANSI_REGEX: OnceLock<Regex> = OnceLock::new();
 
-fn ansi_strip() -> &'static Regex {
-    ANSI_REGEX.get_or_init(|| Regex::new(r"\x1B\[[0-9;]*m").unwrap())
+pub(crate) fn ansi_strip() -> &'static Regex {
+    ANSI_REGEX.get_or_init(|| Regex::new(r"\x1B\[[0-9;:]*m").unwrap())
 }
 
 impl<T> UnicodeWidthGraphemes for T
