@@ -24,11 +24,12 @@ $null = New-Module starship {
     }
 
     function Start-Native {
-        param($Executable, $Arguments)
+        param($Executable, $Arguments, [switch]$RedirectStandardInput)
         $startInfo = New-Object System.Diagnostics.ProcessStartInfo -ArgumentList $Executable -Property @{
             StandardOutputEncoding = [System.Text.Encoding]::UTF8;
             RedirectStandardOutput = $true;
             RedirectStandardError = $true;
+            RedirectStandardInput = [bool] $RedirectStandardInput;
             CreateNoWindow = $true;
             UseShellExecute = $false;
         };
@@ -101,7 +102,8 @@ $null = New-Module starship {
                             if ($Stream.Refined) {
                                 $null = $Events.GenerateEvent('Starship.Refined', $Stream, $null, $null)
                             }
-                            # Closing our pipe ends the publisher without using a recyclable PID.
+                            # Revoke the owned stream even if a refresh worker is blocked.
+                            $Stream.Process.StandardInput.Close()
                             return
                         }
                     }
@@ -135,7 +137,7 @@ $null = New-Module starship {
 
     function Start-StarshipStream {
         param($Arguments)
-        $arguments = @("prompt", "--stream", "--timings=$script:StreamTimings") + $Arguments
+        $arguments = @("prompt", "--stream", "--stream-control-stdin", "--timings=$script:StreamTimings") + $Arguments
         $stream = [hashtable]::Synchronized(@{
             Ready = [System.Threading.ManualResetEventSlim]::new()
             Prompt = $null
@@ -151,13 +153,11 @@ $null = New-Module starship {
             # An exiting direct child pauses PSReadLine events until a keypress.
             # Launch as a grandchild through a short-lived shell instead.
             $stream.Process = Start-Native '/bin/sh' (
-                @('-c', '"$0" "$@" 2>/dev/null &', ::STARSHIP::) + $arguments)
+                @('-c', '"$0" "$@" <&0 2>/dev/null &', ::STARSHIP::) + $arguments) -RedirectStandardInput
             $null = $stream.Process.StandardError.ReadToEnd()
             $stream.Process.WaitForExit()
         } else {
-            $stream.Process = Start-Native ::STARSHIP:: $arguments
-            # Retain the native handle from launch, never reacquire it by PID.
-            $stream.OwnedProcess = $stream.Process
+            $stream.Process = Start-Native ::STARSHIP:: $arguments -RedirectStandardInput
             # Drain the pipe so the writer can finish.
             $null = $stream.Process.StandardError.ReadToEndAsync()
         }
@@ -178,16 +178,11 @@ $null = New-Module starship {
         $stream = $script:Stream
         if ($null -eq $stream) { return }
         $script:Stream = $null
-        # Framework pipe reads cannot cancel after they start. On Windows the
-        # launched Process owns a native handle, safe even after PID recycling.
+        # Closing the owned control writer stops the producer itself, including
+        # synchronous renders. Its exit also releases Framework's uncancellable
+        # output reads. No process is looked up or signaled by numeric PID.
         try {
-            if ($null -ne $stream.OwnedProcess) {
-                try {
-                    $stream.OwnedProcess.Kill()
-                } catch {
-                    if (-not $stream.OwnedProcess.HasExited) { throw }
-                }
-            }
+            $stream.Process.StandardInput.Close()
             $stream.Cancellation.Cancel()
             $null = $script:Pump.EndInvoke($stream.Pumping)
         } finally {

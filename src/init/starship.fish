@@ -83,7 +83,7 @@ if test "$OS" = Windows_NT
     end
 else
     # Fish uses PID-named snapshots and SIGUSR1 because it cannot watch a pipe.
-    set -g __starship_stream_directory (command mktemp -d)
+    set -g __starship_stream_directory
     set -g __starship_stream_prompts '' ''
     set -g __starship_stream_timings ''
 
@@ -99,6 +99,9 @@ else
     # Read the startup pair through EOF; failure leaves an empty prompt.
     function __starship_stream_start
         __starship_stream_stop
+        # Each stream owns a distinct directory, even if the OS reuses a PID.
+        set -g __starship_stream_directory (command mktemp -d)
+        test -n "$__starship_stream_directory"; or return
         ::STARSHIP:: prompt --stream --publish-state=$__starship_stream_directory --signal-pid=$fish_pid --timings=$__starship_stream_timings $argv 2>/dev/null | begin
             read -z main; read -z right; read -z pid
         end
@@ -110,17 +113,21 @@ else
     end
 
     function __starship_stream_stop --on-event fish_preexec --on-event fish_exit
-        if test -n "$__starship_stream_pid"
-            command kill $__starship_stream_pid 2>/dev/null
-            set -l state $__starship_stream_directory/$__starship_stream_pid
-            if test -f $state
-                begin
-                    read -z main; read -z right; read -z timings
-                end <$state
-                set -g __starship_stream_timings $timings
-                command rm -f $state
+        if test -n "$__starship_stream_directory"
+            # Revoke the owned publisher without signaling a recyclable PID.
+            command rm -f -- "$__starship_stream_directory/.active"
+            if test -n "$__starship_stream_pid"
+                set -l state $__starship_stream_directory/$__starship_stream_pid
+                if test -f $state
+                    begin
+                        read -z main; read -z right; read -z timings
+                    end <$state
+                    set -g __starship_stream_timings $timings
+                end
             end
+            command rm -r -- "$__starship_stream_directory"
         end
+        set -g __starship_stream_directory
         set -g __starship_stream_pid
         set -g __starship_stream_arguments
     end
@@ -141,9 +148,6 @@ else
         test "$TRANSIENT" = 1; or commandline -f repaint
     end
 
-    function __starship_stream_cleanup --on-event fish_exit
-        command rm -r $__starship_stream_directory
-    end
 end
 
 # Disable virtualenv prompt, it breaks starship
