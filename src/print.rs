@@ -1,11 +1,9 @@
 use clap::{ValueEnum, builder::PossibleValue};
 use rayon::prelude::*;
-use regex::Regex;
 use std::collections::BTreeSet;
 use std::fmt::{Debug, Write as FmtWrite};
 use std::io::{self, Write};
 use std::path::PathBuf;
-use std::sync::OnceLock;
 use std::time::Duration;
 use terminal_size::terminal_size;
 use unicode_segmentation::UnicodeSegmentation;
@@ -38,25 +36,22 @@ pub trait UnicodeWidthGraphemes {
     fn width_graphemes(&self) -> usize;
 }
 
-static ANSI_REGEX: OnceLock<Regex> = OnceLock::new();
-
-pub(crate) fn ansi_strip() -> &'static Regex {
-    ANSI_REGEX.get_or_init(|| Regex::new(r"\x1B\[[0-9;:]*m").unwrap())
-}
-
 impl<T> UnicodeWidthGraphemes for T
 where
     T: AsRef<str>,
 {
     fn width_graphemes(&self) -> usize {
-        ansi_strip()
-            .replace_all(self.as_ref(), "")
-            .into_owned()
-            .graphemes(true)
+        graphemes(self.as_ref())
             .map(Grapheme)
             .map(|g| g.width())
             .sum()
     }
+}
+
+/// The graphemes a terminal draws for `text`, borrowed from it in order: all
+/// of it but the escape sequences and controls it obeys instead.
+pub fn graphemes(text: &str) -> impl Iterator<Item = &str> {
+    anstream::adapter::strip_str(text).flat_map(|printable| printable.graphemes(true))
 }
 
 #[test]
@@ -67,6 +62,12 @@ fn test_grapheme_aware_width() {
     assert_eq!(11, "normal text".width_graphemes());
     // Magenta string test
     assert_eq!(11, "\x1B[35;6mnormal text".width_graphemes());
+    // A hyperlink, a window title and a true color draw only their text.
+    assert_eq!(
+        4,
+        "\x1b]8;;https://x\x1b\\link\x1b]8;;\x1b\\\x1b]0;title\x07\x1b[38:2::1:2:3m"
+            .width_graphemes()
+    );
 }
 
 pub fn prompt(args: Properties, target: Target) {
