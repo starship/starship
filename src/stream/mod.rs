@@ -12,7 +12,7 @@ pub use snapshot::detach;
 mod testing;
 mod timings;
 
-use std::io;
+use std::io::{self, Read};
 use std::time::{Duration, Instant, SystemTime};
 
 use crate::context::{Context, Properties, Target};
@@ -33,6 +33,28 @@ const HEARTBEAT_INTERVAL: Duration = Duration::from_secs(1);
 
 type PromptPlan<'context> = Plan<'context, PROMPT_COUNT>;
 
+/// An adapter owns this process through the write end of a dedicated pipe.
+/// Watch independently of rendering: scoped workers can be blocked in custom
+/// commands that explicitly ignore timeouts. EOF revokes the whole process,
+/// not just future writes, without signaling a potentially recycled PID.
+pub fn watch_control_stdin() -> io::Result<()> {
+    std::thread::Builder::new()
+        .name("stream-owner".to_owned())
+        .spawn(|| {
+            let mut control = io::stdin().lock();
+            let mut buffer = [0; 256];
+            loop {
+                match control.read(&mut buffer) {
+                    Ok(0) => std::process::exit(0),
+                    Ok(_) => {}
+                    Err(error) if error.kind() == io::ErrorKind::Interrupted => {}
+                    Err(_) => std::process::exit(1),
+                }
+            }
+        })
+        .map(|_| ())
+}
+
 /// Stream both prompts to standard output using the previous stream's timings.
 pub fn stream(properties: Properties, timings: &str) -> io::Result<()> {
     let context = Context::new(properties, Target::Main);
@@ -52,7 +74,7 @@ pub fn publish(
     run(
         &context,
         timings,
-        &mut snapshot::Snapshot::new(directory, shell),
+        &mut snapshot::Snapshot::new(directory, shell)?,
     )
 }
 
@@ -388,9 +410,10 @@ impl<'context> Session<'context> {
         if self
             .next_departure(now)
             .is_some_and(|deadline| deadline <= now)
+            && self.draw(output)?
         {
             self.next_heartbeat = now.checked_add(HEARTBEAT_INTERVAL);
-            return self.draw(output);
+            return Ok(());
         }
         if heartbeat_pending {
             output.send(Frame::Heartbeat)?;
@@ -399,7 +422,7 @@ impl<'context> Session<'context> {
         Ok(())
     }
 
-    fn draw(&mut self, output: &mut impl Sink) -> io::Result<()> {
+    fn draw(&mut self, output: &mut impl Sink) -> io::Result<bool> {
         self.bus.leave();
         let prompts = self
             .plan
@@ -410,13 +433,13 @@ impl<'context> Session<'context> {
             if self.completion_reported {
                 output.send(Frame::Heartbeat)?;
             }
-            return Ok(());
+            return Ok(self.completion_reported);
         }
 
         let [main, right] = &prompts;
         output.send(Frame::Prompt { main, right })?;
         self.last_prompts = Some(prompts);
-        Ok(())
+        Ok(true)
     }
 
     fn report_completion_if_ready(&mut self, output: &mut impl Sink) -> io::Result<()> {
@@ -1136,6 +1159,52 @@ mod tests {
                 "render duration {render_milliseconds}",
             );
         }
+    }
+
+    #[test]
+    fn silent_draws_before_completion_do_not_postpone_heartbeats() {
+        let left: Vec<_> = (0..60)
+            .map(|index| (0, if index % 2 == 0 { "a" } else { "" }))
+            .collect();
+        let right: Vec<_> = (0..60)
+            .map(|index| (0, if index % 2 == 0 { "b" } else { "ab" }))
+            .collect();
+        let frames = simulate_in(
+            SimulationSettings {
+                horizon_milliseconds: 2_500,
+                ..SimulationSettings::default()
+            },
+            &context(toml::toml! {
+                add_newline = false
+                format = "${custom.left}${custom.right}${custom.slow}"
+                [custom.left]
+                command = "left"
+                when = true
+                refresh = 100
+                [custom.right]
+                command = "right"
+                when = true
+                refresh = 100
+                [custom.slow]
+                command = "slow"
+                when = true
+            }),
+            "",
+            &[
+                ("custom.left", &left),
+                ("custom.right", &right),
+                ("custom.slow", &[(5_000, "")]),
+            ],
+        )
+        .frames;
+        assert_eq!(vec![(50, "ab")], prompts(&frames));
+        assert_eq!(
+            vec![(1_050, "HEARTBEAT"), (2_050, "HEARTBEAT")],
+            keywords(&frames)
+                .into_iter()
+                .filter(|(_, keyword)| *keyword == "HEARTBEAT")
+                .collect::<Vec<_>>(),
+        );
     }
 
     #[test]

@@ -11,7 +11,7 @@ use std::ffi::OsString;
 use std::fs;
 use std::io::{ErrorKind, Read, Write};
 use std::path::{Path, PathBuf};
-use std::process::Command;
+use std::process::{Command, Stdio};
 use std::sync::{Mutex, MutexGuard, PoisonError, mpsc};
 use std::thread;
 use std::time::{Duration, Instant};
@@ -727,6 +727,61 @@ format = "$output"
 
 #[test]
 #[ignore = "requires fish"]
+fn fish_revokes_only_its_lease_even_without_a_registered_pid() {
+    let fixture = Fixture::new(Shell::Fish, "");
+    let mut sentinel = Command::new("/bin/sleep").arg("30").spawn().unwrap();
+    let mut outputs = Vec::new();
+    for (name, pid) in [
+        ("unregistered", String::new()),
+        ("recycled", sentinel.id().to_string()),
+    ] {
+        let lease = fixture.directory.path().join(name);
+        fs::create_dir(&lease).unwrap();
+        fs::File::create(lease.join(".active"))
+            .unwrap()
+            .sync_all()
+            .unwrap();
+        outputs.push(
+            Command::new(Shell::Fish.program())
+                .args([
+                    "--no-config",
+                    "--command",
+                    r#"
+source "$STARSHIP_INIT"
+set -g __starship_stream_directory "$LEASE"
+set -g __starship_stream_pid "$PID_VALUE"
+__starship_stream_stop
+test ! -d "$LEASE"; or exit 1
+test -z "$__starship_stream_directory"; or exit 2
+__starship_stream_stop
+printf 'STOPPED\n'
+"#,
+                ])
+                .envs(fixture.environment(Shell::Fish))
+                .env("LEASE", &lease)
+                .env("PID_VALUE", pid)
+                .current_dir(fixture.directory.path())
+                .output()
+                .unwrap(),
+        );
+    }
+    let survived = sentinel.try_wait().unwrap().is_none();
+    let _ = sentinel.kill();
+    sentinel.wait().unwrap();
+    assert!(
+        survived,
+        "stopping a stale stream killed an unrelated owned sentinel"
+    );
+    for output in outputs {
+        assert!(output.status.success(), "{output:?}");
+        assert_eq!(b"STOPPED\n", output.stdout.as_slice());
+        assert!(output.stderr.is_empty(), "{output:?}");
+    }
+    fixture.directory.close().unwrap();
+}
+
+#[test]
+#[ignore = "requires fish"]
 fn fish_strips_nul_bytes_from_initial_and_refreshed_prompts() {
     let mut session = Session::start(
         Shell::Fish,
@@ -840,6 +895,58 @@ fn xonsh_keeps_the_right_prompt_current() {
 #[ignore = "requires pwsh"]
 fn pwsh_redraws_once_finished() {
     redraws_once_finished(Shell::Pwsh);
+}
+
+#[test]
+#[ignore = "requires /bin/sh"]
+fn owned_control_eof_stops_an_active_synchronous_render() {
+    let fixture = Fixture::new(
+        Shell::Bash,
+        r#"
+format = "${custom.slow}"
+[async]
+enabled = false
+[custom.slow]
+command = 'touch "$STARSHIP_CONTROL_STARTED"; sleep 5'
+shell = ["/bin/sh"]
+when = true
+ignore_timeout = true
+format = "$output"
+"#,
+    );
+    let marker = fixture.directory.path().join("render-started");
+    let mut child = Command::new(starship())
+        .args(["prompt", "--stream", "--stream-control-stdin"])
+        .envs(fixture.environment(Shell::Bash))
+        .env("STARSHIP_CONTROL_STARTED", &marker)
+        .stdin(Stdio::piped())
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
+        .spawn()
+        .unwrap();
+    let startup = Instant::now();
+    while !marker.exists() {
+        if startup.elapsed() > TIMEOUT {
+            let _ = child.kill();
+            let _ = child.wait();
+            panic!("the synchronous renderer never started");
+        }
+        thread::sleep(Duration::from_millis(10));
+    }
+    drop(child.stdin.take());
+    let closed = Instant::now();
+    loop {
+        if let Some(status) = child.try_wait().unwrap() {
+            assert!(status.success(), "ownership cancellation failed: {status}");
+            break;
+        }
+        if closed.elapsed() > Duration::from_secs(2) {
+            let _ = child.kill();
+            let _ = child.wait();
+            panic!("owned EOF did not stop the active renderer");
+        }
+        thread::sleep(Duration::from_millis(10));
+    }
 }
 
 #[test]

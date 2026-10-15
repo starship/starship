@@ -1,9 +1,10 @@
 //! Fish transport: announce `main\0right\0pid\0` on stdout, then publish
 //! `main\0right\0timings\0` by atomic rename and notify fish with SIGUSR1.
-//! PID-named files isolate consecutive streams; heartbeats check shell liveness.
+//! Private stream leases isolate publishers; heartbeats check shell liveness.
 
 use std::fs::{self, File};
 use std::io::{self, Write};
+use std::os::unix::fs::MetadataExt;
 use std::path::PathBuf;
 
 use nix::errno::Errno;
@@ -33,6 +34,7 @@ pub fn detach() {
 
 pub struct Snapshot {
     directory: PathBuf,
+    lease: File,
     shell: Pid,
     main: String,
     right: String,
@@ -41,14 +43,28 @@ pub struct Snapshot {
 }
 
 impl Snapshot {
-    pub fn new(directory: PathBuf, shell: i32) -> Self {
-        Self {
+    pub fn new(directory: PathBuf, shell: i32) -> io::Result<Self> {
+        let lease = File::options()
+            .write(true)
+            .create_new(true)
+            .open(directory.join(".active"))?;
+        Ok(Self {
             directory,
+            lease,
             shell: Pid::from_raw(shell),
             main: String::new(),
             right: String::new(),
             timings: String::new(),
             announced: false,
+        })
+    }
+
+    /// Fish revokes this stream by unlinking its private lease, never by PID.
+    fn check_lease(&self) -> io::Result<()> {
+        if self.lease.metadata()?.nlink() == 0 {
+            Err(io::ErrorKind::BrokenPipe.into())
+        } else {
+            Ok(())
         }
     }
 
@@ -80,6 +96,7 @@ impl Snapshot {
     }
 
     fn signal(&self, signal: Option<Signal>) -> io::Result<()> {
+        self.check_lease()?;
         match signal::kill(self.shell, signal) {
             Err(Errno::ESRCH) => Err(io::ErrorKind::BrokenPipe.into()),
             result => result.map_err(io::Error::from),
@@ -89,6 +106,7 @@ impl Snapshot {
 
 impl Sink for Snapshot {
     fn send(&mut self, frame: Frame) -> io::Result<()> {
+        self.check_lease()?;
         match frame {
             // The shell learns the process id with the first prompts.
             Frame::Process => Ok(()),
@@ -118,7 +136,7 @@ mod tests {
     #[test]
     fn nul_bytes_in_prompt_values_do_not_create_snapshot_fields() {
         let directory = tempfile::tempdir().unwrap();
-        let mut snapshot = Snapshot::new(directory.path().to_path_buf(), i32::MAX);
+        let mut snapshot = Snapshot::new(directory.path().to_path_buf(), i32::MAX).unwrap();
         snapshot.announced = true;
         // The shell PID deliberately does not exist; writing precedes signaling.
         let error = snapshot
@@ -141,7 +159,8 @@ mod tests {
         let mut snapshot = Snapshot::new(
             directory.path().to_path_buf(),
             std::process::id().cast_signed(),
-        );
+        )
+        .unwrap();
         // Avoid announcing on the test process's stdout or sending it SIGUSR1.
         snapshot.main = "main\n> ".to_owned();
         snapshot.right = "right".to_owned();
@@ -164,9 +183,46 @@ mod tests {
         let pid = gone.id().cast_signed();
         gone.wait().unwrap();
         let directory = tempfile::tempdir().unwrap();
-        let mut snapshot = Snapshot::new(directory.path().to_path_buf(), pid);
+        let mut snapshot = Snapshot::new(directory.path().to_path_buf(), pid).unwrap();
 
         let error = snapshot.send(Frame::Heartbeat).unwrap_err();
         assert_eq!(io::ErrorKind::BrokenPipe, error.kind());
+    }
+
+    #[test]
+    fn revoking_a_private_lease_ends_every_kind_of_publication() {
+        let directory = tempfile::tempdir().unwrap();
+        let path = directory.path().join(".active");
+        let mut snapshot = Snapshot::new(
+            directory.path().to_path_buf(),
+            std::process::id().cast_signed(),
+        )
+        .unwrap();
+        fs::remove_file(&path).unwrap();
+        // A replacement file cannot give an old publisher ownership again.
+        File::create(path).unwrap();
+
+        for frame in [
+            Frame::Process,
+            Frame::Prompt {
+                main: "main",
+                right: "right",
+            },
+            Frame::Complete("timings"),
+            Frame::Heartbeat,
+        ] {
+            assert_eq!(
+                io::ErrorKind::BrokenPipe,
+                snapshot.send(frame).unwrap_err().kind()
+            );
+        }
+        assert!(
+            !directory
+                .path()
+                .join(std::process::id().to_string())
+                .exists()
+        );
+        drop(snapshot);
+        directory.close().unwrap();
     }
 }

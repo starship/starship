@@ -7,7 +7,7 @@ use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
 use unicode_segmentation::UnicodeSegmentation;
 
 use crate::context::Shell;
-use crate::print::{Grapheme, UnicodeWidthGraphemes};
+use crate::print::{Grapheme, UnicodeWidthGraphemes, ansi_strip};
 use crate::segment::{Kind, Segment};
 use crate::utils::shell_prompt_escape;
 
@@ -125,17 +125,18 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
 /// `pattern` repeated grapheme by grapheme for as long as it fits in `width`,
 /// or as it is if it has no width to repeat.
 fn stretch(pattern: &str, width: usize) -> Cow<'_, str> {
-    if pattern.width_graphemes() == 0 {
-        return Cow::Borrowed(pattern);
-    }
-    let pattern_width: usize = pattern
+    let visible = ansi_strip().replace_all(pattern, "");
+    let pattern_width: usize = visible
         .graphemes(true)
         .map(|grapheme| Grapheme(grapheme).width())
         .sum();
+    if pattern_width == 0 {
+        return Cow::Borrowed(pattern);
+    }
     let mut text = pattern.repeat(width / pattern_width);
     let mut remaining = width % pattern_width;
     let mut partial_end = 0;
-    for (start, grapheme) in pattern.grapheme_indices(true) {
+    for (start, grapheme) in visible.grapheme_indices(true) {
         let columns = Grapheme(grapheme).width();
         if columns > remaining {
             break;
@@ -143,6 +144,16 @@ fn stretch(pattern: &str, width: usize) -> Cow<'_, str> {
         remaining -= columns;
         if columns > 0 || partial_end > 0 {
             partial_end = start + grapheme.len();
+        }
+    }
+    // Map the visible boundary back to the original bytes, keeping every SGR
+    // sequence atomic, including prefixes and fitting zero-width suffixes.
+    if partial_end > 0 {
+        for sequence in ansi_strip().find_iter(pattern) {
+            if sequence.start() > partial_end {
+                break;
+            }
+            partial_end += sequence.len();
         }
     }
     // A partial repetition retains suffixes after any visible grapheme, but
@@ -258,6 +269,25 @@ mod tests {
     #[test]
     fn a_zero_width_fill_keeps_its_natural_text() {
         assert_eq!("\u{301}", stretch("\u{301}", 8));
+        assert_eq!("\x1b[31m\x1b[0m", stretch("\x1b[31m\x1b[0m", 8));
+    }
+
+    #[test]
+    fn colored_fills_measure_visible_graphemes_and_preserve_atomic_sequences() {
+        let dot = "\x1b[31m.\x1b[0m";
+        assert_eq!(dot.repeat(7), stretch(dot, 7));
+        let true_color = "\x1b[38:2::255:0:0m.\x1b[0m";
+        assert_eq!(true_color.repeat(4), stretch(true_color, 4));
+        let wide = "\x1b[31m🟦\x1b[0m\u{7}.";
+        assert_eq!("", stretch(wide, 1));
+        assert_eq!("\x1b[31m🟦\x1b[0m\u{7}", stretch(wide, 2));
+        assert_eq!(wide, stretch(wide, 4));
+        let mixed = "\x1b[31m.\x1b[0m\u{7}🟦";
+        assert_eq!("\x1b[31m.\x1b[0m\u{7}", stretch(mixed, 1));
+        let split_grapheme = "e\x1b[31m\u{301}\x1b[0m";
+        assert_eq!(split_grapheme.repeat(2), stretch(split_grapheme, 2));
+        let split_pattern = format!("{split_grapheme}🟦");
+        assert_eq!(split_grapheme, stretch(&split_pattern, 1));
     }
 
     #[test]
