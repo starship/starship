@@ -87,7 +87,7 @@ fn undistract_me<'a>(
         #[cfg(target_os = "macos")]
         let _ = notify_rust::set_application("com.apple.Terminal");
 
-        let body = format!("Command execution {}", module.get_segments().join(""));
+        let body = notification_body(&module);
 
         let timeout = match config.notification_timeout {
             Some(v) => Timeout::Milliseconds(v),
@@ -109,10 +109,44 @@ fn undistract_me<'a>(
     module
 }
 
+#[cfg(any(feature = "notify", test))]
+fn notification_body(module: &Module) -> String {
+    use std::sync::OnceLock;
+
+    static CONTROLS: OnceLock<regex::Regex> = OnceLock::new();
+    let controls = CONTROLS.get_or_init(|| {
+        regex::Regex::new(
+            r"\x1b(?:\[[0-?]*[ -/]*[@-~]|\](?:[^\x07\x1b]|\x1b[^\\])*(?:\x07|\x1b\\)|[PX^_](?:[^\x1b]|\x1b[^\\])*\x1b\\|[@-_])",
+        )
+        .expect("valid terminal control sequence pattern")
+    });
+    let text = module.get_segments().join("");
+    format!("Command execution {}", controls.replace_all(&text, ""))
+}
+
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
     use nu_ansi_term::Color;
+
+    #[test]
+    fn notifications_exclude_styles_and_terminal_control_strings() {
+        let mut module = super::Module::new("cmd_duration", "Command duration", None);
+        module.set_segments(crate::segment::Segment::from_text(
+            Some(Color::Yellow.into()),
+            concat!(
+                "\x1b[31m5s\x1b[0m",
+                "\x1b]title\x07",
+                "\x1b]title\x1b\\",
+                "\x1bPpayload\x1b\\",
+                "\x1bXpayload\x1b\\",
+                "\x1b^payload\x1b\\",
+                "\x1b_payload\x1b\\",
+            ),
+        ));
+
+        assert_eq!("Command execution 5s", super::notification_body(&module));
+    }
 
     #[test]
     fn config_blank_duration_1s() {
