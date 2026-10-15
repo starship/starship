@@ -818,7 +818,8 @@ pub fn humanize_int(n: u64) -> String {
     let mut unit_idx = 0;
     let mut val = n / 1000.0;
 
-    while val >= 1000.0 && unit_idx < units.len() - 1 {
+    // 999.5 and above would round to "1000" in the current unit, so promote it.
+    while val >= 999.5 && unit_idx < units.len() - 1 {
         val /= 1000.0;
         unit_idx += 1;
     }
@@ -931,6 +932,16 @@ mod tests {
         assert_eq!(humanize_int(100000), "100k");
         assert_eq!(humanize_int(1000000), "1M");
         assert_eq!(humanize_int(1500000), "1.5M");
+    }
+
+    #[test]
+    fn test_humanize_int_rounding_crosses_unit_boundary() {
+        assert_eq!(humanize_int(999_499), "999k");
+        assert_eq!(humanize_int(999_500), "1M");
+        assert_eq!(humanize_int(999_999), "1M");
+        assert_eq!(humanize_int(999_500_000), "1G");
+        assert_eq!(humanize_int(999_499_999), "999M");
+        assert_eq!(humanize_int(999_999_999), "1G");
     }
 
     #[test]

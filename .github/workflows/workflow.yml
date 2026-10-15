@@ -223,7 +223,7 @@ jobs:
           STARSHIP_VERSION: v1.2.3
 
       - name: Sign | Upload Executable [Windows]
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         continue-on-error: true
         id: unsigned-artifacts
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable' && github.event_name == 'push' && github.repository == 'starship/starship'
@@ -234,7 +234,7 @@ jobs:
             target/debug/starship-x86_64-pc-windows-msvc.msi
 
       - name: Sign | Sign [Windows]
-        uses: signpath/github-action-submit-signing-request@c92b958760219087e01f8d67a1669ed57afe2627 # v2.3
+        uses: signpath/github-action-submit-signing-request@f6d04783b4569d051e0c80105fe66e82819d0092 # v3.0
         continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable' && github.event_name == 'push' && github.repository == 'starship/starship'
         with:
@@ -247,7 +247,7 @@ jobs:
           output-artifact-directory: target/debug
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         if: github.repository == 'starship/starship'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

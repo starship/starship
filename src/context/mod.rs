@@ -62,7 +62,7 @@ pub struct Context<'a> {
     pub properties: Properties,
 
     /// Private field to store Git information for modules who need it
-    git_repo: OnceLock<Result<GitRepo, Box<gix::discover::Error>>>,
+    git_repo: OnceLock<Result<GitRepo, gix::Error>>,
 
     /// Private field to store JJ information for modules who need it
     jj_repo: OnceLock<Option<JJRepo>>,
@@ -334,9 +334,9 @@ impl<'a> Context<'a> {
     }
 
     /// Will lazily get repo root and branch when a module requests it.
-    pub fn get_git_repo(&self) -> Result<&GitRepo, &gix::discover::Error> {
+    pub fn get_git_repo(&self) -> Result<&GitRepo, &gix::Error> {
         self.git_repo
-            .get_or_init(|| -> Result<GitRepo, Box<gix::discover::Error>> {
+            .get_or_init(|| -> Result<GitRepo, gix::Error> {
                 // custom open options
                 let mut git_open_opts_map =
                     git_sec::trust::Mapping::<gix::open::Options>::default();
@@ -377,7 +377,7 @@ impl<'a> Context<'a> {
                         Ok(repo) => repo,
                         Err(e) => {
                             log::debug!("Failed to find git repo: {e}");
-                            return Err(Box::new(e));
+                            return Err(e);
                         }
                     };
 
@@ -408,7 +408,6 @@ impl<'a> Context<'a> {
                 })
             })
             .as_ref()
-            .map_err(std::convert::AsRef::as_ref)
     }
 
     /// Will lazily discover Jujutsu repo root when a module requests it.
@@ -509,6 +508,13 @@ impl<'a> Context<'a> {
 
     pub fn get_config_path_os(&self) -> Option<OsString> {
         get_config_path_os(&self.env)
+    }
+
+    /// Checks if it is a SSH session
+    pub fn is_ssh_session(&self) -> bool {
+        ["SSH_CONNECTION", "SSH_TTY", "SSH_CLIENT"]
+            .iter()
+            .any(|s| self.get_env_os(s).is_some())
     }
 }
 
