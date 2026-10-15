@@ -4,9 +4,8 @@ use std::borrow::Cow;
 use std::fmt;
 
 use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
-use unicode_segmentation::UnicodeSegmentation;
 
-use crate::print::{Grapheme, UnicodeWidthGraphemes, ansi_strip};
+use crate::print::{Grapheme, UnicodeWidthGraphemes, graphemes};
 use crate::segment::{Kind, Segment};
 
 /// Text drawn in a single style, borrowed from the segment it was painted
@@ -64,81 +63,71 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
         })
     };
     let fills = styled().filter(|&(kind, ..)| kind == Kind::Fill).count();
-    // Measuring text takes a pass over every grapheme, which only a fill needs.
-    let fill_width = width.filter(|_| fills > 0).and_then(|width| {
+    // Each fill's share of what the rest of the line leaves, if that is a
+    // column or more. Measuring text takes a pass over every grapheme, which
+    // only a fill needs.
+    let share = width.filter(|_| fills > 0).and_then(|width| {
         let used: usize = styled()
             .filter(|&(kind, ..)| kind != Kind::Fill)
             .map(|(.., value)| value.width_graphemes())
             .sum();
-        width
-            .checked_sub(used)
-            .filter(|&left| left >= fills)?
-            .checked_div(fills)
+        Some(width.checked_sub(used)? / fills).filter(|&share| share > 0)
     });
 
-    let mut previous: Option<AnsiStyle> = None;
+    let mut previous = None;
     styled()
         .map(|(kind, style, value)| {
-            let resolve = |previous: Option<AnsiStyle>| {
-                style.map_or_else(AnsiStyle::default, |style| {
-                    style.to_ansi_style(previous.as_ref())
-                })
+            let inherited = if kind == Kind::Fill {
+                previous.take()
+            } else {
+                previous
             };
-            let (style, text) = match kind {
-                Kind::Fill => (
-                    resolve(previous.take()),
-                    fill_width.map_or(Cow::Borrowed(value), |width| stretch(value, width)),
-                ),
-                Kind::Text => {
-                    let style = resolve(previous);
-                    previous = Some(style);
-                    (style, Cow::Borrowed(value))
-                }
+            let style = style.map_or_else(AnsiStyle::default, |style| {
+                style.to_ansi_style(inherited.as_ref())
+            });
+            if kind != Kind::Fill {
+                previous = Some(style);
+            }
+            let text = match share.filter(|_| kind == Kind::Fill) {
+                Some(share) => stretch(value, share, style),
+                None => Cow::Borrowed(value),
             };
             Run { style, text }
         })
         .collect()
 }
 
-/// `pattern` repeated grapheme by grapheme for as long as it fits in `width`,
-/// or as it is if it has no width to repeat.
-fn stretch(pattern: &str, width: usize) -> Cow<'_, str> {
-    let visible = ansi_strip().replace_all(pattern, "");
-    let pattern_width: usize = visible
-        .graphemes(true)
-        .map(|grapheme| Grapheme(grapheme).width())
-        .sum();
+/// `pattern` repeated across `width` columns: whole repetitions, then one
+/// more up to the last grapheme that fits, if that draws anything. Escape
+/// sequences among them could leave a style other than the fill's, which is
+/// restored after them. A pattern without width keeps its natural text.
+fn stretch(pattern: &str, width: usize, style: AnsiStyle) -> Cow<'_, str> {
+    let pattern_width = pattern.width_graphemes();
     if pattern_width == 0 {
         return Cow::Borrowed(pattern);
     }
-    let mut text = pattern.repeat(width / pattern_width);
-    let mut remaining = width % pattern_width;
-    let mut partial_end = 0;
-    for (start, grapheme) in visible.grapheme_indices(true) {
-        let columns = Grapheme(grapheme).width();
-        if columns > remaining {
-            break;
-        }
-        remaining -= columns;
-        if columns > 0 || partial_end > 0 {
-            partial_end = start + grapheme.len();
-        }
+    let end = graphemes(pattern)
+        .scan(width % pattern_width, |room, grapheme| {
+            *room = room.checked_sub(Grapheme(grapheme).width())?;
+            Some(end_within(pattern, grapheme))
+        })
+        .last()
+        .unwrap_or(0);
+    let partial = Some(&pattern[..end]).filter(|partial| partial.width_graphemes() > 0);
+    let mut stretched = pattern.repeat(width / pattern_width) + partial.unwrap_or_default();
+    if stretched.contains('\x1b') {
+        stretched += &format!("{RESET}{}", style.prefix());
     }
-    // Map the visible boundary back to the original bytes, keeping every SGR
-    // sequence atomic, including prefixes and fitting zero-width suffixes.
-    if partial_end > 0 {
-        for sequence in ansi_strip().find_iter(pattern) {
-            if sequence.start() > partial_end {
-                break;
-            }
-            partial_end += sequence.len();
-        }
-    }
-    // A partial repetition retains suffixes after any visible grapheme, but
-    // never emits a zero-width prefix without a visible grapheme of its own.
-    text.push_str(&pattern[..partial_end]);
-    Cow::Owned(text)
+    Cow::Owned(stretched)
 }
+
+/// Where `part`, borrowed from `text`, ends within it.
+fn end_within(text: &str, part: &str) -> usize {
+    part.as_ptr().addr() - text.as_ptr().addr() + part.len()
+}
+
+/// What returns a terminal to its default style, whatever came before.
+const RESET: &str = "\x1b[0m";
 
 /// The bytes a terminal draws, with escape sequences collapsed between runs.
 impl fmt::Display for Painted<'_> {
@@ -240,44 +229,82 @@ mod tests {
             ("🟦", "🟦🟦🟦🟦🟦"),
             ("🟢🔵🟡", "🟢🔵🟡🟢🔵"),
         ] {
-            assert_eq!(stretched, stretch(pattern, 10), "{pattern}");
+            assert_eq!(
+                stretched,
+                stretch(pattern, 10, AnsiStyle::new()),
+                "{pattern}"
+            );
+        }
+    }
+
+    /// Every pattern of up to three pieces, among graphemes narrow, wide and
+    /// without width, a bell and escape sequences, stretched across every
+    /// width up to nine: whole repetitions, then a prefix of one more that
+    /// ends on a grapheme and draws something, a column short at most, and the
+    /// fill's style restored after any escape sequence.
+    #[test]
+    fn every_short_pattern_stretches_to_whole_graphemes() {
+        const PIECES: [&str; 7] = [
+            ".",
+            "🟦",
+            "\u{301}",
+            "\u{7}",
+            "\x1b[31m",
+            "\x1b[0m",
+            "\x1b]8;;x\x1b\\",
+        ];
+        let style = Color::Green.normal();
+        let restore = format!("{RESET}{}", style.prefix());
+        let patterns = (1..=3).flat_map(|length| {
+            (0..PIECES.len().pow(length)).map(move |mut choice| {
+                (0..length)
+                    .map(|_| {
+                        let piece = PIECES[choice % PIECES.len()];
+                        choice /= PIECES.len();
+                        piece
+                    })
+                    .collect::<String>()
+            })
+        });
+        for pattern in patterns {
+            let pattern_width = pattern.width_graphemes();
+            for width in 0..10 {
+                let stretched = stretch(&pattern, width, style);
+                if pattern_width == 0 {
+                    assert_eq!(pattern, stretched);
+                    continue;
+                }
+                let drawn = stretched.strip_suffix(&restore).unwrap_or(&stretched);
+                assert_eq!(drawn.contains('\x1b'), drawn.len() < stretched.len());
+                let whole = pattern.repeat(width / pattern_width);
+                let partial = drawn.strip_prefix(&whole).unwrap();
+                assert!(pattern.starts_with(partial));
+                assert!(
+                    graphemes(partial)
+                        .last()
+                        .is_none_or(|last| end_within(partial, last) == partial.len())
+                );
+                assert!(partial.is_empty() || partial.width_graphemes() > 0);
+                let columns = drawn.width_graphemes();
+                assert!(
+                    columns <= width && columns + 1 >= width,
+                    "{pattern:?} at {width}"
+                );
+            }
         }
     }
 
     #[test]
-    fn a_zero_width_fill_keeps_its_natural_text() {
-        assert_eq!("\u{301}", stretch("\u{301}", 8));
-        assert_eq!("\x1b[31m\x1b[0m", stretch("\x1b[31m\x1b[0m", 8));
-    }
+    fn a_fill_restores_its_style_after_its_escape_sequences() {
+        let segments = [
+            Segment::fill(parse_style_string("green", None), "\x1b[31ma🟦"),
+            text("green", "NEXT"),
+        ];
 
-    #[test]
-    fn colored_fills_measure_visible_graphemes_and_preserve_atomic_sequences() {
-        let dot = "\x1b[31m.\x1b[0m";
-        assert_eq!(dot.repeat(7), stretch(dot, 7));
-        let true_color = "\x1b[38:2::255:0:0m.\x1b[0m";
-        assert_eq!(true_color.repeat(4), stretch(true_color, 4));
-        let wide = "\x1b[31m🟦\x1b[0m\u{7}.";
-        assert_eq!("", stretch(wide, 1));
-        assert_eq!("\x1b[31m🟦\x1b[0m\u{7}", stretch(wide, 2));
-        assert_eq!(wide, stretch(wide, 4));
-        let mixed = "\x1b[31m.\x1b[0m\u{7}🟦";
-        assert_eq!("\x1b[31m.\x1b[0m\u{7}", stretch(mixed, 1));
-        let split_grapheme = "e\x1b[31m\u{301}\x1b[0m";
-        assert_eq!(split_grapheme.repeat(2), stretch(split_grapheme, 2));
-        let split_pattern = format!("{split_grapheme}🟦");
-        assert_eq!(split_grapheme, stretch(&split_pattern, 1));
-    }
-
-    #[test]
-    fn a_partial_fill_does_not_leave_an_orphan_zero_width_prefix() {
-        assert_eq!("", stretch("\u{301}🟦", 1));
-        assert_eq!("\u{301}🟦", stretch("\u{301}🟦", 2));
-        assert_eq!("\u{301}.\u{301}.", stretch("\u{301}.", 2));
-        assert_eq!(".\u{7}.\u{7}", stretch(".\u{7}", 2));
-        assert_eq!(".\u{7}", stretch(".\u{7}🟦", 1));
-        assert_eq!("\u{301}.\u{7}", stretch("\u{301}.\u{7}🟦", 2));
-        assert_eq!(".\u{7}🟦.\u{7}", stretch(".\u{7}🟦", 4));
-        assert_eq!("", stretch("\u{7}🟦", 1));
+        assert_eq!(
+            "\x1b[32m\x1b[31ma🟦\x1b[31ma\x1b[0m\x1b[32mNEXT\x1b[0m",
+            Painted::new(&segments, Some(8)).to_string(),
+        );
     }
 
     #[test]
