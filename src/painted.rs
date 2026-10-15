@@ -94,7 +94,7 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
     // How wide each fill is in turn, if each gets a column or more of what
     // the rest of the line leaves. Measuring text takes a pass over every
     // grapheme, which only a fill needs.
-    let mut widths = width.filter(|_| fills > 0).and_then(|width| {
+    let mut widths = width.filter(|_| fills > 0 && !segments.iter().any(|segment| matches!(segment, Segment::Styled { kind: Kind::Verbatim, .. }))).and_then(|width| {
         let available = width.checked_sub(text_width(segments))?;
         let share = available / fills;
         (share > 0)
@@ -498,7 +498,7 @@ mod tests {
         segments.push(fill("%"));
         let painted = Painted::new(&segments, Some(10));
 
-        assert_eq!("50% %~ %%%", painted.to_string());
-        assert_eq!("50%% %~ %%%%%%", painted.escaped_for(Shell::Zsh));
+        assert_eq!("50% %~ %", painted.to_string());
+        assert_eq!("50%% %~ %%", painted.escaped_for(Shell::Zsh));
     }
 }

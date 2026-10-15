@@ -678,6 +678,55 @@ fn fish_keeps_the_right_prompt_current() {
 
 #[test]
 #[ignore = "requires fish"]
+fn fish_consumes_updates_published_before_pid_registration() {
+    let fixture = Fixture::new(
+        Shell::Fish,
+        r#"
+format = "INITIAL${custom.slow}END"
+add_newline = false
+[async.bus]
+fallback = 1
+[custom.slow]
+command = "sleep 0.1; printf FINAL"
+when = true
+shell = ["/bin/sh"]
+format = "$output"
+"#,
+    );
+    let init = fs::read_to_string(&fixture.init).unwrap();
+    let registration = "        set -g __starship_stream_pid $pid";
+    assert!(init.contains(registration));
+    // Hold registration until the publisher has written and signaled its
+    // final prompt. Its signal must therefore be ignored by the old handler.
+    let delayed = init.replace(
+        registration,
+        &format!(
+            "        for attempt in (seq 1 500)\n            test -f $__starship_stream_directory/$pid; and break\n            sleep 0.01\n        end\n{registration}",
+        ),
+    );
+    fs::write(&fixture.init, delayed).unwrap();
+    fs::File::open(&fixture.init).unwrap().sync_all().unwrap();
+    let output = Command::new(Shell::Fish.program())
+        .args([
+            "--no-config",
+            "--command",
+            "source \"$STARSHIP_INIT\"; __starship_stream_start --status=0; \
+             printf 'LATEST:%s\\n' \"$__starship_stream_prompts[1]\"; __starship_stream_stop",
+        ])
+        .envs(fixture.environment(Shell::Fish))
+        .current_dir(fixture.directory.path())
+        .output()
+        .expect("fish consumes a startup snapshot");
+    assert!(output.status.success(), "{output:?}");
+    assert_eq!(
+        "LATEST:\x1b[JINITIALFINALEND\n",
+        String::from_utf8_lossy(&output.stdout)
+    );
+    fixture.directory.close().unwrap();
+}
+
+#[test]
+#[ignore = "requires fish"]
 fn fish_strips_nul_bytes_from_initial_and_refreshed_prompts() {
     let mut session = Session::start(
         Shell::Fish,
@@ -791,6 +840,20 @@ fn xonsh_keeps_the_right_prompt_current() {
 #[ignore = "requires pwsh"]
 fn pwsh_redraws_once_finished() {
     redraws_once_finished(Shell::Pwsh);
+}
+
+#[test]
+#[ignore = "requires pwsh"]
+fn pwsh_cancels_its_owned_reader_and_decodes_split_utf8() {
+    let output = Command::new(Shell::Pwsh.program())
+        .args(["-NoLogo", "-NoProfile", "-NonInteractive", "-File"])
+        .arg(Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/powershell-stream.ps1"))
+        .arg("-Starship")
+        .arg(starship())
+        .output()
+        .expect("PowerShell exercises the production stream pump");
+    assert!(output.status.success(), "{output:?}");
+    assert!(String::from_utf8_lossy(&output.stdout).contains("PASS: split UTF-8"));
 }
 
 #[test]

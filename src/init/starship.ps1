@@ -78,12 +78,16 @@ $null = New-Module starship {
     # PSReadLine allows one redraw before typing; use it at completion.
     $script:StreamPump = {
         param($Stream, $Events)
-        $block = [char[]]::new(65536)
+        $block = [byte[]]::new(65536)
+        $characters = [char[]]::new([Text.Encoding]::UTF8.GetMaxCharCount($block.Length))
+        $decoder = [Text.Encoding]::UTF8.GetDecoder()
         $received = ''
         try {
-            while (($read = $Stream.Process.StandardOutput.Read($block, 0, $block.Length)) -gt 0) {
+            while (($read = $Stream.Process.StandardOutput.BaseStream.ReadAsync(
+                        $block, 0, $block.Length, $Stream.Cancellation.Token).GetAwaiter().GetResult()) -gt 0) {
                 # PSReadLine has no right prompt; use the first field.
-                $fields = ($received + [string]::new($block, 0, $read)).Split([char] 0)
+                $decoded = $decoder.GetChars($block, 0, $read, $characters, 0)
+                $fields = ($received + [string]::new($characters, 0, $decoded)).Split([char] 0)
                 $frames = [math]::Floor(($fields.Count - 1) / 3)
                 for ($frame = 0; $frame -lt $frames; $frame++) {
                     $first = $fields[3 * $frame + 1]
@@ -97,15 +101,17 @@ $null = New-Module starship {
                             if ($Stream.Refined) {
                                 $null = $Events.GenerateEvent('Starship.Refined', $Stream, $null, $null)
                             }
-                            # No redraws remain after completion.
-                            Stop-Process -Id $Stream.Id -ErrorAction Ignore
+                            # Closing our pipe ends the publisher without using a recyclable PID.
                             return
                         }
                     }
                 }
                 $received = $fields[(3 * $frames)..($fields.Count - 1)] -join [char] 0
             }
+        } catch [System.OperationCanceledException] {
+            if (-not $Stream.Cancellation.IsCancellationRequested) { throw }
         } finally {
+            $Stream.Process.StandardOutput.Dispose()
             $Stream.Ready.Set()
         }
     }
@@ -135,6 +141,7 @@ $null = New-Module starship {
             Prompt = $null
             Refined = $false
             Timings = $null
+            Cancellation = [System.Threading.CancellationTokenSource]::new()
 
             # Event actions run in another module; carry this module's redraw closure.
             Redraw = ${function:Update-StarshipPrompt}
@@ -144,12 +151,13 @@ $null = New-Module starship {
             # An exiting direct child pauses PSReadLine events until a keypress.
             # Launch as a grandchild through a short-lived shell instead.
             $stream.Process = Start-Native '/bin/sh' (
-                @('-c', '"$0" "$@" 2>/dev/null & echo $! >&2', ::STARSHIP::) + $arguments)
-            $stream.Id = [int] $stream.Process.StandardError.ReadToEnd()
+                @('-c', '"$0" "$@" 2>/dev/null &', ::STARSHIP::) + $arguments)
+            $null = $stream.Process.StandardError.ReadToEnd()
             $stream.Process.WaitForExit()
         } else {
             $stream.Process = Start-Native ::STARSHIP:: $arguments
-            $stream.Id = $stream.Process.Id
+            # Retain the native handle from launch, never reacquire it by PID.
+            $stream.OwnedProcess = $stream.Process
             # Drain the pipe so the writer can finish.
             $null = $stream.Process.StandardError.ReadToEndAsync()
         }
@@ -170,12 +178,23 @@ $null = New-Module starship {
         $stream = $script:Stream
         if ($null -eq $stream) { return }
         $script:Stream = $null
-        # A completed pump may have a recycled PID; kill only an active stream.
-        if (-not $stream.Pumping.IsCompleted) {
-            Stop-Process -Id $stream.Id -ErrorAction Ignore
+        # Framework pipe reads cannot cancel after they start. On Windows the
+        # launched Process owns a native handle, safe even after PID recycling.
+        try {
+            if ($null -ne $stream.OwnedProcess) {
+                try {
+                    $stream.OwnedProcess.Kill()
+                } catch {
+                    if (-not $stream.OwnedProcess.HasExited) { throw }
+                }
+            }
+            $stream.Cancellation.Cancel()
+            $null = $script:Pump.EndInvoke($stream.Pumping)
+        } finally {
+            $stream.Cancellation.Dispose()
+            $stream.Ready.Dispose()
+            $stream.Process.Dispose()
         }
-        $null = $script:Pump.EndInvoke($stream.Pumping)
-        $stream.Process.Dispose()
         if ($stream.Timings) { $script:StreamTimings = $stream.Timings }
     }
 

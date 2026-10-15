@@ -102,8 +102,11 @@ else
         ::STARSHIP:: prompt --stream --publish-state=$__starship_stream_directory --signal-pid=$fish_pid --timings=$__starship_stream_timings $argv 2>/dev/null | begin
             read -z main; read -z right; read -z pid
         end
-        set -g __starship_stream_pid $pid
         set -g __starship_stream_prompts "$main" "$right"
+        set -g __starship_stream_pid $pid
+        # A fast update may have signaled before the PID was registered.
+        # Consume its snapshot now; later signals can use the registered PID.
+        __starship_stream_read
     end
 
     function __starship_stream_stop --on-event fish_preexec --on-event fish_exit
@@ -122,12 +125,18 @@ else
         set -g __starship_stream_arguments
     end
 
-    function __starship_stream_update --on-signal USR1
+    function __starship_stream_read
         test -n "$__starship_stream_pid"; or return
+        set -l state $__starship_stream_directory/$__starship_stream_pid
+        test -f $state; or return
         begin
             read -z main; read -z right
-        end <$__starship_stream_directory/$__starship_stream_pid
+        end <$state
         set -g __starship_stream_prompts "$main" "$right"
+    end
+
+    function __starship_stream_update --on-signal USR1
+        __starship_stream_read; or return
         # A prompt drawn as the command line is accepted is drawn once, as is.
         test "$TRANSIENT" = 1; or commandline -f repaint
     end
