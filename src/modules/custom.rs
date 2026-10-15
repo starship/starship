@@ -788,12 +788,14 @@ mod tests {
     }
 
     #[test]
-    fn output_is_escaped() -> io::Result<()> {
+    fn output_is_only_escaped_when_composing_a_prompt() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("custom.test")
+        let context: Context = ModuleRenderer::new("custom.test")
             .path(dir.path())
             .config(toml::toml! {
+                format = "${custom.test}"
+                add_newline = false
                 [custom.test]
                 format = "$output"
                 command = "__starship_to_be_escaped"
@@ -801,9 +803,12 @@ mod tests {
                 ignore_timeout = true
             })
             .shell(Shell::Bash)
-            .collect();
-        let expected = Some("\\`to_be_escaped\\`".to_string());
-        assert_eq!(expected, actual);
+            .into();
+        assert_eq!(
+            Some("`to_be_escaped`".to_string()),
+            crate::print::get_module("custom.test", &context)
+        );
+        assert_eq!("\\`to_be_escaped\\`", crate::print::get_prompt(&context));
 
         dir.close()
     }
@@ -812,9 +817,11 @@ mod tests {
     fn unsafe_no_escape() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("custom.test")
+        let context: Context = ModuleRenderer::new("custom.test")
             .path(dir.path())
             .config(toml::toml! {
+                format = "${custom.test}"
+                add_newline = false
                 [custom.test]
                 format = "$output"
                 command = "__starship_to_be_escaped"
@@ -823,9 +830,12 @@ mod tests {
                 unsafe_no_escape = true
             })
             .shell(Shell::Bash)
-            .collect();
-        let expected = Some("`to_be_escaped`".to_string());
-        assert_eq!(expected, actual);
+            .into();
+        assert_eq!(
+            Some("`to_be_escaped`".to_string()),
+            crate::print::get_module("custom.test", &context)
+        );
+        assert_eq!("`to_be_escaped`", crate::print::get_prompt(&context));
 
         dir.close()
     }
