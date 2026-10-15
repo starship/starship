@@ -3,8 +3,9 @@ use nu_ansi_term::{AnsiString, Style as AnsiStyle};
 
 /// A piece of a prompt: text in a style, or the end of a line.
 ///
-/// Text is stored as the terminal should show it. Escaping it for a shell's
-/// prompt variable happens only when a painted prompt is written out.
+/// Text retains any shell escaping applied by the formatter. The renderer
+/// resolves styles and fills; shell-specific ANSI wrappers are added when the
+/// prompt is written out.
 #[derive(Clone, Debug, PartialEq)]
 pub enum Segment {
     Styled {

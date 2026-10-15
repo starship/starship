@@ -547,7 +547,8 @@ fn home_dir(env: &Env) -> Option<PathBuf> {
 
 /// The configuration file a new context reads.
 ///
-/// A test reads only configuration it set up, itself. This prevents annoying cross-contamination of pre-setup local configs
+/// In-crate unit tests read only explicitly mocked configuration. Integration
+/// tests compile the library normally and must isolate their own environment.
 fn config_file_to_read(env: &Env) -> Option<OsString> {
     if cfg!(test) && env.get_env_os("STARSHIP_CONFIG").is_none() && env.get_env("HOME").is_none() {
         return None;
@@ -1301,6 +1302,29 @@ mod tests {
         });
 
         assert_ne!(context.config.config, mod_context.config.config);
+    }
+
+    #[test]
+    fn unit_test_configuration_requires_an_explicit_config_or_home() {
+        let mut environment = Env::default();
+        assert_eq!(None, super::config_file_to_read(&environment));
+
+        environment.insert("HOME", "/test-home".to_owned());
+        assert_eq!(
+            Some(
+                PathBuf::from("/test-home")
+                    .join(".config")
+                    .join("starship.toml")
+                    .into_os_string()
+            ),
+            super::config_file_to_read(&environment),
+        );
+
+        environment.insert("STARSHIP_CONFIG", "/explicit/starship.toml".to_owned());
+        assert_eq!(
+            Some(PathBuf::from("/explicit/starship.toml").into_os_string()),
+            super::config_file_to_read(&environment),
+        );
     }
 
     #[cfg(windows)]
