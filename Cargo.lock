@@ -3359,6 +3359,7 @@ dependencies = [
 name = "starship"
 version = "1.27.0"
 dependencies = [
+ "anstream",
  "clap",
  "clap_complete",
  "clap_complete_nushell",
