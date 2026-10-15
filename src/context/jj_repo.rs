@@ -1,6 +1,8 @@
 use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
 
+use serde::Deserialize;
+
 use super::Context;
 
 /// A Jujutsu (JJ) repository's data.
@@ -31,7 +33,7 @@ pub struct CurrentChange {
     pub change_offset: Option<u16>,
 
     /// Bookmarks to consider for the current change, if any
-    pub bookmarks: Option<Vec<Bookmark>>,
+    pub bookmarks: Box<[Bookmark]>,
 
     /// Total lines added in this change
     pub lines_added: u32,
@@ -103,117 +105,154 @@ impl JJRepo {
                     "--repository".as_ref(),
                     self.root.as_os_str(),
                     "show".as_ref(),
-                    // Find conflicts in mutable parents and select only one of them: we want to
-                    // print `conflict_before|` once if there is a conflict and it's not in '@'
-                    "@ | latest(heads(mutable() & ::@ & conflicts()), 1)".as_ref(),
+                    // Finds:
+                    //
+                    // 1. current working copy
+                    // 2. closest conflict amongst self & mutable parents (if any)
+                    // 3. closest bookmark
+                    //
+                    // Note they can all resolve to the same actual change or to two changes only,
+                    // that's perfectly fine
+                    //
+                    // Parent information can:
+                    //
+                    // - Be missing if `@` has both a conflict and bookmarks
+                    // - Come from one parent if it has both a conflict and bookmarks
+                    // - Come from two parents if one has a conflict and the other bookmarks
+                    //
+                    // In any case, there will never be two parents with bookmarks or two parents
+                    // with a conflict thanks to this revset
+                    "@ | latest(heads(mutable() & ::@ & conflicts()), 1) | latest(bookmarks() & ::@, 1)".as_ref(),
                     "--no-patch".as_ref(),
-                    // Important to ensure `conflict_before|` is always printed first if a conflict
-                    // is present before '@' (and not in '@')
-                    "--reversed".as_ref(),
                     "--template".as_ref(),
                     r#"if(
                         current_working_copy,
                         join(
                             "\n",
-                            conflict,
-                            description.len() > 0,
-                            hidden,
-                            immutable,
-                            divergent,
-                            change_offset,
-                            change_id,
-                            change_id.shortest().prefix().len(),
-                            commit_id,
-                            commit_id.shortest().prefix().len(),
-                            bookmarks,
-                            parents.map(|p| p.bookmarks()),
-                            diff.stat().total_added(),
-                            diff.stat().total_removed(),
-                            self
-                                .diff(".")
-                                .files()
-                                .filter(|file| !conflict || conflicted_files.all(|c| c.path().display() != file.path().display()))
-                                .map(|file| file.status_char())
-                                .join(""),
+                            concat("current.has_description = ", description.len() > 0),
+                            concat("current.hidden = ", hidden),
+                            concat("current.immutable = ", immutable),
+                            concat("current.divergent = ", divergent),
+                            concat("current.change_offset = ", change_offset),
+                            concat("current.change_id = \"", change_id, "\""),
+                            concat("current.change_id_prefix_len = ", change_id.shortest().prefix().len()),
+                            concat("current.commit_id = \"", commit_id, "\""),
+                            concat("current.commit_id_prefix_len = ", commit_id.shortest().prefix().len()),
+                            concat("current.lines_added = ", diff.stat().total_added()),
+                            concat("current.lines_removed = ", diff.stat().total_removed()),
+                            concat("current.conflicted = ", conflict),
+                            concat("current.bookmarks = [", bookmarks.map(|bm| concat("\"", bm, "\"")).join(","), "]"),
+                            concat(
+                                "current.statuses = \"",
+                                self
+                                    .diff(".")
+                                    .files()
+                                    .map(|file| file.status_char())
+                                    .join(""),
+                                "\"",
+                            ),
                             "",
                         ),
-                        "conflict_before|",
+                        concat(
+                            if(
+                                conflict,
+                                "parents.conflicted = true\n",
+                            ),
+                            if(
+                                bookmarks.len() > 0,
+                                concat("parents.bookmarks = [", bookmarks.map(|bm| concat("\"", bm, "\"")).join(","), "]\n"),
+                            ),
+                        ),
                     )"#.as_ref(),
                 ])?;
 
-                let mut lines = res.stdout.lines();
+                #[derive(Deserialize)]
+                struct RawOutput<'o> {
+                    #[serde(borrow)]
+                    current: RawCurrentChange<'o>,
+                    #[serde(default, borrow)]
+                    parents: RawParents<'o>,
+                }
 
-                // If the conflict is _before_ '@', the output is
-                //
-                //     conflict_before|false
-                //     <...>
-                //
-                // If the conflict is _at_ '@', the output is
-                //
-                //     true
-                //     <...>
-                let first_line = lines.next()?;
-                let has_conflict = first_line == "conflict_before|false" || read_boolean(first_line)?;
+                #[derive(Deserialize)]
+                struct RawCurrentChange<'o> {
+                    has_description: bool,
+                    hidden: bool,
+                    immutable: bool,
+                    divergent: bool,
+                    change_offset: u16,
+                    change_id: &'o str,
+                    change_id_prefix_len: u8,
+                    commit_id: &'o str,
+                    commit_id_prefix_len: u8,
+                    lines_added: u32,
+                    lines_removed: u32,
+                    statuses: &'o str,
+                    #[serde(default)]
+                    conflicted: bool,
+                    #[serde(default, borrow)]
+                    bookmarks: Box<[&'o str]>,
+                }
 
-                let description = read_boolean(lines.next()?)?;
-                let hidden = read_boolean(lines.next()?)?;
-                let immutable = read_boolean(lines.next()?)?;
+                #[derive(Default, Deserialize)]
+                struct RawParents<'o> {
+                    #[serde(default)]
+                    conflicted: bool,
+                    #[serde(default, borrow)]
+                    bookmarks: Box<[&'o str]>,
+                }
 
-                let change_offset = {
-                    // Always advance the iterator for the two relevant lines
-                    let divergent = read_boolean(lines.next()?)?;
-                    let raw = lines.next()?;
-                    match divergent {
-                        true => Some(raw.parse().ok()?),
-                        false => None,
-                    }
-                };
+                let RawOutput { current, parents } = toml::from_str(&res.stdout).ok()?;
 
-                // A full JJ change ID is always `[k-z]{32}`,
-                // so we do a quick sanity check on it just to confirm it looks ok
-                let change = lines.next()?;
-                if change.len() != 32 || !change.is_ascii() {
+                if current.change_id.len() != 32 || !current.change_id.is_ascii() {
                     return None;
                 }
 
-                Some(CurrentChange {
-                    change: Box::from(change),
-                    change_shortest: lines.next()?.parse().ok()?,
-                    commit: Box::from(lines.next().filter(|s| s.is_ascii())?),
-                    commit_shortest: lines.next()?.parse().ok()?,
-                    change_offset,
-                    bookmarks: parse_bookmark_lines(lines.next()?, lines.next()?),
-                    lines_added: lines.next()?.parse().ok()?,
-                    lines_removed: lines.next()?.parse().ok()?,
-                    status: {
-                        let mut status = Status::default();
+                Some(
+                    CurrentChange {
+                        change: Box::from(current.change_id),
+                        change_shortest: current.change_id_prefix_len,
 
-                        if has_conflict {
-                            status.flags |= CurrentChange::CONFLICTED;
-                        }
-                        if description {
-                            status.flags |= CurrentChange::DESCRIPTION;
-                        }
-                        if hidden {
-                            status.flags |= CurrentChange::HIDDEN;
-                        }
-                        if immutable {
-                            status.flags |= CurrentChange::IMMUTABLE;
-                        }
+                        commit: Box::from(current.commit_id),
+                        commit_shortest: current.commit_id_prefix_len,
 
-                        // JJ documents the characters it will return, those that interest us are
-                        // all single bytes so we don't need to do the u8 -> char conversion
-                        for byte in lines.next().unwrap_or("").bytes() {
-                            status.added += usize::from(byte == b'A');
-                            status.copied += usize::from(byte == b'C');
-                            status.deleted += usize::from(byte == b'D');
-                            status.modified += usize::from(byte == b'M');
-                            status.renamed += usize::from(byte == b'R');
-                        }
+                        change_offset: current.divergent.then_some(current.change_offset),
 
-                        status
+                        lines_added: current.lines_added,
+                        lines_removed: current.lines_removed,
+
+                        bookmarks: current.bookmarks.iter().chain(parents.bookmarks.iter()).map(|&s| Bookmark(Box::from(s))).collect(),
+
+                        status: {
+                            let mut status = Status::default();
+
+                            if current.conflicted || parents.conflicted {
+                                status.flags |= CurrentChange::CONFLICTED;
+                            }
+                            if current.has_description {
+                                status.flags |= CurrentChange::DESCRIPTION;
+                            }
+                            if current.hidden {
+                                status.flags |= CurrentChange::HIDDEN;
+                            }
+                            if current.immutable {
+                                status.flags |= CurrentChange::IMMUTABLE;
+                            }
+
+                            // JJ documents the characters it will return, those that interest us are
+                            // all single bytes so we don't need to do the u8 -> char conversion
+                            for byte in current.statuses.bytes() {
+                                status.added += usize::from(byte == b'A');
+                                status.copied += usize::from(byte == b'C');
+                                status.deleted += usize::from(byte == b'D');
+                                status.modified += usize::from(byte == b'M');
+                                status.renamed += usize::from(byte == b'R');
+                            }
+
+                            status
+                        }
                     }
-                })
+                )
             })
             .as_ref()
     }
@@ -267,35 +306,14 @@ impl Bookmark {
     }
 }
 
-/// Read a single boolean
-fn read_boolean(line: &str) -> Option<bool> {
-    match line {
-        "true" => Some(true),
-        "false" => Some(false),
-        _ => None,
-    }
-}
-
-/// Select the bookmarks to save (current > parents)
-fn parse_bookmark_lines(current: &str, parents: &str) -> Option<Vec<Bookmark>> {
-    let line = if !current.is_empty() {
-        current
-    } else if !parents.is_empty() {
-        parents
-    } else {
-        return None;
-    };
-
-    Some(line.split(' ').map(|b| Bookmark(Box::from(b))).collect())
-}
-
 #[cfg(test)]
 impl JJRepo {
     pub const BASE: &str = "/jj/base";
     pub const EMPTY_OUTPUT: &str = "/jj/empty-output";
     pub const INVALID_OUTPUT: &str = "/jj/invalid-output";
 
-    pub const BOOKMARK_NO_CURRENT: &str = "/jj/bookmarks/no-current";
+    pub const BOOKMARKS_NONE: &str = "/jj/bookmarks/no-current-no-parent";
+    pub const BOOKMARKS_IN_PARENT: &str = "/jj/bookmarks/in-parent";
 
     pub const CHANGE_DIVERGENT: &str = "/jj/change/divergent";
     pub const CHANGE_NOT_ASCII: &str = "/jj/change/not-ascii";
@@ -304,8 +322,10 @@ impl JJRepo {
     pub const METRIC_DELETED: &str = "/jj/metrics-deleted";
     pub const METRIC_ZERO: &str = "/jj/metrics-zero";
 
-    pub const STATUS_IMMEDIATE_CONFLICT: &str = "/jj/status/immediate-conflict";
-    pub const STATUS_NO_CONFLICT: &str = "/jj/status/no-conflict";
+    pub const STATUS_CONFLICTED_NONE: &str = "/jj/status/conflicted-none";
+    pub const STATUS_CONFLICTED_CURRENT: &str = "/jj/status/conflicted-current";
+    pub const STATUS_CONFLICTED_PARENT: &str = "/jj/status/conflicted-parent";
+
     pub const STATUS_DESCRIPTION: &str = "/jj/status/description";
     pub const STATUS_HIDDEN: &str = "/jj/status/hidden";
     pub const STATUS_IMMUTABLE: &str = "/jj/status/immutable";
@@ -329,70 +349,70 @@ pub fn mock_jj_cmd(s: &str) -> Option<crate::utils::CommandOutput> {
     // without having to rewrite the whole array every time.
     // We allow unused for all of them to avoid having to add/remove/rename in commits all over.
     #[allow(unused)]
-    const CONFLICT: usize = 0;
+    const HAS_DESCRIPTION: usize = 0;
     #[allow(unused)]
-    const DESC: usize = 1;
+    const HIDDEN: usize = 1;
     #[allow(unused)]
-    const HIDDEN: usize = 2;
+    const IMMUTABLE: usize = 2;
     #[allow(unused)]
-    const IMMUTABLE: usize = 3;
+    const DIVERGENT: usize = 3;
     #[allow(unused)]
-    const DIVERGENT: usize = 4;
+    const CHANGE_OFFSET: usize = 4;
+
     #[allow(unused)]
-    const CHANGE_OFFSET: usize = 5;
+    const CHANGE: usize = 5;
     #[allow(unused)]
-    const CHANGE: usize = 6;
+    const CHANGE_SHORT_LENGTH: usize = 6;
     #[allow(unused)]
-    const CHANGE_SHORT_LENGTH: usize = 7;
+    const COMMIT: usize = 7;
     #[allow(unused)]
-    const COMMIT: usize = 8;
+    const COMMIT_SHORT_LENGTH: usize = 8;
+
     #[allow(unused)]
-    const COMMIT_SHORT_LENGTH: usize = 9;
+    const LINES_ADDED: usize = 9;
     #[allow(unused)]
-    const BOOKMARKS_CUR: usize = 10;
+    const LINES_REMOVED: usize = 10;
+
     #[allow(unused)]
-    const BOOKMARKS_PREV: usize = 11;
+    const STATUSES: usize = 11;
+
     #[allow(unused)]
-    const LINES_A: usize = 12;
+    const CURRENT_CONFLICTED: usize = 12;
     #[allow(unused)]
-    const LINES_D: usize = 13;
+    const PARENT_CONFLICTED: usize = 14;
+
     #[allow(unused)]
-    const FILES: usize = 14;
+    const CURRENT_BOOKMARKS: usize = 13;
+    #[allow(unused)]
+    const PARENT_BOOKMARKS: usize = 15;
 
     /// Generate output for JJ while allowing easy replacement of lines to test various valid
     /// possibilities
     fn output<const N: usize>(mods: [(usize, &str); N]) -> Option<CommandOutput> {
         let mut stdout = [
-            // conflict
-            "conflict_before|false",
-            // description
-            "false",
-            // hidden
-            "false",
-            // immutable
-            "false",
-            // divergent
-            "false",
-            // change offset
+            // -- Current --
+            // -- 0
+            "current.has_description = false",
+            "current.hidden = false",
+            "current.immutable = false",
+            "current.divergent = false",
+            "current.change_offset = 0",
+            // -- 5
+            "current.change_id = \"pvtxwmvtttmrkkoqkutlystlnozssmnk\"",
+            "current.change_id_prefix_len = 3",
+            "current.commit_id = \"30363e463b3a5c87ad352b2d342f7408e3c2dda8\"",
+            "current.commit_id_prefix_len = 4",
+            "current.lines_added = 100",
+            // -- 10
+            "current.lines_removed = 90",
+            "current.statuses = \"ACDMR\"",
+            "current.conflicted = false",
+            r#"current.bookmarks = ["cur_local", "cur_tracked*", "cur_modified@upstream*", "cur_untracked@origin"]"#,
+            // -- Parents, both values are optional --
+            "parents.conflicted = true",
+            // -- 15
+            // r#"parents.bookmarks = ["par_local", "par_tracked*", "par_modified@upstream*", "par_untracked@origin"]"#,
             "",
-            // change id
-            "pvtxwmvtttmrkkoqkutlystlnozssmnk",
-            // change id shortest prefix length
-            "3",
-            // commit id
-            "30363e463b3a5c87ad352b2d342f7408e3c2dda8",
-            // commit id shortest prefix length
-            "4",
-            // @ bookmarks
-            "cur_local cur_tracked* cur_modified@upstream* cur_untracked@origin",
-            // @- bookmarks
-            "par_local par_tracked* par_modified@upstream* par_untracked@origin",
-            // lines added
-            "100",
-            // lines deleted
-            "90",
-            // files status in current directory
-            "ACDMR",
         ];
 
         for (index, replacement) in mods {
@@ -420,110 +440,126 @@ pub fn mock_jj_cmd(s: &str) -> Option<crate::utils::CommandOutput> {
         ),
         // Repos testing jj_bookmark rendering
         (
-            JJRepo::BOOKMARK_NO_CURRENT,
+            JJRepo::BOOKMARKS_NONE,
             || output([
-                (BOOKMARKS_CUR, ""),
+                (CURRENT_BOOKMARKS, "current.bookmarks = []"),
+            ]),
+        ),
+        (
+            JJRepo::BOOKMARKS_IN_PARENT,
+            || output([
+                (CURRENT_BOOKMARKS, "current.bookmarks = []"),
+                (PARENT_BOOKMARKS, r#"parents.bookmarks = ["par_local", "par_tracked*", "par_modified@upstream*", "par_untracked@origin"]"#),
             ]),
         ),
         // Repos testing jj_change rendering
         (
             JJRepo::CHANGE_DIVERGENT,
             || output([
-                (DIVERGENT, "true"),
-                (CHANGE_OFFSET, "2"),
+                (DIVERGENT, "current.divergent = true"),
+                (CHANGE_OFFSET, "current.change_offset = 2"),
             ]),
         ),
         (
             JJRepo::CHANGE_NOT_ASCII,
             || output([
-                (CHANGE, "Étxwmvtttmrkkoqkutlystlnozssmnk"),
+                (CHANGE, "current.change_id = \"Étxwmvtttmrkkoqkutlystlnozssmnk\""),
             ]),
         ),
         // Repos testing jj_metrics rendering
         (
             JJRepo::METRIC_ADDED,
             || output([
-                (LINES_D, "0"),
+                (LINES_REMOVED, "current.lines_removed = 0"),
             ]),
         ),
         (
             JJRepo::METRIC_DELETED,
             || output([
-                (LINES_A, "0")
+                (LINES_ADDED, "current.lines_added = 0")
             ]),
         ),
         (
             JJRepo::METRIC_ZERO,
             || output([
-                (LINES_A, "0"),
-                (LINES_D, "0"),
+                (LINES_ADDED, "current.lines_added = 0"),
+                (LINES_REMOVED, "current.lines_removed = 0"),
             ]),
         ),
         // Repos testing jj_status rendering
         (
-            JJRepo::STATUS_IMMEDIATE_CONFLICT,
+            JJRepo::STATUS_CONFLICTED_NONE,
             || output([
-                (CONFLICT, "true"),
+                (CURRENT_CONFLICTED, "current.conflicted = false"),
+                (PARENT_CONFLICTED, ""),
             ]),
         ),
         (
-            JJRepo::STATUS_NO_CONFLICT,
+            JJRepo::STATUS_CONFLICTED_CURRENT,
             || output([
-                (CONFLICT, "false"),
+                (CURRENT_CONFLICTED, "current.conflicted = true"),
+                (PARENT_CONFLICTED, ""),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_CONFLICTED_PARENT,
+            || output([
+                (CURRENT_CONFLICTED, "current.conflicted = false"),
+                (PARENT_CONFLICTED, "parents.conflicted = true"),
             ]),
         ),
         (
             JJRepo::STATUS_DESCRIPTION,
             || output([
-                (DESC, "true"),
+                (HAS_DESCRIPTION, "current.has_description = true"),
             ]),
         ),
         (
             JJRepo::STATUS_HIDDEN,
             || output([
-                (HIDDEN, "true"),
+                (HIDDEN, "current.hidden = true"),
             ]),
         ),
         (
             JJRepo::STATUS_IMMUTABLE,
             || output([
-                (IMMUTABLE, "true"),
+                (IMMUTABLE, "current.immutable = true"),
             ]),
         ),
         (
             JJRepo::STATUS_ADDED,
             || output([
-                (FILES, "AA"),
+                (STATUSES, "current.statuses = \"AA\""),
             ]),
         ),
         (
             JJRepo::STATUS_COPIED,
             || output([
-                (FILES, "CCC"),
+                (STATUSES, "current.statuses = \"CCC\""),
             ]),
         ),
         (
             JJRepo::STATUS_DELETED,
             || output([
-                (FILES, "DDDD"),
+                (STATUSES, "current.statuses = \"DDDD\""),
             ]),
         ),
         (
             JJRepo::STATUS_MODIFIED,
             || output([
-                (FILES, "MMMMM"),
+                (STATUSES, "current.statuses = \"MMMMM\""),
             ]),
         ),
         (
             JJRepo::STATUS_RENAMED,
             || output([
-                (FILES, "RRRRRR"),
+                (STATUSES, "current.statuses = \"RRRRRR\""),
             ]),
         ),
         (
             JJRepo::STATUS_NO_CHANGES,
             || output([
-                (FILES, ""),
+                (STATUSES, "current.statuses = \"\""),
             ]),
         ),
         // Used to test the parsing will correctly fail on empty stdout
@@ -559,41 +595,13 @@ pub fn mock_jj_cmd(s: &str) -> Option<crate::utils::CommandOutput> {
 
 #[cfg(test)]
 mod tests {
-    use super::{Bookmark, parse_bookmark_lines, read_boolean};
-
-    fn b(s: &str) -> Bookmark {
-        Bookmark(s.into())
-    }
-
-    #[test]
-    fn test_read_boolean() {
-        assert_eq!(read_boolean("true"), Some(true));
-        assert_eq!(read_boolean("false"), Some(false));
-        assert_eq!(read_boolean("falsefalse"), None);
-        assert_eq!(read_boolean("trueabcdef"), None);
-        assert_eq!(read_boolean(""), None);
-    }
-
-    #[test]
-    fn test_parse_bookmark_lines() {
-        assert_eq!(parse_bookmark_lines("", ""), None,);
-
-        assert_eq!(
-            parse_bookmark_lines("b1 b2* b3@upstream b4@origin*", "ignored"),
-            Some(vec![b("b1"), b("b2*"), b("b3@upstream"), b("b4@origin*")]),
-        );
-
-        assert_eq!(
-            parse_bookmark_lines("", "p1 p2* p3@upstream p4@origin*"),
-            Some(vec![b("p1"), b("p2*"), b("p3@upstream"), b("p4@origin*")]),
-        );
-    }
+    use super::Bookmark;
 
     #[test]
     fn test_bookmark_methods() {
         #[track_caller]
         fn check_bookmark(orig: &str, name: &str, remote: Option<&str>, diverged: bool) {
-            let bm = b(orig);
+            let bm = Bookmark(orig.into());
 
             assert_eq!(bm.name(), name);
             assert_eq!(bm.remote(), remote);
