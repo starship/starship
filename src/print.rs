@@ -12,7 +12,6 @@ use unicode_width::UnicodeWidthChar;
 use crate::context::{Context, Properties, Shell, Target};
 use crate::module::Module;
 use crate::modules;
-use crate::painted::Painted;
 use crate::plan::Plan;
 use crate::shadow;
 use crate::workers;
@@ -111,8 +110,7 @@ pub fn module(module_name: &str, args: Properties) {
 }
 
 pub fn get_module(module_name: &str, context: &Context) -> Option<String> {
-    modules::handle(module_name, context)
-        .map(|module| Painted::new(&module.segments, None).escaped_for(context.shell))
+    modules::handle(module_name, context).map(|module| module.to_string())
 }
 
 pub fn timings(args: Properties) {
@@ -524,6 +522,23 @@ mod test {
         let actual = get_prompt(&context);
         assert_eq!(expected, actual);
         dir.close()
+    }
+
+    #[test]
+    fn standalone_modules_keep_literal_text_for_every_shell() {
+        let literal = "$HOME `hostname` \\n 50%";
+        for shell in [Shell::Bash, Shell::Zsh, Shell::Fish, Shell::PowerShell] {
+            let actual = crate::test::ModuleRenderer::new("env_var")
+                .config(toml::toml! {
+                    [env_var]
+                    variable = "VALUE"
+                    format = "$env_value"
+                })
+                .env("VALUE", literal)
+                .shell(shell)
+                .collect();
+            assert_eq!(Some(literal.to_owned()), actual);
+        }
     }
 
     #[test]

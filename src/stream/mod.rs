@@ -13,7 +13,6 @@ mod testing;
 mod timings;
 
 use std::io;
-use std::mem;
 use std::time::{Duration, Instant, SystemTime};
 
 use crate::context::{Context, Properties, Target};
@@ -29,6 +28,8 @@ use frame::{Frame, Sink};
 const PROMPT_COUNT: usize = 2;
 const PROMPT_TARGETS: [Target; PROMPT_COUNT] = [Target::Main, Target::Right];
 const NANOSECONDS_PER_SECOND: u128 = Duration::from_secs(1).as_nanos();
+/// Detect closed readers even while modules render or wait for a long refresh.
+const HEARTBEAT_INTERVAL: Duration = Duration::from_secs(1);
 
 type PromptPlan<'context> = Plan<'context, PROMPT_COUNT>;
 
@@ -280,7 +281,7 @@ struct Session<'context> {
     bus: Bus,
     departure_planner: DeparturePlanner,
     last_prompts: Option<[String; PROMPT_COUNT]>,
-    heartbeat_pending: bool,
+    next_heartbeat: Option<Instant>,
     completion_reported: bool,
 }
 
@@ -309,10 +310,10 @@ impl<'context> Session<'context> {
             bus: Bus::new(clock.started_at, configuration.bus.fallback()),
             departure_planner: DeparturePlanner::with_capacity(plan.modules.len()),
             use_estimates: configuration.bus.adaptive,
+            next_heartbeat: clock.started_at.checked_add(HEARTBEAT_INTERVAL),
             clock,
             modules,
             last_prompts: None,
-            heartbeat_pending: false,
             completion_reported: false,
         }
     }
@@ -383,15 +384,17 @@ impl<'context> Session<'context> {
     }
 
     fn write_pending_output(&mut self, now: Instant, output: &mut impl Sink) -> io::Result<()> {
-        let heartbeat_pending = mem::take(&mut self.heartbeat_pending);
+        let heartbeat_pending = self.next_heartbeat.is_some_and(|deadline| deadline <= now);
         if self
             .next_departure(now)
             .is_some_and(|deadline| deadline <= now)
         {
+            self.next_heartbeat = now.checked_add(HEARTBEAT_INTERVAL);
             return self.draw(output);
         }
         if heartbeat_pending {
             output.send(Frame::Heartbeat)?;
+            self.next_heartbeat = now.checked_add(HEARTBEAT_INTERVAL);
         }
         Ok(())
     }
@@ -442,8 +445,7 @@ impl<'context> Session<'context> {
             Some(Estimate::Changed(duration)) => {
                 self.bus.board(now, duration);
             }
-            Some(Estimate::Unchanged) => self.heartbeat_pending |= self.completion_reported,
-            None => {}
+            Some(Estimate::Unchanged) | None => {}
         }
     }
 
@@ -460,6 +462,7 @@ impl<'context> Session<'context> {
         self.next_departure(now)
             .into_iter()
             .chain(self.modules.iter().filter_map(ModuleSlot::next_refresh_at))
+            .chain(self.next_heartbeat)
             .min()
     }
 
@@ -1098,6 +1101,41 @@ mod tests {
             ],
             keywords(&frames)[..5]
         );
+    }
+
+    #[test]
+    fn heartbeats_do_not_wait_for_long_module_renders_or_refresh_periods() {
+        for (render_milliseconds, first_paint) in [(0, 0), (5_000, 50)] {
+            let frames = simulate_in(
+                SimulationSettings {
+                    horizon_milliseconds: 2_500,
+                    ..SimulationSettings::default()
+                },
+                &context(toml::toml! {
+                    add_newline = false
+                    format = "${custom.slow}"
+                    [custom.slow]
+                    command = "slow"
+                    when = true
+                    refresh = 3_600_000
+                }),
+                "custom.slow=0",
+                &[("custom.slow", &[(render_milliseconds, "constant")])],
+            )
+            .frames;
+            let heartbeats: Vec<_> = keywords(&frames)
+                .into_iter()
+                .filter(|(_, keyword)| *keyword == "HEARTBEAT")
+                .collect();
+            assert_eq!(
+                vec![
+                    (first_paint + 1_000, "HEARTBEAT"),
+                    (first_paint + 2_000, "HEARTBEAT"),
+                ],
+                heartbeats,
+                "render duration {render_milliseconds}",
+            );
+        }
     }
 
     #[test]
