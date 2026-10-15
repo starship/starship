@@ -72,7 +72,7 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
             .sum();
         width
             .checked_sub(used)
-            .filter(|&left| left > 0)?
+            .filter(|&left| left >= fills)?
             .checked_div(fills)
     });
 
@@ -106,16 +106,27 @@ fn stretch(pattern: &str, width: usize) -> Cow<'_, str> {
     if pattern.width_graphemes() == 0 {
         return Cow::Borrowed(pattern);
     }
-    Cow::Owned(
-        pattern
-            .graphemes(true)
-            .cycle()
-            .scan(0, |used, grapheme| {
-                *used += Grapheme(grapheme).width();
-                (*used <= width).then_some(grapheme)
-            })
-            .collect(),
-    )
+    let pattern_width: usize = pattern
+        .graphemes(true)
+        .map(|grapheme| Grapheme(grapheme).width())
+        .sum();
+    let mut text = pattern.repeat(width / pattern_width);
+    let mut remaining = width % pattern_width;
+    let mut partial_end = 0;
+    for (start, grapheme) in pattern.grapheme_indices(true) {
+        let columns = Grapheme(grapheme).width();
+        if columns > remaining {
+            break;
+        }
+        remaining -= columns;
+        if columns > 0 || partial_end > 0 {
+            partial_end = start + grapheme.len();
+        }
+    }
+    // A partial repetition retains suffixes after any visible grapheme, but
+    // never emits a zero-width prefix without a visible grapheme of its own.
+    text.push_str(&pattern[..partial_end]);
+    Cow::Owned(text)
 }
 
 /// The bytes a terminal draws, with escape sequences collapsed between runs.
@@ -147,18 +158,19 @@ mod tests {
             text("fg:prev_bg bg:prev_fg", "b"),
             text("fg:prev_bg", "c"),
         ];
-        let painted = Painted::new(&segments, None);
-
-        assert_eq!(
-            Color::Blue.on(Color::Red),
-            painted.lines[0][1].style,
-            "the second run swaps the first run's colors"
-        );
-        assert_eq!(
-            Color::Red.normal(),
-            painted.lines[0][2].style,
-            "the third run takes the background the second was painted with"
-        );
+        for width in [None, Some(8)] {
+            let painted = Painted::new(&segments, width);
+            assert_eq!(
+                Color::Blue.on(Color::Red),
+                painted.lines[0][1].style,
+                "the second run swaps the first run's colors"
+            );
+            assert_eq!(
+                Color::Red.normal(),
+                painted.lines[0][2].style,
+                "the third run takes the background the second was painted with"
+            );
+        }
     }
 
     #[test]
@@ -227,12 +239,27 @@ mod tests {
     }
 
     #[test]
+    fn a_partial_fill_does_not_leave_an_orphan_zero_width_prefix() {
+        assert_eq!("", stretch("\u{301}🟦", 1));
+        assert_eq!("\u{301}🟦", stretch("\u{301}🟦", 2));
+        assert_eq!("\u{301}.\u{301}.", stretch("\u{301}.", 2));
+        assert_eq!(".\u{7}.\u{7}", stretch(".\u{7}", 2));
+        assert_eq!(".\u{7}", stretch(".\u{7}🟦", 1));
+        assert_eq!("\u{301}.\u{7}", stretch("\u{301}.\u{7}🟦", 2));
+        assert_eq!(".\u{7}🟦.\u{7}", stretch(".\u{7}🟦", 4));
+        assert_eq!("", stretch("\u{7}🟦", 1));
+    }
+
+    #[test]
     fn a_fill_keeps_its_natural_width_without_room_to_stretch() {
         let segments = [text("", "ab"), fill("-:-")];
         for width in [None, Some(2)] {
             let painted = Painted::new(&segments, width);
             assert_eq!("ab-:-", painted.to_string(), "for width {width:?}");
         }
+        let segments = [text("", "ab"), fill("-:-"), fill(".")];
+        assert_eq!("ab-:-.", Painted::new(&segments, Some(3)).to_string());
+        assert_eq!("ab-.", Painted::new(&segments, Some(4)).to_string());
     }
 
     #[test]
