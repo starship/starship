@@ -1,6 +1,5 @@
 use super::{Context, Module, ModuleConfig};
 
-use super::utils::format;
 use crate::configs::nix_shell::NixShellConfig;
 use crate::formatter::StringFormatter;
 
@@ -66,25 +65,35 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: NixShellConfig = NixShellConfig::try_load(module.config);
 
     let shell_type = NixShellType::detect_shell_type(config.heuristic, context)?;
-    let (state_format, state_config_path) = match shell_type {
-        NixShellType::Pure => (config.pure_msg, "nix_shell.pure_msg"),
-        NixShellType::Impure => (config.impure_msg, "nix_shell.impure_msg"),
-        NixShellType::Unknown => (config.unknown_msg, "nix_shell.unknown_msg"),
+    let state_format = match shell_type {
+        NixShellType::Pure => config.pure_msg,
+        NixShellType::Impure => config.impure_msg,
+        NixShellType::Unknown => config.unknown_msg,
     };
     let name = context.get_env("name");
     let level = context.get_env("NIX_SHELL_LEVEL");
     // Rendering the message to segments lets `($state )` in `format` hide when
     // the message is empty, which a meta variable can't do.
-    let state = format::text(
-        state_format,
-        state_config_path,
-        context,
-        |variable| match variable {
-            "name" => name.clone(),
-            "level" => level.clone(),
-            _ => None,
-        },
-    );
+    let state = StringFormatter::new(state_format).and_then(|formatter| {
+        formatter
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "name" => name.as_deref().map(Ok),
+                "level" => level.as_deref().map(Ok),
+                _ => None,
+            })
+            .parse(None, Some(context))
+    });
+    let state = match state {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `nix_shell`:\n{error}");
+            return None;
+        }
+    };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -102,7 +111,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map_variables_to_segments(|variable| match variable {
-                "state" => state.clone().map(Ok),
+                "state" => Some(Ok(state.clone())),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -194,6 +203,21 @@ mod tests {
                 Color::Blue.bold().paint(" (starship) "),
             ])
         ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn impure_shell_msg_uses_module_style() {
+        let actual = ModuleRenderer::new("nix_shell")
+            .env("IN_NIX_SHELL", "impure")
+            .config(toml::toml! {
+                [nix_shell]
+                format = "$symbol$state "
+                impure_msg = "[impure]($style)"
+            })
+            .collect();
+        let expected = Some(format!("❄️  {} ", Color::Blue.bold().paint("impure")));
 
         assert_eq!(expected, actual);
     }
