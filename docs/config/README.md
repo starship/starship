@@ -1,9 +1,9 @@
 # Configuration
 
-To get started configuring starship, create the following file: `~/.config/starship.toml`.
+To get started configuring starship, create the following file: `~/.config/starship/starship.toml`.
 
 ```sh
-mkdir -p ~/.config && touch ~/.config/starship.toml
+mkdir -p ~/.config/starship && touch ~/.config/starship/starship.toml
 ```
 
 All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
@@ -26,7 +26,7 @@ disabled = true
 
 ### Config File Location
 
-You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
+You can change the configuration file location with the `STARSHIP_CONFIG` environment variable:
 
 ```sh
 export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
@@ -43,6 +43,22 @@ Or for Cmd (Windows) would be adding this line to your `starship.lua`:
 ```lua
 os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
 ```
+
+If `STARSHIP_CONFIG` is not set, starship reads `starship.toml` from `STARSHIP_CONFIG_HOME`. If `STARSHIP_CONFIG_HOME` is not set, it defaults to `$XDG_CONFIG_HOME/starship`, or the platform configuration directory on systems without XDG support.
+
+```sh
+export STARSHIP_CONFIG_HOME=~/.config/starship
+```
+
+Starship also loads every TOML file in `$STARSHIP_CONFIG_HOME/conf.d` in ascending filename order after `starship.toml`. Later files override earlier files, while TOML tables are merged recursively.
+
+```text
+~/.config/starship/starship.toml
+~/.config/starship/conf.d/00-symbols.toml
+~/.config/starship/conf.d/10-work.toml
+```
+
+System-level configuration snippets are loaded from each `$XDG_CONFIG_DIRS/starship/conf.d` directory before user configuration. If `XDG_CONFIG_DIRS` is unset on Unix, starship uses `/etc/xdg/starship/conf.d`. On macOS, starship uses `/Library/Application Support/starship/conf.d` when XDG is not configured. On Windows, starship uses `%PROGRAMDATA%\starship\conf.d` when XDG is not configured.
 
 ### Logging
 

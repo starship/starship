@@ -236,16 +236,12 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
 }
 
 fn get_starship_config() -> String {
-    std::env::var("STARSHIP_CONFIG")
-        .map(PathBuf::from)
-        .ok()
-        .or_else(|| {
-            utils::home_dir().map(|mut home_dir| {
-                home_dir.push(".config/starship.toml");
-                home_dir
-            })
-        })
-        .and_then(|config_path| fs::read_to_string(config_path).ok())
+    let config = crate::config::StarshipConfig::initialize_from_sources(
+        &crate::config::ConfigSources::from_env(&Default::default()),
+    );
+    config
+        .config
+        .and_then(|config| toml::to_string_pretty(&config).ok())
         .unwrap_or_else(|| UNKNOWN_CONFIG.to_string())
 }
 

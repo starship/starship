@@ -223,7 +223,7 @@ fn handle_toggle_configuration(doc: &mut DocumentMut, name: &str, key: &str) -> 
 }
 
 pub fn get_configuration(context: &Context) -> toml::Table {
-    let starship_config = StarshipConfig::initialize(context.get_config_path_os().as_deref());
+    let starship_config = StarshipConfig::initialize_from_sources(&context.get_config_sources());
 
     starship_config.config.unwrap_or_default()
 }
@@ -314,7 +314,7 @@ fn get_editor_internal(visual: Option<String>, editor: Option<String>) -> String
 #[cfg(test)]
 mod tests {
     use std::{
-        fs::{File, create_dir},
+        fs::File,
         io::{self, Write},
         path::PathBuf,
     };
@@ -585,7 +585,12 @@ mod tests {
     #[test]
     fn write_and_get_configuration_test() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let context = setup_config(&dir, true, StarshipConfigEnvScenario::NotSpecified)?;
+        let context = setup_config(
+            &dir,
+            true,
+            StarshipConfigEnvScenario::NotSpecified,
+            "write_and_get_configuration_test",
+        )?;
         let mut doc = get_configuration_edit(&context);
         doc["directory"]["format"] = Item::Value("myformat".into());
         write_configuration(&context, &doc);
@@ -644,7 +649,12 @@ mod tests {
         expected_first_line: &str,
     ) -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let context = setup_config(&dir, home_file_exists, starship_config_env_scenario)?;
+        let context = setup_config(
+            &dir,
+            home_file_exists,
+            starship_config_env_scenario,
+            message,
+        )?;
         let config = print_configuration(&context, false, &["custom".to_string()]);
         let first_line = config.split('\n').next().unwrap();
         assert_eq!(expected_first_line, first_line, "{message}");
@@ -655,9 +665,14 @@ mod tests {
         dir: &TempDir,
         home_file_exists: bool,
         starship_config_env_scenario: StarshipConfigEnvScenario,
-    ) -> io::Result<Context<'_>> {
-        let config_path = dir.path().to_path_buf().join(".config");
-        create_dir(&config_path)?;
+        scenario_name: &str,
+    ) -> io::Result<Context<'static>> {
+        let home_path = dir
+            .path()
+            .to_path_buf()
+            .join(scenario_name.replace(' ', "_"));
+        let config_path = home_path.join("xdg-config").join("starship");
+        std::fs::create_dir_all(&config_path)?;
         let home_starship_toml = config_path.join("starship.toml");
         let env_toml = dir.path().join("env.toml");
         if home_file_exists {
@@ -679,9 +694,10 @@ mod tests {
         if let Some(v) = env_starship_config {
             env.insert("STARSHIP_CONFIG", v.to_string_lossy().to_string());
         }
+        env.insert("HOME", home_path.to_string_lossy().to_string());
         env.insert(
-            "HOME",
-            dir.path().to_path_buf().to_string_lossy().to_string(),
+            "XDG_CONFIG_HOME",
+            home_path.join("xdg-config").to_string_lossy().to_string(),
         );
 
         Ok(Context::new_with_shell_and_path(
