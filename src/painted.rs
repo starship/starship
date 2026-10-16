@@ -1,16 +1,16 @@
 //! Segments painted for the terminal: every style resolved, every fill stretched.
 
 use std::borrow::Cow;
-use std::fmt;
+use std::fmt::{self, Write as _};
 
-use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
+use anstream::adapter::StripStr;
+use nu_ansi_term::Style as AnsiStyle;
 use unicode_segmentation::UnicodeSegmentation;
 
 use crate::config::Style;
 use crate::print::{UnicodeWidthGraphemes, printable};
 use crate::context::Shell;
 use crate::segment::{Kind, Segment};
-use crate::utils::shell_prompt_escape;
 
 /// Text in one style, borrowed from its segment unless it is a stretched fill.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -45,30 +45,142 @@ impl<'a> Painted<'a> {
         self
     }
 
-    /// Escape text and fills for the shell, preserving verbatim runs.
+    /// The prompt as `shell` reads it.
     pub fn escaped_for(&self, shell: Shell) -> String {
-        AnsiStrings(&self.ansi_strings(|run| match run.kind {
-            Kind::Text | Kind::Fill => Cow::Owned(shell_prompt_escape(&*run.text, shell)),
-            Kind::Verbatim => Cow::Borrowed(&run.text),
-        }))
-        .to_string()
+        let mut prompt = String::new();
+        self.encode(&mut Encoder::new(shell, &mut prompt))
+            .expect("writing to a String cannot fail");
+        prompt
     }
 
-    /// Preserve line breaks while allowing ANSI sequences to collapse.
-    fn ansi_strings<'s>(
-        &'s self,
-        text: impl Fn(&'s Run<'a>) -> Cow<'s, str>,
-    ) -> Vec<AnsiString<'s>> {
-        let runs: usize = self.lines.iter().map(Vec::len).sum();
-        let mut strings = Vec::with_capacity(runs + self.lines.len().saturating_sub(1));
+    /// Writes every run, styles changing between them as little as they can.
+    fn encode(&self, encoder: &mut Encoder<impl fmt::Write>) -> fmt::Result {
+        let mut style = AnsiStyle::default();
         for (index, line) in self.lines.iter().enumerate() {
             if index > 0 {
-                strings.push(AnsiString::from("\n"));
+                writeln!(encoder, "{}", style.infix(AnsiStyle::default()))?;
+                style = AnsiStyle::default();
             }
-            strings.extend(line.iter().map(|run| run.style.paint(text(run))));
+            for run in line {
+                write!(encoder, "{}", style.infix(run.style))?;
+                encoder.kind = run.kind;
+                encoder.write_str(&run.text)?;
+                encoder.kind = Kind::Text;
+                style = run.style;
+            }
         }
-        strings
+        write!(encoder, "{}", style.infix(AnsiStyle::default()))?;
+        encoder.finish()
     }
+}
+
+/// Writes what a terminal is to read into a prompt as its shell takes it:
+/// text escaped, unless it is prompt syntax, and controls escaped and marked
+/// as drawing nothing, one mark around any controls that follow one another.
+struct Encoder<W> {
+    shell: Shell,
+    output: W,
+    /// Where controls begin and end, as the terminal parses them, across
+    /// writes too.
+    parser: StripStr,
+    /// The kind of text written: verbatim text is prompt syntax.
+    kind: Kind,
+    /// Whether a mark is open around the controls written last.
+    marking: bool,
+}
+
+impl<W: fmt::Write> Encoder<W> {
+    fn new(shell: Shell, output: W) -> Self {
+        Self {
+            shell,
+            output,
+            parser: StripStr::new(),
+            kind: Kind::Text,
+            marking: false,
+        }
+    }
+
+    /// The marks a shell is told draws nothing between, if it is told.
+    fn marks(&self) -> Option<(&'static str, &'static str)> {
+        match self.shell {
+            Shell::Bash => Some((r"\[", r"\]")),
+            Shell::Zsh | Shell::Tcsh => Some(("%{", "%}")),
+            _ => None,
+        }
+    }
+
+    fn finish(&mut self) -> fmt::Result {
+        match self.marks() {
+            Some((_, end)) if std::mem::take(&mut self.marking) => self.output.write_str(end),
+            _ => Ok(()),
+        }
+    }
+}
+
+impl<W: fmt::Write> fmt::Write for Encoder<W> {
+    fn write_str(&mut self, text: &str) -> fmt::Result {
+        let Some((begin, end)) = self.marks() else {
+            // Marking nothing, a shell takes controls as it takes the text.
+            return match self.kind {
+                Kind::Verbatim => self.output.write_str(text),
+                Kind::Text | Kind::Fill => escape(text, self.shell, &mut self.output),
+            };
+        };
+        let Self {
+            shell,
+            output,
+            parser,
+            kind,
+            marking,
+        } = self;
+        let mut parsed = 0;
+        for drawn in parser.strip_next(text).chain([&text[text.len()..]]) {
+            let start = drawn.as_ptr().addr() - text.as_ptr().addr();
+            if start > parsed {
+                if !std::mem::replace(marking, true) {
+                    output.write_str(begin)?;
+                }
+                // A shell decodes what it is told draws nothing as it does
+                // anything else.
+                escape(&text[parsed..start], *shell, output)?;
+            }
+            if !drawn.is_empty() {
+                if std::mem::take(marking) {
+                    output.write_str(end)?;
+                }
+                match kind {
+                    Kind::Verbatim => output.write_str(drawn)?,
+                    Kind::Text | Kind::Fill => escape(drawn, *shell, output)?,
+                }
+            }
+            parsed = start + drawn.len();
+        }
+        Ok(())
+    }
+}
+
+/// Writes `text` so that `shell` shows it as it is.
+fn escape(text: &str, shell: Shell, output: &mut impl fmt::Write) -> fmt::Result {
+    let mut unchanged = 0;
+    for (index, character) in text.char_indices() {
+        let escaped = match (shell, character) {
+            // Bash decodes prompt escapes, then expands what they leave: a
+            // backslash survives both doubled twice, and a dollar as `\\$`,
+            // which is not the root-sensitive `\$`.
+            (Shell::Bash, '\\') => r"\\\\",
+            (Shell::Bash, '$') => r"\\$",
+            (Shell::Bash, '`') => r"\`",
+            (Shell::Zsh | Shell::Tcsh, '%') => "%%",
+            // Xonsh formats a prompt, filling in fields such as `{user}`.
+            (Shell::Xonsh, '{') => "{{",
+            (Shell::Xonsh, '}') => "}}",
+            _ => continue,
+        };
+        output.write_str(&text[unchanged..index])?;
+        output.write_str(escaped)?;
+        unchanged = index + character.len_utf8();
+    }
+    output.write_str(&text[unchanged..])
 }
 
 /// Paints one line. Fills share the width the rest of the line leaves, with
@@ -211,11 +323,11 @@ fn stretch(pattern: Cow<'_, str>, width: usize) -> Cow<'_, str> {
     })
 }
 
-/// The bytes a terminal draws, with escape sequences collapsed between runs.
+/// The bytes a terminal draws: the prompt as a shell that escapes nothing
+/// and marks nothing reads it.
 impl fmt::Display for Painted<'_> {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let strings = self.ansi_strings(|run| Cow::Borrowed(&run.text));
-        write!(formatter, "{}", AnsiStrings(&strings))
+        self.encode(&mut Encoder::new(Shell::Unknown, formatter))
     }
 }
 
@@ -492,13 +604,44 @@ mod tests {
     }
 
     #[test]
-    fn a_shell_receives_every_run_escaped_except_verbatim_ones() {
-        let mut segments = Segment::from_text(None, "50% ");
-        segments.extend(Segment::verbatim(None, "%~ "));
+    fn a_shell_receives_literals_escaped_syntax_as_it_is_and_controls_marked() {
+        let mut segments = Segment::from_text(None, "\x1b]8;;x\x1b\\$5 {u} 50%\x1b]8;;\x07");
+        segments.extend(Segment::verbatim(None, "%~"));
         segments.push(fill("%"));
-        let painted = Painted::new(&segments, Some(10));
+        let painted = Painted::new(&segments, Some(13));
 
-        assert_eq!("50% %~ %", painted.to_string());
-        assert_eq!("50%% %~ %%", painted.escaped_for(Shell::Zsh));
+        for (shell, prompt) in [
+            (
+                Shell::Bash,
+                concat!(
+                    r"\[",
+                    "\x1b]8;;x\x1b",
+                    r"\\\\\]\\$5 {u} 50%\[",
+                    "\x1b]8;;\x07",
+                    r"\]%~%"
+                ),
+            ),
+            (
+                Shell::Zsh,
+                "%{\x1b]8;;x\x1b\\%}$5 {u} 50%%%{\x1b]8;;\x07%}%~%%",
+            ),
+            (Shell::Xonsh, "\x1b]8;;x\x1b\\$5 {{u}} 50%\x1b]8;;\x07%~%"),
+            (Shell::Fish, "\x1b]8;;x\x1b\\$5 {u} 50%\x1b]8;;\x07%~%"),
+        ] {
+            assert_eq!(prompt, painted.escaped_for(shell), "{shell:?}");
+        }
+    }
+
+    #[test]
+    fn verbatim_text_leaves_fill_width_unknown_only_on_its_own_line() {
+        let mut segments = Segment::verbatim(None, "$HOME");
+        segments.push(fill("."));
+        segments.push(Segment::LineBreak);
+        segments.extend(Segment::from_text(None, "x"));
+        segments.push(fill("."));
+        let painted = Painted::new(&segments, Some(8));
+
+        assert_eq!("$HOME.\nx.......", painted.to_string());
+        assert_eq!("$HOME.\nx.......", painted.escaped_for(Shell::Bash));
     }
 }
