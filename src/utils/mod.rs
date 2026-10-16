@@ -711,7 +711,16 @@ pub fn wrap_colorseq_for_shell(ansi: String, shell: Shell) -> String {
     let mut wrapped = String::with_capacity(ansi.len());
     let mut drawn = 0;
     // Each printable run after the controls before it, and the controls left.
-    for (start, printable) in printables.chain([(ansi.len(), "")]) {
+    for (mut start, mut printable) in printables.chain([(ansi.len(), "")]) {
+        // Escaping doubled the backslash of a string terminator for Bash,
+        // which decodes the two back into the one the terminal reads.
+        if shell == Shell::Bash
+            && ansi[drawn..start].ends_with("\x1b\\")
+            && let Some(rest) = printable.strip_prefix('\\')
+        {
+            start += 1;
+            printable = rest;
+        }
         let controls = &ansi[drawn..start];
         if !controls.is_empty() {
             wrapped.push_str(beg);
@@ -1101,6 +1110,12 @@ mod tests {
                 "\\[\x1b]8;;https://x\x1b\\\\]aaa\\[\x1b]8;;\x07\\]|",
             ),
             ("\x1b[J", "%{\x1b[J%}", "\\[\x1b[J\\]"),
+            // Bash escaped the backslash of a terminator, and both belong to it.
+            (
+                "\x1b]8;;x\x1b\\\\a",
+                "%{\x1b]8;;x\x1b\\%}\\a",
+                "\\[\x1b]8;;x\x1b\\\\\\]a",
+            ),
             ("a\x07b", "a%{\x07%}b", "a\\[\x07\\]b"),
             ("one\ntwo", "one\ntwo", "one\ntwo"),
             ("herpaderp", "herpaderp", "herpaderp"),
