@@ -309,6 +309,20 @@ pub fn approximate<'a>(module: &str, context: &'a Context) -> Option<Module<'a>>
     }
 }
 
+/// How a module schedules its next render while the prompt is shown.
+pub(crate) enum Refresh {
+    Every(Duration),
+    Time(time::Schedule),
+}
+
+pub(crate) fn refresh(module: &str, context: &Context) -> Option<Refresh> {
+    if module == "time" {
+        time::schedule(context).map(Refresh::Time)
+    } else {
+        period(module, context).map(Refresh::Every)
+    }
+}
+
 /// Refresh cadence for an enabled module with refresh configured.
 pub fn period(module: &str, context: &Context) -> Option<Duration> {
     let configuration = || context.config.get_module_config(module);
