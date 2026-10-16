@@ -3,6 +3,7 @@
 #[macro_use]
 extern crate shadow_rs;
 
+use std::sync::Once;
 use std::thread::available_parallelism;
 
 shadow!(shadow);
@@ -40,4 +41,16 @@ pub fn num_rayon_threads() -> usize {
         // Default to the number of logical cores,
         // but restrict the number of threads to 8
         .unwrap_or_else(|| available_parallelism().map_or(1, usize::from).min(8))
+}
+
+/// Builds the global `rayon` thread pool the first time a module needs it:
+/// prompts render their modules on threads of their own, and seldom do.
+pub fn init_global_threadpool() {
+    static BUILT: Once = Once::new();
+    BUILT.call_once(|| {
+        rayon::ThreadPoolBuilder::new()
+            .num_threads(num_rayon_threads())
+            .build_global()
+            .expect("Failed to initialize worker thread pool");
+    });
 }

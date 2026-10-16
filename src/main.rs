@@ -10,7 +10,7 @@ use clap_complete::generate;
 use rand::RngExt;
 use starship::context::{Context, Properties, Target};
 use starship::module::ALL_MODULES;
-use starship::{bug_report, configure, init, logger, num_rayon_threads, print, shadow, stream};
+use starship::{bug_report, configure, init, logger, print, shadow, stream};
 
 #[derive(Parser, Debug)]
 #[clap(
@@ -231,10 +231,9 @@ fn main() {
     }
 
     logger::init();
-    init_global_threadpool();
 
     // Delete old log files
-    rayon::spawn(|| {
+    std::thread::spawn(|| {
         let log_dir = logger::get_log_dir();
         logger::cleanup_log_files(log_dir);
     });
@@ -355,12 +354,4 @@ fn main() {
         #[cfg(feature = "config-schema")]
         Commands::ConfigSchema => print::print_schema(),
     }
-}
-
-/// Initialize global `rayon` thread pool
-fn init_global_threadpool() {
-    rayon::ThreadPoolBuilder::new()
-        .num_threads(num_rayon_threads())
-        .build_global()
-        .expect("Failed to initialize worker thread pool");
 }
