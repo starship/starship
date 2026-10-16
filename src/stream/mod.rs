@@ -38,7 +38,12 @@ type Prompts = [String; 2];
 /// times after the first paint if that is limited.
 pub fn stream(properties: Properties, redraws: Option<usize>) -> ! {
     #[cfg(unix)]
-    end_with_reader();
+    {
+        // Lead a process group, which the commands of its modules join, so
+        // that it can end them with itself.
+        let _ = nix::unistd::setpgid(nix::unistd::Pid::from_raw(0), nix::unistd::Pid::from_raw(0));
+        end_with_reader();
+    }
     let context = Context::new(properties, Target::Main);
     run(&context, redraws, &mut io::stdout().lock(), end)
 }
@@ -63,9 +68,44 @@ fn end(streamed: io::Result<()>) -> ! {
         // A closed pipe is a shell that no longer wants this prompt.
         Err(error) if error.kind() != io::ErrorKind::BrokenPipe => {
             eprintln!("Unable to stream the prompt: {error}");
-            process::exit(1)
+            exit(1)
         }
-        _ => process::exit(0),
+        _ => exit(0),
+    }
+}
+
+/// Exits, ending the commands that modules still rendering run, which nothing
+/// needs any more: they are in the process group the stream leads, unless
+/// they left it.
+fn exit(code: i32) -> ! {
+    #[cfg(unix)]
+    {
+        use nix::sys::signal::{self, SigHandler, Signal};
+        use nix::unistd::{getpgrp, getpid};
+        // A group it does not lead is its shell's.
+        if getpgrp() == getpid() {
+            // SAFETY: ignoring a signal installs no handler to run.
+            let _ = unsafe { signal::signal(Signal::SIGTERM, SigHandler::SigIgn) };
+            let _ = signal::killpg(getpgrp(), Signal::SIGTERM);
+        }
+    }
+    process::exit(code)
+}
+
+/// Waits up to `timeout` for nothing to read the pipe `writing` writes to
+/// any more, and returns whether that is so: the writing end of a pipe polls
+/// readable, or in error, once nothing reads it.
+#[cfg(unix)]
+fn deserted(writing: std::os::fd::BorrowedFd, timeout: nix::poll::PollTimeout) -> bool {
+    use nix::errno::Errno;
+    use nix::poll::{PollFd, PollFlags, poll};
+
+    let mut pipe = [PollFd::new(writing, PollFlags::POLLIN)];
+    loop {
+        match poll(&mut pipe, timeout) {
+            Err(Errno::EINTR) => {}
+            ready => return ready != Ok(0),
+        }
     }
 }
 
@@ -74,8 +114,7 @@ fn end(streamed: io::Result<()>) -> ! {
 /// renders on threads that may never finish, and has nothing left to do.
 #[cfg(unix)]
 fn end_with_reader() {
-    use nix::errno::Errno;
-    use nix::poll::{PollFd, PollFlags, PollTimeout, poll};
+    use nix::poll::PollTimeout;
     use nix::sys::stat::{SFlag, fstat};
     use std::os::fd::AsFd;
 
@@ -84,14 +123,11 @@ fn end_with_reader() {
         SFlag::from_bits_truncate(status.st_mode) & SFlag::S_IFMT == SFlag::S_IFIFO
     });
     let watching = is_pipe.then(|| {
-        std::thread::Builder::new()
+        thread::Builder::new()
             .name("stream-reader".to_owned())
             .spawn(move || {
-                // The writing end of a pipe polls readable, or in error, once
-                // nothing reads it.
-                let mut reader = [PollFd::new(stdout.as_fd(), PollFlags::POLLIN)];
-                while poll(&mut reader, PollTimeout::NONE) == Err(Errno::EINTR) {}
-                std::process::exit(0)
+                deserted(stdout.as_fd(), PollTimeout::NONE);
+                exit(0)
             })
     });
     if let Some(Err(error)) = watching {

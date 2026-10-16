@@ -3,27 +3,31 @@
 //! replaces a file named `prompt` whole, after which fish is sent `SIGUSR1`.
 //! The directory is named on standard output, which then closes, once the
 //! first pair is there. Fish ends the stream by creating `stop` in it, and it
-//! ends on its own once fish has gone; either way, it removes the directory.
+//! ends on its own once fish has gone, or stopped waiting for the first pair;
+//! either way, it removes the directory.
 
 use std::fs::{self, File};
 use std::io::{self, Write};
 use std::os::fd::{AsFd, OwnedFd};
 use std::os::unix::ffi::OsStrExt;
 use std::path::PathBuf;
-use std::sync::Arc;
+use std::sync::{Arc, Mutex, MutexGuard, PoisonError};
 use std::time::Duration;
 use std::{env, process, thread};
 
 use nix::errno::Errno;
 use nix::fcntl::{self, AtFlags, OFlag};
+use nix::poll::PollTimeout;
 use nix::sys::signal::{self, Signal};
 use nix::sys::stat::{self, Mode};
 use nix::unistd::{self, ForkResult, Pid};
 
-use super::{Prompts, Sink, encode};
+use super::{Prompts, Sink, deserted, encode};
 
-/// How often a stream looks for whether fish still wants it.
+/// How often a stream looks for whether fish still wants it, and, while fish
+/// waits for the first prompts, whether it still does.
 const LOOK: Duration = Duration::from_secs(1);
+const LOOK_AT_STARTUP: Duration = Duration::from_millis(50);
 
 /// Detach before starting any threads; the child announces the first prompt.
 pub fn detach() {
@@ -54,8 +58,6 @@ pub fn linger() -> ! {
 
 pub struct Snapshot {
     directory: Arc<Directory>,
-    /// The pipe fish waits on until the first prompts are published.
-    waiting: Option<OwnedFd>,
 }
 
 /// The directory a stream publishes in, and the fish it publishes for.
@@ -63,6 +65,8 @@ struct Directory {
     path: PathBuf,
     handle: File,
     shell: Pid,
+    /// The pipe fish waits on, until the first prompts are published.
+    waiting: Mutex<Option<OwnedFd>>,
 }
 
 impl Snapshot {
@@ -76,13 +80,12 @@ impl Snapshot {
         thread::Builder::new()
             .name("stream-shell".to_owned())
             .spawn(move || {
-                loop {
-                    thread::sleep(LOOK);
-                    if watched.released() {
-                        watched.remove();
-                        process::exit(0);
-                    }
+                while !watched.released() {
+                    let announced = watched.waiting().is_none();
+                    thread::sleep(if announced { LOOK } else { LOOK_AT_STARTUP });
                 }
+                watched.remove();
+                super::exit(0)
             })
             .inspect_err(|_| snapshot.directory.remove())?;
         Ok(snapshot)
@@ -98,8 +101,8 @@ impl Snapshot {
                 path,
                 handle,
                 shell,
+                waiting: Mutex::new(Some(waiting)),
             }),
-            waiting: Some(waiting),
         })
     }
 
@@ -117,7 +120,7 @@ impl Snapshot {
         )?);
         published.write_all(encode(prompts).as_bytes())?;
         fcntl::renameat(&directory.handle, "prompt.new", &directory.handle, "prompt")?;
-        match self.waiting.take() {
+        match directory.waiting().take() {
             Some(waiting) => {
                 let mut waiting = File::from(waiting);
                 waiting.write_all(directory.path.as_os_str().as_bytes())?;
@@ -129,10 +132,19 @@ impl Snapshot {
 }
 
 impl Directory {
-    /// Whether fish has let go of the stream: asked it to stop, or gone.
+    /// Whether fish has let go of the stream: stopped waiting for the first
+    /// prompts, before it could know where they are; asked it to stop; or
+    /// gone.
     fn released(&self) -> bool {
-        stat::fstatat(&self.handle, "stop", AtFlags::AT_SYMLINK_NOFOLLOW).is_ok()
+        self.waiting()
+            .as_ref()
+            .is_some_and(|waiting| deserted(waiting.as_fd(), PollTimeout::ZERO))
+            || stat::fstatat(&self.handle, "stop", AtFlags::AT_SYMLINK_NOFOLLOW).is_ok()
             || signal::kill(self.shell, None) == Err(Errno::ESRCH)
+    }
+
+    fn waiting(&self) -> MutexGuard<'_, Option<OwnedFd>> {
+        self.waiting.lock().unwrap_or_else(PoisonError::into_inner)
     }
 
     fn remove(&self) {
@@ -162,10 +174,12 @@ mod tests {
             .unwrap()
     }
 
-    fn snapshot(shell: &std::process::Child) -> (Snapshot, File) {
-        let (reading, writing) = unistd::pipe().unwrap();
-        let snapshot = Snapshot::new(Pid::from_raw(shell.id().cast_signed()), writing).unwrap();
-        (snapshot, File::from(reading))
+    /// A snapshot for `shell`, and the pipe it waits on, which no process
+    /// started meanwhile inherits.
+    fn snapshot(shell: &std::process::Child) -> (Snapshot, io::PipeReader) {
+        let (reading, writing) = io::pipe().unwrap();
+        let shell = Pid::from_raw(shell.id().cast_signed());
+        (Snapshot::new(shell, writing.into()).unwrap(), reading)
     }
 
     #[test]
@@ -183,6 +197,11 @@ mod tests {
             [path.as_os_str().as_bytes(), b"\0"].concat(),
             announced,
             "the pipe closes once it names the directory"
+        );
+        drop(waiting);
+        assert!(
+            !snapshot.directory.released(),
+            "told where, fish no longer reads the pipe"
         );
         assert_eq!(
             "main\0right\0",
@@ -217,6 +236,27 @@ mod tests {
         fish.wait().unwrap();
         let (snapshot, _waiting) = self::snapshot(&fish);
         assert!(snapshot.directory.released(), "fish has gone");
+        snapshot.directory.remove();
+    }
+
+    #[test]
+    fn fish_lets_go_by_no_longer_waiting_for_the_first_prompts() {
+        let mut fish = fish();
+        let (snapshot, waiting) = snapshot(&fish);
+        assert!(!snapshot.directory.released(), "fish waits for them");
+
+        drop(waiting);
+        // A process another test starts can hold the pipe until it runs.
+        let deadline = std::time::Instant::now() + Duration::from_secs(5);
+        while !snapshot.directory.released() {
+            assert!(
+                std::time::Instant::now() < deadline,
+                "nor could fish stop a stream whose directory it was never told"
+            );
+            thread::sleep(LOOK_AT_STARTUP);
+        }
+        fish.kill().unwrap();
+        fish.wait().unwrap();
         snapshot.directory.remove();
     }
 }
