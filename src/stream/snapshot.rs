@@ -1,23 +1,35 @@
-//! Fish transport: announce `main\0right\0pid\0` on stdout, then publish
-//! `main\0right\0timings\0` by atomic rename and notify fish with SIGUSR1.
-//! Private stream leases isolate publishers; heartbeats check shell liveness.
+//! Fish cannot watch a pipe while it waits for input, so a stream publishes
+//! to it through a directory of its own instead: each pair of prompts
+//! replaces a file named `prompt` whole, after which fish is sent `SIGUSR1`.
+//! The directory is named on standard output, which then closes, once the
+//! first pair is there. Fish ends the stream by creating `stop` in it, and it
+//! ends on its own once fish has gone; either way, it removes the directory.
 
 use std::fs::{self, File};
 use std::io::{self, Write};
-use std::os::unix::fs::MetadataExt;
+use std::os::fd::{AsFd, OwnedFd};
+use std::os::unix::ffi::OsStrExt;
 use std::path::PathBuf;
+use std::sync::{Arc, Mutex, MutexGuard, PoisonError};
+use std::time::Duration;
+use std::{env, process, thread};
 
 use nix::errno::Errno;
+use nix::fcntl::{self, AtFlags, OFlag};
 use nix::sys::signal::{self, Signal};
+use nix::sys::stat::{self, Mode};
 use nix::unistd::{self, ForkResult, Pid};
 
-use super::frame::{Frame, Sink};
+use super::{Prompts, Sink, encode};
+
+/// How often a stream looks for whether fish still wants it.
+const LOOK: Duration = Duration::from_secs(1);
 
 /// Detach before starting any threads; the child announces the first prompt.
 pub fn detach() {
     // SAFETY: called before thread startup, so no locks are held by other threads.
     match unsafe { unistd::fork() } {
-        Ok(ForkResult::Parent { .. }) => std::process::exit(0),
+        Ok(ForkResult::Parent { .. }) => process::exit(0),
         Ok(ForkResult::Child) => {
             // Isolate the stream from foreground job signals.
             let _ = unistd::setsid();
@@ -28,201 +40,189 @@ pub fn detach() {
         }
         // Fish waits for startup EOF; a foreground refresh loop would never
         // finish. Fail promptly instead of starting the long-lived publisher.
-        Err(_) => std::process::exit(1),
+        Err(_) => process::exit(1),
     }
 }
 
 pub struct Snapshot {
-    directory: PathBuf,
-    lease: File,
+    directory: Arc<Mutex<Directory>>,
+    /// The pipe fish waits on until the first prompts are published.
+    waiting: Option<OwnedFd>,
+}
+
+/// The directory a stream publishes in, and the fish it publishes for.
+struct Directory {
+    path: PathBuf,
+    handle: File,
     shell: Pid,
-    main: String,
-    right: String,
-    timings: String,
-    announced: bool,
 }
 
 impl Snapshot {
-    pub fn new(directory: PathBuf, shell: i32) -> io::Result<Self> {
-        let lease = File::options()
-            .write(true)
-            .create_new(true)
-            .open(directory.join(".active"))?;
+    /// Publishes for the fish `shell`, which waits on standard output.
+    pub fn for_fish(shell: Pid) -> io::Result<Self> {
+        // Nothing else is written to the pipe fish waits on.
+        let waiting = io::stdout().as_fd().try_clone_to_owned()?;
+        unistd::dup2_stdout(File::options().write(true).open("/dev/null")?)?;
+        let snapshot = Self::new(shell, waiting)?;
+        let watched = Arc::clone(&snapshot.directory);
+        thread::Builder::new()
+            .name("stream-shell".to_owned())
+            .spawn(move || {
+                loop {
+                    thread::sleep(LOOK);
+                    let directory = lock(&watched);
+                    if directory.released() {
+                        directory.remove();
+                        process::exit(0);
+                    }
+                }
+            })?;
+        Ok(snapshot)
+    }
+
+    fn new(shell: Pid, waiting: OwnedFd) -> io::Result<Self> {
+        let path = unistd::mkdtemp(&env::temp_dir().join("starship-XXXXXX"))?;
+        let handle = File::open(&path).inspect_err(|_| {
+            let _ = fs::remove_dir(&path);
+        })?;
         Ok(Self {
-            directory,
-            lease,
-            shell: Pid::from_raw(shell),
-            main: String::new(),
-            right: String::new(),
-            timings: String::new(),
-            announced: false,
+            directory: Arc::new(Mutex::new(Directory {
+                path,
+                handle,
+                shell,
+            })),
+            waiting: Some(waiting),
         })
     }
 
-    /// Fish revokes this stream by unlinking its private lease, never by PID.
-    fn check_lease(&self) -> io::Result<()> {
-        if self.lease.metadata()?.nlink() == 0 {
-            Err(io::ErrorKind::BrokenPipe.into())
-        } else {
-            Ok(())
+    /// Keeps the last prompts published, for fish to read whenever it is
+    /// signaled, until it lets go of the stream.
+    pub fn linger(&self) -> ! {
+        loop {
+            thread::park();
         }
     }
+}
 
-    /// Readers see a complete old or new snapshot.
-    fn write(&self) -> io::Result<()> {
-        let path = self.directory.join(std::process::id().to_string());
-        let written = path.with_extension("new");
-        fs::write(
-            &written,
-            [&self.main, "\0", &self.right, "\0", &self.timings, "\0"].concat(),
-        )?;
-        fs::rename(written, path)
+impl Directory {
+    /// Whether fish has let go of the stream: asked it to stop, or gone.
+    fn released(&self) -> bool {
+        stat::fstatat(&self.handle, "stop", AtFlags::AT_SYMLINK_NOFOLLOW).is_ok()
+            || signal::kill(self.shell, None) == Err(Errno::ESRCH)
     }
 
-    /// Announce startup and close stdout so fish can finish reading.
-    fn announce(&mut self) -> io::Result<()> {
-        let mut output = io::stdout().lock();
-        write!(
-            output,
-            "{}\0{}\0{}\0",
-            self.main,
-            self.right,
-            std::process::id()
-        )?;
-        output.flush()?;
-        unistd::dup2_stdout(File::options().write(true).open("/dev/null")?)?;
-        self.announced = true;
-        Ok(())
-    }
-
-    fn signal(&self, signal: Option<Signal>) -> io::Result<()> {
-        self.check_lease()?;
-        match signal::kill(self.shell, signal) {
-            Err(Errno::ESRCH) => Err(io::ErrorKind::BrokenPipe.into()),
-            result => result.map_err(io::Error::from),
-        }
+    fn remove(&self) {
+        let _ = fs::remove_dir_all(&self.path);
     }
 }
 
 impl Sink for Snapshot {
-    fn send(&mut self, frame: Frame) -> io::Result<()> {
-        self.check_lease()?;
-        match frame {
-            // The shell learns the process id with the first prompts.
-            Frame::Process => Ok(()),
-            Frame::Prompt { main, right } => {
-                self.main = main.replace('\0', "");
-                self.right = right.replace('\0', "");
-                if self.announced {
-                    self.write()?;
-                    self.signal(Some(Signal::SIGUSR1))
-                } else {
-                    self.announce()
-                }
+    fn draw(&mut self, prompts: &Prompts) -> io::Result<()> {
+        let directory = lock(&self.directory);
+        if directory.released() {
+            return Err(io::ErrorKind::BrokenPipe.into());
+        }
+        // Replaced whole, so that fish reads one pair or another, never part.
+        let mut published = File::from(fcntl::openat(
+            &directory.handle,
+            "prompt.new",
+            OFlag::O_WRONLY | OFlag::O_CREAT | OFlag::O_TRUNC | OFlag::O_CLOEXEC,
+            Mode::S_IRUSR | Mode::S_IWUSR,
+        )?);
+        published.write_all(encode(prompts).as_bytes())?;
+        fcntl::renameat(&directory.handle, "prompt.new", &directory.handle, "prompt")?;
+        match self.waiting.take() {
+            Some(waiting) => {
+                let mut waiting = File::from(waiting);
+                waiting.write_all(directory.path.as_os_str().as_bytes())?;
+                waiting.write_all(b"\0")
             }
-            Frame::Complete(timings) => {
-                timings.clone_into(&mut self.timings);
-                self.write()
-            }
-            Frame::Heartbeat => self.signal(None),
+            None => signal::kill(directory.shell, Signal::SIGUSR1).map_err(io::Error::from),
         }
     }
+}
+
+impl Drop for Snapshot {
+    fn drop(&mut self) {
+        lock(&self.directory).remove();
+    }
+}
+
+fn lock(directory: &Mutex<Directory>) -> MutexGuard<'_, Directory> {
+    directory.lock().unwrap_or_else(PoisonError::into_inner)
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::io::Read;
 
-    #[test]
-    fn nul_bytes_in_prompt_values_do_not_create_snapshot_fields() {
-        let directory = tempfile::tempdir().unwrap();
-        let mut snapshot = Snapshot::new(directory.path().to_path_buf(), i32::MAX).unwrap();
-        snapshot.announced = true;
-        // The shell PID deliberately does not exist; writing precedes signaling.
-        let error = snapshot
-            .send(Frame::Prompt {
-                main: "ma\0in",
-                right: "ri\0ght",
-            })
-            .unwrap_err();
-        assert_eq!(io::ErrorKind::BrokenPipe, error.kind());
-        let path = directory.path().join(std::process::id().to_string());
-        assert_eq!("main\0right\0\0", fs::read_to_string(path).unwrap());
-        assert_eq!("main", snapshot.main);
-        assert_eq!("right", snapshot.right);
-    }
-
-    #[test]
-    fn completion_updates_preserve_the_prompt_pair() {
-        let directory = tempfile::tempdir().unwrap();
-        let path = directory.path().join(std::process::id().to_string());
-        let mut snapshot = Snapshot::new(
-            directory.path().to_path_buf(),
-            std::process::id().cast_signed(),
-        )
-        .unwrap();
-        // Avoid announcing on the test process's stdout or sending it SIGUSR1.
-        snapshot.main = "main\n> ".to_owned();
-        snapshot.right = "right".to_owned();
-
-        for timings in ["character=1", ""] {
-            snapshot.send(Frame::Complete(timings)).unwrap();
-            assert_eq!(
-                format!("main\n> \0right\0{timings}\0"),
-                fs::read_to_string(&path).unwrap(),
-            );
-        }
-    }
-
-    #[test]
-    fn a_shell_that_has_gone_ends_the_stream() {
-        let mut gone = crate::utils::create_command("true")
+    /// A process to stand for fish, which `SIGUSR1` ends.
+    fn fish() -> std::process::Child {
+        crate::utils::create_command("sleep")
             .unwrap()
+            .arg("30")
             .spawn()
-            .unwrap();
-        let pid = gone.id().cast_signed();
-        gone.wait().unwrap();
-        let directory = tempfile::tempdir().unwrap();
-        let mut snapshot = Snapshot::new(directory.path().to_path_buf(), pid).unwrap();
+            .unwrap()
+    }
 
-        let error = snapshot.send(Frame::Heartbeat).unwrap_err();
-        assert_eq!(io::ErrorKind::BrokenPipe, error.kind());
+    fn snapshot(shell: &std::process::Child) -> (Snapshot, File) {
+        let (reading, writing) = unistd::pipe().unwrap();
+        let snapshot = Snapshot::new(Pid::from_raw(shell.id().cast_signed()), writing).unwrap();
+        (snapshot, File::from(reading))
+    }
+
+    fn path(snapshot: &Snapshot) -> PathBuf {
+        lock(&snapshot.directory).path.clone()
     }
 
     #[test]
-    fn revoking_a_private_lease_ends_every_kind_of_publication() {
-        let directory = tempfile::tempdir().unwrap();
-        let path = directory.path().join(".active");
-        let mut snapshot = Snapshot::new(
-            directory.path().to_path_buf(),
-            std::process::id().cast_signed(),
-        )
-        .unwrap();
-        fs::remove_file(&path).unwrap();
-        // A replacement file cannot give an old publisher ownership again.
-        File::create(path).unwrap();
+    fn fish_reads_whole_pairs_without_nuls_once_told_where() {
+        let mut fish = fish();
+        let (mut snapshot, mut waiting) = snapshot(&fish);
+        let path = path(&snapshot);
 
-        for frame in [
-            Frame::Process,
-            Frame::Prompt {
-                main: "main",
-                right: "right",
-            },
-            Frame::Complete("timings"),
-            Frame::Heartbeat,
-        ] {
-            assert_eq!(
-                io::ErrorKind::BrokenPipe,
-                snapshot.send(frame).unwrap_err().kind()
-            );
-        }
-        assert!(
-            !directory
-                .path()
-                .join(std::process::id().to_string())
-                .exists()
+        snapshot
+            .draw(&["ma\0in".to_owned(), "ri\0ght".to_owned()])
+            .unwrap();
+        let mut announced = Vec::new();
+        waiting.read_to_end(&mut announced).unwrap();
+        assert_eq!(
+            [path.as_os_str().as_bytes(), b"\0"].concat(),
+            announced,
+            "the pipe closes once it names the directory"
         );
+        assert_eq!(
+            "main\0right\0",
+            fs::read_to_string(path.join("prompt")).unwrap()
+        );
+
+        snapshot
+            .draw(&["next\n> ".to_owned(), String::new()])
+            .unwrap();
+        assert_eq!(
+            "next\n> \0\0",
+            fs::read_to_string(path.join("prompt")).unwrap()
+        );
+        assert!(!fish.wait().unwrap().success(), "fish was signaled");
         drop(snapshot);
-        directory.close().unwrap();
+        assert!(!path.exists(), "the stream removes its directory");
+    }
+
+    #[test]
+    fn fish_lets_go_by_asking_the_stream_to_stop_or_by_going() {
+        let mut fish = fish();
+        let (mut snapshot, _waiting) = snapshot(&fish);
+        let prompts = ["main".to_owned(), "right".to_owned()];
+        File::create(path(&snapshot).join("stop")).unwrap();
+
+        assert_eq!(
+            io::ErrorKind::BrokenPipe,
+            snapshot.draw(&prompts).unwrap_err().kind()
+        );
+        fish.kill().unwrap();
+        fish.wait().unwrap();
+        let (snapshot, _waiting) = self::snapshot(&fish);
+        assert!(lock(&snapshot.directory).released(), "fish has gone");
     }
 }
