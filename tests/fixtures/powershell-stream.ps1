@@ -30,61 +30,51 @@ public sealed class SingleByteStream : MemoryStream {
 '@
 function New-TestStream($reader) {
     [hashtable]::Synchronized(@{
-        Process = [pscustomobject]@{
-            StandardOutput = $reader
-            StandardInput = [IO.StreamWriter]::new([IO.MemoryStream]::new())
-        }
+        Process = [pscustomobject]@{ StandardOutput = $reader }
         Cancellation = [Threading.CancellationTokenSource]::new()
         Ready = [Threading.ManualResetEventSlim]::new()
         Prompt = $null
-        Refined = $false
-        Timings = $null
     })
 }
 
-# The misleading PID belongs to a separate process created by this test.
-$sentinel = [Diagnostics.Process]::Start('/bin/sleep', '30')
-try {
-    $wire = [Text.Encoding]::UTF8.GetBytes("PROMPT`0λ🙂`0`0COMPLETE`0timings`0`0")
-    $bytes = [SingleByteStream]::new($wire)
+foreach ($case in @(
+    @{ Wire = "λ🙂`0right`0"; Prompt = 'λ🙂'; Refined = $false },
+    @{ Wire = "λ🙂`0right`0complete 🙂`0right`0"; Prompt = 'complete 🙂'; Refined = $true }
+)) {
+    $bytes = [SingleByteStream]::new([Text.Encoding]::UTF8.GetBytes($case.Wire))
     $stream = New-TestStream ([IO.StreamReader]::new($bytes))
-    $stream.Id = $sentinel.Id
-    & $body $stream $null
-    if ($stream.Prompt -cne 'λ🙂' -or $stream.Timings -cne 'timings') {
-        throw 'Split UTF-8 or COMPLETE framing failed'
-    }
-    if ($bytes.CanRead) { throw 'COMPLETE did not close the owned reader' }
-    $sentinel.Refresh()
-    if ($sentinel.HasExited) { throw 'Unrelated sentinel terminated' }
+    # Records the events the pump raises.
+    $events = [pscustomobject]@{ Raised = [Collections.Generic.List[string]]::new() } |
+        Add-Member -PassThru ScriptMethod GenerateEvent { param($Name) $this.Raised.Add($Name) }
+    & $body $stream $events
+    if ($stream.Prompt -cne $case.Prompt) { throw "Read $($stream.Prompt), not $($case.Prompt)" }
+    $refined = @($events.Raised | Where-Object { $_ -eq 'Starship.Refined' })
+    if (($refined.Count -eq 1) -ne $case.Refined) { throw "Refined $($refined.Count) times from $($case.Wire)" }
     $stream.Cancellation.Dispose()
     $stream.Ready.Dispose()
-
-    $info = [Diagnostics.ProcessStartInfo]::new('/bin/sleep', '30')
-    $info.UseShellExecute = $false
-    $info.RedirectStandardOutput = $true
-    $producer = [Diagnostics.Process]::Start($info)
-    $stream = New-TestStream $producer.StandardOutput
-    $pump = [PowerShell]::Create()
-    $null = $pump.AddScript($body).AddArgument($stream).AddArgument($null)
-    $pending = $pump.BeginInvoke()
-    try {
-        Start-Sleep -Milliseconds 300
-        $stream.Cancellation.Cancel()
-        if (-not $pending.AsyncWaitHandle.WaitOne(5000)) { throw 'Cancellation remained blocked' }
-        $null = $pump.EndInvoke($pending)
-        if ($pump.HadErrors) { throw ($pump.Streams.Error | Out-String) }
-        if (-not $stream.Ready.IsSet) { throw 'Cancellation did not release the startup waiter' }
-    } finally {
-        if (-not $producer.HasExited) { $producer.Kill() }
-        $producer.WaitForExit()
-        $pump.Dispose()
-        $producer.Dispose()
-        $stream.Cancellation.Dispose()
-        $stream.Ready.Dispose()
-    }
-} finally {
-    if (-not $sentinel.HasExited) { $sentinel.Kill() }
-    $sentinel.WaitForExit()
-    $sentinel.Dispose()
 }
-'PASS: split UTF-8, COMPLETE, owned reader cancellation, and unrelated PID safety'
+
+$info = [Diagnostics.ProcessStartInfo]::new('/bin/sleep', '30')
+$info.UseShellExecute = $false
+$info.RedirectStandardOutput = $true
+$producer = [Diagnostics.Process]::Start($info)
+$stream = New-TestStream $producer.StandardOutput
+$pump = [PowerShell]::Create()
+$null = $pump.AddScript($body).AddArgument($stream).AddArgument($null)
+$pending = $pump.BeginInvoke()
+try {
+    Start-Sleep -Milliseconds 300
+    $stream.Cancellation.Cancel()
+    if (-not $pending.AsyncWaitHandle.WaitOne(5000)) { throw 'Cancellation remained blocked' }
+    $null = $pump.EndInvoke($pending)
+    if ($pump.HadErrors) { throw ($pump.Streams.Error | Out-String) }
+    if (-not $stream.Ready.IsSet) { throw 'Cancellation did not release the startup waiter' }
+} finally {
+    if (-not $producer.HasExited) { $producer.Kill() }
+    $producer.WaitForExit()
+    $pump.Dispose()
+    $producer.Dispose()
+    $stream.Cancellation.Dispose()
+    $stream.Ready.Dispose()
+}
+'PASS: split UTF-8, one refinement once complete, and cancellation'

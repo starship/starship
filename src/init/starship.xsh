@@ -21,48 +21,44 @@ class StarshipStream:
 
     def __init__(self):
         self.prompts = ["", ""]
-        self.timings = ""
         self.process = None
         self.received = b""
         self.loop = None
 
     def apply(self):
-        """Apply complete frames and retain partial bytes; return applied keywords."""
-        applied = set()
-        while self.received.count(b"\0") >= 3:
-            kind, first, second, self.received = self.received.split(b"\0", 3)
-            if kind == b"PROMPT":
-                self.prompts = [first.decode(), second.decode()]
-            elif kind == b"COMPLETE":
-                self.timings = first.decode()
-            applied.add(kind)
-        return applied
+        """Take the newest complete pair of prompts; return whether there was one."""
+        fields = self.received.split(b"\0")
+        complete = (len(fields) - 1) // 2 * 2
+        if not complete:
+            return False
+        self.prompts = [field.decode() for field in fields[complete - 2 : complete]]
+        self.received = b"\0".join(fields[complete:])
+        return True
 
     def start(self):
-        """Stream with prompt_toolkit on Unix; otherwise wait for completion."""
+        """Stream with prompt_toolkit on Unix; otherwise draw the prompts once complete."""
         self.stop()
         self.prompts = ["", ""]
         prompter = getattr(__xonsh__.shell.shell, "prompter", None)
         refined = prompter is not None and os.name == "posix"
         self.process = subprocess.Popen(
-            [starship_program, "prompt", "--stream", f"--timings={self.timings}", *starship_arguments()],
+            [starship_program, "prompt", "--stream", *([] if refined else ["--redraws=0"]), *starship_arguments()],
             env=__xonsh__.env.detype(),
             stdout=subprocess.PIPE,
             stderr=subprocess.DEVNULL,
         )
-        if self.read_until(b"PROMPT" if refined else b"COMPLETE") and refined:
-            prompter.app.pre_run_callables.append(self.attach)
-            return
-        self.stop()
-
-    def read_until(self, keyword):
-        """Return whether the requested frame arrives before EOF."""
         descriptor = self.process.stdout.fileno()
-        while received := os.read(descriptor, 65536):
+        drawn = self.apply()
+        while not drawn:
+            received = os.read(descriptor, 65536)
+            if not received:
+                break
             self.received += received
-            if keyword in self.apply():
-                return True
-        return False
+            drawn = self.apply()
+        if refined and drawn:
+            prompter.app.pre_run_callables.append(self.attach)
+        else:
+            self.stop()
 
     def attach(self):
         if self.process is not None:
@@ -75,7 +71,7 @@ class StarshipStream:
             self.stop()
             return
         self.received += received
-        if b"PROMPT" not in self.apply():
+        if not self.apply():
             return
         shell = __xonsh__.shell.shell
         # Reformat updates when Xonsh is not already doing so on each keypress.

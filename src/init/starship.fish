@@ -82,63 +82,29 @@ if test "$OS" = Windows_NT
         end
     end
 else
-    # Fish uses PID-named snapshots and SIGUSR1 because it cannot watch a pipe.
+    # Fish cannot watch a pipe while it waits for input, so a stream publishes
+    # each pair of prompts to a file in a directory of its own, and signals.
     set -g __starship_stream_directory
     set -g __starship_stream_prompts '' ''
-    set -g __starship_stream_timings ''
 
-    # Restart for a new prompt or changed arguments (width, mode).
+    # Restart for a new prompt or changed arguments (width, mode), waiting for
+    # the stream to name its directory once the first prompts are there.
     function __starship_prompt --argument-names side
         if test "$__starship_stream_arguments" != "$argv[2..-1]"
-            __starship_stream_start $argv[2..-1]
+            __starship_stream_stop
             set -g __starship_stream_arguments $argv[2..-1]
+            set -g __starship_stream_prompts '' ''
+            ::STARSHIP:: prompt --stream --signal-pid=$fish_pid $argv[2..-1] 2>/dev/null | read -gz __starship_stream_directory
+            __starship_stream_read
         end
         printf %s $__starship_stream_prompts[$side]
     end
 
-    # Read the startup pair through EOF; failure leaves an empty prompt.
-    function __starship_stream_start
-        __starship_stream_stop
-        # Each stream owns a distinct directory, even if the OS reuses a PID.
-        set -g __starship_stream_directory (command mktemp -d)
-        test -n "$__starship_stream_directory"; or return
-        ::STARSHIP:: prompt --stream --publish-state=$__starship_stream_directory --signal-pid=$fish_pid --timings=$__starship_stream_timings $argv 2>/dev/null | begin
-            read -z main; read -z right; read -z pid
-        end
-        set -g __starship_stream_prompts "$main" "$right"
-        set -g __starship_stream_pid $pid
-        # A fast update may have signaled before the PID was registered.
-        # Consume its snapshot now; later signals can use the registered PID.
-        __starship_stream_read
-    end
-
-    function __starship_stream_stop --on-event fish_preexec --on-event fish_exit
-        if test -n "$__starship_stream_directory"
-            # Revoke the owned publisher without signaling a recyclable PID.
-            command rm -f -- "$__starship_stream_directory/.active"
-            if test -n "$__starship_stream_pid"
-                set -l state $__starship_stream_directory/$__starship_stream_pid
-                if test -f $state
-                    begin
-                        read -z main; read -z right; read -z timings
-                    end <$state
-                    set -g __starship_stream_timings $timings
-                end
-            end
-            command rm -r -- "$__starship_stream_directory"
-        end
-        set -g __starship_stream_directory
-        set -g __starship_stream_pid
-        set -g __starship_stream_arguments
-    end
-
     function __starship_stream_read
-        test -n "$__starship_stream_pid"; or return
-        set -l state $__starship_stream_directory/$__starship_stream_pid
-        test -f $state; or return
+        test -n "$__starship_stream_directory"; or return
         begin
-            read -z main; read -z right
-        end <$state
+            read -z main; and read -z right
+        end <$__starship_stream_directory/prompt; or return
         set -g __starship_stream_prompts "$main" "$right"
     end
 
@@ -148,6 +114,16 @@ else
         test "$TRANSIENT" = 1; or commandline -f repaint
     end
 
+    # The stream removes its directory once asked to stop.
+    function __starship_stream_stop --on-event fish_preexec --on-event fish_exit
+        if test -n "$__starship_stream_directory"
+            begin
+                true >$__starship_stream_directory/stop
+            end 2>/dev/null
+        end
+        set -g __starship_stream_directory
+        set -g __starship_stream_arguments
+    end
 end
 
 # Disable virtualenv prompt, it breaks starship
