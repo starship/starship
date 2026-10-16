@@ -41,7 +41,7 @@ for failure in no-directory missing-directory incomplete-pair
     expect (__starship_prompt 1 $arguments) MAIN_FALLBACK
     expect (__starship_prompt 2 $arguments) RIGHT_FALLBACK
     expect "$test_stream_calls" (math $streams + 2)
-    expect "$__starship_stream_ready" 0
+    set -q __starship_stream_arguments; and exit 3
 end
 expect "$test_main_calls" 3
 expect "$test_right_calls" 3
@@ -54,7 +54,7 @@ set -l right (__starship_prompt 2 $arguments | string collect)
 expect "$main" ''
 expect "$right" ''
 expect "$test_stream_calls" 7
-expect "$__starship_stream_ready" 1
+set -q __starship_stream_arguments; or exit 4
 expect "$test_main_calls" 3
 expect "$test_right_calls" 3
 
@@ -81,13 +81,13 @@ expect (__starship_prompt 1 $arguments) MAIN_CACHED
 expect (__starship_prompt 2 $arguments) RIGHT_CACHED
 expect "$test_stream_calls" 10
 __starship_stream_stop
-expect "$__starship_stream_ready" 0
+set -q __starship_stream_arguments; and exit 5
 
 # An empty argument list also needs an initial stream, then shares its cache.
 printf '\0\0' >"$test_directory/prompt"
 __starship_prompt 1
 __starship_prompt 2
 expect "$test_stream_calls" 11
-expect "$__starship_stream_ready" 1
+set -q __starship_stream_arguments; or exit 6
 __starship_stream_stop
 printf 'PASS: stream fallback and prompt pair caching\n'

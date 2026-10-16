@@ -1,144 +1,123 @@
 //! What each module did for the previous prompt of a shell session.
 //!
-//! A stream reports it once every module has rendered, in a file of the
-//! session's beside its log, which the next stream reads. After an internal
-//! generation header, the body contains `name=milliseconds` for a module that
-//! changed the prompt, and the bare name of one that did not, separated by
-//! commas. It only ever decides when the prompt is drawn, never what is drawn,
-//! so a stale or mangled report costs at most an extra redraw.
+//! Each stream adds its report beside the session's log, in a file of its own
+//! named for the stream's generation, and the next stream reads the newest. A
+//! report is never replaced, only added and later pruned, so no stream reads
+//! one half written, and none that finishes late can undo the report of one
+//! that started after it. Generations follow a hybrid logical clock: the wall
+//! clock, but always after every generation a stream has read, so that a
+//! clock set back cannot put a report behind the one it was measured against.
+//!
+//! A report holds `name=milliseconds` for a module that changed the prompt,
+//! and the bare name of one that did not, separated by commas. It only ever
+//! decides when the prompt is drawn, never what is drawn, so a stale or
+//! missing one costs at most an extra redraw.
 
-use std::fs::{self, File};
+use std::fs;
 use std::io::{self, Write};
 use std::path::{Path, PathBuf};
-use std::time::Duration;
+use std::time::{Duration, SystemTime};
 
 use indexmap::IndexSet;
 
 use super::bus::{Estimate, Span};
 use crate::context::Context;
 
-const HEADER: &str = "# starship-timings-v1 ";
-
-/// The report of the session `context` belongs to, if it belongs to one.
-pub fn path(context: &Context) -> Option<PathBuf> {
-    let session = context
-        .get_env("STARSHIP_SESSION_KEY")
-        .filter(|key| !key.is_empty())?;
-    Some(crate::logger::get_log_dir().join(format!("session_{session}.timings")))
-}
-
-/// What each of `modules` did for the previous prompt, as far as the report
-/// of `writer` says.
-pub fn load(writer: Option<&Writer>, modules: &IndexSet<String>) -> Vec<Option<Estimate>> {
-    let report = writer.and_then(|writer| fs::read_to_string(&writer.path).ok());
-    read(body(report.as_deref().unwrap_or_default()), modules)
-}
-
-/// The stream allowed to report for a session. A newer stream claims it before
-/// loading estimates, so an older, slower render cannot replace its report.
-pub struct Writer {
-    path: PathBuf,
+/// The reports of a shell session, as a stream of it found them.
+pub struct Timings {
+    directory: PathBuf,
+    /// What the session's reports are named after: `session_<key>.`, then
+    /// their generation, then `.timings`.
+    session: String,
+    /// The newest report when the stream started.
+    previous: String,
     generation: u128,
 }
 
-impl Writer {
-    pub fn claim(path: PathBuf) -> Option<Self> {
-        let writer = Self {
-            path,
-            generation: rand::random(),
-        };
-        let claimed = (|| -> io::Result<()> {
-            let _owner = writer.lock()?;
-            let previous = match fs::read_to_string(&writer.path) {
-                Ok(previous) => previous,
-                Err(error) if error.kind() == io::ErrorKind::NotFound => String::new(),
-                Err(error) => return Err(error),
-            };
-            writer
-                .prepare(body(&previous))?
-                .persist(&writer.path)
-                .map_err(|error| error.error)?;
-            Ok(())
-        })();
-        match claimed {
-            Ok(()) => Some(writer),
-            Err(error) => {
-                log::debug!("Unable to claim the timings of this prompt: {error}");
-                None
-            }
+impl Timings {
+    /// The reports of the session `context` belongs to, if it belongs to one.
+    pub fn open(context: &Context) -> Option<Self> {
+        let key = context
+            .get_env("STARSHIP_SESSION_KEY")
+            .filter(|key| !key.is_empty())?;
+        Some(Self::at(
+            crate::logger::get_log_dir(),
+            &key,
+            SystemTime::now(),
+        ))
+    }
+
+    /// The reports of the session `key` kept in `directory`, for a stream
+    /// starting `now`.
+    pub(super) fn at(directory: PathBuf, key: &str, now: SystemTime) -> Self {
+        let session = format!("session_{key}.");
+        let newest = reports(&directory, &session).max();
+        let previous = newest
+            .as_ref()
+            .and_then(|(_, path)| fs::read_to_string(path).ok())
+            .unwrap_or_default();
+        let now = now
+            .duration_since(SystemTime::UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_nanos();
+        Self {
+            generation: newest.map_or(now, |(newest, _)| now.max(newest.saturating_add(1))),
+            directory,
+            session,
+            previous,
         }
     }
 
-    /// Keeps `report` whole for the next prompt, if no newer stream has started.
-    pub fn save(&self, report: &str) {
-        if let Err(error) = self.keep(report) {
+    pub fn previous(&self) -> &str {
+        &self.previous
+    }
+
+    /// Keeps `report` for the next prompt, in place of every report before it.
+    pub fn keep(self, report: &str) {
+        if let Err(error) = self.add(report) {
             log::debug!("Unable to keep the timings of this prompt: {error}");
         }
     }
 
-    fn keep(&self, report: &str) -> io::Result<()> {
-        let written = self.prepare(report)?;
-
-        let _owner = self.lock()?;
-        let previous = fs::read_to_string(&self.path)?;
-        if unpack(&previous).0 == Some(self.generation) {
-            written.persist(&self.path).map_err(|error| error.error)?;
+    fn add(&self, report: &str) -> io::Result<()> {
+        fs::create_dir_all(&self.directory)?;
+        // Named like a report, so that cleanup expires it too should this
+        // process end before it is.
+        let mut staged = tempfile::Builder::new()
+            .prefix("session_")
+            .suffix(".timings")
+            .tempfile_in(&self.directory)?;
+        staged.write_all(report.as_bytes())?;
+        let name = format!("{}{}.timings", self.session, self.generation);
+        staged
+            .persist_noclobber(self.directory.join(name))
+            .map_err(|error| error.error)?;
+        for (generation, path) in reports(&self.directory, &self.session) {
+            if generation < self.generation {
+                // Another stream may have pruned it first.
+                let _ = fs::remove_file(path);
+            }
         }
         Ok(())
     }
-
-    fn prepare(&self, report: &str) -> io::Result<tempfile::NamedTempFile> {
-        // A process may exit without dropping this file. The logger's existing
-        // cleanup expires orphaned stages just like completed session reports.
-        let mut written = tempfile::Builder::new()
-            .prefix("session_")
-            .suffix(".timings")
-            .tempfile_in(self.directory())?;
-        writeln!(written, "{HEADER}{:032x}", self.generation)?;
-        written.write_all(report.as_bytes())?;
-        Ok(written)
-    }
-
-    /// One lock serves the cache directory; each session keeps its ownership
-    /// in its expiring report. The lock stays in place so contenders always
-    /// lock the same inode, and is held only to claim or publish a report.
-    /// Contention skips this optional cache work instead of delaying a prompt.
-    fn lock(&self) -> io::Result<File> {
-        let owner = File::options()
-            .read(true)
-            .write(true)
-            .create(true)
-            .truncate(false)
-            .open(self.directory().join(".timings.lock"))?;
-        owner.try_lock()?;
-        Ok(owner)
-    }
-
-    fn directory(&self) -> &Path {
-        self.path
-            .parent()
-            .filter(|path| !path.as_os_str().is_empty())
-            .unwrap_or_else(|| Path::new("."))
-    }
 }
 
-/// The module report, without storage metadata. Legacy reports have no header.
-pub(super) fn body(stored: &str) -> &str {
-    unpack(stored).1
-}
-
-fn unpack(stored: &str) -> (Option<u128>, &str) {
-    let Some((header, body)) = stored.split_once('\n') else {
-        return (None, stored);
-    };
-    let generation = header
-        .strip_prefix(HEADER)
-        .filter(|value| value.len() == 32)
-        .and_then(|value| u128::from_str_radix(value, 16).ok());
-    match generation {
-        Some(generation) => (Some(generation), body),
-        None => (None, stored),
-    }
+/// The reports of `session` in `directory`, with their generations.
+fn reports<'a>(directory: &Path, session: &'a str) -> impl Iterator<Item = (u128, PathBuf)> + 'a {
+    fs::read_dir(directory)
+        .into_iter()
+        .flatten()
+        .filter_map(move |entry| {
+            let entry = entry.ok()?;
+            let generation = entry
+                .file_name()
+                .to_str()?
+                .strip_prefix(session)?
+                .strip_suffix(".timings")?
+                .parse()
+                .ok()?;
+            Some((generation, entry.path()))
+        })
 }
 
 /// What each of `modules` did for the previous prompt, by position, as far
@@ -186,15 +165,30 @@ fn entries(report: &str) -> impl Iterator<Item = (&str, Estimate)> {
 mod tests {
     use super::*;
     use proptest::prelude::*;
-    use std::fs::FileTimes;
-    use std::sync::Barrier;
-    use std::sync::atomic::{AtomicUsize, Ordering};
-    use std::sync::mpsc;
+    use proptest::sample::Index;
     use std::thread;
-    use std::time::{Instant, SystemTime};
 
     fn handed_back(report: &str) -> String {
         super::report(entries(report))
+    }
+
+    /// The reports of the session `key` in `directory`, for a stream starting
+    /// `seconds` after the epoch.
+    fn at(directory: &Path, seconds: u64) -> Timings {
+        Timings::at(
+            directory.to_path_buf(),
+            "key",
+            SystemTime::UNIX_EPOCH + Duration::from_secs(seconds),
+        )
+    }
+
+    /// The session's reports in `directory`, oldest first.
+    fn kept(directory: &Path) -> Vec<String> {
+        let mut kept: Vec<_> = reports(directory, "session_key.").collect();
+        kept.sort();
+        kept.into_iter()
+            .map(|(_, path)| fs::read_to_string(path).unwrap())
+            .collect()
     }
 
     #[test]
@@ -218,275 +212,89 @@ mod tests {
     }
 
     #[test]
-    fn a_report_kept_is_read_back_for_the_next_prompt() {
+    fn the_next_stream_reads_the_report_kept_in_place_of_those_before() {
         let directory = tempfile::tempdir().unwrap();
-        let path = directory.path().join("session_key.timings");
-        let writer = Writer::claim(path.clone()).unwrap();
-        let modules = IndexSet::from(["rust".to_owned(), "character".to_owned()]);
+        let first = at(directory.path(), 1);
+        assert_eq!("", first.previous(), "none kept yet");
+        first.keep("rust=12,character");
+        let second = at(directory.path(), 2);
+        assert_eq!("rust=12,character", second.previous());
+        second.keep("rust=24");
 
-        assert_eq!(
-            vec![None, None],
-            load(Some(&writer), &modules),
-            "none kept yet"
-        );
-        writer.save("rust=12,character");
-        assert_eq!(
-            vec![
-                Some(Estimate::Changed(Span::from(Duration::from_millis(12)))),
-                Some(Estimate::Unchanged)
-            ],
-            load(Some(&writer), &modules)
-        );
-        writer.save("rust");
-        assert_eq!("rust", body(&fs::read_to_string(&path).unwrap()));
-        assert_eq!(vec![None, None], load(None, &modules), "outside a session");
+        assert_eq!(["rust=24"], kept(directory.path()).as_slice());
     }
 
     #[test]
-    fn a_claim_preserves_legacy_reports_and_storage_headers_stay_internal() {
+    fn a_report_supersedes_the_one_it_read_however_far_the_clock_goes_back() {
         let directory = tempfile::tempdir().unwrap();
-        let path = directory.path().join("session_key.timings");
-        let report = "rust=12,character";
-        fs::write(&path, report).unwrap();
-        let writer = Writer::claim(path.clone()).unwrap();
-        let stored = fs::read_to_string(&path).unwrap();
+        at(directory.path(), 100).keep("before");
+        let after = at(directory.path(), 1);
+        assert_eq!("before", after.previous());
+        after.keep("after");
 
-        assert_eq!((Some(writer.generation), report), unpack(&stored));
-        assert_eq!(body(report), report, "legacy reports have no header");
-        let modules = IndexSet::from(["rust".to_owned(), "character".to_owned()]);
-        assert_eq!(read(report, &modules), load(Some(&writer), &modules));
-        assert_eq!(
-            handed_back(report),
-            report,
-            "the report format is unchanged"
-        );
-        for unrecognized in [
-            "# starship-timings-v1 invalid\nrust=12",
-            "# starship-timings-v1 1234\nrust=12",
-            "# starship-timings-v2 00000000000000000000000000000001\nrust=12",
-        ] {
-            assert_eq!(body(unrecognized), unrecognized);
-        }
+        assert_eq!(["after"], kept(directory.path()).as_slice());
     }
 
     #[test]
-    fn sessions_share_one_lock_without_revoking_each_others_reports() {
+    fn other_sessions_and_unfinished_reports_are_left_alone() {
         let directory = tempfile::tempdir().unwrap();
-        let first_path = directory.path().join("session_first.timings");
-        let second_path = directory.path().join("session_second.timings");
-        let first = Writer::claim(first_path.clone()).unwrap();
-        let second = Writer::claim(second_path.clone()).unwrap();
+        let other = |seconds| {
+            Timings::at(
+                directory.path().to_path_buf(),
+                "other",
+                SystemTime::UNIX_EPOCH + Duration::from_secs(seconds),
+            )
+        };
+        other(1).keep("other=1");
+        let unfinished = directory.path().join("session_key.7.timings.partial");
+        fs::write(&unfinished, "unfinished=1").unwrap();
+        at(directory.path(), 1).keep("rust=12");
+        at(directory.path(), 2).keep("rust=24");
 
-        second.save("second=2");
-        first.save("first=1");
-
-        assert_eq!(body(&fs::read_to_string(first_path).unwrap()), "first=1");
-        assert_eq!(body(&fs::read_to_string(second_path).unwrap()), "second=2");
-        assert_eq!(3, fs::read_dir(directory.path()).unwrap().count());
+        assert_eq!(["rust=24"], kept(directory.path()).as_slice());
+        assert!(unfinished.exists());
+        assert_eq!("other=1", other(3).previous());
     }
 
     #[test]
-    fn a_newer_stream_owns_the_report_even_if_an_older_stream_finishes_last() {
+    fn streams_keeping_reports_at_once_are_only_ever_read_whole() {
         let directory = tempfile::tempdir().unwrap();
-        let path = directory.path().join("session_key.timings");
-        let previous = Writer::claim(path.clone()).unwrap();
-        previous.save("previous=1");
-        let older = Writer::claim(path.clone()).unwrap();
-        let newer = Writer::claim(path.clone()).unwrap();
-
-        older.save("older=2");
-        assert_eq!(
-            "previous=1",
-            body(&fs::read_to_string(&path).unwrap()),
-            "a new stream retains the last complete report until it finishes"
-        );
-        newer.save("newer=3");
-        older.save("older=4");
-        previous.save("previous=5");
-        assert_eq!("newer=3", body(&fs::read_to_string(&path).unwrap()));
-    }
-
-    #[test]
-    fn a_busy_cache_lock_does_not_delay_claims_or_saves() {
-        let directory = tempfile::tempdir().unwrap();
-        let path = directory.path().join("session_key.timings");
-        let other_path = directory.path().join("session_other.timings");
-        let writer = Writer::claim(path.clone()).unwrap();
-        writer.save("rust=12");
-        let before = fs::read_to_string(&path).unwrap();
-        let owner = writer.lock().unwrap();
-
-        thread::scope(|scope| {
-            let (send, receive) = mpsc::channel();
-            let other_path = &other_path;
-            let writer = &writer;
-            scope.spawn(move || {
-                let skipped = Writer::claim(other_path.clone()).is_none();
-                let error = writer.keep("rust=24").unwrap_err().kind();
-                send.send((skipped, error)).unwrap();
-            });
-            let result = receive.recv_timeout(Duration::from_secs(5));
-            // Release before asserting so a regression cannot hang scoped joins.
-            drop(owner);
-            assert_eq!(
-                (true, io::ErrorKind::WouldBlock),
-                result.expect("optional timing work waited for the busy cache lock")
-            );
-        });
-
-        assert_eq!(before, fs::read_to_string(&path).unwrap());
-        assert!(!other_path.exists(), "a failed claim changes no generation");
-        writer.save("rust=36");
-        assert_eq!("rust=36", body(&fs::read_to_string(&path).unwrap()));
-    }
-
-    #[test]
-    fn overlapping_streams_and_readers_only_see_whole_reports() {
-        const WRITERS: usize = 4;
-        struct Running<'a>(&'a AtomicUsize);
-        impl Drop for Running<'_> {
-            fn drop(&mut self) {
-                self.0.fetch_sub(1, Ordering::Release);
-            }
-        }
-        let directory = tempfile::tempdir().unwrap();
-        let path = directory.path().join("session_key.timings");
-        let initial = "initial=0";
-        Writer::claim(path.clone()).unwrap().save(initial);
-        let reports: Vec<_> = (0..WRITERS)
-            .map(|writer| {
-                (0..(512 + writer * 128))
-                    .map(|module| format!("custom.writer{writer}.{module}={writer}"))
+        let reports: Vec<String> = (0..4)
+            .map(|stream| {
+                (0..512)
+                    .map(|module| format!("custom.stream{stream}.{module}={stream}"))
                     .collect::<Vec<_>>()
                     .join(",")
             })
             .collect();
-        let ready = Barrier::new(WRITERS + 1);
-        let remaining = AtomicUsize::new(WRITERS);
 
         thread::scope(|scope| {
-            let ready = &ready;
-            let remaining = &remaining;
             for report in &reports {
-                let path = path.clone();
+                let directory = directory.path();
                 scope.spawn(move || {
-                    let _running = Running(remaining);
-                    ready.wait();
                     for _ in 0..16 {
-                        let Some(writer) = Writer::claim(path.clone()) else {
-                            continue;
-                        };
-                        let deadline = Instant::now() + Duration::from_secs(5);
-                        loop {
-                            match writer.keep(report) {
-                                Err(error)
-                                    if error.kind() == io::ErrorKind::WouldBlock
-                                        && Instant::now() < deadline =>
-                                {
-                                    thread::yield_now();
-                                }
-                                result => {
-                                    result.unwrap();
-                                    break;
-                                }
-                            }
-                        }
+                        Timings::at(directory.to_path_buf(), "key", SystemTime::now()).keep(report);
                     }
                 });
             }
-            ready.wait();
-            loop {
-                let observed = fs::read_to_string(&path).unwrap();
-                let (generation, observed) = unpack(&observed);
-                assert!(generation.is_some(), "a reader saw a partial header");
+            for _ in 0..256 {
+                let read = at(directory.path(), 0).previous;
                 assert!(
-                    observed == initial || reports.iter().any(|report| report == observed),
-                    "a reader saw a partial or mixed report"
+                    read.is_empty() || reports.contains(&read),
+                    "a report read in part"
                 );
-                if remaining.load(Ordering::Acquire) == 0 {
-                    break;
-                }
-                thread::yield_now();
             }
         });
-
-        assert!(
-            reports
-                .iter()
-                .any(|report| report == body(&fs::read_to_string(&path).unwrap()))
-        );
     }
 
     #[test]
-    fn a_failed_replacement_preserves_the_target_and_removes_its_temporary_file() {
-        let directory = tempfile::tempdir().unwrap();
-        let path = directory.path().join("session_key.timings");
-        let writer = Writer::claim(path.clone()).unwrap();
-        fs::remove_file(&path).unwrap();
-        fs::create_dir(&path).unwrap();
-        fs::write(path.join("existing"), "preserved").unwrap();
-
-        assert!(writer.keep("rust=12").is_err());
-        assert_eq!(
-            "preserved",
-            fs::read_to_string(path.join("existing")).unwrap()
-        );
-        assert_eq!(
-            2,
-            fs::read_dir(directory.path()).unwrap().count(),
-            "only the target and stable ownership file remain"
-        );
-        assert!(
-            Writer::claim(path).is_none(),
-            "a failed claim preserves its target"
-        );
-    }
-
-    #[test]
-    fn closed_sessions_and_orphaned_stages_leave_only_one_shared_lock_after_cleanup() {
-        let directory = tempfile::tempdir().unwrap();
-        for session in 0..100 {
-            let path = directory.path().join(format!("session_{session}.timings"));
-            Writer::claim(path).unwrap().save("rust=12");
-        }
-        assert_eq!(
-            101,
-            fs::read_dir(directory.path()).unwrap().count(),
-            "each session has only its expiring report, plus one shared lock"
-        );
-
-        let writer = Writer::claim(directory.path().join("session_0.timings")).unwrap();
-        let (orphan, orphan_path) = writer.prepare("interrupted=1").unwrap().keep().unwrap();
-        drop(orphan);
-        let old = FileTimes::new().set_modified(SystemTime::UNIX_EPOCH);
-        for entry in fs::read_dir(directory.path()).unwrap() {
-            File::options()
-                .write(true)
-                .open(entry.unwrap().path())
-                .unwrap()
-                .set_times(old)
-                .unwrap();
-        }
-        let owner = writer.lock().unwrap();
-        crate::logger::cleanup_log_files(directory.path());
-        assert!(!orphan_path.exists(), "interrupted writes also expire");
-        let remaining: Vec<_> = fs::read_dir(directory.path())
-            .unwrap()
-            .map(|entry| entry.unwrap().file_name())
-            .collect();
-        assert_eq!(remaining, [".timings.lock"]);
-        drop(owner);
-    }
-
-    #[test]
-    fn a_session_keeps_its_report_beside_its_log() {
+    fn a_session_keeps_its_reports_beside_its_log() {
         let mut context = crate::test::default_context();
-        assert_eq!(None, path(&context));
+        assert!(Timings::open(&context).is_none());
         context.env.insert("STARSHIP_SESSION_KEY", "key".to_owned());
-        assert_eq!(
-            Some(crate::logger::get_log_dir().join("session_key.timings")),
-            path(&context)
-        );
+        let timings = Timings::open(&context).unwrap();
+        assert_eq!(crate::logger::get_log_dir(), timings.directory);
+        assert_eq!("session_key.", timings.session);
     }
 
     #[test]
@@ -531,6 +339,33 @@ mod tests {
                 reported.into_iter().collect::<Vec<_>>(),
                 entries(&report).map(|(module, estimate)| (module.to_owned(), estimate)).collect::<Vec<_>>()
             );
+        }
+
+        /// Streams start a second apart, and each keeps its report, if at
+        /// all, at any point after it starts. However they overlap, the next
+        /// stream reads the report of the last to start among those that kept
+        /// one.
+        #[test]
+        fn the_last_stream_started_to_report_is_the_one_read(
+            steps in prop::collection::vec((any::<bool>(), any::<Index>()), 0..12),
+        ) {
+            let directory = tempfile::tempdir().unwrap();
+            let mut started = 0_u64;
+            let mut running: Vec<(u64, Timings)> = Vec::new();
+            let mut kept = Vec::new();
+            for (start, which) in steps {
+                if start || running.is_empty() {
+                    started += 1;
+                    running.push((started, at(directory.path(), started)));
+                } else {
+                    let (stream, timings) = running.swap_remove(which.index(running.len()));
+                    timings.keep(&stream.to_string());
+                    kept.push(stream);
+                }
+            }
+
+            let read = at(directory.path(), started + 1).previous;
+            prop_assert_eq!(kept.iter().max().map(ToString::to_string).unwrap_or_default(), read);
         }
     }
 }
