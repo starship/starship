@@ -49,8 +49,9 @@ impl<'a> Painted<'a> {
     }
 }
 
-/// Paints one line. A fill takes an equal share of the width the rest of the
-/// line leaves; without a width, or without room, it keeps its natural width.
+/// Paints one line. Fills share the width the rest of the line leaves, with
+/// remainder columns going to the first fills. Without a width, or without
+/// room for each fill, they keep their natural width.
 ///
 /// A run inherits from its left neighbor on the same line, except that nothing
 /// inherits across a fill: the fill resolves against the run before it, and
@@ -66,15 +67,14 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
     // Each fill's share of what the rest of the line leaves, if that is a
     // column or more. Measuring text takes a pass over every grapheme, which
     // only a fill needs.
-    let share = width.filter(|_| fills > 0).and_then(|width| {
-        let used: usize = styled()
-            .filter(|&(kind, ..)| kind != Kind::Fill)
-            .map(|(.., value)| value.width_graphemes())
-            .sum();
-        Some(width.checked_sub(used)? / fills).filter(|&share| share > 0)
+    let allocation = width.filter(|_| fills > 0).and_then(|width| {
+        let used = text_width(segments);
+        let available = width.checked_sub(used)?;
+        Some((available / fills, available % fills)).filter(|&(share, _)| share > 0)
     });
 
     let mut previous = None;
+    let mut fill_index = 0;
     styled()
         .map(|(kind, style, value)| {
             let inherited = if kind == Kind::Fill {
@@ -88,13 +88,44 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
             if kind != Kind::Fill {
                 previous = Some(style);
             }
-            let text = match share.filter(|_| kind == Kind::Fill) {
-                Some(share) => stretch(value, share, style),
+            let text = match allocation.filter(|_| kind == Kind::Fill) {
+                Some((share, remainder)) => {
+                    let width = share + usize::from(fill_index < remainder);
+                    fill_index += 1;
+                    stretch(value, width, style)
+                }
                 None => Cow::Borrowed(value),
             };
             Run { style, text }
         })
         .collect()
+}
+
+/// Adjacent text runs can belong to one grapheme despite their different
+/// styles. A fill separates them; its neighbors cannot join through it.
+fn text_width(segments: &[Segment]) -> usize {
+    segments
+        .split(|segment| {
+            matches!(
+                segment,
+                Segment::Styled {
+                    kind: Kind::Fill,
+                    ..
+                }
+            )
+        })
+        .map(|group| {
+            let mut values = group.iter().filter_map(|segment| match segment {
+                Segment::Styled { value, .. } => Some(value.as_str()),
+                Segment::LineBreak => None,
+            });
+            let mut text = Cow::Borrowed(values.next().unwrap_or_default());
+            for value in values {
+                text.to_mut().push_str(value);
+            }
+            text.width_graphemes()
+        })
+        .sum()
 }
 
 /// `pattern` repeated across `width` columns: whole repetitions, then one
@@ -217,7 +248,77 @@ mod tests {
         ];
         let painted = Painted::new(&segments, Some(12));
 
-        assert_eq!("a....b----c\nnext........", painted.to_string());
+        assert_eq!("a.....b----c\nnext........", painted.to_string());
+    }
+
+    #[test]
+    fn remainder_columns_go_to_the_first_two_or_three_fills() {
+        let two = [
+            text("", "a"),
+            fill("."),
+            text("", "b"),
+            fill("-"),
+            text("", "c"),
+        ];
+        let three = [
+            text("", "a"),
+            fill("."),
+            text("", "b"),
+            fill("-"),
+            text("", "c"),
+            fill("_"),
+        ];
+        for (width, expected) in [
+            (10, "a....b---c"),
+            (11, "a....b----c"),
+            (12, "a.....b----c"),
+        ] {
+            assert_eq!(expected, Painted::new(&two, Some(width)).to_string());
+        }
+        for (width, expected) in [
+            (10, "a...b--c__"),
+            (11, "a...b---c__"),
+            (12, "a...b---c___"),
+        ] {
+            assert_eq!(expected, Painted::new(&three, Some(width)).to_string());
+        }
+        for width in 6..30 {
+            assert_eq!(
+                width,
+                Painted::new(&two, Some(width))
+                    .to_string()
+                    .width_graphemes()
+            );
+            assert_eq!(
+                width,
+                Painted::new(&three, Some(width))
+                    .to_string()
+                    .width_graphemes()
+            );
+        }
+    }
+
+    #[test]
+    fn fill_layout_measures_graphemes_across_adjacent_styles() {
+        let segments = [
+            text("red", "👩"),
+            text("blue", "‍👩‍"),
+            text("green", "👦‍👦"),
+            fill("."),
+            text("red", "a"),
+            text("blue", "\u{301}"),
+        ];
+        let painted = Painted::new(&segments, Some(8));
+        assert_eq!(".....", painted.lines[0][3].text);
+        assert_eq!(8, painted.to_string().width_graphemes());
+        assert_eq!(Some(Color::Red), painted.lines[0][0].style.foreground);
+        assert_eq!(Some(Color::Blue), painted.lines[0][1].style.foreground);
+        assert_eq!(Some(Color::Green), painted.lines[0][2].style.foreground);
+
+        let segments = [text("red", "👩"), fill("."), text("blue", "‍👩‍👦‍👦")];
+        let painted = Painted::new(&segments, Some(8));
+        assert_eq!("....", painted.lines[0][1].text);
+        assert_eq!(8, painted.to_string().width_graphemes());
     }
 
     #[test]
@@ -305,6 +406,38 @@ mod tests {
             "\x1b[32m\x1b[31ma🟦\x1b[31ma\x1b[0m\x1b[32mNEXT\x1b[0m",
             Painted::new(&segments, Some(8)).to_string(),
         );
+    }
+
+    #[test]
+    fn partial_fills_keep_graphemes_whole_across_controls_and_restore_their_style() {
+        let style = Color::Green.normal();
+        let restore = format!("{RESET}{}", style.prefix());
+        for (grapheme, columns) in [
+            ("👩\x1b[31m‍👩‍👦‍👦", 2),
+            ("a\x1b[31m\u{301}", 1),
+            ("👩\x1b]0;title\x07‍👩‍👦‍👦", 2),
+        ] {
+            let pattern = format!("{grapheme}🟦");
+            assert_eq!("", stretch(&pattern, columns - 1, style));
+            assert_eq!(
+                format!("{grapheme}{restore}"),
+                stretch(&pattern, columns, style)
+            );
+            assert_eq!(
+                format!("{grapheme}{restore}"),
+                stretch(&pattern, columns + 1, style)
+            );
+            let segments = [
+                Segment::fill(parse_style_string("green", None), &pattern),
+                text("green", "NEXT"),
+            ];
+            assert_eq!(
+                format!("\x1b[32m{grapheme}{restore}NEXT\x1b[0m"),
+                Painted::new(&segments, Some(columns + 4)).to_string()
+            );
+        }
+        let pattern = "👩\x07‍👩‍👦‍👦🟦";
+        assert_eq!("👩\x07‍👩‍👦‍👦", stretch(pattern, 2, style));
     }
 
     #[test]
