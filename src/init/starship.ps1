@@ -149,8 +149,9 @@ $null = New-Module starship {
             $null = $stream.Process.StandardError.ReadToEndAsync()
         }
         $script:Pump.Commands.Clear()
-        $stream.Pumping = $script:Pump.AddScript($script:StreamPump).
-            AddArgument($stream).AddArgument($ExecutionContext.Events).BeginInvoke()
+        $null = $script:Pump.AddScript($script:StreamPump)
+        $null = $script:Pump.AddArgument($stream).AddArgument($ExecutionContext.Events)
+        $stream.Pumping = $script:Pump.BeginInvoke()
         $script:Stream = $stream
         $stream.Ready.Wait()
         if ($null -ne $stream.Prompt) {

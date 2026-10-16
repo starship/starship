@@ -398,23 +398,27 @@ Supported shell integrations:
 
 ### Options
 
-| Option         | Default | Description                                                                                                                                   |
-| -------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `enabled`      | `true`  | Allow a partial prompt while modules render. Set to `false` to wait for all modules.                                                          |
-| `refresh`      | `true`  | Refresh time-varying modules while the prompt is displayed.                                                                                   |
-| `bus.adaptive` | `true`  | Use previous module timings to schedule redraws. Disable to treat every module as unmeasured.                                                 |
-| `bus.fallback` | `50`    | Maximum waiting budget for initial paint and later redraw batches, in milliseconds. Process startup and configuration loading are additional. |
+| Option         | Default | Description                                                                                                                                    |
+| -------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `enabled`      | `true`  | Allow a partial prompt while modules render. Set to `false` to wait for all modules.                                                           |
+| `refresh`      | `true`  | Refresh time-varying modules while the prompt is displayed.                                                                                    |
+| `bus.adaptive` | `true`  | Use previous module timings to schedule redraws. Disable to use the fallback waiting budget for every module; timings still order module work. |
+| `bus.fallback` | `50`    | Maximum waiting budget for initial paint and later redraw batches, in milliseconds. Process startup and configuration loading are additional.  |
 
 On shells that support ongoing updates, modules can refresh while the prompt is displayed. When enabled, `time` refreshes as
 often as what it shows changes: every hundredth or tenth of a second, second, minute, hour or day, whichever its format shows
-first, and at least every second while a valid `time_range` controls its visibility. Literal formats need no refresh.
+first. Calendar-only formats are checked daily. Boundaries follow the configured display timezone, including its offset
+transitions, with at least one check per second while a valid `time_range` controls visibility. Literal formats need no refresh
+unless a valid range controls their visibility.
 `memory_usage` refreshes every five seconds, and `battery` and `localip` every thirty seconds.
 Custom modules repeat only when their `refresh` interval is greater than zero (milliseconds).
 Refreshes align to wall-clock boundaries and redraw only when the resulting prompt changes.
 Refreshing a disabled module does not enable it.
 
-Set `[async].refresh = false` to stop all periodic refreshes, or set an individual built-in
-module's `refresh = false`. Set a custom module's `refresh = 0` to run it once per prompt.
+Set `[async].refresh = false` to stop all periodic refreshes. The four built-in modules above
+(`time`, `memory_usage`, `battery`, and `localip`) each support `refresh = false` to stop their
+own refreshes. Other built-in modules render once per prompt and have no `refresh` option.
+Set a custom module's `refresh = 0` to run it once per prompt.
 
 ### Example
 

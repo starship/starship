@@ -497,6 +497,7 @@ fn redraws_once_finished(shell: Shell) {
     session.wait_for("FAST SLOW");
 
     session.send(shell.input());
+    session.wait_for(shell.input());
     session.enter();
     session.wait_for("RESULT:typed");
     session.close();
@@ -673,7 +674,18 @@ format = "$env_value"
 #[test]
 #[ignore = "requires fish"]
 fn fish_stops_its_stream_which_removes_its_directory() {
-    let fixture = Fixture::new(Shell::Fish, "format = \"MARK\"\nadd_newline = false\n");
+    let fixture = Fixture::new(
+        Shell::Fish,
+        r#"
+format = "MARK${custom.slow}"
+add_newline = false
+[custom.slow]
+command = 'touch rendering; sleep 30'
+when = true
+shell = ["/bin/sh"]
+ignore_timeout = true
+"#,
+    );
     let output = Command::new(Shell::Fish.program())
         .args([
             "--no-config",
@@ -683,12 +695,17 @@ source "$STARSHIP_INIT"
 __starship_prompt 1 --status=0 >/dev/null
 set -l directory $__starship_stream_directory
 test -d "$directory"; or exit 1
-__starship_stream_stop
 for attempt in (seq 50)
+    test -f rendering; and break
+    sleep 0.1
+end
+test -f rendering; or exit 2
+__starship_stream_stop
+for attempt in (seq 20)
     test -d "$directory"; or break
     sleep 0.1
 end
-test -d "$directory"; and exit 2
+test -d "$directory"; and exit 3
 printf 'STOPPED\n'
 "#,
         ])
@@ -698,6 +715,32 @@ printf 'STOPPED\n'
         .expect("fish starts and stops a stream");
     assert!(output.status.success(), "{output:?}");
     assert_eq!(b"STOPPED\n", output.stdout.as_slice());
+    assert!(output.stderr.is_empty(), "{output:?}");
+}
+
+#[test]
+#[ignore = "requires fish"]
+fn fish_retries_failed_streams_and_caches_complete_prompt_pairs() {
+    let fixture = Fixture::new(Shell::Fish, "format = \"MARK\"\nadd_newline = false\n");
+    // Replace only the native command, keeping the generated integration intact.
+    let source = fs::read_to_string(&fixture.init).unwrap();
+    fs::write(
+        &fixture.init,
+        source.replace(starship().to_str().unwrap(), "__starship_test_command"),
+    )
+    .unwrap();
+    let output = Command::new(Shell::Fish.program())
+        .arg("--no-config")
+        .arg(Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/fish-stream.fish"))
+        .envs(fixture.environment(Shell::Fish))
+        .current_dir(fixture.directory.path())
+        .output()
+        .expect("fish exercises stream startup and caching");
+    assert!(output.status.success(), "{output:?}");
+    assert_eq!(
+        b"PASS: stream fallback and prompt pair caching\n",
+        output.stdout.as_slice()
+    );
     assert!(output.stderr.is_empty(), "{output:?}");
 }
 
