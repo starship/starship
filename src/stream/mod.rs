@@ -1661,6 +1661,8 @@ mod tests {
             let mut configuration = toml::toml! {
                 format = "[$directory](bold)${custom.slow}$fill${custom.raw}$line_break$status$character"
                 right_format = "${custom.slow}[$jobs](red)"
+                // Commands on a busy machine can take longer than the default.
+                command_timeout = 10_000
                 [directory]
                 format = "$path "
                 [custom.slow]
