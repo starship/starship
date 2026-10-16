@@ -120,7 +120,7 @@ fn run<T>(
         &plan.modules,
     );
     let (sender, receiver) = mpsc::channel();
-    let render = |position: usize| {
+    let render = |position: usize, context: &Context<'_>| {
         let segments = print::render(&plan.modules[position], context);
         // Sent to a stream that may have ended without it.
         let _ = sender.send(Rendered { position, segments });
@@ -129,6 +129,7 @@ fn run<T>(
     thread::scope(|scope| {
         let mut threads = Threads {
             scope,
+            context,
             render: &render,
             receiver,
         };
@@ -181,21 +182,30 @@ trait Renderer {
     ) -> Option<(Instant, impl Iterator<Item = Rendered> + '_)>;
 }
 
-/// Renders each module on a thread of its own, sending what it shows.
+/// Renders each module on a thread of its own, sending what it shows. Every
+/// module's first render shares what `context` observes of the filesystem;
+/// a module rendering again observes it anew.
 struct Threads<'scope, 'environment, F> {
     scope: &'scope Scope<'scope, 'environment>,
+    context: &'environment Context<'environment>,
     render: &'environment F,
     receiver: Receiver<Rendered>,
 }
 
-impl<F: Fn(usize) + Sync> Renderer for Threads<'_, '_, F> {
+impl<'environment, F> Renderer for Threads<'_, 'environment, F>
+where
+    F: Fn(usize, &Context<'environment>) + Sync,
+{
     fn start(&mut self, modules: usize) {
-        print::fan_out(self.scope, modules, self.render);
+        let (render, context) = (self.render, self.context);
+        print::fan_out(self.scope, modules, move |position| {
+            render(position, context)
+        });
     }
 
     fn render(&mut self, position: usize) {
-        let render = self.render;
-        let again = move || render(position);
+        let (render, context) = (self.render, self.context);
+        let again = move || render(position, &context.renewed());
         if let Err(error) = thread::Builder::new().spawn_scoped(self.scope, again) {
             log::debug!("Unable to start rendering on a thread of its own: {error}");
             again();
@@ -1451,6 +1461,66 @@ mod tests {
             .collect();
         assert!(mains.len() >= 2, "the time turned over: {mains:?}");
         assert!(mains.windows(2).all(|pair| pair[0] != pair[1]));
+    }
+
+    /// A shell that creates a marker once drawn the first prompts, and stops
+    /// reading once drawn prompts showing `until`, or at a deadline.
+    struct Watching {
+        written: Vec<u8>,
+        marker: PathBuf,
+        until: &'static str,
+        deadline: Instant,
+    }
+
+    impl Write for Watching {
+        fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+            let shown = String::from_utf8_lossy(&self.written).contains(self.until);
+            if shown || Instant::now() >= self.deadline {
+                return Err(io::ErrorKind::BrokenPipe.into());
+            }
+            self.written.extend_from_slice(bytes);
+            std::fs::write(&self.marker, "")?;
+            Ok(bytes.len())
+        }
+
+        fn flush(&mut self) -> io::Result<()> {
+            Ok(())
+        }
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn a_module_rendering_again_finds_what_appeared_since() {
+        let directory = tempfile::tempdir().unwrap();
+        let mut context = context(toml::toml! {
+            add_newline = false
+            format = "${custom.found}$time"
+            time.disabled = false
+            time.time_format = "%.3f"
+            [custom.found]
+            command = "printf found"
+            detect_files = ["marker"]
+            when = false
+            format = "$output"
+            refresh = 50
+        });
+        context.current_dir = directory.path().to_path_buf();
+        let mut shell = Watching {
+            written: Vec::new(),
+            marker: directory.path().join("marker"),
+            until: "found",
+            deadline: Instant::now() + Duration::from_secs(3),
+        };
+
+        let error = run(&context, None, &mut shell, identity).unwrap_err();
+        assert_eq!(io::ErrorKind::BrokenPipe, error.kind());
+        let prompts = read_prompts(&shell.written);
+        assert!(!prompts[0][0].contains("found"), "{:?}", prompts[0]);
+        assert!(
+            prompts.iter().any(|[main, _]| main.contains("found")),
+            "a refresh kept what the first render observed, to {:?}",
+            prompts.last()
+        );
     }
 
     #[cfg(unix)]
