@@ -342,99 +342,55 @@ pub fn description(module: &str) -> &'static str {
 mod test {
     use super::*;
 
+    /// Each module that goes stale on its own renders again so often, if it
+    /// is enabled and its own `refresh` allows; nothing else does.
     #[test]
-    fn only_enabled_modules_that_go_stale_render_again() {
-        let context = crate::test::default_context().set_config(toml::toml! {
-            memory_usage.disabled = false
-            localip.disabled = true
-            [custom.weather]
-            command = "forecast"
-            refresh = 600_000
-            [custom.once]
-            command = "true"
-        });
-
-        assert_eq!(
-            Some(Duration::from_secs(5)),
-            period("memory_usage", &context)
-        );
-        assert_eq!(None, period("localip", &context));
-        assert_eq!(None, period("time", &context), "disabled unless configured");
-        assert_eq!(None, period("git_status", &context));
-        assert_eq!(
-            Some(Duration::from_secs(600)),
-            period("custom.weather", &context)
-        );
-        assert_eq!(None, period("custom.once", &context));
-        assert_eq!(None, period("custom.missing", &context));
-    }
-
-    #[test]
-    fn a_module_set_not_to_refresh_renders_once() {
-        let context = crate::test::default_context().set_config(toml::toml! {
-            memory_usage.disabled = false
-            memory_usage.refresh = false
-            localip.disabled = false
-            localip.refresh = false
-            time.disabled = false
-            time.refresh = false
-            [custom.weather]
-            command = "forecast"
-            refresh = 600_000
-            disabled = true
-        });
-
-        let modules = ["memory_usage", "localip", "time", "custom.weather"];
-        for module in modules {
-            assert_eq!(None, period(module, &context), "{module}");
+    fn modules_render_again_as_often_as_they_go_stale_if_enabled_and_allowed() {
+        let seconds = |seconds| Some(Duration::from_secs(seconds));
+        for (module, configuration, expected) in [
+            ("memory_usage", "memory_usage.disabled = false", seconds(5)),
+            ("memory_usage", "memory_usage.disabled = true", None),
+            (
+                "memory_usage",
+                "memory_usage = { disabled = false, refresh = false }",
+                None,
+            ),
+            ("localip", "localip.disabled = false", seconds(30)),
+            (
+                "localip",
+                "localip = { disabled = false, refresh = false }",
+                None,
+            ),
+            ("time", "", None),
+            ("time", "time = { disabled = false, refresh = false }", None),
+            ("git_status", "", None),
+            (
+                "custom.weather",
+                "custom.weather.refresh = 600_000",
+                seconds(600),
+            ),
+            (
+                "custom.weather",
+                "custom.weather = { refresh = 600_000, disabled = true }",
+                None,
+            ),
+            ("custom.once", "custom.once.command = 'true'", None),
+            ("custom.missing", "", None),
+            #[cfg(feature = "battery")]
+            ("battery", "", seconds(30)),
+            #[cfg(feature = "battery")]
+            ("battery", "battery.refresh = false", None),
+            #[cfg(feature = "battery")]
+            ("battery", "battery.disabled = true", None),
+        ] {
+            let context =
+                crate::test::default_context().set_config(toml::from_str(configuration).unwrap());
+            assert_eq!(
+                expected,
+                period(module, &context),
+                "{module} with {configuration}"
+            );
         }
-    }
-
-    #[test]
-    fn enabled_builtin_refresh_periods_match_their_defaults() {
-        let context = crate::test::default_context().set_config(toml::toml! {
-            memory_usage.disabled = false
-            localip.disabled = false
-        });
-
-        assert_eq!(
-            Some(Duration::from_secs(5)),
-            period("memory_usage", &context)
-        );
-        assert_eq!(Some(Duration::from_secs(30)), period("localip", &context));
-    }
-
-    #[test]
-    fn disabled_builtin_modules_do_not_refresh_when_refresh_is_enabled() {
-        let context = crate::test::default_context().set_config(toml::toml! {
-            memory_usage.disabled = true
-            memory_usage.refresh = true
-            localip.disabled = true
-            localip.refresh = true
-            time.disabled = true
-            time.refresh = true
-            battery.disabled = true
-            battery.refresh = true
-        });
-
-        for module in ["memory_usage", "localip", "time", "battery"] {
-            assert_eq!(None, period(module, &context), "{module}");
-        }
-    }
-
-    #[cfg(feature = "battery")]
-    #[test]
-    fn battery_refresh_period_is_enabled_by_default_and_can_be_disabled() {
-        assert_eq!(
-            Some(Duration::from_secs(30)),
-            period("battery", &crate::test::default_context()),
-            "battery refresh is enabled by default",
-        );
-
-        let context = crate::test::default_context().set_config(toml::toml! {
-            battery.refresh = false
-        });
-        assert_eq!(None, period("battery", &context));
     }
 
     #[test]
