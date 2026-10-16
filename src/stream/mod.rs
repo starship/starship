@@ -493,11 +493,13 @@ mod tests {
     use crate::context::Shell;
     use crate::test::default_context;
     use proptest::prelude::*;
-    use std::cell::Cell;
+    use std::cell::{Cell, RefCell};
     use std::convert::identity;
     use std::path::PathBuf;
 
-    const FALLBACK: u64 = 50;
+    fn milliseconds(milliseconds: u64) -> Duration {
+        Duration::from_millis(milliseconds)
+    }
 
     fn context(configuration: toml::Table) -> Context<'static> {
         let mut context = default_context().set_config(configuration);
@@ -505,60 +507,47 @@ mod tests {
         context
     }
 
-    fn milliseconds(milliseconds: u64) -> Duration {
-        Duration::from_millis(milliseconds)
+    /// What happened in a stream, in the order it happened, each at a time
+    /// since the stream started.
+    #[derive(Clone, Debug, PartialEq)]
+    enum Event {
+        /// A module, by position in the plan, started rendering.
+        Started(Duration, usize),
+        /// A module rendered, and shows this.
+        Landed(Duration, usize, String),
+        Drawn(Duration, Prompts),
     }
 
-    fn elapsed(since: Instant, now: Instant) -> u64 {
-        (now - since).as_millis().try_into().unwrap()
+    /// A simulated clock, and what happened by it.
+    struct World {
+        start: Instant,
+        now: Cell<Instant>,
+        events: RefCell<Vec<Event>>,
+    }
+
+    impl World {
+        fn since(&self) -> Duration {
+            self.now.get() - self.start
+        }
+
+        fn log(&self, event: Event) {
+            self.events.borrow_mut().push(event);
+        }
     }
 
     /// Each module's renders, as how many milliseconds each takes and what it
-    /// shows; the last one repeats.
+    /// shows, in turn, over and over.
     type Script<'a> = &'a [(&'a str, &'a [(u64, &'a str)])];
 
-    /// Modules rendering on a simulated clock, until a horizon.
+    /// Modules rendering on the simulated clock, until a horizon.
     struct Simulation<'a> {
-        renders: Vec<&'a [(u64, &'a str)]>,
-        now: &'a Cell<Instant>,
-        start: Instant,
+        world: &'a World,
+        renders: Vec<std::iter::Cycle<std::slice::Iter<'a, (u64, &'a str)>>>,
         horizon: Instant,
         rendering: Vec<(Instant, usize, &'a str)>,
-        /// When each module first rendered.
-        first: Vec<Option<u64>>,
-        /// Whether the stream was still going at the horizon.
+        /// How many times running the stream has waited for nothing.
+        idle: usize,
         reached_horizon: bool,
-    }
-
-    impl<'a> Simulation<'a> {
-        fn new(
-            plan: &Plan<'_, 2>,
-            script: Script<'a>,
-            now: &'a Cell<Instant>,
-            settings: &Settings,
-        ) -> Self {
-            let renders = plan
-                .modules
-                .iter()
-                .map(|module| {
-                    let (_, renders) = script
-                        .iter()
-                        .rfind(|(name, _)| name == module)
-                        .unwrap_or_else(|| panic!("no script for {module}"));
-                    assert!(!renders.is_empty(), "an empty script for {module}");
-                    *renders
-                })
-                .collect();
-            Self {
-                renders,
-                now,
-                start: now.get(),
-                horizon: now.get() + milliseconds(settings.horizon),
-                rendering: Vec::new(),
-                first: vec![None; plan.modules.len()],
-                reached_horizon: false,
-            }
-        }
     }
 
     impl Renderer for Simulation<'_> {
@@ -569,13 +558,10 @@ mod tests {
         }
 
         fn render(&mut self, position: usize) {
-            let renders = &mut self.renders[position];
-            let &(took, text) = renders.first().expect("a render");
-            if renders.len() > 1 {
-                *renders = &renders[1..];
-            }
-            self.rendering
-                .push((self.now.get() + milliseconds(took), position, text));
+            let &(took, text) = self.renders[position].next().expect("a render");
+            self.world.log(Event::Started(self.world.since(), position));
+            let lands = self.world.now.get() + milliseconds(took);
+            self.rendering.push((lands, position, text));
         }
 
         fn wait(&mut self, deadline: Option<Instant>) -> Option<(Instant, Vec<Rendered>)> {
@@ -590,17 +576,24 @@ mod tests {
                 self.reached_horizon = true;
                 return None;
             }
-            let now = next.max(self.now.get());
-            self.now.set(now);
+            let now = next.max(self.world.now.get());
             let (landed, rendering) = self
                 .rendering
                 .drain(..)
                 .partition::<Vec<_>, _>(|&(lands, ..)| lands <= now);
             self.rendering = rendering;
+            self.idle = if landed.is_empty() && now == self.world.now.get() {
+                self.idle + 1
+            } else {
+                0
+            };
+            assert!(self.idle < 3, "the stream spins without anything happening");
+            self.world.now.set(now);
             let rendered = landed
                 .into_iter()
-                .map(|(lands, position, text)| {
-                    self.first[position].get_or_insert(elapsed(self.start, lands));
+                .map(|(_, position, text)| {
+                    self.world
+                        .log(Event::Landed(self.world.since(), position, text.to_owned()));
                     let segments = if text.is_empty() {
                         Vec::new()
                     } else {
@@ -613,17 +606,9 @@ mod tests {
         }
     }
 
-    /// What a shell is drawn, and when.
-    struct Recording<'a> {
-        start: Instant,
-        now: &'a Cell<Instant>,
-        drawn: Vec<(u64, Prompts)>,
-    }
-
-    impl Sink for Recording<'_> {
+    impl Sink for &World {
         fn draw(&mut self, prompts: &Prompts) -> io::Result<()> {
-            self.drawn
-                .push((elapsed(self.start, self.now.get()), prompts.clone()));
+            self.log(Event::Drawn(self.since(), prompts.clone()));
             Ok(())
         }
     }
@@ -649,20 +634,26 @@ mod tests {
     }
 
     struct Simulated {
-        drawn: Vec<(u64, Prompts)>,
-        /// When each module first rendered, by position in the plan.
-        first: Vec<Option<u64>>,
+        events: Vec<Event>,
+        /// The modules of the plan, by position.
+        modules: Vec<String>,
         report: String,
         /// Whether the stream ended before the horizon.
         ended: bool,
     }
 
     impl Simulated {
-        /// When each main prompt was drawn, and what it was.
+        fn drawn(&self) -> impl Iterator<Item = (Duration, &Prompts)> {
+            self.events.iter().filter_map(|event| match event {
+                Event::Drawn(at, prompts) => Some((*at, prompts)),
+                Event::Started(..) | Event::Landed(..) => None,
+            })
+        }
+
+        /// When each main prompt was drawn, in milliseconds, and what it was.
         fn mains(&self) -> Vec<(u64, &str)> {
-            self.drawn
-                .iter()
-                .map(|(drawn, [main, _])| (*drawn, main.as_str()))
+            self.drawn()
+                .map(|(at, [main, _])| (at.as_millis().try_into().unwrap(), main.as_str()))
                 .collect()
         }
     }
@@ -675,261 +666,625 @@ mod tests {
     ) -> Simulated {
         let plan = Plan::new(context, [Target::Main, Target::Right]);
         let start = Instant::now();
-        let now = Cell::new(start);
-        let mut simulation = Simulation::new(&plan, script, &now, &settings);
-        let mut recording = Recording {
+        let world = World {
             start,
-            now: &now,
-            drawn: Vec::new(),
+            now: Cell::new(start),
+            events: RefCell::new(Vec::new()),
+        };
+        let renders = plan
+            .modules
+            .iter()
+            .map(|module| {
+                let (_, renders) = script
+                    .iter()
+                    .rfind(|(name, _)| name == module)
+                    .unwrap_or_else(|| panic!("no script for {module}"));
+                assert!(!renders.is_empty(), "an empty script for {module}");
+                renders.iter().cycle()
+            })
+            .collect();
+        let mut simulation = Simulation {
+            world: &world,
+            renders,
+            horizon: start + milliseconds(settings.horizon),
+            rendering: Vec::new(),
+            idle: 0,
+            reached_horizon: false,
         };
         let clock = Clock {
             start,
             wall: milliseconds(settings.wall),
         };
         let estimates = timings::read(timings, &plan.modules);
-        let mut session = Session::new(
-            context,
-            &plan,
-            estimates,
-            settings.redraws,
-            clock,
-            settings
-                .timings
-                .map(|directory| Timings::at(directory, "key", SystemTime::now())),
-        );
-        session.run(&mut simulation, &mut recording).unwrap();
+        let timings = settings
+            .timings
+            .map(|directory| Timings::at(directory, "key", SystemTime::now()));
+        let mut session = Session::new(context, &plan, estimates, settings.redraws, clock, timings);
+        session.run(&mut simulation, &mut &world).unwrap();
         Simulated {
-            drawn: recording.drawn,
-            first: simulation.first,
+            events: world.events.take(),
+            modules: plan.modules.iter().cloned().collect(),
             report: session.report(),
             ended: !simulation.reached_horizon,
         }
     }
 
-    fn three_modules(mut configuration: toml::Table) -> Context<'static> {
-        configuration.insert("add_newline".into(), false.into());
-        configuration.insert("format".into(), "${custom.a}${custom.b}$character".into());
-        context(configuration)
+    /// What generated modules show. Shared among them, so that modules can
+    /// change what they show without changing what they compose.
+    const OUTPUTS: [&str; 4] = ["", "a", "b", "ab"];
+
+    /// Outputs that no two modules share, for tests that tell modules apart
+    /// by what they show.
+    const DISTINCT: [&str; 5] = ["a", "b", "c", "d", "e"];
+
+    /// A render that takes longer than any span a stream plans with.
+    const DAY_AND_A_MILLISECOND: u64 = 86_400_001;
+
+    /// A module of a generated prompt.
+    #[derive(Clone, Debug)]
+    struct Module {
+        previous: Option<Estimate>,
+        /// How often it renders again, in milliseconds, if it does.
+        period: Option<u64>,
+        /// Whether it is in the right prompt rather than the main one.
+        right: bool,
+        /// How long each render takes, in milliseconds, and what it shows,
+        /// in turn.
+        renders: Vec<(u64, &'static str)>,
     }
 
-    #[test]
-    fn the_prompt_is_drawn_as_configured_for_what_the_previous_prompt_says() {
-        let slow: Script = &[
-            ("character", &[(0, ">")]),
-            ("custom.a", &[(10, "a")]),
-            ("custom.b", &[(2000, "b")]),
-        ];
-        let blank: Script = &[
-            ("character", &[(0, ">")]),
-            ("custom.a", &[(10, "a")]),
-            ("custom.b", &[(15, "")]),
-        ];
-        let measured = "character=0,custom.a=10,custom.b=2000";
-        let cases = [
-            (
-                "b, known to be slow, holds nothing back",
-                toml::Table::new(),
-                measured,
-                slow,
-                vec![(10, "a>"), (2000, "ab>")],
-            ),
-            (
-                "b, never measured, is waited for until the fallback",
-                toml::Table::new(),
-                "",
-                slow,
-                vec![(50, "a>"), (2000, "ab>")],
-            ),
-            (
-                "without adaptive, whatever the previous prompt says",
-                toml::toml! { async.bus.adaptive = false },
-                measured,
-                slow,
-                vec![(50, "a>"), (2000, "ab>")],
-            ),
-            (
-                "the fallback is how long the first paint waits at most",
-                toml::toml! { async.bus.fallback = 30 },
-                "",
-                slow,
-                vec![(30, "a>"), (2000, "ab>")],
-            ),
-            (
-                "without async, the first paint waits for every module",
-                toml::toml! { async.enabled = false },
-                measured,
-                slow,
-                vec![(2000, "ab>")],
-            ),
-            (
-                "b, which changed nothing, is not waited for",
-                toml::Table::new(),
-                "character=0,custom.a=10,custom.b",
-                blank,
-                vec![(10, "a>")],
-            ),
-            (
-                "unless the previous prompt says it changes the prompt",
-                toml::Table::new(),
-                "character=0,custom.a=10,custom.b=15",
-                blank,
-                vec![(15, "a>")],
-            ),
-        ];
-        for (why, configuration, timings, script, expected) in cases {
-            let simulated = simulate_in(
-                Settings::default(),
-                &three_modules(configuration),
-                timings,
-                script,
+    /// A generated prompt, its configuration, and how long it is watched.
+    #[derive(Clone, Debug)]
+    struct Scenario {
+        modules: Vec<Module>,
+        fallback: u64,
+        asynchronous: bool,
+        adaptive: bool,
+        refresh: bool,
+        redraws: Option<usize>,
+        wall: u64,
+        horizon: u64,
+    }
+
+    impl Scenario {
+        /// A prompt of `modules`, under the default configuration but for
+        /// `fallback`, watched until long after every module has rendered.
+        fn plain(modules: Vec<Module>, fallback: u64) -> Self {
+            let mut scenario = Self {
+                modules,
+                fallback,
+                asynchronous: true,
+                adaptive: true,
+                refresh: true,
+                redraws: None,
+                wall: 0,
+                horizon: 0,
+            };
+            scenario.horizon = scenario.complete() + fallback + 1_000;
+            scenario
+        }
+
+        fn name(index: usize) -> String {
+            format!("custom.{index}")
+        }
+
+        fn context(&self) -> Context<'static> {
+            let format = |right: bool| -> String {
+                (0..self.modules.len())
+                    .filter(|&index| self.modules[index].right == right)
+                    .map(|index| format!("${{{}}}", Self::name(index)))
+                    .collect()
+            };
+            let custom: toml::Table = self
+                .modules
+                .iter()
+                .enumerate()
+                .map(|(index, module)| {
+                    let refresh = i64::try_from(module.period.unwrap_or(0)).unwrap();
+                    let configuration = toml::toml! { command = "generated" refresh = refresh };
+                    (index.to_string(), configuration.into())
+                })
+                .collect();
+            let (enabled, refresh, adaptive) = (self.asynchronous, self.refresh, self.adaptive);
+            let fallback = i64::try_from(self.fallback).unwrap();
+            let mut configuration = toml::toml! {
+                add_newline = false
+                [async]
+                enabled = enabled
+                refresh = refresh
+                [async.bus]
+                adaptive = adaptive
+                fallback = fallback
+            };
+            configuration.insert("format".into(), format(false).into());
+            configuration.insert("right_format".into(), format(true).into());
+            configuration.insert("custom".into(), custom.into());
+            context(configuration)
+        }
+
+        /// When every module has rendered once, in milliseconds.
+        fn complete(&self) -> u64 {
+            let first = self.modules.iter().map(|module| module.renders[0].0);
+            first.max().unwrap_or(0)
+        }
+
+        fn simulate(&self, timings: Option<PathBuf>) -> Simulated {
+            let names: Vec<String> = (0..self.modules.len()).map(Self::name).collect();
+            let script: Vec<(&str, &[(u64, &str)])> = names
+                .iter()
+                .zip(&self.modules)
+                .map(|(name, module)| (name.as_str(), module.renders.as_slice()))
+                .collect();
+            let previous = timings::report(
+                names
+                    .iter()
+                    .zip(&self.modules)
+                    .filter_map(|(name, module)| Some((name.as_str(), module.previous?))),
             );
-            assert_eq!(expected, simulated.mains(), "{why}");
+            let settings = Settings {
+                wall: self.wall,
+                horizon: self.horizon,
+                redraws: self.redraws,
+                timings,
+            };
+            simulate_in(settings, &self.context(), &previous, &script)
+        }
+
+        /// The prompts the modules compose, given which output each shows.
+        fn compose(&self, shown: &[&str]) -> Prompts {
+            let side = |right: bool| -> String {
+                (0..self.modules.len())
+                    .filter(|&index| self.modules[index].right == right)
+                    .map(|index| shown[index])
+                    .collect()
+            };
+            [side(false), side(true)]
         }
     }
 
-    #[test]
-    fn without_async_the_first_paint_waits_beyond_the_largest_planning_span() {
-        let after_a_day = Span::MAX.get().as_millis() as u64 + 1;
-        let simulated = simulate_in(
-            Settings {
-                horizon: after_a_day + 1,
-                ..Settings::default()
-            },
-            &three_modules(toml::toml! { async.enabled = false }),
-            "character=0,custom.a=10,custom.b=2000",
-            &[
-                ("character", &[(0, ">")]),
-                ("custom.a", &[(10, "a")]),
-                ("custom.b", &[(after_a_day, "b")]),
-            ],
-        );
-
-        assert_eq!(vec![(after_a_day, "ab>")], simulated.mains());
-        assert!(simulated.ended);
+    fn estimate() -> impl Strategy<Value = Option<Estimate>> {
+        prop_oneof![
+            Just(None),
+            Just(Some(Estimate::Unchanged)),
+            (0_u64..400).prop_map(|took| Some(Estimate::Changed(Span::from(milliseconds(took))))),
+        ]
     }
 
-    #[test]
-    fn without_async_an_unfinished_render_never_exposes_a_partial_prompt() {
-        let after_a_day = Span::MAX.get().as_millis() as u64 + 1;
-        let simulated = simulate_in(
-            Settings {
-                horizon: after_a_day,
-                ..Settings::default()
-            },
-            &three_modules(toml::toml! { async.enabled = false }),
-            "",
-            &[
-                ("character", &[(0, ">")]),
-                ("custom.a", &[(10, "a")]),
-                ("custom.b", &[(after_a_day + 1, "b")]),
-            ],
-        );
-
-        assert!(simulated.drawn.is_empty());
-        assert!(!simulated.ended, "still waiting for the unfinished module");
+    /// A module showing one of `outputs`, which refreshes every `period`
+    /// milliseconds if `live` would have it, or else whose first render may
+    /// take longer than a day.
+    fn module(
+        live: bool,
+        outputs: &'static [&'static str],
+        period: u64,
+    ) -> impl Strategy<Value = Module> {
+        let first = if live {
+            (0_u64..400).boxed()
+        } else {
+            prop_oneof![9 => 0_u64..400, 1 => Just(DAY_AND_A_MILLISECOND)].boxed()
+        };
+        // Refreshes that take one of a few durations land together, and some
+        // take longer than the stream is watched.
+        let again = prop_oneof![
+            4 => prop::sample::select(&[0_u64, 5, 20][..]),
+            4 => 0_u64..400,
+            1 => Just(60_000_u64),
+        ];
+        let period = if live {
+            prop::option::of(Just(period)).boxed()
+        } else {
+            Just(None).boxed()
+        };
+        let output = prop::sample::select(outputs);
+        (
+            estimate(),
+            period,
+            any::<bool>(),
+            (first, output.clone()),
+            prop::collection::vec((again, output), 0..3),
+        )
+            .prop_map(|(previous, period, right, first, again)| Module {
+                previous,
+                period,
+                right,
+                renders: std::iter::once(first).chain(again).collect(),
+            })
     }
 
-    #[test]
-    fn without_async_refreshes_still_use_the_configured_waiting_budget() {
-        let simulated = simulate_in(
-            Settings {
-                horizon: 199,
-                ..Settings::default()
-            },
-            &context(toml::toml! {
-                add_newline = false
-                format = "${custom.fast}${custom.slow}"
-                async.enabled = false
-                async.bus.fallback = 10
-                [custom.fast]
-                command = "fast"
-                when = true
-                refresh = 100
-                [custom.slow]
-                command = "slow"
-                when = true
-                refresh = 100
-            }),
-            "",
-            &[
-                ("custom.fast", &[(1, "a"), (1, "A")]),
-                ("custom.slow", &[(1, "b"), (45, "B")]),
-            ],
-        );
-
-        assert_eq!(vec![(1, "ab"), (110, "Ab"), (145, "AB")], simulated.mains());
-        assert!(!simulated.ended, "both refresh again at two hundred");
-    }
-
-    #[test]
-    fn the_right_prompt_is_drawn_with_the_main_one() {
-        let simulated = simulate_in(
-            Settings::default(),
-            &context(toml::toml! {
-                add_newline = false
-                format = "$character"
-                right_format = "${custom.right}"
-            }),
-            "character=0,custom.right=500",
-            &[
-                ("character", &[(0, ">")]),
-                ("custom.right", &[(500, "right")]),
-            ],
-        );
-
-        assert_eq!(
-            vec![
-                (0, [">".to_owned(), String::new()]),
-                (500, [">".to_owned(), "right".to_owned()])
-            ],
-            simulated.drawn
-        );
-    }
-
-    #[test]
-    fn refreshes_fall_due_on_the_wall_clock_and_are_drawn_together() {
-        let simulated = simulate_in(
-            Settings {
-                wall: 300,
-                horizon: 5_000,
-                ..Settings::default()
-            },
-            &context(toml::toml! {
-                add_newline = false
-                format = "$time $memory_usage"
-                time.disabled = false
-                memory_usage.disabled = false
-            }),
-            "time=1,memory_usage=2",
-            &[
+    /// A prompt that refreshes, or one that may take longer than a day, its
+    /// modules refreshing together, if at all: every hundred milliseconds or
+    /// more, or sooner than a bus leaves. Some show only nothing or `a`, so
+    /// that two of them swapping what they show compose the same prompt.
+    fn scenario() -> impl Strategy<Value = Scenario> {
+        (
+            any::<bool>(),
+            prop_oneof![Just(&OUTPUTS[..]), Just(&OUTPUTS[..2])],
+            prop_oneof![1_u64..40, 100_u64..1_500],
+        )
+            .prop_flat_map(|(live, outputs, period)| {
                 (
-                    "time",
-                    &[
-                        (1, "t0"),
-                        (1, "t1"),
-                        (1, "t2"),
-                        (1, "t3"),
-                        (1, "t4"),
-                        (1, "t5"),
-                    ],
-                ),
-                ("memory_usage", &[(2, "m0"), (2, "m1")]),
-            ],
-        );
+                    prop::collection::vec(module(live, outputs, period), 1..=DISTINCT.len()),
+                    10_u64..100,
+                    any::<bool>(),
+                    any::<bool>(),
+                    any::<bool>(),
+                    prop::option::of(0_usize..3),
+                    0_u64..2_000,
+                    prop::bool::weighted(0.1),
+                )
+                    .prop_map(
+                        move |(
+                            modules,
+                            fallback,
+                            asynchronous,
+                            adaptive,
+                            refresh,
+                            redraws,
+                            wall,
+                            short,
+                        )| {
+                            let mut scenario = Scenario {
+                                modules,
+                                fallback,
+                                asynchronous,
+                                adaptive,
+                                refresh: refresh && live,
+                                redraws,
+                                wall,
+                                horizon: 0,
+                            };
+                            let complete = scenario.complete();
+                            scenario.horizon = if short && complete > 0 {
+                                complete - 1
+                            } else if live {
+                                1_500
+                            } else {
+                                complete + fallback + 1_000
+                            };
+                            scenario
+                        },
+                    )
+            })
+    }
 
-        assert_eq!(
-            vec![
-                (2, "t0 m0"),
-                (701, "t1 m0"),
-                (1701, "t2 m0"),
-                (2701, "t3 m0"),
-                (3701, "t4 m0"),
-                (4702, "t5 m1")
-            ],
-            simulated.mains(),
-            "the time turns over each second, and memory every five, both on \
-             the wall clock, which reads whole seconds 700 milliseconds after one"
-        );
+    /// What a stream must do, whatever its timetable: draw the prompts just
+    /// as its modules show them, never the same twice running, at most a
+    /// fallback late; render again exactly as the wall clock turns over each
+    /// period; end exactly when nothing will change the prompts again, or
+    /// once complete for a shell that can draw only so often; and keep what
+    /// each module did for this prompt as soon as each has rendered once.
+    fn check(scenario: &Scenario, simulated: &Simulated, kept: &str) -> Result<(), TestCaseError> {
+        let index = |position: usize| -> usize {
+            simulated.modules[position]
+                .strip_prefix("custom.")
+                .and_then(|index| index.parse().ok())
+                .expect("a generated module")
+        };
+        let count = scenario.modules.len();
+        let fallback = milliseconds(scenario.fallback);
+        let complete = milliseconds(scenario.complete());
+        let horizon = milliseconds(scenario.horizon);
+        let finished = complete <= horizon;
+        let period = |module: usize| {
+            scenario.modules[module]
+                .period
+                .filter(|_| scenario.refresh)
+                .map(milliseconds)
+        };
+
+        let mut shown = vec![""; count];
+        // What the modules composed, from when.
+        let mut composed = vec![(Duration::ZERO, scenario.compose(&shown))];
+        let mut drawn: Vec<(Duration, &Prompts)> = Vec::new();
+        let mut landed: Vec<Option<Duration>> = vec![None; count];
+        let mut due: Vec<Option<Duration>> = vec![None; count];
+        let mut first: Vec<Option<(Duration, &str)>> = vec![None; count];
+        for event in &simulated.events {
+            match event {
+                Event::Started(at, position) => {
+                    let module = index(*position);
+                    match landed[module] {
+                        None => prop_assert_eq!(Duration::ZERO, *at, "every module starts at once"),
+                        Some(_) => {
+                            prop_assert_eq!(due[module], Some(*at), "rendered again when due")
+                        }
+                    }
+                    due[module] = None;
+                }
+                Event::Landed(at, position, text) => {
+                    let module = index(*position);
+                    shown[module] = text;
+                    landed[module] = Some(*at);
+                    first[module].get_or_insert((*at, text));
+                    // The first instant after it at which the wall clock
+                    // reads a whole number of periods.
+                    due[module] = period(module).map(|period| {
+                        let wall = (milliseconds(scenario.wall) + *at).as_nanos();
+                        let left = period.as_nanos() - wall % period.as_nanos();
+                        *at + Duration::from_nanos(left.try_into().unwrap())
+                    });
+                    composed.push((*at, scenario.compose(&shown)));
+                }
+                Event::Drawn(at, prompts) => {
+                    prop_assert_eq!(
+                        &scenario.compose(&shown),
+                        prompts,
+                        "drawn as shown at {:?}",
+                        at
+                    );
+                    if let Some(&(_, previous)) = drawn.last() {
+                        prop_assert_ne!(previous, prompts, "drawn twice running");
+                    }
+                    drawn.push((*at, prompts));
+                }
+            }
+        }
+        let last = scenario.compose(&shown);
+
+        // Every refresh that fell due while the stream went on started.
+        if !simulated.ended {
+            for (module, due) in due.iter().enumerate() {
+                prop_assert!(
+                    due.is_none_or(|due| due >= horizon),
+                    "custom.{} never refreshed",
+                    module
+                );
+            }
+        }
+
+        let ends_by_horizon = complete + fallback <= horizon;
+        match scenario.redraws {
+            Some(redraws) => {
+                prop_assert!(drawn.len() <= redraws + 1, "drawn {} times", drawn.len());
+                if finished {
+                    prop_assert!(simulated.ended || !ends_by_horizon, "ends once complete");
+                } else {
+                    prop_assert!(
+                        drawn.len() <= redraws,
+                        "the last draw waits for every module"
+                    );
+                    prop_assert!(!simulated.ended);
+                }
+            }
+            None if scenario.refresh
+                && scenario
+                    .modules
+                    .iter()
+                    .any(|module| module.period.is_some()) =>
+            {
+                prop_assert!(!simulated.ended, "a refreshing prompt never settles");
+            }
+            None => {
+                prop_assert!(simulated.ended || !ends_by_horizon, "nothing renders again");
+                prop_assert!(finished || !simulated.ended);
+            }
+        }
+        if simulated.ended {
+            prop_assert_eq!(
+                drawn.last().map(|&(_, prompts)| prompts),
+                Some(&last),
+                "ends as shown"
+            );
+        }
+
+        if scenario.asynchronous {
+            if scenario.redraws.is_none() {
+                // Whenever the modules last showed something a fallback ago,
+                // the shell shows that or something newer.
+                let then =
+                    std::iter::once(Duration::ZERO).chain(composed.iter().map(|&(at, _)| at));
+                for at in then.map(|at| at + fallback).filter(|&at| at <= horizon) {
+                    let shows = drawn.iter().rev().find(|&&(drawn, _)| drawn <= at);
+                    let current = composed
+                        .iter()
+                        .enumerate()
+                        .filter(|&(position, &(from, _))| {
+                            let until = composed
+                                .get(position + 1)
+                                .map_or(Duration::MAX, |&(until, _)| until);
+                            from <= at && until.saturating_add(fallback) >= at
+                        });
+                    let mut current = current.map(|(_, (_, prompts))| prompts);
+                    prop_assert!(
+                        shows.is_some_and(|&(_, shows)| current.any(|prompts| prompts == shows)),
+                        "at {:?} the shell shows {:?}, over a fallback late",
+                        at,
+                        shows
+                    );
+                }
+            }
+        } else {
+            prop_assert!(
+                drawn.iter().all(|&(at, _)| at >= complete),
+                "drawn before every module rendered"
+            );
+            if complete.max(fallback) <= horizon && finished {
+                prop_assert!(
+                    drawn
+                        .first()
+                        .is_some_and(|&(at, _)| at <= complete.max(fallback))
+                );
+            }
+        }
+
+        let report = timings::report(simulated.modules.iter().enumerate().map(
+            |(position, name)| {
+                let module = index(position);
+                let (took, text) = first[module].unwrap_or_default();
+                let measured = if text.is_empty() {
+                    Estimate::Unchanged
+                } else {
+                    Estimate::Changed(Span::from(took))
+                };
+                (
+                    name.as_str(),
+                    Estimate::after(scenario.modules[module].previous, measured),
+                )
+            },
+        ));
+        if finished {
+            prop_assert_eq!(&report, kept, "kept once every module rendered");
+            prop_assert_eq!(&report, &simulated.report, "refreshes measure nothing");
+        } else {
+            prop_assert_eq!("", kept, "kept before every module rendered");
+        }
+        Ok(())
+    }
+
+    /// What `modules` show and how long each took to: those that show
+    /// something, rendering once.
+    fn visible(modules: &[Module]) -> Vec<(Duration, &'static str)> {
+        modules
+            .iter()
+            .map(|module| (milliseconds(module.renders[0].0), module.renders[0].1))
+            .filter(|(_, output)| !output.is_empty())
+            .collect()
+    }
+
+    /// Modules that each render once, telling themselves apart.
+    fn distinct(renders: impl IntoIterator<Item = (Option<Estimate>, u64, bool)>) -> Vec<Module> {
+        renders
+            .into_iter()
+            .zip(DISTINCT)
+            .map(|((previous, took, shows), output)| Module {
+                previous,
+                period: None,
+                right: false,
+                renders: vec![(took, if shows { output } else { "" })],
+            })
+            .collect()
+    }
+
+    /// What the timetable drawn cost: the wait for the first paint, and for
+    /// each redraw, the size of the bus its first change opened and the wait.
+    fn drawn_cost(
+        drawn: &[(Duration, &str)],
+        visible: &[(Duration, &str)],
+        fallback: Span,
+    ) -> Duration {
+        let redraws = drawn.windows(2).map(|pair| {
+            let [(_, before), (at, after)] = pair else {
+                unreachable!("a pair")
+            };
+            let first = visible
+                .iter()
+                .filter(|(_, output)| after.contains(output) && !before.contains(output))
+                .map(|&(took, _)| took)
+                .min()
+                .expect("a redraw draws a change");
+            bus::size(fallback, Span::from(first)).get() + (*at - first)
+        });
+        drawn[0].0 + redraws.sum::<Duration>()
+    }
+
+    fn cheapest_cost(visible: &[(Duration, &str)], fallback: Span) -> Option<Duration> {
+        let mut landings: Vec<_> = visible
+            .iter()
+            .map(|&(took, _)| bus::Landing {
+                after: took,
+                size: bus::size(fallback, Span::from(took)),
+            })
+            .collect();
+        landings.sort_unstable_by_key(|landing| landing.after);
+        testing::every_timetable(bus::Passengers::Prompt, fallback.get(), &landings)
+            .into_iter()
+            .map(|(_, cost)| cost)
+            .min()
+    }
+
+    proptest! {
+        #![proptest_config(ProptestConfig::with_cases(512))]
+
+        #[test]
+        fn a_stream_shows_its_modules_faithfully_and_promptly(scenario in scenario()) {
+            let directory = tempfile::tempdir().unwrap();
+            let simulated = scenario.simulate(Some(directory.path().to_path_buf()));
+            let kept = Timings::at(directory.path().to_path_buf(), "key", SystemTime::now());
+            check(&scenario, &simulated, kept.previous())?;
+
+            // Without adaptive planning, or without async, what any module
+            // did for the previous prompt makes no difference.
+            if !(scenario.asynchronous && scenario.adaptive) {
+                let mut unmeasured = scenario.clone();
+                for module in &mut unmeasured.modules {
+                    module.previous = None;
+                }
+                prop_assert_eq!(&simulated.events, &unmeasured.simulate(None).events);
+            }
+        }
+
+        /// When every module does what it did before, the prompt is drawn on
+        /// the cheapest timetable there is.
+        #[test]
+        fn true_estimates_make_the_cheapest_timetable(
+            modules in prop::collection::vec((0_u64..300, any::<bool>()), 1..=DISTINCT.len()),
+            fallback in 10_u64..100,
+        ) {
+            let modules = distinct(modules.into_iter().map(|(took, shows)| {
+                let previous = if shows {
+                    Estimate::Changed(Span::from(milliseconds(took)))
+                } else {
+                    Estimate::Unchanged
+                };
+                (Some(previous), took, shows)
+            }));
+            let simulated = Scenario::plain(modules.clone(), fallback).simulate(None);
+            let drawn: Vec<_> = simulated.drawn().map(|(at, [main, _])| (at, main.as_str())).collect();
+            let visible = visible(&modules);
+            let fallback = Span::from(milliseconds(fallback));
+
+            prop_assert_eq!(cheapest_cost(&visible, fallback), Some(drawn_cost(&drawn, &visible, fallback)), "{:?}", drawn);
+        }
+
+        /// Modules never measured are waited for until the fallback, and the
+        /// first paint shows all of them that have rendered by then.
+        #[test]
+        fn modules_never_measured_are_waited_for_until_the_fallback(
+            took in prop::collection::vec(0_u64..120, 1..=DISTINCT.len()),
+            fallback in 10_u64..100,
+        ) {
+            let modules = distinct(took.iter().map(|&took| (None, took, true)));
+            let simulated = Scenario::plain(modules.clone(), fallback).simulate(None);
+            let (first_paint, [prompt, _]) = simulated.drawn().next().unwrap();
+            let rendered: String = visible(&modules)
+                .into_iter()
+                .filter(|&(took, _)| took <= first_paint)
+                .map(|(_, output)| output)
+                .collect();
+
+            prop_assert_eq!(milliseconds(*took.iter().max().unwrap()).min(milliseconds(fallback)), first_paint);
+            prop_assert_eq!(&rendered, prompt);
+        }
+
+        /// Prompts arrive as they were drawn, but for any NUL within them.
+        #[test]
+        fn prompts_survive_encoding_but_for_nuls(
+            main in prop_oneof![any::<String>(), "[\\x00-\\x7f]{0,80}"],
+            right in prop_oneof![any::<String>(), "[\\x00-\\x7f]{0,80}"],
+        ) {
+            prop_assert_eq!(
+                vec![[main.replace('\0', ""), right.replace('\0', "")]],
+                read_prompts(encode(&[main, right]).as_bytes())
+            );
+        }
+    }
+
+    /// Too rare to generate: modules that refresh together and swap what they
+    /// show compose the same prompt again, which is not drawn again.
+    #[test]
+    fn modules_that_swap_what_they_show_draw_nothing_new() {
+        let swapping = |shown: [&'static str; 2]| Module {
+            previous: None,
+            period: Some(1_000),
+            right: false,
+            renders: vec![(1, shown[0]), (1, shown[1])],
+        };
+        let mut scenario = Scenario::plain(vec![swapping(["a", ""]), swapping(["", "a"])], 50);
+        scenario.horizon = 3_500;
+        let simulated = scenario.simulate(None);
+
+        assert_eq!(vec![(1, "a")], simulated.mains());
+        assert!(!simulated.ended, "both run again each second");
     }
 
     #[test]
@@ -986,399 +1341,6 @@ mod tests {
         }
     }
 
-    #[test]
-    fn modules_that_compose_the_same_prompt_again_draw_nothing() {
-        let simulated = simulate_in(
-            Settings {
-                horizon: 2_500,
-                ..Settings::default()
-            },
-            &context(toml::toml! {
-                add_newline = false
-                format = "${custom.left}${custom.right}"
-                [custom.left]
-                command = "left"
-                when = true
-                refresh = 1000
-                [custom.right]
-                command = "right"
-                when = true
-                refresh = 1000
-            }),
-            "custom.left=1,custom.right=1",
-            &[
-                ("custom.left", &[(1, "a"), (1, ""), (1, "a")]),
-                ("custom.right", &[(1, "b"), (1, "ab"), (1, "b")]),
-            ],
-        );
-
-        assert_eq!(vec![(1, "ab")], simulated.mains());
-        assert!(!simulated.ended, "both run again each second");
-    }
-
-    #[test]
-    fn only_the_first_render_of_a_module_is_reported() {
-        let simulated = simulate_in(
-            Settings {
-                horizon: 5_000,
-                ..Settings::default()
-            },
-            &context(toml::toml! {
-                add_newline = false
-                format = "$time${custom.slow}"
-                time.disabled = false
-            }),
-            "time=5,custom.slow=3500",
-            &[("time", &[(1, "t0")]), ("custom.slow", &[(2500, "s")])],
-        );
-
-        assert_eq!(
-            "custom.slow=3250,time=4", simulated.report,
-            "the time, rendering again unchanged while the slow module rendered, \
-             is reported as it first rendered"
-        );
-    }
-
-    #[test]
-    fn the_report_is_kept_once_every_module_has_rendered_whatever_still_refreshes() {
-        let directory = tempfile::tempdir().unwrap();
-        let path = directory.path().join("timings");
-        simulate_in(
-            Settings {
-                horizon: 1_000,
-                timings: Some(path.clone()),
-                ..Settings::default()
-            },
-            &context(toml::toml! {
-                add_newline = false
-                format = "${custom.refreshing}${custom.slow}"
-                [custom.refreshing]
-                command = "refreshing"
-                when = true
-                refresh = 100
-                [custom.slow]
-                command = "slow"
-                when = true
-            }),
-            "",
-            &[
-                ("custom.refreshing", &[(0, "r"), (60_000, "never")]),
-                ("custom.slow", &[(300, "s")]),
-            ],
-        );
-
-        assert_eq!(
-            "custom.refreshing=0,custom.slow=300",
-            Timings::at(path, "key", SystemTime::now()).previous(),
-            "kept at three hundred milliseconds, while the refresh started at one hundred never lands"
-        );
-    }
-
-    #[test]
-    fn a_stream_ends_once_nothing_renders_again() {
-        for (configuration, ends) in [
-            (toml::toml! { format = "$time" }, true),
-            (
-                toml::toml! { format = "$time"
-                time.disabled = false },
-                false,
-            ),
-            (
-                toml::toml! { format = "$time"
-                time.disabled = false
-                time.refresh = false },
-                true,
-            ),
-            (
-                toml::toml! { format = "$time"
-                time.disabled = false
-                async.refresh = false },
-                true,
-            ),
-        ] {
-            let simulated = simulate_in(
-                Settings {
-                    horizon: 5_000,
-                    ..Settings::default()
-                },
-                &context(configuration.clone()),
-                "",
-                &[("time", &[(0, "")])],
-            );
-
-            assert_eq!(ends, simulated.ended, "{configuration}");
-        }
-    }
-
-    #[test]
-    fn a_custom_module_runs_again_as_often_as_it_is_configured_to() {
-        let simulated = simulate_in(
-            Settings {
-                horizon: 2_500,
-                ..Settings::default()
-            },
-            &context(toml::toml! {
-                add_newline = false
-                format = "${custom.song}"
-                [custom.song]
-                command = "now-playing"
-                when = true
-                refresh = 1000
-            }),
-            "custom.song=3",
-            &[("custom.song", &[(3, "first"), (3, "first"), (3, "second")])],
-        );
-
-        assert_eq!(
-            vec![(3, "first"), (2003, "second")],
-            simulated.mains(),
-            "run again each second, it is redrawn once its output changes"
-        );
-    }
-
-    #[test]
-    fn a_shell_that_draws_once_more_is_drawn_the_complete_prompt_and_nothing_after() {
-        let context = context(toml::toml! {
-            add_newline = false
-            format = "$time${custom.a}${custom.b}$character"
-            time.disabled = false
-        });
-        let script: Script = &[
-            ("time", &[(0, "t")]),
-            ("character", &[(0, ">")]),
-            ("custom.a", &[(10, "a")]),
-            ("custom.b", &[(20, "b"), (100, "B")]),
-        ];
-        let timings = "time=0,character=0,custom.a=10,custom.b=2000";
-        let with_redraws = |redraws| {
-            simulate_in(
-                Settings {
-                    redraws: Some(redraws),
-                    ..Settings::default()
-                },
-                &context,
-                timings,
-                script,
-            )
-        };
-
-        let once = with_redraws(1);
-        assert_eq!(vec![(10, "ta>"), (20, "tab>")], once.mains());
-        assert!(once.ended, "the time is not refreshed");
-        let never = with_redraws(0);
-        assert_eq!(vec![(20, "tab>")], never.mains());
-        assert!(never.ended);
-    }
-
-    const GENERATED: [&str; 6] = [
-        "custom.0", "custom.1", "custom.2", "custom.3", "custom.4", "custom.5",
-    ];
-    const OUTPUTS: [&str; GENERATED.len()] = ["a", "b", "c", "d", "e", "f"];
-
-    #[derive(Clone, Debug)]
-    struct Generated {
-        took: u64,
-        shows: bool,
-        previous: Option<Estimate>,
-    }
-
-    fn simulate_generated(modules: &[Generated], settings: Settings) -> Simulated {
-        let names = &GENERATED[..modules.len()];
-        let renders: Vec<_> = modules
-            .iter()
-            .zip(OUTPUTS)
-            .map(|(module, output)| [(module.took, if module.shows { output } else { "" })])
-            .collect();
-        let script: Vec<_> = names
-            .iter()
-            .zip(&renders)
-            .map(|(&name, render)| (name, render.as_slice()))
-            .collect();
-        let timings = timings::report(
-            names
-                .iter()
-                .zip(modules)
-                .filter_map(|(&name, module)| Some((name, module.previous?))),
-        );
-        let format: String = names.iter().map(|name| format!("${{{name}}}")).collect();
-        let mut configuration = toml::Table::new();
-        configuration.insert("add_newline".into(), false.into());
-        configuration.insert("format".into(), format.into());
-        simulate_in(settings, &context(configuration), &timings, &script)
-    }
-
-    /// What each module that shows something shows, and how long it takes to.
-    fn visible(modules: &[Generated]) -> impl Iterator<Item = (u64, &'static str)> + '_ {
-        modules
-            .iter()
-            .zip(OUTPUTS)
-            .filter(|(module, _)| module.shows)
-            .map(|(module, output)| (module.took, output))
-    }
-
-    fn generated(took: std::ops::Range<u64>) -> impl Strategy<Value = Generated> {
-        let previous = prop_oneof![
-            Just(None),
-            Just(Some(Estimate::Unchanged)),
-            (0_u64..3_000).prop_map(|took| Some(Estimate::Changed(Span::from(milliseconds(took))))),
-        ];
-        (took, any::<bool>(), previous).prop_map(|(took, shows, previous)| Generated {
-            took,
-            shows,
-            previous,
-        })
-    }
-
-    /// What the timetable drawn cost: the wait for the first paint, and for
-    /// each redraw, the size of the bus its first change opened and the wait.
-    fn drawn_cost(drawn: &[(u64, &str)], visible: &[(u64, &str)]) -> Duration {
-        let redraws = drawn.windows(2).map(|pair| {
-            let [(_, before), (at, after)] = pair else {
-                unreachable!("a pair")
-            };
-            let first = visible
-                .iter()
-                .filter(|(_, output)| after.contains(output) && !before.contains(output))
-                .map(|&(took, _)| took)
-                .min()
-                .expect("a redraw draws a change");
-            bus::size(
-                Span::from(milliseconds(FALLBACK)),
-                Span::from(milliseconds(first)),
-            )
-            .get()
-                + milliseconds(at - first)
-        });
-        milliseconds(drawn[0].0) + redraws.sum::<Duration>()
-    }
-
-    fn cheapest_cost(visible: &[(u64, &str)]) -> Option<Duration> {
-        let fallback = Span::from(milliseconds(FALLBACK));
-        let mut landings: Vec<_> = visible
-            .iter()
-            .map(|&(took, _)| bus::Landing {
-                after: milliseconds(took),
-                size: bus::size(fallback, Span::from(milliseconds(took))),
-            })
-            .collect();
-        landings.sort_unstable_by_key(|landing| landing.after);
-        testing::every_timetable(bus::Passengers::Prompt, fallback.get(), &landings)
-            .into_iter()
-            .map(|(_, cost)| cost)
-            .min()
-    }
-
-    proptest! {
-        #![proptest_config(ProptestConfig::with_cases(512))]
-
-        /// Whatever modules take, show, and did before, every module that
-        /// shows something is drawn within a fallback of rendering, never a
-        /// prompt the same as the one before, and the last drawn is complete.
-        #[test]
-        fn redraws_show_every_module_promptly_and_end_complete(
-            modules in prop::collection::vec(generated(0..3_000), 1..=GENERATED.len()),
-        ) {
-            let simulated = simulate_generated(&modules, Settings::default());
-            let drawn = simulated.mains();
-
-            prop_assert!(simulated.ended);
-            prop_assert!(drawn[0].0 <= FALLBACK, "first drawn at {}", drawn[0].0);
-            for pair in drawn.windows(2) {
-                prop_assert_ne!(pair[0].1, pair[1].1);
-            }
-            for (position, (module, output)) in modules.iter().zip(OUTPUTS).enumerate() {
-                if !module.shows {
-                    continue;
-                }
-                let rendered = simulated.first[position].expect("every module renders");
-                let shown = drawn.iter().find(|(_, prompt)| prompt.contains(output)).map(|&(at, _)| at);
-                prop_assert!(
-                    shown.is_some_and(|at| (rendered..=rendered + FALLBACK).contains(&at)),
-                    "{output} rendered at {rendered}, shown at {shown:?}: {drawn:?}"
-                );
-            }
-            let complete: String = visible(&modules).map(|(_, output)| output).collect();
-            prop_assert_eq!(Some(complete.as_str()), drawn.last().map(|&(_, prompt)| prompt));
-        }
-
-        /// A shell that can draw only so often is drawn no more than that, the
-        /// last time the complete prompt, and then the stream ends.
-        #[test]
-        fn a_shell_is_drawn_no_more_often_than_it_can_be(
-            modules in prop::collection::vec(generated(0..3_000), 1..=GENERATED.len()),
-            redraws in 0_usize..3,
-        ) {
-            let simulated = simulate_generated(
-                &modules,
-                Settings { redraws: Some(redraws), ..Settings::default() },
-            );
-            let drawn = simulated.mains();
-
-            prop_assert!(simulated.ended);
-            prop_assert!(drawn.len() <= redraws + 1, "{drawn:?}");
-            let complete: String = visible(&modules).map(|(_, output)| output).collect();
-            prop_assert_eq!(Some(complete.as_str()), drawn.last().map(|&(_, prompt)| prompt));
-        }
-
-        /// When every module does what it did before, the prompt is drawn on
-        /// the cheapest timetable there is.
-        #[test]
-        fn true_estimates_make_the_cheapest_timetable(
-            modules in prop::collection::vec((0_u64..300, any::<bool>()), 1..=GENERATED.len()),
-        ) {
-            let modules: Vec<_> = modules
-                .into_iter()
-                .map(|(took, shows)| Generated {
-                    took,
-                    shows,
-                    previous: Some(if shows {
-                        Estimate::Changed(Span::from(milliseconds(took)))
-                    } else {
-                        Estimate::Unchanged
-                    }),
-                })
-                .collect();
-            let simulated = simulate_generated(&modules, Settings::default());
-            let drawn = simulated.mains();
-            let visible: Vec<_> = visible(&modules).collect();
-
-            prop_assert_eq!(cheapest_cost(&visible), Some(drawn_cost(&drawn, &visible)), "{:?}", drawn);
-        }
-
-        /// Modules never measured are waited for until the fallback, and the
-        /// first paint shows all of them that have rendered by then.
-        #[test]
-        fn modules_never_measured_are_waited_for_until_the_fallback(
-            took in prop::collection::vec(0_u64..120, 1..=GENERATED.len()),
-        ) {
-            let modules: Vec<_> = took
-                .iter()
-                .map(|&took| Generated { took, shows: true, previous: None })
-                .collect();
-            let simulated = simulate_generated(&modules, Settings::default());
-            let (first_paint, prompt) = simulated.mains()[0];
-            let rendered: String = visible(&modules)
-                .filter(|&(took, _)| took <= first_paint)
-                .map(|(_, output)| output)
-                .collect();
-
-            prop_assert_eq!(took.iter().max().map(|&last| last.min(FALLBACK)), Some(first_paint));
-            prop_assert_eq!(rendered.as_str(), prompt);
-        }
-
-        /// Prompts arrive as they were drawn, but for any NUL within them.
-        #[test]
-        fn prompts_survive_encoding_but_for_nuls(
-            main in prop_oneof![any::<String>(), "[\\x00-\\x7f]{0,80}"],
-            right in prop_oneof![any::<String>(), "[\\x00-\\x7f]{0,80}"],
-        ) {
-            prop_assert_eq!(
-                vec![[main.replace('\0', ""), right.replace('\0', "")]],
-                read_prompts(encode(&[main, right]).as_bytes())
-            );
-        }
-    }
-
     /// The prompts drawn as `bytes`, in order.
     fn read_prompts(bytes: &[u8]) -> Vec<Prompts> {
         let fields: Vec<String> = std::str::from_utf8(bytes)
@@ -1391,23 +1353,6 @@ mod tests {
             .chunks(2)
             .map(|pair| pair.to_vec().try_into().expect("a pair"))
             .collect()
-    }
-
-    #[test]
-    fn without_async_the_prompts_are_drawn_once_every_module_renders() {
-        let context = context(toml::toml! {
-            add_newline = false
-            format = "$character"
-            right_format = "$jobs"
-            async.enabled = false
-        });
-        let mut output = Vec::new();
-        run(&context, None, &mut output, identity).unwrap();
-
-        assert_eq!(
-            vec![[print::get_prompt(&context), String::new()]],
-            read_prompts(&output)
-        );
     }
 
     #[test]
@@ -1453,7 +1398,7 @@ mod tests {
         });
         let mut output = ClosesAt {
             written: Vec::new(),
-            deadline: Instant::now() + milliseconds(1100),
+            deadline: Instant::now() + milliseconds(300),
         };
 
         let error = run(&context, None, &mut output, identity).unwrap_err();
@@ -1466,53 +1411,103 @@ mod tests {
         assert!(mains.windows(2).all(|pair| pair[0] != pair[1]));
     }
 
+    #[cfg(unix)]
+    #[test]
+    fn a_stream_ends_without_waiting_for_renders_it_no_longer_needs() {
+        let directory = tempfile::tempdir().unwrap();
+        let mut context = context(toml::toml! {
+            add_newline = false
+            format = "${custom.again}${custom.slow}"
+            command_timeout = 10_000
+            [custom.again]
+            // At once the first time, and for two seconds every time after.
+            command = "test -f rendered && sleep 2; touch rendered; printf again"
+            when = true
+            shell = ["/bin/sh"]
+            format = "$output"
+            refresh = 10
+            [custom.slow]
+            command = "sleep 0.3; printf slow"
+            when = true
+            shell = ["/bin/sh"]
+            format = "$output"
+        });
+        context.current_dir = directory.path().to_path_buf();
+        let start = Instant::now();
+        let mut output = Vec::new();
+
+        let ended = run(&context, Some(0), &mut output, |streamed| {
+            streamed.unwrap();
+            start.elapsed()
+        });
+        assert!(
+            ended < Duration::from_millis(1_500),
+            "ended {ended:?} in, waiting on a refresh nothing needed"
+        );
+        assert_eq!(
+            vec![["againslow".to_owned(), String::new()]],
+            read_prompts(&output)
+        );
+    }
+
     #[test]
     fn a_stream_ends_on_the_prompts_starship_prints() {
         let directory = tempfile::tempdir().unwrap();
-        let configuration = toml::toml! {
-            format = "[$directory](bold)${custom.slow}$fill${custom.raw}$line_break$status$character"
-            right_format = "${custom.slow}[$jobs](red)"
-            [directory]
-            format = "$path "
-            [custom.slow]
-            command = "echo '50% $HOME `tick`'"
-            when = true
-            format = "[$output](cyan) "
-            [custom.raw]
-            command = "echo '%~'"
-            when = true
-            unsafe_no_escape = true
-            [status]
-            disabled = false
-        };
-        for shell in [
-            Shell::Zsh,
-            Shell::Bash,
-            Shell::Fish,
-            Shell::Tcsh,
-            Shell::Xonsh,
-            Shell::Unknown,
-        ] {
-            let context_for = |target| {
-                let mut context = context(configuration.clone());
-                context.shell = shell;
-                context.target = target;
-                context.current_dir = directory.path().to_path_buf();
-                context.properties.status_code = Some("1".to_owned());
-                context.properties.jobs = 2;
-                context
+        for asynchronous in [true, false] {
+            let mut configuration = toml::toml! {
+                format = "[$directory](bold)${custom.slow}$fill${custom.raw}$line_break$status$character"
+                right_format = "${custom.slow}[$jobs](red)"
+                [directory]
+                format = "$path "
+                [custom.slow]
+                command = "echo '50% $HOME `tick`'"
+                when = true
+                format = "[$output](cyan) "
+                [custom.raw]
+                command = "echo '%~'"
+                when = true
+                unsafe_no_escape = true
+                [status]
+                disabled = false
             };
-            let mut output = Vec::new();
-            run(&context_for(Target::Main), None, &mut output, identity).unwrap();
-
-            assert_eq!(
-                Some([
-                    print::get_prompt(&context_for(Target::Main)),
-                    print::get_prompt(&context_for(Target::Right))
-                ]),
-                read_prompts(&output).pop(),
-                "under {shell:?}"
+            configuration.insert(
+                "async".to_owned(),
+                toml::toml! { enabled = asynchronous }.into(),
             );
+            for shell in [
+                Shell::Zsh,
+                Shell::Bash,
+                Shell::Fish,
+                Shell::Tcsh,
+                Shell::Xonsh,
+                Shell::Unknown,
+            ] {
+                let context_for = |target| {
+                    let mut context = context(configuration.clone());
+                    context.shell = shell;
+                    context.target = target;
+                    context.current_dir = directory.path().to_path_buf();
+                    context.properties.status_code = Some("1".to_owned());
+                    context.properties.jobs = 2;
+                    context
+                };
+                let mut output = Vec::new();
+                run(&context_for(Target::Main), None, &mut output, identity).unwrap();
+
+                let mut drawn = read_prompts(&output);
+                assert_eq!(
+                    Some([
+                        print::get_prompt(&context_for(Target::Main)),
+                        print::get_prompt(&context_for(Target::Right))
+                    ]),
+                    drawn.pop(),
+                    "under {shell:?}"
+                );
+                assert!(
+                    asynchronous || drawn.is_empty(),
+                    "without async, drawn once complete"
+                );
+            }
         }
     }
 
@@ -1556,28 +1551,5 @@ mod tests {
             "{first}"
         );
         assert_eq!("found>", refined);
-    }
-
-    #[test]
-    fn a_refresh_falls_due_strictly_after_now_on_the_wall_clock() {
-        let start = Instant::now();
-        let second = Span::from(Duration::from_secs(1));
-        let clock = Clock {
-            start,
-            wall: milliseconds(300),
-        };
-        let boundary = start + milliseconds(700);
-
-        assert_eq!(Some(boundary), clock.next(start, second));
-        assert_eq!(
-            Some(boundary + second),
-            clock.next(boundary, second),
-            "a refresh on a boundary falls due on the next"
-        );
-        assert_eq!(
-            None,
-            clock.next(start, Span::default()),
-            "nor ever without a period"
-        );
     }
 }

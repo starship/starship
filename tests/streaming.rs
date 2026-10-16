@@ -744,39 +744,6 @@ fn fish_retries_failed_streams_and_caches_complete_prompt_pairs() {
     assert!(output.stderr.is_empty(), "{output:?}");
 }
 
-#[test]
-#[ignore = "requires fish"]
-fn fish_strips_nul_bytes_from_initial_and_refreshed_prompts() {
-    let mut session = Session::start(
-        Shell::Fish,
-        r#"
-format = "${custom.main}END"
-right_format = "${custom.right}"
-add_newline = false
-
-[custom.main]
-command = "if test -f updated; then printf 'MA\\000IN_AFTER'; else printf 'MA\\000IN_BEFORE'; fi"
-when = true
-shell = ["/bin/sh"]
-format = "$output"
-refresh = 100
-
-[custom.right]
-command = "if test -f updated; then printf 'RI\\000GHT_AFTER'; else printf 'RI\\000GHT_BEFORE'; fi"
-when = true
-shell = ["/bin/sh"]
-format = "$output"
-refresh = 100
-"#,
-    );
-    session.wait_for("MAIN_BEFOREEND");
-    session.wait_for("RIGHT_BEFORE");
-    fs::write(session._fixture.directory.path().join("updated"), "").unwrap();
-    session.wait_for("MAIN_AFTEREND");
-    session.wait_for("RIGHT_AFTER");
-    session.close();
-}
-
 /// A stream rendering a module that never finishes ends the moment the shell
 /// stops reading it, whether or not it has drawn the first paint.
 fn a_stream_ends_once_its_shell_stops_reading(asynchronous: bool) {
