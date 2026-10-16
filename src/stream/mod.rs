@@ -13,7 +13,6 @@ mod testing;
 mod timings;
 
 use std::io::{self, Write};
-use std::path::PathBuf;
 use std::time::{Duration, Instant, SystemTime};
 
 use crate::context::{Context, Properties, Target};
@@ -86,8 +85,8 @@ fn run(context: &Context, redraws: Option<usize>, output: &mut impl Sink) -> io:
     }
 
     let plan = Plan::new(context, [Target::Main, Target::Right]);
-    let timings = timings::path(context);
-    let estimates = timings::load(timings.as_deref(), &plan.modules);
+    let timings = timings::path(context).and_then(timings::Writer::claim);
+    let estimates = timings::load(timings.as_ref(), &plan.modules);
     let waiting = estimates
         .iter()
         .filter(|&&estimate| Estimate::waits(estimate));
@@ -167,6 +166,21 @@ impl Clock {
         let left = period - wall.checked_rem(period)?;
         Some(now + Duration::from_nanos(u64::try_from(left).ok()?))
     }
+
+    fn next_refresh(&self, now: Instant, refresh: &modules::Refresh) -> Option<Instant> {
+        match refresh {
+            modules::Refresh::Every(period) => self.next(now, Span::from(*period)),
+            modules::Refresh::Time(schedule) => {
+                let wall = self.wall + (now - self.start);
+                let timestamp = jiff::Timestamp::new(
+                    i64::try_from(wall.as_secs()).ok()?,
+                    wall.subsec_nanos() as i32,
+                )
+                .ok()?;
+                now.checked_add(schedule.delay(timestamp)?)
+            }
+        }
+    }
 }
 
 /// How the bus plans.
@@ -181,8 +195,8 @@ enum Planning {
 /// A module of the plan, as the stream shows it.
 struct Slot {
     shown: Vec<Segment>,
-    /// How often it renders again while the prompt is shown, if it does.
-    period: Option<Span>,
+    /// When it renders again while the prompt is shown, if it does.
+    refresh: Option<modules::Refresh>,
     /// What it is expected to do: what it did for the previous prompt, until
     /// it renders for this one.
     estimate: Option<Estimate>,
@@ -239,7 +253,11 @@ impl Slot {
         if let State::Rendering(_) = self.state {
             self.estimate = Some(Estimate::after(self.estimate, measured));
         }
-        self.state = State::Rendered(self.period.and_then(|period| clock.next(now, period)));
+        self.state = State::Rendered(
+            self.refresh
+                .as_ref()
+                .and_then(|refresh| clock.next_refresh(now, refresh)),
+        );
         match measured {
             Estimate::Changed(took) => Some(took),
             Estimate::Unchanged => None,
@@ -259,7 +277,7 @@ struct Session<'context> {
     /// How many more times the shell can draw them, if that is limited.
     draws: Option<usize>,
     /// Where to keep what the modules did, for the next prompt.
-    timings: Option<PathBuf>,
+    timings: Option<timings::Writer>,
 }
 
 impl<'context> Session<'context> {
@@ -269,14 +287,13 @@ impl<'context> Session<'context> {
         estimates: Vec<Option<Estimate>>,
         redraws: Option<usize>,
         clock: Clock,
-        timings: Option<PathBuf>,
+        timings: Option<timings::Writer>,
     ) -> Self {
         let configuration = &context.root_config.asynchronous;
-        // Without async, the first paint waits for every module.
-        let (fallback, planning) = match (configuration.enabled, configuration.bus.adaptive) {
-            (false, _) => (Span::MAX, Planning::Fallback),
-            (true, false) => (configuration.bus.fallback().into(), Planning::Fallback),
-            (true, true) => (configuration.bus.fallback().into(), Planning::Adaptive),
+        let planning = if configuration.enabled && configuration.bus.adaptive {
+            Planning::Adaptive
+        } else {
+            Planning::Fallback
         };
         let slots = plan
             .modules
@@ -284,9 +301,7 @@ impl<'context> Session<'context> {
             .zip(estimates)
             .map(|(module, estimate)| Slot {
                 shown: Vec::new(),
-                period: modules::period(module, context)
-                    .filter(|_| configuration.refresh)
-                    .map(Span::from),
+                refresh: modules::refresh(module, context).filter(|_| configuration.refresh),
                 estimate,
                 state: State::Rendering(clock.start),
             })
@@ -294,7 +309,11 @@ impl<'context> Session<'context> {
         Self {
             context,
             plan,
-            bus: Bus::new(clock.start, fallback, plan.modules.len()),
+            bus: Bus::new(
+                clock.start,
+                configuration.bus.fallback().into(),
+                plan.modules.len(),
+            ),
             clock,
             planning,
             slots,
@@ -362,15 +381,18 @@ impl<'context> Session<'context> {
                 && self.rendered()
                 && let Some(timings) = &self.timings
             {
-                timings::save(timings, &self.report());
+                timings.save(&self.report());
             }
         }
     }
 
     /// When the bus leaves, if anything is aboard.
     fn departure(&mut self, now: Instant) -> Option<Instant> {
-        // A shell's last draw shows the prompts complete.
-        if self.draws == Some(1) && !self.rendered() {
+        // Without async, the first paint waits indefinitely for every module,
+        // including timeout-exempt commands. A shell's last draw is complete too.
+        if (!self.context.root_config.asynchronous.enabled || self.draws == Some(1))
+            && !self.rendered()
+        {
             return None;
         }
         let adaptive = self.planning == Planning::Adaptive;
@@ -424,6 +446,7 @@ mod tests {
     use proptest::prelude::*;
     use std::cell::Cell;
     use std::collections::VecDeque;
+    use std::path::PathBuf;
 
     const FALLBACK: u64 = 50;
     const EVERY_WORKER: usize = usize::MAX;
@@ -567,7 +590,7 @@ mod tests {
     }
 
     struct Settings {
-        /// The wall clock at the start, in milliseconds since a whole second.
+        /// The wall clock at the start, in milliseconds since the Unix epoch.
         wall: u64,
         horizon: u64,
         workers: usize,
@@ -632,7 +655,7 @@ mod tests {
             estimates,
             settings.redraws,
             clock,
-            settings.timings,
+            settings.timings.and_then(timings::Writer::claim),
         );
         session.run(&mut simulation, &mut recording).unwrap();
         Simulated {
@@ -722,6 +745,80 @@ mod tests {
             );
             assert_eq!(expected, simulated.mains(), "{why}");
         }
+    }
+
+    #[test]
+    fn without_async_the_first_paint_waits_beyond_the_largest_planning_span() {
+        let after_a_day = Span::MAX.get().as_millis() as u64 + 1;
+        let simulated = simulate_in(
+            Settings {
+                horizon: after_a_day + 1,
+                ..Settings::default()
+            },
+            &three_modules(toml::toml! { async.enabled = false }),
+            "character=0,custom.a=10,custom.b=2000",
+            &[
+                ("character", &[(0, ">")]),
+                ("custom.a", &[(10, "a")]),
+                ("custom.b", &[(after_a_day, "b")]),
+            ],
+        );
+
+        assert_eq!(vec![(after_a_day, "ab>")], simulated.mains());
+        assert!(simulated.ended);
+    }
+
+    #[test]
+    fn without_async_an_unfinished_render_never_exposes_a_partial_prompt() {
+        let after_a_day = Span::MAX.get().as_millis() as u64 + 1;
+        let simulated = simulate_in(
+            Settings {
+                horizon: after_a_day,
+                ..Settings::default()
+            },
+            &three_modules(toml::toml! { async.enabled = false }),
+            "",
+            &[
+                ("character", &[(0, ">")]),
+                ("custom.a", &[(10, "a")]),
+                ("custom.b", &[(after_a_day + 1, "b")]),
+            ],
+        );
+
+        assert!(simulated.drawn.is_empty());
+        assert!(!simulated.ended, "still waiting for the unfinished module");
+    }
+
+    #[test]
+    fn without_async_refreshes_still_use_the_configured_waiting_budget() {
+        let simulated = simulate_in(
+            Settings {
+                horizon: 199,
+                ..Settings::default()
+            },
+            &context(toml::toml! {
+                add_newline = false
+                format = "${custom.fast}${custom.slow}"
+                async.enabled = false
+                async.bus.fallback = 10
+                [custom.fast]
+                command = "fast"
+                when = true
+                refresh = 100
+                [custom.slow]
+                command = "slow"
+                when = true
+                refresh = 100
+            }),
+            "",
+            &[
+                ("custom.fast", &[(1, "a"), (1, "A")]),
+                ("custom.slow", &[(1, "b"), (45, "B")]),
+            ],
+        );
+
+        assert_eq!(vec![(1, "ab"), (110, "Ab"), (145, "AB")], simulated.mains());
+        assert!(!simulated.ended, "both refresh again at two hundred");
     }
 
     #[test]
@@ -816,6 +913,60 @@ mod tests {
             "the time turns over each second, and memory every five, both on \
              the wall clock, which reads whole seconds 700 milliseconds after one"
         );
+    }
+
+    #[test]
+    fn time_refreshes_follow_configured_zone_boundaries_and_dst() {
+        for (format, zone, wall, before, after) in [
+            (
+                "%F",
+                "-4",
+                "2026-10-16T03:59:59.750Z",
+                "2026-10-15",
+                "2026-10-16",
+            ),
+            ("%H", "+5.75", "2026-10-16T06:14:59.750Z", "11", "12"),
+            (
+                "%Z",
+                "America/New_York",
+                "2026-11-01T05:59:59.750Z",
+                "EDT",
+                "EST",
+            ),
+            (
+                "%:z",
+                "America/New_York",
+                "2026-11-01T05:59:59.750Z",
+                "-04:00",
+                "-05:00",
+            ),
+        ] {
+            let mut configuration = toml::toml! {
+                add_newline = false
+                format = "$time"
+                time.disabled = false
+            };
+            let time = configuration["time"].as_table_mut().unwrap();
+            time.insert("time_format".to_owned(), format.into());
+            time.insert("utc_time_offset".to_owned(), zone.into());
+            let wall: jiff::Timestamp = wall.parse().unwrap();
+            let renders = [(1, before), (1, after)];
+            let simulated = simulate_in(
+                Settings {
+                    wall: u64::try_from(wall.as_millisecond()).unwrap(),
+                    horizon: 500,
+                    ..Settings::default()
+                },
+                &context(configuration),
+                "time=1",
+                &[("time", &renders)],
+            );
+            assert_eq!(
+                simulated.mains(),
+                vec![(1, before), (251, after)],
+                "{format} in {zone}"
+            );
+        }
     }
 
     #[test]
@@ -1412,6 +1563,14 @@ mod tests {
             Some(boundary + second),
             clock.next(boundary, second),
             "a refresh on a boundary falls due on the next"
+        );
+        assert_eq!(
+            clock.next(boundary, Span::MAX),
+            clock.next_refresh(
+                boundary,
+                &modules::Refresh::Every(Span::MAX.get() + Duration::from_secs(1)),
+            ),
+            "generic refreshes retain their bounded planning span"
         );
         assert_eq!(
             None,
