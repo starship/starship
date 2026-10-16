@@ -1,18 +1,28 @@
 use clap::{ValueEnum, builder::PossibleValue};
+use indexmap::IndexSet;
 use std::borrow::Cow;
+use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::{Debug, Write as FmtWrite};
 use std::io::{self, Write};
+use std::panic::{AssertUnwindSafe, catch_unwind};
 use std::path::PathBuf;
+use std::sync::OnceLock;
+use std::thread::{self, Scope};
 use std::time::Duration;
 use terminal_size::terminal_size;
 use unicode_segmentation::{GraphemeCursor, UnicodeSegmentation};
 use unicode_width::UnicodeWidthChar;
 
+use crate::configs::PROMPT_ORDER;
 use crate::context::{Context, Properties, Shell, Target};
+use crate::formatter::{StringFormatter, VariableHolder};
+use crate::module::ALL_MODULES;
 use crate::module::Module;
 use crate::modules;
-use crate::plan::Plan;
+use crate::painted::Painted;
+use crate::segment::Segment;
 use crate::shadow;
+use crate::utils::wrap_colorseq_for_shell;
 
 pub struct Grapheme<'a>(pub &'a str);
 
@@ -158,6 +168,178 @@ pub fn get_prompt(context: &Context) -> String {
     let rendered = plan.render(context);
     let [prompt] = plan.prompts(&|position| &rendered[position], context);
     prompt
+}
+
+/// Prompt formats sharing one ordered set of modules to render.
+pub struct Plan<'a, const PROMPTS: usize> {
+    /// Deduplicated modules, in first-use order.
+    pub modules: IndexSet<String>,
+    /// The format of each requested prompt, in the order requested.
+    pub formats: [PromptFormat<'a>; PROMPTS],
+}
+
+impl<'a, const PROMPTS: usize> Plan<'a, PROMPTS> {
+    pub fn new(context: &'a Context, targets: [Target; PROMPTS]) -> Self {
+        let mut modules = IndexSet::new();
+        let formats = targets.map(|target| PromptFormat::new(context, target, &mut modules));
+        Self { modules, formats }
+    }
+
+    /// Renders every module of the plan at once, each into a cell of its own.
+    pub fn render(&self, context: &Context) -> Vec<Vec<Segment>> {
+        let shown: Vec<OnceLock<Vec<Segment>>> =
+            self.modules.iter().map(|_| OnceLock::new()).collect();
+        let render = |position: usize| {
+            let _ = shown[position].set(render(&self.modules[position], context));
+        };
+        thread::scope(|scope| fan_out(scope, self.modules.len(), &render));
+        shown
+            .into_iter()
+            .map(|shown| shown.into_inner().unwrap_or_default())
+            .collect()
+    }
+
+    /// Compose shell-ready prompts from plan-indexed segments.
+    pub fn prompts<'s>(
+        &self,
+        shown: &impl Fn(usize) -> &'s [Segment],
+        context: &Context,
+    ) -> [String; PROMPTS] {
+        self.formats
+            .each_ref()
+            .map(|format| format.prompt(shown, context))
+    }
+}
+
+/// What `module` shows: nothing if it panics while rendering, which takes no
+/// other module down with it.
+pub fn render(module: &str, context: &Context) -> Vec<Segment> {
+    match catch_unwind(AssertUnwindSafe(|| modules::handle(module, context))) {
+        Ok(rendered) => rendered.map_or_else(Vec::new, |rendered| rendered.segments),
+        Err(_) => {
+            log::error!("The {module} module panicked while rendering");
+            Vec::new()
+        }
+    }
+}
+
+/// Runs `job` for every index below `count` at once, each on a thread of its
+/// own. The threads start one another, each the next two of a binary tree, so
+/// that starting a hundred takes about as long as starting seven in turn. A
+/// job whose thread cannot start runs on the thread that tried to start it.
+pub fn fan_out<'scope, 'environment, F: Fn(usize) + Sync>(
+    scope: &'scope Scope<'scope, 'environment>,
+    count: usize,
+    job: &'environment F,
+) {
+    fn branch<'scope, 'environment, F: Fn(usize) + Sync>(
+        scope: &'scope Scope<'scope, 'environment>,
+        index: usize,
+        count: usize,
+        job: &'environment F,
+    ) {
+        if index >= count {
+            return;
+        }
+        let subtree = move || {
+            branch(scope, 2 * index + 1, count, job);
+            branch(scope, 2 * index + 2, count, job);
+            job(index);
+        };
+        if let Err(error) = thread::Builder::new().spawn_scoped(scope, subtree) {
+            log::debug!("Unable to start a thread to render on: {error}");
+            subtree();
+        }
+    }
+    branch(scope, 0, count, job);
+}
+
+/// One format with variables resolved to module positions.
+pub struct PromptFormat<'a> {
+    target: Target,
+    formatter: StringFormatter<'a>,
+    /// Plan positions for each variable; disabled variables are absent.
+    variables: BTreeMap<String, Vec<usize>>,
+}
+
+impl<'a> PromptFormat<'a> {
+    fn new(context: &'a Context, target: Target, modules: &mut IndexSet<String>) -> Self {
+        let (formatter, module_list) = load_formatter_and_modules(context, &target);
+        let variables = formatter
+            .get_variables()
+            .into_iter()
+            .filter(|variable| {
+                matches!(variable.as_str(), "all" | "env_var")
+                    || !context.is_module_disabled_in_config(variable)
+            })
+            .map(|variable| {
+                let positions = modules_named(&variable, context, &module_list)
+                    .into_iter()
+                    .map(|module| modules.insert_full(module).0)
+                    .collect();
+                (variable, positions)
+            })
+            .collect();
+        Self {
+            target,
+            formatter,
+            variables,
+        }
+    }
+
+    fn prompt<'s>(&self, shown: &impl Fn(usize) -> &'s [Segment], context: &Context) -> String {
+        let segments = self
+            .formatter
+            .clone()
+            .map_variables_to_segments(|variable| {
+                let positions = self.variables.get(variable)?;
+                Some(Ok(positions
+                    .iter()
+                    .flat_map(|&position| shown(position).iter().cloned())
+                    .collect()))
+            })
+            .parse(None, Some(context))
+            .expect("Unexpected error returned in root format variables");
+        let painted = Painted::new(&segments, Some(context.width));
+        // continuation prompts normally do not include newlines, but they can
+        if context.root_config.add_newline && self.target != Target::Continuation {
+            shell_prompt(&painted.below_a_line_break(), context, &self.target)
+        } else {
+            shell_prompt(&painted, context, &self.target)
+        }
+    }
+}
+
+/// The text a shell's prompt variable holds for the painted `target` prompt.
+fn shell_prompt(painted: &Painted, context: &Context, target: &Target) -> String {
+    let mut buf = String::new();
+
+    // A workaround for a fish bug (see #739,#279). Applying it to all shells
+    // breaks things (see #808,#824,#834). Should only be printed in fish.
+    if Shell::Fish == context.shell && *target == Target::Main {
+        buf.push_str("\x1b[J"); // An ASCII control code to clear screen
+    }
+
+    // Painting collapses redundant ANSI color sequences, so apply it before modifying the ANSI
+    // color sequences for this specific shell
+    buf.push_str(&wrap_colorseq_for_shell(
+        painted.escaped_for(context.shell),
+        context.shell,
+    ));
+
+    if *target == Target::Right {
+        // right prompts generally do not allow newlines
+        buf = buf.replace('\n', "");
+    }
+
+    // escape \n and ! characters for tcsh
+    if context.shell == Shell::Tcsh {
+        buf = buf.replace('!', "\\!");
+        // space is required before newline
+        buf = buf.replace('\n', " \\n");
+    }
+
+    buf
 }
 
 pub fn module(module_name: &str, args: Properties) {
@@ -317,12 +499,168 @@ fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
         .collect()
 }
 
+/// The modules a format variable shows, in order: none, one, or for `$all`,
+/// `$custom` and `$env_var`, every module they expand to.
+fn modules_named(variable: &str, context: &Context, module_list: &BTreeSet<String>) -> Vec<String> {
+    if variable == "all" {
+        // Make $all display all modules not explicitly referenced
+        all_modules_uniq(module_list)
+            .iter()
+            .flat_map(|module| modules_named(module, context, module_list))
+            .collect()
+    } else if ALL_MODULES.contains(&variable) {
+        // Write out a module if it isn't disabled
+        if context.is_module_disabled_in_config(variable) {
+            Vec::new()
+        } else {
+            vec![variable.to_owned()]
+        }
+    } else if variable.starts_with("custom.") || variable.starts_with("env_var.") {
+        // custom.<name> and env_var.<name> are special cases and handle disabled modules themselves
+        vec![variable.to_owned()]
+    } else if matches!(variable, "custom" | "env_var") {
+        // env var is a special case and may contain a top-level module definition
+        let base = (variable == "env_var" && !context.is_module_disabled_in_config(variable))
+            .then(|| variable.to_owned());
+
+        // Write out all custom modules, except for those that are explicitly set
+        let children = context
+            .config
+            .get_config(&[variable])
+            .and_then(toml::Value::as_table)
+            .into_iter()
+            .flatten()
+            .filter(|(child, config)| {
+                // Some env var keys may be part of a top-level module definition
+                !(variable == "env_var" && !config.is_table())
+                    && should_add_implicit_module(variable, child, config, module_list)
+            })
+            .map(|(child, _)| format!("{variable}.{child}"));
+
+        base.into_iter().chain(children).collect()
+    } else {
+        log::debug!(
+            "Expected top level format to contain value from {ALL_MODULES:?}. Instead received {variable}",
+        );
+        Vec::new()
+    }
+}
+
+fn should_add_implicit_module(
+    parent_module: &str,
+    child_module: &str,
+    config: &toml::Value,
+    module_list: &BTreeSet<String>,
+) -> bool {
+    let explicit_module_name = format!("{parent_module}.{child_module}");
+    let is_explicitly_specified = module_list.contains(&explicit_module_name);
+
+    if is_explicitly_specified {
+        // The module is already specified explicitly, so we skip it
+        return false;
+    }
+
+    let false_value = toml::Value::Boolean(false);
+
+    !config
+        .get("disabled")
+        .unwrap_or(&false_value)
+        .as_bool()
+        .unwrap_or(false)
+}
+
 pub fn format_duration(duration: &Duration) -> String {
     let milis = duration.as_millis();
     if milis == 0 {
         "<1ms".to_string()
     } else {
         format!("{milis:?}ms")
+    }
+}
+
+/// Return the modules from $all that are not already in the list
+fn all_modules_uniq(module_list: &BTreeSet<String>) -> Vec<String> {
+    let mut prompt_order: Vec<String> = Vec::new();
+    for module in PROMPT_ORDER {
+        if !module_list.contains(*module) {
+            prompt_order.push(String::from(*module));
+        }
+    }
+
+    prompt_order
+}
+
+/// Load the correct formatter for the target (ie left prompt or right prompt)
+/// and the list of all modules used in a format string
+fn load_formatter_and_modules<'a>(
+    context: &'a Context,
+    target: &Target,
+) -> (StringFormatter<'a>, BTreeSet<String>) {
+    let config = &context.root_config;
+
+    if *target == Target::Continuation {
+        let cf = &config.continuation_prompt;
+        let formatter = StringFormatter::new(cf);
+        return match formatter {
+            Ok(f) => {
+                let modules = f.get_variables().into_iter().collect();
+                (f, modules)
+            }
+            Err(e) => {
+                log::error!("Error parsing continuation prompt: {e}");
+                (StringFormatter::raw(">"), BTreeSet::new())
+            }
+        };
+    }
+
+    let (left_format_str, right_format_str): (&str, &str) = match target {
+        Target::Main | Target::Right => (&config.format, &config.right_format),
+        Target::Profile(name) => {
+            if let Some(lf) = config
+                .user_profiles
+                .get(name)
+                .or_else(|| config.internal_profiles.get(name))
+            {
+                (lf, "")
+            } else {
+                log::error!("Profile {name:?} not found");
+                return (StringFormatter::raw(">"), BTreeSet::new());
+            }
+        }
+        Target::Continuation => unreachable!("Continuation prompt should have been handled above"),
+    };
+
+    let lf = StringFormatter::new(left_format_str);
+    let rf = StringFormatter::new(right_format_str);
+
+    if let Err(ref e) = lf {
+        let name = if let Target::Profile(profile_name) = target {
+            format!("profile.{profile_name}")
+        } else {
+            "format".to_string()
+        };
+        log::error!("Error parsing {name:?}: {e}");
+    }
+
+    if let Err(ref e) = rf {
+        log::error!("Error parsing right_format: {e}");
+    }
+
+    let modules = [&lf, &rf]
+        .into_iter()
+        .flatten()
+        .flat_map(VariableHolder::get_variables)
+        .collect();
+
+    let main_formatter = match target {
+        Target::Main | Target::Profile(_) => lf,
+        Target::Right => rf,
+        Target::Continuation => unreachable!("Continuation prompt should have been handled above"),
+    };
+
+    match main_formatter {
+        Ok(f) => (f, modules),
+        _ => (StringFormatter::raw(">"), BTreeSet::new()),
     }
 }
 
@@ -715,5 +1053,92 @@ mod test {
         let expected = "user profile";
         let actual = get_prompt(&context);
         assert_eq!(expected, actual);
+    }
+
+    fn planned_modules(config: toml::Table) -> Vec<String> {
+        let context = default_context().set_config(config);
+        Plan::new(&context, [Target::Main, Target::Right])
+            .modules
+            .into_iter()
+            .collect()
+    }
+
+    #[test]
+    fn shared_modules_have_one_plan_position() {
+        let modules = planned_modules(toml::toml! {
+            format = "$character$status$character"
+            right_format = "$status$jobs"
+        });
+
+        assert_eq!(["character", "status", "jobs"], modules.as_slice());
+    }
+
+    #[test]
+    fn disabled_modules_are_absent_from_the_plan() {
+        let modules = planned_modules(toml::toml! {
+            format = "$character$status"
+            [character]
+            disabled = true
+        });
+
+        assert_eq!(["status"], modules.as_slice());
+    }
+
+    #[test]
+    fn disabled_env_var_base_preserves_enabled_children() {
+        for format in ["$env_var", "$all"] {
+            let mut config = toml::toml! {
+                format = format
+                right_format = format
+                add_newline = false
+                [env_var]
+                disabled = true
+                default = "BASE"
+                [env_var.ENABLED]
+                disabled = false
+                default = "CHILD"
+                format = "$env_value"
+                [env_var.DISABLED]
+                disabled = true
+                default = "HIDDEN"
+            };
+            // Isolate $all from filesystem, command, and platform modules.
+            for module in ALL_MODULES.iter().filter(|module| **module != "env_var") {
+                config.insert((*module).to_owned(), toml::toml! { disabled = true }.into());
+            }
+
+            let context = default_context().set_config(config);
+            let plan = Plan::new(&context, [Target::Main, Target::Right]);
+            assert_eq!(
+                ["env_var.ENABLED"],
+                plan.modules
+                    .iter()
+                    .map(String::as_str)
+                    .collect::<Vec<_>>()
+                    .as_slice()
+            );
+
+            let rendered = plan.render(&context);
+            assert_eq!(
+                ["CHILD", "CHILD"],
+                plan.prompts(&|position| &rendered[position], &context),
+            );
+        }
+    }
+
+    #[test]
+    fn all_expands_to_every_module_neither_prompt_names() {
+        let modules = planned_modules(toml::toml! {
+            format = "$all"
+            right_format = "$directory"
+        });
+
+        let expected: Vec<_> = PROMPT_ORDER
+            .iter()
+            .copied()
+            .filter(|module| !matches!(*module, "directory" | "custom"))
+            .chain(["directory"])
+            .collect();
+        assert_eq!(expected, modules);
     }
 }
