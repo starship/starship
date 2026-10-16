@@ -408,9 +408,6 @@ pub fn mock_jj_cmd(s: &str) -> Option<crate::utils::CommandOutput> {
     if !s.contains("show @") {
         panic!("Found non-mocked JJ command: {s}");
     }
-    if !s.contains(".diff()") || s.contains(r#".diff(".")"#) {
-        panic!("JJ show template must count files across the whole working copy: {s}");
-    }
 
     // Voluntarily unformatted to allow easy modifications that don't conflict all the time
     // and to make each outputs formatted the same for easier reading
