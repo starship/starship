@@ -175,7 +175,10 @@ trait Renderer {
     /// Waits until a module renders, or until `deadline` if there is one, and
     /// returns when it stopped waiting and the modules rendered by then; or
     /// nothing, once the stream is to end, as a simulation does at its horizon.
-    fn wait(&mut self, deadline: Option<Instant>) -> Option<(Instant, Vec<Rendered>)>;
+    fn wait(
+        &mut self,
+        deadline: Option<Instant>,
+    ) -> Option<(Instant, impl Iterator<Item = Rendered> + '_)>;
 }
 
 /// Renders each module on a thread of its own, sending what it shows.
@@ -199,7 +202,10 @@ impl<F: Fn(usize) + Sync> Renderer for Threads<'_, '_, F> {
         }
     }
 
-    fn wait(&mut self, deadline: Option<Instant>) -> Option<(Instant, Vec<Rendered>)> {
+    fn wait(
+        &mut self,
+        deadline: Option<Instant>,
+    ) -> Option<(Instant, impl Iterator<Item = Rendered> + '_)> {
         let first = match deadline {
             Some(deadline) => self
                 .receiver
@@ -208,8 +214,10 @@ impl<F: Fn(usize) + Sync> Renderer for Threads<'_, '_, F> {
             // The sender outlives every render, so this waits for one.
             None => self.receiver.recv().ok(),
         };
-        let rendered = first.into_iter().chain(self.receiver.try_iter()).collect();
-        Some((Instant::now(), rendered))
+        Some((
+            Instant::now(),
+            first.into_iter().chain(self.receiver.try_iter()),
+        ))
     }
 }
 
@@ -319,6 +327,29 @@ impl Slot {
     }
 }
 
+/// How many more times a shell can draw the prompts.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Draws {
+    Unlimited,
+    /// Only so many, the last of them once every module has rendered.
+    Left(usize),
+}
+
+impl Draws {
+    /// The first paint, and `redraws` more if that is limited.
+    fn after(redraws: Option<usize>) -> Self {
+        redraws.map_or(Self::Unlimited, |redraws| {
+            Self::Left(redraws.saturating_add(1))
+        })
+    }
+
+    fn spend(&mut self) {
+        if let Self::Left(left) = self {
+            *left = left.saturating_sub(1);
+        }
+    }
+}
+
 struct Session<'context> {
     context: &'context Context<'context>,
     plan: &'context Plan<'context, 2>,
@@ -328,8 +359,7 @@ struct Session<'context> {
     bus: Bus,
     /// The prompts last drawn, once any have been.
     drawn: Option<Prompts>,
-    /// How many more times the shell can draw them, if that is limited.
-    draws: Option<usize>,
+    draws: Draws,
     /// Where to keep what the modules did for the next prompt, until kept.
     timings: Option<Timings>,
 }
@@ -374,7 +404,7 @@ impl<'context> Session<'context> {
             planning,
             slots,
             drawn: None,
-            draws: redraws.map(|redraws| redraws.saturating_add(1)),
+            draws: Draws::after(redraws),
             timings,
         }
     }
@@ -396,8 +426,7 @@ impl<'context> Session<'context> {
             {
                 self.draw(output)?;
             }
-            // A shell that can draw only so often is done with them complete.
-            if self.draws.is_some() && self.rendered() && self.bus.is_empty() {
+            if self.finished() {
                 return Ok(());
             }
             for (position, slot) in self.slots.iter_mut().enumerate() {
@@ -413,10 +442,6 @@ impl<'context> Session<'context> {
                 .filter_map(Slot::due)
                 .chain(departure)
                 .min();
-            // Nothing will change the prompts again.
-            if deadline.is_none() && self.slots.iter().all(|slot| slot.since().is_none()) {
-                return Ok(());
-            }
             let Some((then, rendered)) = renderer.wait(deadline) else {
                 return Ok(());
             };
@@ -439,7 +464,7 @@ impl<'context> Session<'context> {
     fn departure(&mut self, now: Instant) -> Option<Instant> {
         // Without async, the first paint waits indefinitely for every module,
         // including timeout-exempt commands. A shell's last draw is complete too.
-        if (!self.context.root_config.asynchronous.enabled || self.draws == Some(1))
+        if (!self.context.root_config.asynchronous.enabled || self.draws == Draws::Left(1))
             && !self.rendered()
         {
             return None;
@@ -463,9 +488,23 @@ impl<'context> Session<'context> {
         if self.drawn.as_ref() != Some(&prompts) {
             output.draw(&prompts)?;
             self.drawn = Some(prompts);
-            self.draws = self.draws.map(|draws| draws.saturating_sub(1));
+            self.draws.spend();
         }
         Ok(())
+    }
+
+    /// Whether nothing the shell is to draw will change: every module has
+    /// rendered and been drawn, and either the shell draws only so often, or
+    /// no module will ever render again.
+    fn finished(&self) -> bool {
+        self.bus.is_empty()
+            && match self.draws {
+                Draws::Left(_) => self.rendered(),
+                Draws::Unlimited => self
+                    .slots
+                    .iter()
+                    .all(|slot| matches!(slot.state, State::Rendered(None))),
+            }
     }
 
     /// Whether every module has rendered for this prompt.
@@ -564,7 +603,10 @@ mod tests {
             self.rendering.push((lands, position, text));
         }
 
-        fn wait(&mut self, deadline: Option<Instant>) -> Option<(Instant, Vec<Rendered>)> {
+        fn wait(
+            &mut self,
+            deadline: Option<Instant>,
+        ) -> Option<(Instant, impl Iterator<Item = Rendered> + '_)> {
             let next = self
                 .rendering
                 .iter()
@@ -601,8 +643,8 @@ mod tests {
                     };
                     Rendered { position, segments }
                 })
-                .collect();
-            Some((now, rendered))
+                .collect::<Vec<_>>();
+            Some((now, rendered.into_iter()))
         }
     }
 
