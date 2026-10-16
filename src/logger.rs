@@ -224,8 +224,9 @@ impl log::Log for StarshipLogger {
             record.args()
         );
 
-        // Add to duplicate detection set
-        if let Ok(mut c) = self.log_file_content.write() {
+        // Add to duplicate detection set, which only looks up warnings and
+        // errors: a long-lived stream logs ever new debug messages.
+        if !is_debug && let Ok(mut c) = self.log_file_content.write() {
             c.insert(to_print);
         }
     }
