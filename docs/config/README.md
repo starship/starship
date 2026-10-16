@@ -375,19 +375,15 @@ format = '$all$directory$character'
 
 ## Async
 
-`starship prompt --stream` emits the main and right prompts as modules finish rendering.
-The first prompt can appear before slow modules finish. Later frames include their results.
-The initial directory can use an approximation that skips repository discovery and permission
-checks. Repository shortening, repository styling, and the read-only indicator appear when the
-full directory render finishes.
-The completed prompts use the same formatting as ordinary `starship prompt` output.
-The scheduler uses how long each module took for the previous prompt of the shell session, kept
-beside its log, to group results expected close together. Slow modules can update the prompt
-independently. Missing or late estimates use the fallback waiting budget.
-A stream writes the main and right prompts, each followed by a NUL, every time they change. It
-ends once nothing will change them again, or as soon as the shell stops reading it, and
-`--redraws` limits how often it redraws them for shells that can only redraw so often.
-Supported shell integrations:
+`starship prompt --stream` draws the prompts before slow modules finish, then redraws them as they
+do, ending on what `starship prompt` prints. Until the directory renders in full, it is shown without
+repository shortening, repository styling or the read-only indicator. Redraws follow how long each
+module took for the previous prompt of the shell session, so that results expected close together
+are drawn together; a module never measured, or late, is waited for no longer than the fallback.
+
+A stream writes the main and right prompts, each followed by a NUL, every time they change. It ends
+once nothing will change them again, or the moment the shell stops reading, and `--redraws` limits
+how often it redraws them for shells that can only redraw so often. Supported shell integrations:
 
 - zsh streams both prompts, including refreshes, vi mode changes, and terminal resizing.
 - fish streams and refreshes both prompts on Unix. With a Windows Starship binary, prompts render synchronously.
@@ -405,19 +401,13 @@ Supported shell integrations:
 | `bus.adaptive` | `true`  | Use previous module timings to schedule redraws. Disable to use the fallback waiting budget for every module.                                 |
 | `bus.fallback` | `50`    | Maximum waiting budget for initial paint and later redraw batches, in milliseconds. Process startup and configuration loading are additional. |
 
-On shells that support ongoing updates, modules can refresh while the prompt is displayed. When enabled, `time` refreshes
-every hundredth or tenth of a second, or every second, if its format shows them, and otherwise every minute, on which the
-hours, days and offset transitions of every timezone fall too; it refreshes at least every second while a valid `time_range`
-controls its visibility.
-`memory_usage` refreshes every five seconds, and `battery` and `localip` every thirty seconds.
-Custom modules repeat only when their `refresh` interval is greater than zero (milliseconds).
-Refreshes align to wall-clock boundaries and redraw only when the resulting prompt changes.
-Refreshing a disabled module does not enable it.
-
-Set `[async].refresh = false` to stop all periodic refreshes. The four built-in modules above
-(`time`, `memory_usage`, `battery`, and `localip`) each support `refresh = false` to stop their
-own refreshes. Other built-in modules render once per prompt and have no `refresh` option.
-Set a custom module's `refresh = 0` to run it once per prompt.
+While the prompt is shown, modules whose values go stale render again, aligned to the wall clock,
+and the prompt is redrawn when that changes it. `time` renders again every hundredth or tenth of a
+second, or every second, if its format shows them, and otherwise every minute, on which the hours,
+days and offset transitions of every timezone fall too; with a valid `time_range`, at least every
+second. `memory_usage` renders again every five seconds, `battery` and `localip` every thirty, and a
+custom module as often as its `refresh` says, in milliseconds. Set `[async].refresh = false`, or a
+built-in module's `refresh = false`, to stop them.
 
 ### Example
 
@@ -5106,7 +5096,7 @@ format = 'via [$symbol$workspace]($style) '
 ## Time
 
 The `time` module shows the current **local** time.
-The `time_format` configuration value is used by the [`jiff`](https://crates.io/crates/jiff) crate to control how the time is displayed. Take a look [at the jiff strftime docs](https://docs.rs/jiff/latest/jiff/fmt/strtime/index.html) to see what options are available.
+The `format` configuration value is used by the [`jiff`](https://crates.io/crates/jiff) crate to control how the time is displayed. Take a look [at the jiff strftime docs](https://docs.rs/jiff/latest/jiff/fmt/strtime/index.html) to see what options are available.
 
 > [!TIP]
 > This module is disabled by default.
@@ -5122,12 +5112,11 @@ The `time_format` configuration value is used by the [`jiff`](https://crates.io/
 | `style`           | `'bold yellow'`         | The style for the module time                                                                                                                             |
 | `utc_time_offset` | `'local'`               | Sets the UTC offset to use. Either an IANA time zone name or a range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
 | `disabled`        | `true`                  | Disables the `time` module.                                                                                                                               |
-| `refresh`         | `true`                  | Refresh the displayed time and any configured `time_range` visibility changes while the prompt is shown.                                                  |
+| `refresh`         | `true`                  | Redraw the time while the prompt is shown, as often as what it shows changes.                                                                             |
 | `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                     |
 
 If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`.
 Manually setting `time_format` will override the `use_12hr` setting.
-During streaming, a valid `time_range` is checked every second, including with a literal `time_format`.
 
 ### Variables
 

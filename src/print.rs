@@ -1064,6 +1064,20 @@ mod test {
     }
 
     #[test]
+    fn a_fan_out_runs_every_job_once_however_its_tree_is_shaped() {
+        use std::sync::atomic::{AtomicUsize, Ordering};
+        for count in [0, 1, 2, 3, 6, 7, 8, 63, 64, 65, 200] {
+            let runs: Vec<AtomicUsize> = (0..count).map(|_| AtomicUsize::new(0)).collect();
+            let job = |index: usize| {
+                runs[index].fetch_add(1, Ordering::Relaxed);
+            };
+            thread::scope(|scope| fan_out(scope, count, &job));
+            let runs: Vec<usize> = runs.into_iter().map(AtomicUsize::into_inner).collect();
+            assert_eq!(vec![1; count], runs, "{count} jobs");
+        }
+    }
+
+    #[test]
     fn shared_modules_have_one_plan_position() {
         let modules = planned_modules(toml::toml! {
             format = "$character$status$character"
