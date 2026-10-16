@@ -1,6 +1,9 @@
 //! A prompt worked out from configuration before any of its modules run.
 
 use std::collections::{BTreeMap, BTreeSet};
+use std::panic::{AssertUnwindSafe, catch_unwind};
+use std::sync::OnceLock;
+use std::thread::{self, Scope};
 
 use indexmap::IndexSet;
 
@@ -8,6 +11,7 @@ use crate::configs::PROMPT_ORDER;
 use crate::context::{Context, Shell, Target};
 use crate::formatter::{StringFormatter, VariableHolder};
 use crate::module::ALL_MODULES;
+use crate::modules;
 use crate::painted::Painted;
 use crate::segment::Segment;
 use crate::utils::wrap_colorseq_for_shell;
@@ -27,6 +31,20 @@ impl<'a, const PROMPTS: usize> Plan<'a, PROMPTS> {
         Self { modules, formats }
     }
 
+    /// Renders every module of the plan at once, each into a cell of its own.
+    pub fn render(&self, context: &Context) -> Vec<Vec<Segment>> {
+        let shown: Vec<OnceLock<Vec<Segment>>> =
+            self.modules.iter().map(|_| OnceLock::new()).collect();
+        let render = |position: usize| {
+            let _ = shown[position].set(render(&self.modules[position], context));
+        };
+        thread::scope(|scope| fan_out(scope, self.modules.len(), &render));
+        shown
+            .into_iter()
+            .map(|shown| shown.into_inner().unwrap_or_default())
+            .collect()
+    }
+
     /// Compose shell-ready prompts from plan-indexed segments.
     pub fn prompts<'s>(
         &self,
@@ -37,6 +55,49 @@ impl<'a, const PROMPTS: usize> Plan<'a, PROMPTS> {
             .each_ref()
             .map(|format| format.prompt(shown, context))
     }
+}
+
+/// What `module` shows: nothing if it panics while rendering, which takes no
+/// other module down with it.
+pub fn render(module: &str, context: &Context) -> Vec<Segment> {
+    match catch_unwind(AssertUnwindSafe(|| modules::handle(module, context))) {
+        Ok(rendered) => rendered.map_or_else(Vec::new, |rendered| rendered.segments),
+        Err(_) => {
+            log::error!("The {module} module panicked while rendering");
+            Vec::new()
+        }
+    }
+}
+
+/// Runs `job` for every index below `count` at once, each on a thread of its
+/// own. The threads start one another, each the next two of a binary tree, so
+/// that starting a hundred takes about as long as starting seven in turn. A
+/// job whose thread cannot start runs on the thread that tried to start it.
+pub fn fan_out<'scope, 'environment, F: Fn(usize) + Sync>(
+    scope: &'scope Scope<'scope, 'environment>,
+    count: usize,
+    job: &'environment F,
+) {
+    fn branch<'scope, 'environment, F: Fn(usize) + Sync>(
+        scope: &'scope Scope<'scope, 'environment>,
+        index: usize,
+        count: usize,
+        job: &'environment F,
+    ) {
+        if index >= count {
+            return;
+        }
+        let subtree = move || {
+            branch(scope, 2 * index + 1, count, job);
+            branch(scope, 2 * index + 2, count, job);
+            job(index);
+        };
+        if let Err(error) = thread::Builder::new().spawn_scoped(scope, subtree) {
+            log::debug!("Unable to start a thread to render on: {error}");
+            subtree();
+        }
+    }
+    branch(scope, 0, count, job);
 }
 
 /// One format with variables resolved to module positions.
@@ -351,7 +412,7 @@ mod tests {
                     .as_slice()
             );
 
-            let rendered = crate::workers::render_all(&context, &plan.modules);
+            let rendered = plan.render(&context);
             assert_eq!(
                 ["CHILD", "CHILD"],
                 plan.prompts(&|position| &rendered[position], &context),

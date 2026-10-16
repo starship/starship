@@ -260,19 +260,10 @@ fn main() {
             ..
         } => {
             #[cfg(unix)]
-            let streamed = match signal_pid {
-                Some(shell) => stream::publish(properties, shell),
-                None => stream::stream(properties, redraws),
-            };
-            #[cfg(not(unix))]
-            let streamed = stream::stream(properties, redraws);
-            // A closed pipe is a shell that no longer wants this prompt.
-            if let Err(error) = streamed
-                && error.kind() != io::ErrorKind::BrokenPipe
-            {
-                eprintln!("Unable to stream the prompt: {error}");
-                std::process::exit(1);
+            if let Some(shell) = signal_pid {
+                stream::publish(properties, shell)
             }
+            stream::stream(properties, redraws)
         }
         Commands::Prompt {
             properties,

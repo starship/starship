@@ -10,7 +10,7 @@ use std::io::{self, Write};
 use std::os::fd::{AsFd, OwnedFd};
 use std::os::unix::ffi::OsStrExt;
 use std::path::PathBuf;
-use std::sync::{Arc, Mutex, MutexGuard, PoisonError};
+use std::sync::Arc;
 use std::time::Duration;
 use std::{env, process, thread};
 
@@ -44,8 +44,16 @@ pub fn detach() {
     }
 }
 
+/// Keeps the prompts last published, for fish to read whenever it is
+/// signaled, until it lets go of the stream, which ends the process.
+pub fn linger() -> ! {
+    loop {
+        thread::park();
+    }
+}
+
 pub struct Snapshot {
-    directory: Arc<Mutex<Directory>>,
+    directory: Arc<Directory>,
     /// The pipe fish waits on until the first prompts are published.
     waiting: Option<OwnedFd>,
 }
@@ -70,13 +78,13 @@ impl Snapshot {
             .spawn(move || {
                 loop {
                     thread::sleep(LOOK);
-                    let directory = lock(&watched);
-                    if directory.released() {
-                        directory.remove();
+                    if watched.released() {
+                        watched.remove();
                         process::exit(0);
                     }
                 }
-            })?;
+            })
+            .inspect_err(|_| snapshot.directory.remove())?;
         Ok(snapshot)
     }
 
@@ -86,39 +94,17 @@ impl Snapshot {
             let _ = fs::remove_dir(&path);
         })?;
         Ok(Self {
-            directory: Arc::new(Mutex::new(Directory {
+            directory: Arc::new(Directory {
                 path,
                 handle,
                 shell,
-            })),
+            }),
             waiting: Some(waiting),
         })
     }
 
-    /// Keeps the last prompts published, for fish to read whenever it is
-    /// signaled, until it lets go of the stream.
-    pub fn linger(&self) -> ! {
-        loop {
-            thread::park();
-        }
-    }
-}
-
-impl Directory {
-    /// Whether fish has let go of the stream: asked it to stop, or gone.
-    fn released(&self) -> bool {
-        stat::fstatat(&self.handle, "stop", AtFlags::AT_SYMLINK_NOFOLLOW).is_ok()
-            || signal::kill(self.shell, None) == Err(Errno::ESRCH)
-    }
-
-    fn remove(&self) {
-        let _ = fs::remove_dir_all(&self.path);
-    }
-}
-
-impl Sink for Snapshot {
-    fn draw(&mut self, prompts: &Prompts) -> io::Result<()> {
-        let directory = lock(&self.directory);
+    fn publish(&mut self, prompts: &Prompts) -> io::Result<()> {
+        let directory = &self.directory;
         if directory.released() {
             return Err(io::ErrorKind::BrokenPipe.into());
         }
@@ -142,14 +128,24 @@ impl Sink for Snapshot {
     }
 }
 
-impl Drop for Snapshot {
-    fn drop(&mut self) {
-        lock(&self.directory).remove();
+impl Directory {
+    /// Whether fish has let go of the stream: asked it to stop, or gone.
+    fn released(&self) -> bool {
+        stat::fstatat(&self.handle, "stop", AtFlags::AT_SYMLINK_NOFOLLOW).is_ok()
+            || signal::kill(self.shell, None) == Err(Errno::ESRCH)
+    }
+
+    fn remove(&self) {
+        let _ = fs::remove_dir_all(&self.path);
     }
 }
 
-fn lock(directory: &Mutex<Directory>) -> MutexGuard<'_, Directory> {
-    directory.lock().unwrap_or_else(PoisonError::into_inner)
+impl Sink for Snapshot {
+    /// A stream that cannot publish has ended, and its directory with it.
+    fn draw(&mut self, prompts: &Prompts) -> io::Result<()> {
+        self.publish(prompts)
+            .inspect_err(|_| self.directory.remove())
+    }
 }
 
 #[cfg(test)]
@@ -172,15 +168,11 @@ mod tests {
         (snapshot, File::from(reading))
     }
 
-    fn path(snapshot: &Snapshot) -> PathBuf {
-        lock(&snapshot.directory).path.clone()
-    }
-
     #[test]
     fn fish_reads_whole_pairs_without_nuls_once_told_where() {
         let mut fish = fish();
         let (mut snapshot, mut waiting) = snapshot(&fish);
-        let path = path(&snapshot);
+        let path = snapshot.directory.path.clone();
 
         snapshot
             .draw(&["ma\0in".to_owned(), "ri\0ght".to_owned()])
@@ -205,24 +197,26 @@ mod tests {
             fs::read_to_string(path.join("prompt")).unwrap()
         );
         assert!(!fish.wait().unwrap().success(), "fish was signaled");
-        drop(snapshot);
-        assert!(!path.exists(), "the stream removes its directory");
+        snapshot.directory.remove();
     }
 
     #[test]
     fn fish_lets_go_by_asking_the_stream_to_stop_or_by_going() {
         let mut fish = fish();
         let (mut snapshot, _waiting) = snapshot(&fish);
+        let path = snapshot.directory.path.clone();
         let prompts = ["main".to_owned(), "right".to_owned()];
-        File::create(path(&snapshot).join("stop")).unwrap();
+        File::create(path.join("stop")).unwrap();
 
         assert_eq!(
             io::ErrorKind::BrokenPipe,
             snapshot.draw(&prompts).unwrap_err().kind()
         );
+        assert!(!path.exists(), "the stream removes its directory");
         fish.kill().unwrap();
         fish.wait().unwrap();
         let (snapshot, _waiting) = self::snapshot(&fish);
-        assert!(lock(&snapshot.directory).released(), "fish has gone");
+        assert!(snapshot.directory.released(), "fish has gone");
+        snapshot.directory.remove();
     }
 }
