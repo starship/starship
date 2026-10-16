@@ -49,10 +49,10 @@ expect "$test_right_calls" 3
 # Both fields can be empty without indicating failure or forcing a restart.
 set -g test_failure ''
 printf '\0\0' >"$test_directory/prompt"
-set -l main (__starship_prompt 1 $arguments | string collect)
-set -l right (__starship_prompt 2 $arguments | string collect)
-expect "$main" ''
-expect "$right" ''
+set -l drawn_main (__starship_prompt 1 $arguments | string collect)
+set -l drawn_right (__starship_prompt 2 $arguments | string collect)
+expect "$drawn_main" ''
+expect "$drawn_right" ''
 expect "$test_stream_calls" 7
 set -q __starship_stream_arguments; or exit 4
 expect "$test_main_calls" 3
@@ -74,11 +74,20 @@ set -a arguments --jobs=2
 expect (__starship_prompt 2 $arguments) RIGHT_CACHED
 expect "$test_stream_calls" 10
 
+# Each side draws the newest pair, read as it is drawn into variables of
+# its own, leaving the user's alone.
+set -g main USER_MAIN
+set -g right USER_RIGHT
+printf 'MAIN_NEWER\0RIGHT_NEWER\0' >"$test_directory/prompt"
+expect (__starship_prompt 1 $arguments) MAIN_NEWER
+expect (__starship_prompt 2 $arguments) RIGHT_NEWER
+expect "$main $right" "USER_MAIN USER_RIGHT"
+
 # A partial update must leave the last complete pair intact.
 printf 'partial\0' >"$test_directory/prompt"
 __starship_stream_read; and exit 2
-expect (__starship_prompt 1 $arguments) MAIN_CACHED
-expect (__starship_prompt 2 $arguments) RIGHT_CACHED
+expect (__starship_prompt 1 $arguments) MAIN_NEWER
+expect (__starship_prompt 2 $arguments) RIGHT_NEWER
 expect "$test_stream_calls" 10
 __starship_stream_stop
 set -q __starship_stream_arguments; and exit 5
