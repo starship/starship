@@ -21,8 +21,8 @@ use std::time::{Duration, Instant, SystemTime};
 
 use crate::context::{Context, Properties, Target};
 use crate::modules;
-use crate::plan::{self, Plan};
-use crate::print::{self, DUMB_TERMINAL_PROMPT};
+
+use crate::print::{self, DUMB_TERMINAL_PROMPT, Plan};
 use crate::segment::Segment;
 
 use bus::{Bus, Estimate, Rendering, Span};
@@ -121,7 +121,7 @@ fn run<T>(
     );
     let (sender, receiver) = mpsc::channel();
     let render = |position: usize| {
-        let segments = plan::render(&plan.modules[position], context);
+        let segments = print::render(&plan.modules[position], context);
         // Sent to a stream that may have ended without it.
         let _ = sender.send(Rendered { position, segments });
     };
@@ -187,7 +187,7 @@ struct Threads<'scope, 'environment, F> {
 
 impl<F: Fn(usize) + Sync> Renderer for Threads<'_, '_, F> {
     fn start(&mut self, modules: usize) {
-        plan::fan_out(self.scope, modules, self.render);
+        print::fan_out(self.scope, modules, self.render);
     }
 
     fn render(&mut self, position: usize) {
