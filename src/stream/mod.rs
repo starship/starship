@@ -1052,7 +1052,7 @@ mod tests {
 
         assert_eq!(
             "custom.refreshing=0,custom.slow=300",
-            std::fs::read_to_string(path).unwrap(),
+            timings::body(&std::fs::read_to_string(path).unwrap()),
             "kept at three hundred milliseconds, while the refresh started at one hundred never lands"
         );
     }
