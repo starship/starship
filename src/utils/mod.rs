@@ -12,7 +12,6 @@ use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
 
 use crate::context::Context;
-use crate::context::Shell;
 
 /// Default timeout for command execution in milliseconds
 pub const DEFAULT_COMMAND_TIMEOUT_MS: u64 = 500;
@@ -646,76 +645,6 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
     Some(out)
 }
 
-/// Escape interpretable characters for the shell prompt
-pub fn shell_prompt_escape<T>(text: T, shell: Shell) -> String
-where
-    T: Into<String>,
-{
-    // Handle other interpretable characters
-    match shell {
-        // Bash might interpret backslashes, backticks and $
-        // see #658 for more details
-        Shell::Bash => text
-            .into()
-            // PS1 decodes prompt escapes before expanding the resulting text.
-            // Preserve each literal backslash through both stages.
-            .replace('\\', r"\\\\")
-            // In PS1, `\$` is a special root-sensitive prompt escape. The
-            // extra backslash makes the dollar literal after prompt expansion.
-            .replace('$', r"\\$")
-            .replace('`', r"\`"),
-        Shell::Zsh => {
-            // % is an escape in zsh, see PROMPT in `man zshmisc`
-            text.into().replace('%', "%%")
-        }
-        // % is an escape in tcsh too, see prompt in `man tcsh`
-        Shell::Tcsh => text.into().replace('%', "%%"),
-        // xonsh formats a prompt, filling in fields such as {user}
-        Shell::Xonsh => text.into().replace('{', "{{").replace('}', "}}"),
-        _ => text.into(),
-    }
-}
-
-/// Wraps ANSI color escape sequences in the shell-appropriate wrappers.
-/// Many shells cannot deal with raw unprintable characters and miscompute the cursor position,
-/// leading to strange visual bugs like duplicated/missing chars. This function wraps every
-/// control sequence, as a terminal parses it, in shell-specific escapes to avoid these problems.
-pub fn wrap_colorseq_for_shell(ansi: String, shell: Shell) -> String {
-    let (beg, end) = match shell {
-        // \[ and \]
-        Shell::Bash => ("\u{5c}\u{5b}", "\u{5c}\u{5d}"),
-        // %{ and %}
-        Shell::Tcsh | Shell::Zsh => ("\u{25}\u{7b}", "\u{25}\u{7d}"),
-        _ => return ansi,
-    };
-
-    let printables = anstream::adapter::strip_str(&ansi)
-        .map(|printable| (printable.as_ptr().addr() - ansi.as_ptr().addr(), printable));
-    let mut wrapped = String::with_capacity(ansi.len());
-    let mut drawn = 0;
-    // Each printable run after the controls before it, and the controls left.
-    for (mut start, mut printable) in printables.chain([(ansi.len(), "")]) {
-        // Escaping doubled the backslash of a string terminator for Bash,
-        // which decodes the two back into the one the terminal reads.
-        if shell == Shell::Bash
-            && ansi[drawn..start].ends_with("\x1b\\")
-            && let Some(rest) = printable.strip_prefix('\\')
-        {
-            start += 1;
-            printable = rest;
-        }
-        let controls = &ansi[drawn..start];
-        if !controls.is_empty() {
-            wrapped.push_str(beg);
-            wrapped.push_str(controls);
-            wrapped.push_str(end);
-        }
-        wrapped.push_str(printable);
-        drawn = start + printable.len();
-    }
-    wrapped
-}
-
 fn internal_exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
     cmd: T,
     args: &[U],
@@ -915,61 +844,6 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_bash_escape() {
-        assert_eq!(shell_prompt_escape("$HOME", Shell::Bash), r"\\$HOME");
-
-        let test = "$(echo a)";
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::Bash),
-            r"\\$(echo a)"
-        );
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
-            test
-        );
-
-        let test = r"\$(echo a)";
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::Bash),
-            r"\\\\\\$(echo a)"
-        );
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
-            test
-        );
-
-        let test = r"`echo a`";
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::Bash),
-            r"\`echo a\`"
-        );
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
-            test
-        );
-    }
-
-    #[test]
-    fn test_zsh_escape() {
-        let test = "10%";
-        assert_eq!(shell_prompt_escape(test.to_owned(), Shell::Zsh), "10%%");
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
-            test
-        );
-    }
-
-    #[test]
-    fn test_tcsh_escape() {
-        assert_eq!(shell_prompt_escape("%n", Shell::Tcsh), "%%n");
-    }
-
-    #[test]
-    fn test_xonsh_escape() {
-        assert_eq!(shell_prompt_escape("{user}", Shell::Xonsh), "{{user}}");
-    }
-
-    #[test]
     fn render_time_test_0ms() {
         assert_eq!(render_time(0_u128, true), "0ms");
     }
@@ -1120,39 +994,6 @@ mod tests {
         let expected = None;
 
         assert_eq!(result, expected);
-    }
-
-    #[test]
-    fn test_color_sequence_wrappers() {
-        for (ansi, zsh, bash) in [
-            (
-                "\x1b[31mred\x1b[0m",
-                "%{\x1b[31m%}red%{\x1b[0m%}",
-                "\\[\x1b[31m\\]red\\[\x1b[0m\\]",
-            ),
-            // A hyperlink, terminated either way, draws only its text.
-            (
-                "\x1b]8;;https://x\x1b\\aaa\x1b]8;;\x07|",
-                "%{\x1b]8;;https://x\x1b\\%}aaa%{\x1b]8;;\x07%}|",
-                "\\[\x1b]8;;https://x\x1b\\\\]aaa\\[\x1b]8;;\x07\\]|",
-            ),
-            ("\x1b[J", "%{\x1b[J%}", "\\[\x1b[J\\]"),
-            // Bash escaped the backslash of a terminator, and both belong to it.
-            (
-                "\x1b]8;;x\x1b\\\\a",
-                "%{\x1b]8;;x\x1b\\%}\\a",
-                "\\[\x1b]8;;x\x1b\\\\\\]a",
-            ),
-            ("a\x07b", "a%{\x07%}b", "a\\[\x07\\]b"),
-            ("one\ntwo", "one\ntwo", "one\ntwo"),
-            ("herpaderp", "herpaderp", "herpaderp"),
-            ("", "", ""),
-        ] {
-            assert_eq!(zsh, wrap_colorseq_for_shell(ansi.to_owned(), Shell::Zsh));
-            assert_eq!(zsh, wrap_colorseq_for_shell(ansi.to_owned(), Shell::Tcsh));
-            assert_eq!(bash, wrap_colorseq_for_shell(ansi.to_owned(), Shell::Bash));
-            assert_eq!(ansi, wrap_colorseq_for_shell(ansi.to_owned(), Shell::Fish));
-        }
     }
 
     #[test]

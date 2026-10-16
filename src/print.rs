@@ -22,7 +22,6 @@ use crate::modules;
 use crate::painted::Painted;
 use crate::segment::Segment;
 use crate::shadow;
-use crate::utils::wrap_colorseq_for_shell;
 
 pub struct Grapheme<'a>(pub &'a str);
 
@@ -336,12 +335,7 @@ fn shell_prompt(painted: &Painted, context: &Context, target: &Target) -> String
         buf.push_str("\x1b[J"); // An ASCII control code to clear screen
     }
 
-    // Painting collapses redundant ANSI color sequences, so apply it before modifying the ANSI
-    // color sequences for this specific shell
-    buf.push_str(&wrap_colorseq_for_shell(
-        painted.escaped_for(context.shell),
-        context.shell,
-    ));
+    buf.push_str(&painted.escaped_for(context.shell));
 
     if *target == Target::Right {
         // right prompts generally do not allow newlines
