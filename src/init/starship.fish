@@ -105,22 +105,30 @@ else
                 return
             end
             set -g __starship_stream_arguments $argv[2..-1]
+        else
+            # Each side reads the newest pair as it is drawn: one published in
+            # between is drawn whole once fish is signaled for it.
+            __starship_stream_read
         end
         printf %s $__starship_stream_prompts[$side]
     end
 
     # Fish warns of a redirection that fails before silencing the block, so
-    # the file is looked for first.
+    # the file is looked for first. Its fields are read into variables of
+    # this function's own, never into the user's.
     function __starship_stream_read
         test -n "$__starship_stream_directory"; and test -r "$__starship_stream_directory/prompt"; or return
+        set -l main
+        set -l right
         begin
             read -z main; and read -z right
         end <$__starship_stream_directory/prompt 2>/dev/null; or return
         set -g __starship_stream_prompts "$main" "$right"
     end
 
+    # Repainting reads the newest prompts. Keeping nothing itself, a signal
+    # handled while they are being read cannot leave older ones in their place.
     function __starship_stream_update --on-signal USR1
-        __starship_stream_read; or return
         # A prompt drawn as the command line is accepted is drawn once, as is.
         test "$TRANSIENT" = 1; or commandline -f repaint
     end
