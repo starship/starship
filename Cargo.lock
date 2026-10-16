@@ -3324,6 +3324,7 @@ name = "starship"
 version = "1.26.0"
 dependencies = [
  "anstream",
+ "anstyle-parse",
  "clap",
  "clap_complete",
  "clap_complete_nushell",

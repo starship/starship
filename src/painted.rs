@@ -94,6 +94,7 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
                     fill_index += 1;
                     stretch(value, width, style)
                 }
+                None if kind == Kind::Fill => finish_fill(Cow::Borrowed(value), style),
                 None => Cow::Borrowed(value),
             };
             Run { style, text }
@@ -130,12 +131,13 @@ fn text_width(segments: &[Segment]) -> usize {
 
 /// `pattern` repeated across `width` columns: whole repetitions, then one
 /// more up to the last grapheme that fits, if that draws anything. Escape
-/// sequences among them could leave a style other than the fill's, which is
-/// restored after them. A pattern without width keeps its natural text.
+/// sequences among them could leave a hyperlink open or a style other than
+/// the fill's; both are reset after them. A pattern without width keeps its
+/// natural text.
 fn stretch(pattern: &str, width: usize, style: AnsiStyle) -> Cow<'_, str> {
     let pattern_width = pattern.width_graphemes();
     if pattern_width == 0 {
-        return Cow::Borrowed(pattern);
+        return finish_fill(Cow::Borrowed(pattern), style);
     }
     let end = graphemes(pattern)
         .scan(width % pattern_width, |room, grapheme| {
@@ -145,11 +147,21 @@ fn stretch(pattern: &str, width: usize, style: AnsiStyle) -> Cow<'_, str> {
         .last()
         .unwrap_or(0);
     let partial = Some(&pattern[..end]).filter(|partial| partial.width_graphemes() > 0);
-    let mut stretched = pattern.repeat(width / pattern_width) + partial.unwrap_or_default();
-    if stretched.contains('\x1b') {
-        stretched += &format!("{RESET}{}", style.prefix());
+    let stretched = pattern.repeat(width / pattern_width) + partial.unwrap_or_default();
+    finish_fill(Cow::Owned(stretched), style)
+}
+
+/// A fill cannot leave controls active in the run painted after it, whether
+/// stretched or kept at its natural width.
+fn finish_fill(mut text: Cow<'_, str>, style: AnsiStyle) -> Cow<'_, str> {
+    if text.contains('\x1b') {
+        if hyperlink_is_open(&text) {
+            text.to_mut().push_str(CLOSE_HYPERLINK);
+        }
+        text.to_mut()
+            .push_str(&format!("{RESET}{}", style.prefix()));
     }
-    Cow::Owned(stretched)
+    text
 }
 
 /// Where `part`, borrowed from `text`, ends within it.
@@ -159,6 +171,31 @@ fn end_within(text: &str, part: &str) -> usize {
 
 /// What returns a terminal to its default style, whatever came before.
 const RESET: &str = "\x1b[0m";
+
+const CLOSE_HYPERLINK: &str = "\x1b]8;;\x1b\\";
+
+/// OSC 8 state after the bytes that actually fit, including complete repeats.
+/// The parser handles terminators and unrelated control strings for us.
+fn hyperlink_is_open(text: &str) -> bool {
+    #[derive(Default)]
+    struct Hyperlink(bool);
+
+    impl anstyle_parse::Perform for Hyperlink {
+        fn osc_dispatch(&mut self, params: &[&[u8]], _bell_terminated: bool) {
+            if params.len() >= 3 && params[0] == b"8" {
+                // Semicolons in a URI become further OSC parameters.
+                self.0 = !params[2].is_empty() || params.len() > 3;
+            }
+        }
+    }
+
+    let mut parser: anstyle_parse::Parser = Default::default();
+    let mut hyperlink = Hyperlink::default();
+    for byte in text.bytes() {
+        parser.advance(&mut hyperlink, byte);
+    }
+    hyperlink.0
+}
 
 /// The bytes a terminal draws, with escape sequences collapsed between runs.
 impl fmt::Display for Painted<'_> {
@@ -371,12 +408,14 @@ mod tests {
             let pattern_width = pattern.width_graphemes();
             for width in 0..10 {
                 let stretched = stretch(&pattern, width, style);
-                if pattern_width == 0 {
-                    assert_eq!(pattern, stretched);
-                    continue;
-                }
                 let drawn = stretched.strip_suffix(&restore).unwrap_or(&stretched);
                 assert_eq!(drawn.contains('\x1b'), drawn.len() < stretched.len());
+                assert!(!hyperlink_is_open(&stretched), "{pattern:?} at {width}");
+                let drawn = drawn.strip_suffix(CLOSE_HYPERLINK).unwrap_or(drawn);
+                if pattern_width == 0 {
+                    assert_eq!(pattern, drawn);
+                    continue;
+                }
                 let whole = pattern.repeat(width / pattern_width);
                 let partial = drawn.strip_prefix(&whole).unwrap();
                 assert!(pattern.starts_with(partial));
@@ -438,6 +477,102 @@ mod tests {
         }
         let pattern = "👩\x07‍👩‍👦‍👦🟦";
         assert_eq!("👩\x07‍👩‍👦‍👦", stretch(pattern, 2, style));
+    }
+
+    #[test]
+    fn partial_fills_close_hyperlinks_before_the_following_run() {
+        let style = Color::Green.normal();
+        let restore = format!("{RESET}{}", style.prefix());
+        for terminator in ["\x1b\\", "\x07"] {
+            for uri in ["https://x", "https://x;a"] {
+                let open = format!("\x1b]8;id=fill;{uri}{terminator}");
+                let close = format!("\x1b]8;;{terminator}");
+                let pattern = format!("{open}a{close}🟦");
+                assert_eq!(
+                    format!("{open}a{CLOSE_HYPERLINK}{restore}"),
+                    stretch(&pattern, 1, style)
+                );
+                let segments = [
+                    Segment::fill(parse_style_string("green", None), &pattern),
+                    text("green", "NEXT"),
+                ];
+                assert_eq!(
+                    format!("\x1b[32m{open}a{CLOSE_HYPERLINK}{restore}NEXT{RESET}"),
+                    Painted::new(&segments, Some(5)).to_string()
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn linked_graphemes_stay_whole_when_a_fill_closes_their_hyperlink() {
+        let style = Color::Green.normal();
+        let open = "\x1b]8;;https://x\x1b\\";
+        let family = format!("👩{open}‍👩‍👦‍👦");
+        let pattern = format!("{family}{CLOSE_HYPERLINK}🟦");
+        assert_eq!("", stretch(&pattern, 1, style));
+        assert_eq!(
+            format!("{family}{CLOSE_HYPERLINK}{RESET}{}", style.prefix()),
+            stretch(&pattern, 2, style)
+        );
+    }
+
+    #[test]
+    fn fill_cleanup_only_closes_hyperlinks_left_open_by_emitted_bytes() {
+        let style = Color::Green.normal();
+        let restore = format!("{RESET}{}", style.prefix());
+        let open = "\x1b]8;;https://x\x1b\\";
+        let closed = format!("{open}a{CLOSE_HYPERLINK}");
+        assert_eq!(
+            format!("{closed}{closed}{restore}"),
+            stretch(&closed, 2, style)
+        );
+        let future = format!("\x1b[31ma{open}🟦{CLOSE_HYPERLINK}");
+        assert_eq!(format!("\x1b[31ma{restore}"), stretch(&future, 1, style));
+        let title = "\x1b]0;title\x07a🟦";
+        assert_eq!(
+            format!("\x1b]0;title\x07a{restore}"),
+            stretch(title, 1, style)
+        );
+    }
+
+    #[test]
+    fn zero_width_and_natural_fills_restore_controls_before_the_following_run() {
+        let open = "\x1b]8;;https://x\x1b\\";
+        for (pattern, expected, columns) in [
+            ("\x1b[31m", "\x1b[31m".to_owned(), 0),
+            (open, format!("{open}{CLOSE_HYPERLINK}"), 0),
+            ("\x1b[31ma", "\x1b[31ma".to_owned(), 1),
+            (
+                "\x1b]8;;https://x\x1b\\a",
+                format!("{open}a{CLOSE_HYPERLINK}"),
+                1,
+            ),
+        ] {
+            let segments = [
+                Segment::fill(parse_style_string("green", None), pattern),
+                text("green", "NEXT"),
+            ];
+            for width in [None, Some(4), Some(4 + columns)] {
+                assert_eq!(
+                    format!("\x1b[32m{expected}{RESET}\x1b[32mNEXT{RESET}"),
+                    Painted::new(&segments, width).to_string(),
+                    "{pattern:?} at {width:?}"
+                );
+            }
+            if columns == 0 {
+                assert_eq!(
+                    format!("\x1b[32m{expected}{RESET}\x1b[32mNEXT{RESET}"),
+                    Painted::new(&segments, Some(8)).to_string()
+                );
+            }
+        }
+        for pattern in ["", "\u{301}", "\x07"] {
+            assert!(matches!(
+                finish_fill(Cow::Borrowed(pattern), Color::Green.normal()),
+                Cow::Borrowed(_)
+            ));
+        }
     }
 
     #[test]
