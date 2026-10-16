@@ -85,7 +85,7 @@ pub struct Context<'a> {
 
     /// a mock of the root directory
     #[cfg(test)]
-    pub root_dir: tempfile::TempDir,
+    pub root_dir: Arc<tempfile::TempDir>,
 
     #[cfg(feature = "battery")]
     pub battery_info_provider: &'a (dyn crate::modules::BatteryInfoProvider + Send + Sync),
@@ -192,13 +192,41 @@ impl<'a> Context<'a> {
             width,
             env,
             #[cfg(test)]
-            root_dir: tempfile::TempDir::new().unwrap(),
+            root_dir: Arc::new(tempfile::TempDir::new().unwrap()),
             #[cfg(test)]
             cmd: HashMap::new(),
             #[cfg(feature = "battery")]
             battery_info_provider: &crate::modules::BatteryInfoProviderImpl,
             root_config,
             claude_code_data: None,
+            _marker: PhantomData,
+        }
+    }
+
+    /// This context as a module rendering again sees it: the same
+    /// configuration and properties, but nothing of what was observed of the
+    /// filesystem and repositories, which may have changed since.
+    pub fn renewed(&self) -> Self {
+        Self {
+            config: self.config.clone(),
+            current_dir: self.current_dir.clone(),
+            logical_dir: self.logical_dir.clone(),
+            dir_contents: OnceLock::new(),
+            properties: self.properties.clone(),
+            git_repo: OnceLock::new(),
+            jj_repo: OnceLock::new(),
+            shell: self.shell,
+            target: self.target.clone(),
+            width: self.width,
+            env: self.env.clone(),
+            #[cfg(test)]
+            cmd: self.cmd.clone(),
+            #[cfg(test)]
+            root_dir: Arc::clone(&self.root_dir),
+            #[cfg(feature = "battery")]
+            battery_info_provider: self.battery_info_provider,
+            root_config: self.root_config.clone(),
+            claude_code_data: self.claude_code_data.clone(),
             _marker: PhantomData,
         }
     }
@@ -918,7 +946,7 @@ pub enum Target {
 }
 
 /// Properties as passed on from the shell as arguments
-#[derive(Parser, Debug)]
+#[derive(Parser, Clone, Debug)]
 pub struct Properties {
     /// The status code of the previously run command as an unsigned or signed 32bit integer
     #[clap(short = 's', long = "status")]
