@@ -24,7 +24,6 @@ pub mod print;
 mod segment;
 pub mod stream;
 mod utils;
-mod workers;
 
 #[cfg(test)]
 mod test;
@@ -42,19 +41,4 @@ pub fn num_rayon_threads() -> usize {
         // Default to the number of logical cores,
         // but restrict the number of threads to 8
         .unwrap_or_else(|| available_parallelism().map_or(1, usize::from).min(8))
-}
-
-/// Return the number of threads to render `modules` modules on, `waiting` of
-/// which wait on subprocesses or the filesystem rather than compute, if that
-/// is known.
-///
-/// Unless configured otherwise, one thread per logical core renders what
-/// computes, and one more renders each module that waits; without knowing how
-/// many do, as many are taken to wait as to compute.
-fn num_module_threads(modules: usize, waiting: Option<usize>) -> usize {
-    let cores = available_parallelism().map_or(1, usize::from);
-    num_configured_starship_threads()
-        .unwrap_or_else(|| cores.saturating_add(waiting.unwrap_or(cores)).clamp(4, 64))
-        .max(1)
-        .min(modules)
 }

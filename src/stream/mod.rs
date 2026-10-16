@@ -3,7 +3,8 @@
 //!
 //! A shell reads `main\0right\0` each time the prompts change, until the
 //! stream ends: once nothing will change them again, or the moment the shell
-//! stops reading, whatever is still rendering.
+//! stops reading, whatever is still rendering. Each render runs on a thread of
+//! its own, which the stream never waits for: it ends the process instead.
 
 mod bus;
 #[cfg(unix)]
@@ -13,16 +14,19 @@ mod testing;
 mod timings;
 
 use std::io::{self, Write};
+use std::process;
+use std::sync::mpsc::{self, Receiver};
+use std::thread::{self, Scope};
 use std::time::{Duration, Instant, SystemTime};
 
 use crate::context::{Context, Properties, Target};
 use crate::modules;
-use crate::plan::Plan;
+use crate::plan::{self, Plan};
 use crate::print::{self, DUMB_TERMINAL_PROMPT};
 use crate::segment::Segment;
-use crate::workers::{self, Rendered, Workers};
 
 use bus::{Bus, Estimate, Rendering, Span};
+use timings::Timings;
 
 #[cfg(unix)]
 pub use snapshot::detach;
@@ -32,20 +36,37 @@ type Prompts = [String; 2];
 
 /// Streams both prompts to standard output, redrawing them at most `redraws`
 /// times after the first paint if that is limited.
-pub fn stream(properties: Properties, redraws: Option<usize>) -> io::Result<()> {
+pub fn stream(properties: Properties, redraws: Option<usize>) -> ! {
     #[cfg(unix)]
     end_with_reader();
     let context = Context::new(properties, Target::Main);
-    run(&context, redraws, &mut io::stdout().lock())
+    run(&context, redraws, &mut io::stdout().lock(), end)
 }
 
 /// Streams both prompts to fish, which it signals as `shell`; see [`snapshot`].
 #[cfg(unix)]
-pub fn publish(properties: Properties, shell: i32) -> io::Result<()> {
+pub fn publish(properties: Properties, shell: i32) -> ! {
     let context = Context::new(properties, Target::Main);
-    let mut snapshot = snapshot::Snapshot::for_fish(nix::unistd::Pid::from_raw(shell))?;
-    run(&context, None, &mut snapshot)?;
-    snapshot.linger()
+    match snapshot::Snapshot::for_fish(nix::unistd::Pid::from_raw(shell)) {
+        Ok(mut snapshot) => run(&context, None, &mut snapshot, |streamed| match streamed {
+            Ok(()) => snapshot::linger(),
+            Err(error) => end(Err(error)),
+        }),
+        Err(error) => end(Err(error)),
+    }
+}
+
+/// Ends the process once its stream has, at once: whatever still renders,
+/// nothing needs any more.
+fn end(streamed: io::Result<()>) -> ! {
+    match streamed {
+        // A closed pipe is a shell that no longer wants this prompt.
+        Err(error) if error.kind() != io::ErrorKind::BrokenPipe => {
+            eprintln!("Unable to stream the prompt: {error}");
+            process::exit(1)
+        }
+        _ => process::exit(0),
+    }
 }
 
 /// Ends the process the moment nothing reads the pipe on its standard output
@@ -78,22 +99,40 @@ fn end_with_reader() {
     }
 }
 
-fn run(context: &Context, redraws: Option<usize>, output: &mut impl Sink) -> io::Result<()> {
+/// Streams the prompts of `context` to `output`, then hands how that went to
+/// `end`, while renders may still be running: the stream ends the process
+/// there, a test returns and waits for them.
+fn run<T>(
+    context: &Context,
+    redraws: Option<usize>,
+    output: &mut impl Sink,
+    end: impl FnOnce(io::Result<()>) -> T,
+) -> T {
     if print::is_dumb_terminal(context) {
         log::error!("Under a 'dumb' terminal (TERM=dumb).");
-        return output.draw(&[DUMB_TERMINAL_PROMPT, DUMB_TERMINAL_PROMPT].map(str::to_owned));
+        return end(output.draw(&[DUMB_TERMINAL_PROMPT, DUMB_TERMINAL_PROMPT].map(str::to_owned)));
     }
 
     let plan = Plan::new(context, [Target::Main, Target::Right]);
-    let timings = timings::path(context).and_then(timings::Writer::claim);
-    let estimates = timings::load(timings.as_ref(), &plan.modules);
-    let waiting = estimates
-        .iter()
-        .filter(|&&estimate| Estimate::waits(estimate));
-    let threads = crate::num_module_threads(plan.modules.len(), Some(waiting.count()));
-    workers::with_workers(context, &plan.modules, threads, |workers| {
-        Session::new(context, &plan, estimates, redraws, Clock::now(), timings)
-            .run(&mut &*workers, output)
+    let timings = Timings::open(context);
+    let estimates = timings::read(
+        timings.as_ref().map_or("", Timings::previous),
+        &plan.modules,
+    );
+    let (sender, receiver) = mpsc::channel();
+    let render = |position: usize| {
+        let segments = plan::render(&plan.modules[position], context);
+        // Sent to a stream that may have ended without it.
+        let _ = sender.send(Rendered { position, segments });
+    };
+    let mut session = Session::new(context, &plan, estimates, redraws, Clock::now(), timings);
+    thread::scope(|scope| {
+        let mut threads = Threads {
+            scope,
+            render: &render,
+            receiver,
+        };
+        end(session.run(&mut threads, output))
     })
 }
 
@@ -119,8 +158,18 @@ fn encode(prompts: &Prompts) -> String {
         .collect()
 }
 
-/// What renders modules for a stream: workers, or a simulation of them.
+/// What a module showed once it rendered.
+struct Rendered {
+    position: usize,
+    segments: Vec<Segment>,
+}
+
+/// What renders modules for a stream: threads, or a simulation of them.
 trait Renderer {
+    /// Starts rendering every module.
+    fn start(&mut self, modules: usize);
+
+    /// Starts rendering the module at `position` again.
     fn render(&mut self, position: usize);
 
     /// Waits until a module renders, or until `deadline` if there is one, and
@@ -129,13 +178,37 @@ trait Renderer {
     fn wait(&mut self, deadline: Option<Instant>) -> Option<(Instant, Vec<Rendered>)>;
 }
 
-impl Renderer for &Workers<'_> {
+/// Renders each module on a thread of its own, sending what it shows.
+struct Threads<'scope, 'environment, F> {
+    scope: &'scope Scope<'scope, 'environment>,
+    render: &'environment F,
+    receiver: Receiver<Rendered>,
+}
+
+impl<F: Fn(usize) + Sync> Renderer for Threads<'_, '_, F> {
+    fn start(&mut self, modules: usize) {
+        plan::fan_out(self.scope, modules, self.render);
+    }
+
     fn render(&mut self, position: usize) {
-        Workers::render(self, position);
+        let render = self.render;
+        let again = move || render(position);
+        if let Err(error) = thread::Builder::new().spawn_scoped(self.scope, again) {
+            log::debug!("Unable to start rendering on a thread of its own: {error}");
+            again();
+        }
     }
 
     fn wait(&mut self, deadline: Option<Instant>) -> Option<(Instant, Vec<Rendered>)> {
-        let rendered = Workers::wait(self, deadline);
+        let first = match deadline {
+            Some(deadline) => self
+                .receiver
+                .recv_timeout(deadline.saturating_duration_since(Instant::now()))
+                .ok(),
+            // The sender outlives every render, so this waits for one.
+            None => self.receiver.recv().ok(),
+        };
+        let rendered = first.into_iter().chain(self.receiver.try_iter()).collect();
         Some((Instant::now(), rendered))
     }
 }
@@ -166,21 +239,6 @@ impl Clock {
         let left = period - wall.checked_rem(period)?;
         Some(now + Duration::from_nanos(u64::try_from(left).ok()?))
     }
-
-    fn next_refresh(&self, now: Instant, refresh: &modules::Refresh) -> Option<Instant> {
-        match refresh {
-            modules::Refresh::Every(period) => self.next(now, Span::from(*period)),
-            modules::Refresh::Time(schedule) => {
-                let wall = self.wall + (now - self.start);
-                let timestamp = jiff::Timestamp::new(
-                    i64::try_from(wall.as_secs()).ok()?,
-                    wall.subsec_nanos() as i32,
-                )
-                .ok()?;
-                now.checked_add(schedule.delay(timestamp)?)
-            }
-        }
-    }
 }
 
 /// How the bus plans.
@@ -195,8 +253,8 @@ enum Planning {
 /// A module of the plan, as the stream shows it.
 struct Slot {
     shown: Vec<Segment>,
-    /// When it renders again while the prompt is shown, if it does.
-    refresh: Option<modules::Refresh>,
+    /// How often it renders again while the prompt is shown, if it does.
+    period: Option<Span>,
     /// What it is expected to do: what it did for the previous prompt, until
     /// it renders for this one.
     estimate: Option<Estimate>,
@@ -253,11 +311,7 @@ impl Slot {
         if let State::Rendering(_) = self.state {
             self.estimate = Some(Estimate::after(self.estimate, measured));
         }
-        self.state = State::Rendered(
-            self.refresh
-                .as_ref()
-                .and_then(|refresh| clock.next_refresh(now, refresh)),
-        );
+        self.state = State::Rendered(self.period.and_then(|period| clock.next(now, period)));
         match measured {
             Estimate::Changed(took) => Some(took),
             Estimate::Unchanged => None,
@@ -276,8 +330,8 @@ struct Session<'context> {
     drawn: Option<Prompts>,
     /// How many more times the shell can draw them, if that is limited.
     draws: Option<usize>,
-    /// Where to keep what the modules did, for the next prompt.
-    timings: Option<timings::Writer>,
+    /// Where to keep what the modules did for the next prompt, until kept.
+    timings: Option<Timings>,
 }
 
 impl<'context> Session<'context> {
@@ -287,7 +341,7 @@ impl<'context> Session<'context> {
         estimates: Vec<Option<Estimate>>,
         redraws: Option<usize>,
         clock: Clock,
-        timings: Option<timings::Writer>,
+        timings: Option<Timings>,
     ) -> Self {
         let configuration = &context.root_config.asynchronous;
         let planning = if configuration.enabled && configuration.bus.adaptive {
@@ -301,7 +355,9 @@ impl<'context> Session<'context> {
             .zip(estimates)
             .map(|(module, estimate)| Slot {
                 shown: Vec::new(),
-                refresh: modules::refresh(module, context).filter(|_| configuration.refresh),
+                period: modules::period(module, context)
+                    .filter(|_| configuration.refresh)
+                    .map(Span::from),
                 estimate,
                 state: State::Rendering(clock.start),
             })
@@ -324,13 +380,7 @@ impl<'context> Session<'context> {
     }
 
     fn run(&mut self, renderer: &mut impl Renderer, output: &mut impl Sink) -> io::Result<()> {
-        // When modules outnumber workers, those never measured render first,
-        // then those expected to change the prompt soonest.
-        let mut order: Vec<usize> = (0..self.slots.len()).collect();
-        order.sort_by_key(|&position| self.slots[position].estimate);
-        for position in order {
-            renderer.render(position);
-        }
+        renderer.start(self.slots.len());
         // Shown until they render, and worked out while they do.
         for (slot, module) in self.slots.iter_mut().zip(&self.plan.modules) {
             if let Some(approximation) = modules::approximate(module, self.context) {
@@ -371,17 +421,16 @@ impl<'context> Session<'context> {
                 return Ok(());
             };
             now = then;
-            let unrendered = !self.rendered();
             for Rendered { position, segments } in rendered {
                 if let Some(took) = self.slots[position].land(segments, now, &self.clock) {
                     self.bus.board(now, took);
                 }
             }
-            if unrendered
-                && self.rendered()
-                && let Some(timings) = &self.timings
+            // Kept once, as soon as every module has rendered for this prompt.
+            if self.rendered()
+                && let Some(timings) = self.timings.take()
             {
-                timings.save(&self.report());
+                timings.keep(&self.report());
             }
         }
     }
@@ -445,11 +494,10 @@ mod tests {
     use crate::test::default_context;
     use proptest::prelude::*;
     use std::cell::Cell;
-    use std::collections::VecDeque;
+    use std::convert::identity;
     use std::path::PathBuf;
 
     const FALLBACK: u64 = 50;
-    const EVERY_WORKER: usize = usize::MAX;
 
     fn context(configuration: toml::Table) -> Context<'static> {
         let mut context = default_context().set_config(configuration);
@@ -469,16 +517,13 @@ mod tests {
     /// shows; the last one repeats.
     type Script<'a> = &'a [(&'a str, &'a [(u64, &'a str)])];
 
-    /// Workers rendering on a simulated clock, as many at once as there are,
-    /// until a horizon.
+    /// Modules rendering on a simulated clock, until a horizon.
     struct Simulation<'a> {
         renders: Vec<&'a [(u64, &'a str)]>,
-        workers: usize,
         now: &'a Cell<Instant>,
         start: Instant,
         horizon: Instant,
         rendering: Vec<(Instant, usize, &'a str)>,
-        queued: VecDeque<usize>,
         /// When each module first rendered.
         first: Vec<Option<u64>>,
         /// Whether the stream was still going at the horizon.
@@ -506,36 +551,31 @@ mod tests {
                 .collect();
             Self {
                 renders,
-                workers: settings.workers,
                 now,
                 start: now.get(),
                 horizon: now.get() + milliseconds(settings.horizon),
                 rendering: Vec::new(),
-                queued: VecDeque::new(),
                 first: vec![None; plan.modules.len()],
                 reached_horizon: false,
-            }
-        }
-
-        fn start_queued(&mut self) {
-            while self.rendering.len() < self.workers
-                && let Some(position) = self.queued.pop_front()
-            {
-                let renders = &mut self.renders[position];
-                let &(took, text) = renders.first().expect("a render");
-                if renders.len() > 1 {
-                    *renders = &renders[1..];
-                }
-                self.rendering
-                    .push((self.now.get() + milliseconds(took), position, text));
             }
         }
     }
 
     impl Renderer for Simulation<'_> {
+        fn start(&mut self, modules: usize) {
+            for position in 0..modules {
+                self.render(position);
+            }
+        }
+
         fn render(&mut self, position: usize) {
-            self.queued.push_back(position);
-            self.start_queued();
+            let renders = &mut self.renders[position];
+            let &(took, text) = renders.first().expect("a render");
+            if renders.len() > 1 {
+                *renders = &renders[1..];
+            }
+            self.rendering
+                .push((self.now.get() + milliseconds(took), position, text));
         }
 
         fn wait(&mut self, deadline: Option<Instant>) -> Option<(Instant, Vec<Rendered>)> {
@@ -569,7 +609,6 @@ mod tests {
                     Rendered { position, segments }
                 })
                 .collect();
-            self.start_queued();
             Some((now, rendered))
         }
     }
@@ -593,8 +632,8 @@ mod tests {
         /// The wall clock at the start, in milliseconds since the Unix epoch.
         wall: u64,
         horizon: u64,
-        workers: usize,
         redraws: Option<usize>,
+        /// Where the session keeps its timings, if anywhere.
         timings: Option<PathBuf>,
     }
 
@@ -603,7 +642,6 @@ mod tests {
             Self {
                 wall: 0,
                 horizon: 60_000,
-                workers: EVERY_WORKER,
                 redraws: None,
                 timings: None,
             }
@@ -655,7 +693,9 @@ mod tests {
             estimates,
             settings.redraws,
             clock,
-            settings.timings.and_then(timings::Writer::claim),
+            settings
+                .timings
+                .map(|directory| Timings::at(directory, "key", SystemTime::now())),
         );
         session.run(&mut simulation, &mut recording).unwrap();
         Simulated {
@@ -819,29 +859,6 @@ mod tests {
 
         assert_eq!(vec![(1, "ab"), (110, "Ab"), (145, "AB")], simulated.mains());
         assert!(!simulated.ended, "both refresh again at two hundred");
-    }
-
-    #[test]
-    fn with_fewer_workers_than_modules_the_quickest_render_first() {
-        let simulated = simulate_in(
-            Settings {
-                workers: 1,
-                ..Settings::default()
-            },
-            &three_modules(toml::Table::new()),
-            "character=0,custom.a=1000,custom.b=5",
-            &[
-                ("character", &[(0, ">")]),
-                ("custom.a", &[(1000, "a")]),
-                ("custom.b", &[(5, "b")]),
-            ],
-        );
-
-        assert_eq!(
-            vec![(5, "b>"), (1005, "ab>")],
-            simulated.mains(),
-            "the plan puts a, the slowest, before b"
-        );
     }
 
     #[test]
@@ -1052,7 +1069,7 @@ mod tests {
 
         assert_eq!(
             "custom.refreshing=0,custom.slow=300",
-            timings::body(&std::fs::read_to_string(path).unwrap()),
+            Timings::at(path, "key", SystemTime::now()).previous(),
             "kept at three hundred milliseconds, while the refresh started at one hundred never lands"
         );
     }
@@ -1065,12 +1082,6 @@ mod tests {
                 toml::toml! { format = "$time"
                 time.disabled = false },
                 false,
-            ),
-            (
-                toml::toml! { format = "$time"
-                time.disabled = false
-                time.time_format = "today" },
-                true,
             ),
             (
                 toml::toml! { format = "$time"
@@ -1266,9 +1277,8 @@ mod tests {
         #[test]
         fn redraws_show_every_module_promptly_and_end_complete(
             modules in prop::collection::vec(generated(0..3_000), 1..=GENERATED.len()),
-            workers in 1_usize..=GENERATED.len(),
         ) {
-            let simulated = simulate_generated(&modules, Settings { workers, ..Settings::default() });
+            let simulated = simulate_generated(&modules, Settings::default());
             let drawn = simulated.mains();
 
             prop_assert!(simulated.ended);
@@ -1392,7 +1402,7 @@ mod tests {
             async.enabled = false
         });
         let mut output = Vec::new();
-        run(&context, None, &mut output).unwrap();
+        run(&context, None, &mut output, identity).unwrap();
 
         assert_eq!(
             vec![[print::get_prompt(&context), String::new()]],
@@ -1405,7 +1415,7 @@ mod tests {
         let mut context = context(toml::toml! { format = "$time" });
         context.env.insert("TERM", "dumb".to_owned());
         let mut output = Vec::new();
-        run(&context, None, &mut output).unwrap();
+        run(&context, None, &mut output, identity).unwrap();
 
         assert_eq!(DUMB_TERMINAL_PROMPT, print::get_prompt(&context));
         assert_eq!(
@@ -1446,7 +1456,7 @@ mod tests {
             deadline: Instant::now() + milliseconds(1100),
         };
 
-        let error = run(&context, None, &mut output).unwrap_err();
+        let error = run(&context, None, &mut output, identity).unwrap_err();
         assert_eq!(io::ErrorKind::BrokenPipe, error.kind());
         let mains: Vec<_> = read_prompts(&output.written)
             .into_iter()
@@ -1493,7 +1503,7 @@ mod tests {
                 context
             };
             let mut output = Vec::new();
-            run(&context_for(Target::Main), None, &mut output).unwrap();
+            run(&context_for(Target::Main), None, &mut output, identity).unwrap();
 
             assert_eq!(
                 Some([
@@ -1563,14 +1573,6 @@ mod tests {
             Some(boundary + second),
             clock.next(boundary, second),
             "a refresh on a boundary falls due on the next"
-        );
-        assert_eq!(
-            clock.next(boundary, Span::MAX),
-            clock.next_refresh(
-                boundary,
-                &modules::Refresh::Every(Span::MAX.get() + Duration::from_secs(1)),
-            ),
-            "generic refreshes retain their bounded planning span"
         );
         assert_eq!(
             None,
