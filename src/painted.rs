@@ -129,10 +129,11 @@ fn text_width(segments: &[Segment]) -> usize {
 /// more up to the last grapheme that fits, if that draws anything. Escape
 /// sequences among them could leave a hyperlink open or a style other than
 /// the fill's; both are reset after them. A pattern without width keeps its
-/// natural text.
+/// natural text, as does one whose repetitions would join into fewer
+/// graphemes, such as one ending in a joiner.
 fn stretch(pattern: &str, width: usize, style: AnsiStyle) -> Cow<'_, str> {
     let pattern_width = pattern.width_graphemes();
-    if pattern_width == 0 {
+    if pattern_width == 0 || pattern.repeat(2).width_graphemes() != 2 * pattern_width {
         return finish_fill(Cow::Borrowed(pattern), style);
     }
     let end = graphemes(pattern)
@@ -352,6 +353,16 @@ mod tests {
         let painted = Painted::new(&segments, Some(8));
         assert_eq!("....", painted.lines[0][1].text);
         assert_eq!(8, painted.to_string().width_graphemes());
+    }
+
+    #[test]
+    fn a_fill_whose_repetitions_would_join_keeps_its_natural_text() {
+        let joining = "\u{1f469}\u{200d}";
+        assert_eq!(joining, stretch(joining, 8, AnsiStyle::new()));
+        assert_eq!(
+            "\u{1f469}".repeat(4),
+            stretch("\u{1f469}", 8, AnsiStyle::new())
+        );
     }
 
     #[test]
