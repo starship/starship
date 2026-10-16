@@ -600,6 +600,54 @@ vimcmd_symbol = "NORMAL"
     session.close();
 }
 
+/// Each behavior, as a test in each shell that has it, named for both.
+macro_rules! in_shells {
+    ($($shell:ident, $requirement:literal: $($test:ident => $behavior:ident),+;)+) => {
+        $($(
+            #[test]
+            #[ignore = $requirement]
+            fn $test() {
+                $behavior(Shell::$shell);
+            }
+        )+)+
+    };
+}
+
+in_shells! {
+    Zsh, "requires zsh":
+        zsh_streams => streams,
+        zsh_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
+        zsh_shows_text_as_it_is => text_is_shown_as_it_is,
+        zsh_keeps_the_right_prompt_current => the_right_prompt_is_kept_current,
+        zsh_redraws_the_vi_mode_indicator => vi_mode_redraws_the_indicator;
+    Fish, "requires fish":
+        fish_streams => streams,
+        fish_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
+        fish_shows_text_as_it_is => text_is_shown_as_it_is,
+        fish_keeps_the_right_prompt_current => the_right_prompt_is_kept_current;
+    Nushell, "requires nu 0.115 or later":
+        nushell_streams => streams,
+        nushell_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
+        nushell_shows_text_as_it_is => text_is_shown_as_it_is,
+        nushell_keeps_the_right_prompt_current => the_right_prompt_is_kept_current;
+    Bash, "requires bash":
+        bash_shows_text_as_it_is => text_is_shown_as_it_is;
+    BashWithBle, "requires bash 4.2 or later, and STARSHIP_TEST_BLE naming ble.sh":
+        bash_with_ble_streams => streams,
+        bash_with_ble_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
+        bash_with_ble_shows_text_as_it_is => text_is_shown_as_it_is,
+        bash_with_ble_keeps_the_right_prompt_current => the_right_prompt_is_kept_current;
+    Xonsh, "requires xonsh":
+        xonsh_streams => streams,
+        xonsh_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
+        xonsh_shows_text_as_it_is => text_is_shown_as_it_is,
+        xonsh_keeps_the_right_prompt_current => the_right_prompt_is_kept_current;
+    Pwsh, "requires pwsh":
+        pwsh_redraws_once_finished => redraws_once_finished,
+        pwsh_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
+        pwsh_shows_text_as_it_is => text_is_shown_as_it_is;
+}
+
 #[test]
 #[ignore = "requires zsh"]
 fn zsh_draws_what_later_precmd_hooks_leave() {
@@ -623,161 +671,34 @@ format = "$env_value"
 }
 
 #[test]
-#[ignore = "requires zsh"]
-fn zsh_streams() {
-    streams(Shell::Zsh);
-}
-
-#[test]
-#[ignore = "requires zsh"]
-fn zsh_leaves_an_accepted_line_alone() {
-    an_accepted_line_is_left_alone(Shell::Zsh);
-}
-
-#[test]
-#[ignore = "requires zsh"]
-fn zsh_shows_text_as_it_is() {
-    text_is_shown_as_it_is(Shell::Zsh);
-}
-
-#[test]
-#[ignore = "requires zsh"]
-fn zsh_keeps_the_right_prompt_current() {
-    the_right_prompt_is_kept_current(Shell::Zsh);
-}
-
-#[test]
-#[ignore = "requires zsh"]
-fn zsh_redraws_the_vi_mode_indicator() {
-    vi_mode_redraws_the_indicator(Shell::Zsh);
-}
-
-#[test]
 #[ignore = "requires fish"]
-fn fish_streams() {
-    streams(Shell::Fish);
-}
-
-#[test]
-#[ignore = "requires fish"]
-fn fish_leaves_an_accepted_line_alone() {
-    an_accepted_line_is_left_alone(Shell::Fish);
-}
-
-#[test]
-#[ignore = "requires fish"]
-fn fish_shows_text_as_it_is() {
-    text_is_shown_as_it_is(Shell::Fish);
-}
-
-#[test]
-#[ignore = "requires fish"]
-fn fish_keeps_the_right_prompt_current() {
-    the_right_prompt_is_kept_current(Shell::Fish);
-}
-
-#[test]
-#[ignore = "requires fish"]
-fn fish_consumes_updates_published_before_pid_registration() {
-    let fixture = Fixture::new(
-        Shell::Fish,
-        r#"
-format = "INITIAL${custom.slow}END"
-add_newline = false
-[async.bus]
-fallback = 1
-[custom.slow]
-command = "sleep 0.1; printf FINAL"
-when = true
-shell = ["/bin/sh"]
-format = "$output"
-"#,
-    );
-    let init = fs::read_to_string(&fixture.init).unwrap();
-    let registration = "        set -g __starship_stream_pid $pid";
-    assert!(init.contains(registration));
-    // Hold registration until the publisher has written and signaled its
-    // final prompt. Its signal must therefore be ignored by the old handler.
-    let delayed = init.replace(
-        registration,
-        &format!(
-            "        for attempt in (seq 1 500)\n            test -f $__starship_stream_directory/$pid; and break\n            sleep 0.01\n        end\n{registration}",
-        ),
-    );
-    fs::write(&fixture.init, delayed).unwrap();
-    fs::File::open(&fixture.init).unwrap().sync_all().unwrap();
+fn fish_stops_its_stream_which_removes_its_directory() {
+    let fixture = Fixture::new(Shell::Fish, "format = \"MARK\"\nadd_newline = false\n");
     let output = Command::new(Shell::Fish.program())
         .args([
             "--no-config",
             "--command",
-            "source \"$STARSHIP_INIT\"; __starship_stream_start --status=0; \
-             printf 'LATEST:%s\\n' \"$__starship_stream_prompts[1]\"; __starship_stream_stop",
+            r#"
+source "$STARSHIP_INIT"
+__starship_prompt 1 --status=0 >/dev/null
+set -l directory $__starship_stream_directory
+test -d "$directory"; or exit 1
+__starship_stream_stop
+for attempt in (seq 50)
+    test -d "$directory"; or break
+    sleep 0.1
+end
+test -d "$directory"; and exit 2
+printf 'STOPPED\n'
+"#,
         ])
         .envs(fixture.environment(Shell::Fish))
         .current_dir(fixture.directory.path())
         .output()
-        .expect("fish consumes a startup snapshot");
+        .expect("fish starts and stops a stream");
     assert!(output.status.success(), "{output:?}");
-    assert_eq!(
-        "LATEST:\x1b[JINITIALFINALEND\n",
-        String::from_utf8_lossy(&output.stdout)
-    );
-    fixture.directory.close().unwrap();
-}
-
-#[test]
-#[ignore = "requires fish"]
-fn fish_revokes_only_its_lease_even_without_a_registered_pid() {
-    let fixture = Fixture::new(Shell::Fish, "");
-    let mut sentinel = Command::new("/bin/sleep").arg("30").spawn().unwrap();
-    let mut outputs = Vec::new();
-    for (name, pid) in [
-        ("unregistered", String::new()),
-        ("recycled", sentinel.id().to_string()),
-    ] {
-        let lease = fixture.directory.path().join(name);
-        fs::create_dir(&lease).unwrap();
-        fs::File::create(lease.join(".active"))
-            .unwrap()
-            .sync_all()
-            .unwrap();
-        outputs.push(
-            Command::new(Shell::Fish.program())
-                .args([
-                    "--no-config",
-                    "--command",
-                    r#"
-source "$STARSHIP_INIT"
-set -g __starship_stream_directory "$LEASE"
-set -g __starship_stream_pid "$PID_VALUE"
-__starship_stream_stop
-test ! -d "$LEASE"; or exit 1
-test -z "$__starship_stream_directory"; or exit 2
-__starship_stream_stop
-printf 'STOPPED\n'
-"#,
-                ])
-                .envs(fixture.environment(Shell::Fish))
-                .env("LEASE", &lease)
-                .env("PID_VALUE", pid)
-                .current_dir(fixture.directory.path())
-                .output()
-                .unwrap(),
-        );
-    }
-    let survived = sentinel.try_wait().unwrap().is_none();
-    let _ = sentinel.kill();
-    sentinel.wait().unwrap();
-    assert!(
-        survived,
-        "stopping a stale stream killed an unrelated owned sentinel"
-    );
-    for output in outputs {
-        assert!(output.status.success(), "{output:?}");
-        assert_eq!(b"STOPPED\n", output.stdout.as_slice());
-        assert!(output.stderr.is_empty(), "{output:?}");
-    }
-    fixture.directory.close().unwrap();
+    assert_eq!(b"STOPPED\n", output.stdout.as_slice());
+    assert!(output.stderr.is_empty(), "{output:?}");
 }
 
 #[test]
@@ -813,145 +734,85 @@ refresh = 100
     session.close();
 }
 
-#[test]
-#[ignore = "requires nu 0.115 or later"]
-fn nushell_streams() {
-    streams(Shell::Nushell);
-}
-
-#[test]
-#[ignore = "requires nu 0.115 or later"]
-fn nushell_leaves_an_accepted_line_alone() {
-    an_accepted_line_is_left_alone(Shell::Nushell);
-}
-
-#[test]
-#[ignore = "requires nu 0.115 or later"]
-fn nushell_shows_text_as_it_is() {
-    text_is_shown_as_it_is(Shell::Nushell);
-}
-
-#[test]
-#[ignore = "requires nu 0.115 or later"]
-fn nushell_keeps_the_right_prompt_current() {
-    the_right_prompt_is_kept_current(Shell::Nushell);
-}
-
-#[test]
-#[ignore = "requires bash"]
-fn bash_shows_text_as_it_is() {
-    text_is_shown_as_it_is(Shell::Bash);
-}
-
-#[test]
-#[ignore = "requires bash 4.2 or later, and STARSHIP_TEST_BLE naming ble.sh"]
-fn bash_with_ble_streams() {
-    streams(Shell::BashWithBle);
-}
-
-#[test]
-#[ignore = "requires bash 4.2 or later, and STARSHIP_TEST_BLE naming ble.sh"]
-fn bash_with_ble_leaves_an_accepted_line_alone() {
-    an_accepted_line_is_left_alone(Shell::BashWithBle);
-}
-
-#[test]
-#[ignore = "requires bash 4.2 or later, and STARSHIP_TEST_BLE naming ble.sh"]
-fn bash_with_ble_shows_text_as_it_is() {
-    text_is_shown_as_it_is(Shell::BashWithBle);
-}
-
-#[test]
-#[ignore = "requires bash 4.2 or later, and STARSHIP_TEST_BLE naming ble.sh"]
-fn bash_with_ble_keeps_the_right_prompt_current() {
-    the_right_prompt_is_kept_current(Shell::BashWithBle);
-}
-
-#[test]
-#[ignore = "requires xonsh"]
-fn xonsh_streams() {
-    streams(Shell::Xonsh);
-}
-
-#[test]
-#[ignore = "requires xonsh"]
-fn xonsh_leaves_an_accepted_line_alone() {
-    an_accepted_line_is_left_alone(Shell::Xonsh);
-}
-
-#[test]
-#[ignore = "requires xonsh"]
-fn xonsh_shows_text_as_it_is() {
-    text_is_shown_as_it_is(Shell::Xonsh);
-}
-
-#[test]
-#[ignore = "requires xonsh"]
-fn xonsh_keeps_the_right_prompt_current() {
-    the_right_prompt_is_kept_current(Shell::Xonsh);
-}
-
-#[test]
-#[ignore = "requires pwsh"]
-fn pwsh_redraws_once_finished() {
-    redraws_once_finished(Shell::Pwsh);
-}
-
-#[test]
-#[ignore = "requires /bin/sh"]
-fn owned_control_eof_stops_an_active_synchronous_render() {
+/// A stream rendering a module that never finishes ends the moment the shell
+/// stops reading it, whether or not it has drawn the first paint.
+fn a_stream_ends_once_its_shell_stops_reading(asynchronous: bool) {
     let fixture = Fixture::new(
         Shell::Bash,
-        r#"
-format = "${custom.slow}"
+        &format!(
+            r#"
+format = "${{custom.slow}}"
+add_newline = false
 [async]
-enabled = false
+enabled = {asynchronous}
 [custom.slow]
-command = 'touch "$STARSHIP_CONTROL_STARTED"; sleep 5'
+command = 'touch "$STARSHIP_RENDERING"; sleep 30'
 shell = ["/bin/sh"]
 when = true
 ignore_timeout = true
 format = "$output"
-"#,
+"#
+        ),
     );
-    let marker = fixture.directory.path().join("render-started");
-    let mut child = Command::new(starship())
-        .args(["prompt", "--stream", "--stream-control-stdin"])
+    let rendering = fixture.directory.path().join("rendering");
+    let mut stream = Command::new(starship())
+        .args(["prompt", "--stream"])
         .envs(fixture.environment(Shell::Bash))
-        .env("STARSHIP_CONTROL_STARTED", &marker)
-        .stdin(Stdio::piped())
-        .stdout(Stdio::null())
+        .env("STARSHIP_RENDERING", &rendering)
+        .stdin(Stdio::null())
+        .stdout(Stdio::piped())
         .stderr(Stdio::null())
         .spawn()
         .unwrap();
-    let startup = Instant::now();
-    while !marker.exists() {
-        if startup.elapsed() > TIMEOUT {
-            let _ = child.kill();
-            let _ = child.wait();
-            panic!("the synchronous renderer never started");
-        }
+    let mut prompts = stream.stdout.take().unwrap();
+    if asynchronous {
+        let mut first = [0; 2];
+        prompts.read_exact(&mut first).unwrap();
+        assert_eq!(
+            b"\0\0", &first,
+            "the first paint, before the module renders"
+        );
+    }
+    let started = Instant::now();
+    while !rendering.exists() {
+        assert!(
+            started.elapsed() < TIMEOUT,
+            "the module never started rendering"
+        );
         thread::sleep(Duration::from_millis(10));
     }
-    drop(child.stdin.take());
+
+    drop(prompts);
     let closed = Instant::now();
-    loop {
-        if let Some(status) = child.try_wait().unwrap() {
-            assert!(status.success(), "ownership cancellation failed: {status}");
-            break;
+    let status = loop {
+        if let Some(status) = stream.try_wait().unwrap() {
+            break status;
         }
         if closed.elapsed() > Duration::from_secs(2) {
-            let _ = child.kill();
-            let _ = child.wait();
-            panic!("owned EOF did not stop the active renderer");
+            let _ = stream.kill();
+            let _ = stream.wait();
+            panic!("the stream kept rendering for a shell that stopped reading");
         }
         thread::sleep(Duration::from_millis(10));
-    }
+    };
+    assert!(status.success(), "{status}");
+}
+
+#[test]
+#[ignore = "requires /bin/sh"]
+fn a_stream_ends_once_its_shell_stops_reading_the_first_paint() {
+    a_stream_ends_once_its_shell_stops_reading(true);
+}
+
+#[test]
+#[ignore = "requires /bin/sh"]
+fn a_stream_without_async_ends_once_its_shell_stops_waiting_for_it() {
+    a_stream_ends_once_its_shell_stops_reading(false);
 }
 
 #[test]
 #[ignore = "requires pwsh"]
-fn pwsh_cancels_its_owned_reader_and_decodes_split_utf8() {
+fn pwsh_reads_prompts_split_anywhere_and_cancels_its_reader() {
     let output = Command::new(Shell::Pwsh.program())
         .args(["-NoLogo", "-NoProfile", "-NonInteractive", "-File"])
         .arg(Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/powershell-stream.ps1"))
@@ -961,16 +822,4 @@ fn pwsh_cancels_its_owned_reader_and_decodes_split_utf8() {
         .expect("PowerShell exercises the production stream pump");
     assert!(output.status.success(), "{output:?}");
     assert!(String::from_utf8_lossy(&output.stdout).contains("PASS: split UTF-8"));
-}
-
-#[test]
-#[ignore = "requires pwsh"]
-fn pwsh_leaves_an_accepted_line_alone() {
-    an_accepted_line_is_left_alone(Shell::Pwsh);
-}
-
-#[test]
-#[ignore = "requires pwsh"]
-fn pwsh_shows_text_as_it_is() {
-    text_is_shown_as_it_is(Shell::Pwsh);
 }

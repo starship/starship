@@ -24,12 +24,11 @@ $null = New-Module starship {
     }
 
     function Start-Native {
-        param($Executable, $Arguments, [switch]$RedirectStandardInput)
+        param($Executable, $Arguments)
         $startInfo = New-Object System.Diagnostics.ProcessStartInfo -ArgumentList $Executable -Property @{
             StandardOutputEncoding = [System.Text.Encoding]::UTF8;
             RedirectStandardOutput = $true;
             RedirectStandardError = $true;
-            RedirectStandardInput = [bool] $RedirectStandardInput;
             CreateNoWindow = $true;
             UseShellExecute = $false;
         };
@@ -76,39 +75,29 @@ $null = New-Module starship {
         $stdout.Result;
     }
 
-    # PSReadLine allows one redraw before typing; use it at completion.
+    # PSReadLine redraws a prompt once while it reads a line: the stream draws
+    # the prompt, draws it again once complete if that changes it, and ends.
     $script:StreamPump = {
         param($Stream, $Events)
         $block = [byte[]]::new(65536)
         $characters = [char[]]::new([Text.Encoding]::UTF8.GetMaxCharCount($block.Length))
         $decoder = [Text.Encoding]::UTF8.GetDecoder()
         $received = ''
+        $fields = @()
         try {
             while (($read = $Stream.Process.StandardOutput.BaseStream.ReadAsync(
                         $block, 0, $block.Length, $Stream.Cancellation.Token).GetAwaiter().GetResult()) -gt 0) {
-                # PSReadLine has no right prompt; use the first field.
-                $decoded = $decoder.GetChars($block, 0, $read, $characters, 0)
-                $fields = ($received + [string]::new($characters, 0, $decoded)).Split([char] 0)
-                $frames = [math]::Floor(($fields.Count - 1) / 3)
-                for ($frame = 0; $frame -lt $frames; $frame++) {
-                    $first = $fields[3 * $frame + 1]
-                    switch ($fields[3 * $frame]) {
-                        'PROMPT' {
-                            $Stream.Prompt = $first
-                            if ($Stream.Ready.IsSet) { $Stream.Refined = $true } else { $Stream.Ready.Set() }
-                        }
-                        'COMPLETE' {
-                            $Stream.Timings = $first
-                            if ($Stream.Refined) {
-                                $null = $Events.GenerateEvent('Starship.Refined', $Stream, $null, $null)
-                            }
-                            # Revoke the owned stream even if a refresh worker is blocked.
-                            $Stream.Process.StandardInput.Close()
-                            return
-                        }
-                    }
+                $received += [string]::new($characters, 0, $decoder.GetChars($block, 0, $read, $characters, 0))
+                # PSReadLine has no right prompt; the first of each pair is the main one.
+                $fields = $received.Split([char] 0)
+                if ($fields.Count -ge 3 -and -not $Stream.Ready.IsSet) {
+                    $Stream.Prompt = $fields[0]
+                    $Stream.Ready.Set()
                 }
-                $received = $fields[(3 * $frames)..($fields.Count - 1)] -join [char] 0
+            }
+            if ($fields.Count -ge 5) {
+                $Stream.Prompt = $fields[2]
+                $null = $Events.GenerateEvent('Starship.Refined', $Stream, $null, $null)
             }
         } catch [System.OperationCanceledException] {
             if (-not $Stream.Cancellation.IsCancellationRequested) { throw }
@@ -137,12 +126,10 @@ $null = New-Module starship {
 
     function Start-StarshipStream {
         param($Arguments)
-        $arguments = @("prompt", "--stream", "--stream-control-stdin", "--timings=$script:StreamTimings") + $Arguments
+        $arguments = @("prompt", "--stream", "--redraws=1") + $Arguments
         $stream = [hashtable]::Synchronized(@{
             Ready = [System.Threading.ManualResetEventSlim]::new()
             Prompt = $null
-            Refined = $false
-            Timings = $null
             Cancellation = [System.Threading.CancellationTokenSource]::new()
 
             # Event actions run in another module; carry this module's redraw closure.
@@ -153,11 +140,11 @@ $null = New-Module starship {
             # An exiting direct child pauses PSReadLine events until a keypress.
             # Launch as a grandchild through a short-lived shell instead.
             $stream.Process = Start-Native '/bin/sh' (
-                @('-c', '"$0" "$@" <&0 2>/dev/null &', ::STARSHIP::) + $arguments) -RedirectStandardInput
+                @('-c', '"$0" "$@" 2>/dev/null &', ::STARSHIP::) + $arguments)
             $null = $stream.Process.StandardError.ReadToEnd()
             $stream.Process.WaitForExit()
         } else {
-            $stream.Process = Start-Native ::STARSHIP:: $arguments -RedirectStandardInput
+            $stream.Process = Start-Native ::STARSHIP:: $arguments
             # Drain the pipe so the writer can finish.
             $null = $stream.Process.StandardError.ReadToEndAsync()
         }
@@ -178,19 +165,20 @@ $null = New-Module starship {
         $stream = $script:Stream
         if ($null -eq $stream) { return }
         $script:Stream = $null
-        # Closing the owned control writer stops the producer itself, including
-        # synchronous renders. Its exit also releases Framework's uncancellable
-        # output reads. No process is looked up or signaled by numeric PID.
+        # A stream ends once nothing reads it. Framework's reads cannot be
+        # cancelled, so on Windows it is ended by the handle to its process,
+        # never by a process ID that may have been reused.
         try {
-            $stream.Process.StandardInput.Close()
             $stream.Cancellation.Cancel()
+            if (-not $script:Unix) {
+                try { $stream.Process.Kill() } catch [InvalidOperationException] {}
+            }
             $null = $script:Pump.EndInvoke($stream.Pumping)
         } finally {
             $stream.Cancellation.Dispose()
             $stream.Ready.Dispose()
             $stream.Process.Dispose()
         }
-        if ($stream.Timings) { $script:StreamTimings = $stream.Timings }
     }
 
     function Enable-TransientPrompt {
@@ -329,7 +317,6 @@ $null = New-Module starship {
     $script:DoesUseLists = (Get-PSReadLineOption).PredictionViewStyle -eq 'ListView'
 
     $script:Stream = $null
-    $script:StreamTimings = ''
     $script:Refining = $false
     $script:Pump = $null
     $script:Unix = $PSVersionTable.PSVersion.Major -gt 5 -and -not $IsWindows

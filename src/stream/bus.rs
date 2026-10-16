@@ -1,379 +1,303 @@
-//! Schedule redraws while prompt modules render concurrently.
+//! When a streamed prompt is drawn.
 //!
-//! A pending batch has a fixed deadline. Its redraw cost equals its maximum
-//! wait, and its waiting cost is the delay of its oldest change. Slower changes
-//! open smaller batches: `fallback² / (fallback + render_duration)`.
+//! Every module renders at once, and each change one makes to the prompt
+//! boards a bus, which draws everything aboard when it leaves. Until the first
+//! paint a shell shows nothing at all, so the prompt itself boards at the
+//! start.
 //!
-//! Predictions determine the cheapest sequence of future redraws, with earlier
-//! departures winning ties. Unknown or overdue predictions use the pending
-//! deadline. The initial prompt waits for a predicted change when one fits;
-//! otherwise it can be drawn immediately.
+//! What a redraw costs is how much it is seen to flash. Changes that land
+//! close together look like one prompt appearing, so drawing them apart
+//! flashes; a module that takes a while looks like a change of its own, so
+//! drawing it as soon as it lands hardly does. So a bus is as big as the
+//! fallback when it opens for a change that took no time to render, and
+//! smaller the longer the change took: `fallback / (1 + took / fallback)`, half
+//! as big for a change that took a fallback. A bus waits at most its size, and
+//! running one costs as much as that much waiting. Waiting costs however long
+//! the change aboard longest waits. Changes that land together open one bus,
+//! as big as the biggest of them.
 //!
-//! Planning takes O(n log n) time, including sorting, and one O(n) working
-//! buffer. Reuse a [`DeparturePlanner`] to retain that buffer between calls.
+//! What each module did for the previous prompt says when it should land, and
+//! whether it will change anything, and the bus leaves on the cheapest
+//! timetable for all of them: now, or once the next few have landed. While
+//! those estimates hold, no timetable costs less, and the bus plans again
+//! whenever a module lands. The prompt alone has nothing new to show, so the
+//! first bus leaves no sooner than the first change lands, unless none lands
+//! within its size. A module never measured, or later than expected, could
+//! land at any moment, so the bus waits for it as long as it waits for
+//! anything.
 
+use std::ops::Add;
 use std::time::{Duration, Instant};
 
-/// The upper bound for an individual batch's wait and for sizing measurements.
-pub const MAXIMUM_BATCH_WAIT: Duration = Duration::from_secs(60 * 60);
+/// A span of time a stream plans with: at most a day, longer than anything a
+/// prompt waits for, and short enough that adding up as many as a stream ever
+/// holds cannot overflow. Longer ones are taken as a day.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, PartialOrd, Ord)]
+pub struct Span(Duration);
 
-/// The existing public name for [`MAXIMUM_BATCH_WAIT`].
-pub const FOREVER: Duration = MAXIMUM_BATCH_WAIT;
+impl Span {
+    pub const MAX: Self = Self(Duration::from_secs(24 * 60 * 60));
 
-const PREVIOUS_ESTIMATE_WEIGHT: u128 = 3;
-const MEASUREMENT_WEIGHT: u128 = 1;
-const TOTAL_ESTIMATE_WEIGHT: u128 = PREVIOUS_ESTIMATE_WEIGHT + MEASUREMENT_WEIGHT;
-const MINIMUM_WAITING_DURATION: Duration = Duration::from_millis(1);
-const NANOSECONDS_PER_SECOND: u128 = 1_000_000_000;
+    pub const fn get(self) -> Duration {
+        self.0
+    }
+}
 
-/// A module's behavior on the previous prompt.
+impl From<Duration> for Span {
+    fn from(duration: Duration) -> Self {
+        Self(duration.min(Self::MAX.0))
+    }
+}
+
+impl Add<Span> for Instant {
+    type Output = Self;
+
+    fn add(self, span: Span) -> Self {
+        self + span.0
+    }
+}
+
+/// What a module did for the previous prompt.
 ///
-/// The variant order schedules changing modules first, shortest duration first.
-/// An unmeasured module, represented by `None`, sorts before either variant.
+/// Ordered as a stream renders modules when they outnumber its workers, those
+/// that changed the prompt soonest first. A module never measured comes before
+/// any of these, being `None`.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Estimate {
-    /// Changed the prompt after rendering for this duration.
-    Changed(Duration),
-    /// Produced nothing new, including producing no output at all.
+    /// Changed the prompt, after rendering for this long.
+    Changed(Span),
+    /// Left the prompt as it was: showed nothing, or what it already showed.
     Unchanged,
 }
 
 impl Estimate {
-    /// Update an estimate, giving a new duration one quarter of the weight.
+    /// What a module is expected to do, having done `measured` when it was
+    /// expected to do `previous`. A quarter of the weight goes to a new
+    /// measurement of how long it takes, so that one slow prompt moves the
+    /// estimate without replacing it.
     pub fn after(previous: Option<Self>, measured: Self) -> Self {
         match (previous, measured) {
-            (Some(Self::Changed(previous)), Self::Changed(measured)) => {
-                Self::Changed(smooth_duration(previous, measured))
+            (Some(Self::Changed(estimate)), Self::Changed(took)) => {
+                Self::Changed(Span((estimate.0 * 3 + took.0) / 4))
             }
             _ => measured,
         }
     }
 
-    /// Whether a module may wait on external work rather than compute briefly.
+    /// Whether a module expected to do `estimate` waits on a subprocess or the
+    /// filesystem, rather than computes, which takes microseconds: one that
+    /// took a millisecond or more to change the prompt, or one never measured,
+    /// which might.
     pub fn waits(estimate: Option<Self>) -> bool {
         match estimate {
-            Some(Self::Changed(duration)) => duration >= MINIMUM_WAITING_DURATION,
+            Some(Self::Changed(took)) => took.0 >= Duration::from_millis(1),
             Some(Self::Unchanged) => false,
             None => true,
         }
     }
 }
 
-fn smooth_duration(previous: Duration, measured: Duration) -> Duration {
-    // The weighted sum fits u128 even when both durations are Duration::MAX.
-    let nanoseconds = (previous.as_nanos() * PREVIOUS_ESTIMATE_WEIGHT
-        + measured.as_nanos() * MEASUREMENT_WEIGHT)
-        / TOTAL_ESTIMATE_WEIGHT;
-
-    Duration::new(
-        (nanoseconds / NANOSECONDS_PER_SECOND) as u64,
-        (nanoseconds % NANOSECONDS_PER_SECOND) as u32,
-    )
-}
-
-/// A module that is still rendering.
+/// A module still rendering, as the bus sees it.
 #[derive(Clone, Copy, Debug)]
 pub struct Rendering {
-    /// When this module started rendering.
     pub since: Instant,
-    /// What it did on the previous prompt, if measured.
+    /// What it did for the previous prompt, if that is known.
     pub estimate: Option<Estimate>,
 }
 
-impl Rendering {
-    /// A strictly future completion; due, overdue, or unrepresentable is unknown.
-    fn remaining_duration(self, now: Instant, render_duration: Duration) -> Option<Duration> {
-        self.since
-            .checked_add(render_duration)?
-            .checked_duration_since(now)
-            .filter(|remaining| !remaining.is_zero())
-    }
-}
-
-/// Collect changes into batches and choose when to draw them.
+/// The changes waiting to be drawn, and what planning when takes.
 pub struct Bus {
-    fallback: Duration,
-    pending: Option<PendingBatch>,
+    fallback: Span,
+    aboard: Option<Aboard>,
+    /// Kept from one plan to the next, so that planning allocates nothing
+    /// once it has planned for every module there is.
+    landings: Vec<Landing>,
+    departures: Vec<Departure>,
 }
 
+/// A bus with something aboard.
 #[derive(Clone, Copy, Debug)]
-struct PendingBatch {
-    started: Instant,
-    maximum_wait: Duration,
+struct Aboard {
+    /// When what is aboard longest boarded.
+    since: Instant,
+    size: Span,
     passengers: Passengers,
 }
 
-impl PendingBatch {
-    fn deadline(self) -> Instant {
-        self.started + self.maximum_wait
-    }
-}
-
+/// What is aboard a bus.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub(crate) enum Passengers {
+pub(super) enum Passengers {
+    /// The prompt alone, which has nothing new to show until a change lands.
     Prompt,
+    /// Changes, the prompt's among them if it is the first bus.
     Changes,
 }
 
 impl Bus {
-    /// Start with the prompt waiting for its first paint.
-    pub fn new(start: Instant, fallback: Duration) -> Self {
-        let fallback = fallback.min(MAXIMUM_BATCH_WAIT);
+    /// The bus of a stream of `modules` modules started at `start`, with the
+    /// prompt itself aboard.
+    pub fn new(start: Instant, fallback: Span, modules: usize) -> Self {
         Self {
             fallback,
-            pending: Some(PendingBatch {
-                started: start,
-                maximum_wait: fallback,
+            aboard: Some(Aboard {
+                since: start,
+                size: fallback,
                 passengers: Passengers::Prompt,
             }),
+            landings: Vec::with_capacity(modules),
+            departures: Vec::with_capacity(modules),
         }
     }
 
-    /// Queue a change, retaining an existing batch's start and maximum wait.
-    pub fn board(&mut self, now: Instant, render_duration: Duration) {
-        let fallback = self.fallback;
-        let pending = self.pending.get_or_insert_with(|| PendingBatch {
-            started: now,
-            maximum_wait: size(fallback, render_duration),
+    /// A change boards at `now`, having taken `took` to render.
+    pub fn board(&mut self, now: Instant, took: Span) {
+        let size = size(self.fallback, took);
+        let aboard = self.aboard.get_or_insert(Aboard {
+            since: now,
+            size,
             passengers: Passengers::Changes,
         });
-        pending.passengers = Passengers::Changes;
+        if aboard.since == now {
+            aboard.size = aboard.size.max(size);
+        }
+        aboard.passengers = Passengers::Changes;
     }
 
     pub fn is_empty(&self) -> bool {
-        self.pending.is_none()
+        self.aboard.is_none()
     }
 
-    /// Mark the pending batch as drawn.
+    /// The bus leaves, and what was aboard is drawn.
     pub fn leave(&mut self) {
-        self.pending = None;
+        self.aboard = None;
     }
 
-    /// Choose a departure using temporary planning storage.
-    #[cfg(test)]
+    /// When the bus leaves, if anything is aboard, given the modules still
+    /// rendering.
     pub fn departure(
-        &self,
-        now: Instant,
-        rendering: impl IntoIterator<Item = Rendering>,
-    ) -> Option<Instant> {
-        self.departure_with_planner(now, rendering, &mut DeparturePlanner::with_capacity(0))
-    }
-
-    /// Choose a departure while retaining the planner's allocation for reuse.
-    pub fn departure_with_planner(
-        &self,
-        now: Instant,
-        rendering: impl IntoIterator<Item = Rendering>,
-        planner: &mut DeparturePlanner,
-    ) -> Option<Instant> {
-        let pending = self.pending?;
-        let deadline = pending.deadline();
-        let Some(predictions) = planner.predictions(now, self.fallback, rendering) else {
-            return Some(deadline);
-        };
-
-        let wait = cheapest_departure(
-            pending.passengers,
-            deadline.saturating_duration_since(now),
-            predictions,
-        );
-        Some(now + wait)
-    }
-}
-
-/// Calculate a batch's maximum wait from its opening change's render duration.
-pub fn size(fallback: Duration, render_duration: Duration) -> Duration {
-    if fallback.is_zero() {
-        return Duration::ZERO;
-    }
-
-    let fallback_nanoseconds = fallback.as_nanos();
-    let render_nanoseconds = render_duration.min(MAXIMUM_BATCH_WAIT).as_nanos();
-    let total_nanoseconds = fallback_nanoseconds + render_nanoseconds;
-
-    // Square only the smaller operand, which is bounded by MAXIMUM_BATCH_WAIT.
-    // f² / (f + r) = f - r + r² / (f + r) when f >= r.
-    let window_nanoseconds = if fallback_nanoseconds >= render_nanoseconds {
-        fallback_nanoseconds - render_nanoseconds
-            + render_nanoseconds * render_nanoseconds / total_nanoseconds
-    } else {
-        fallback_nanoseconds * fallback_nanoseconds / total_nanoseconds
-    };
-
-    // Preserve the public function's existing u64-nanosecond output limit.
-    Duration::from_nanos(window_nanoseconds.min(u128::from(u64::MAX)) as u64)
-}
-
-/// Reusable scratch space. Once capacity is sufficient, planning allocates nothing.
-#[derive(Default)]
-pub struct DeparturePlanner {
-    entries: Vec<TimedCost>,
-}
-
-impl DeparturePlanner {
-    pub fn with_capacity(module_count: usize) -> Self {
-        Self {
-            entries: Vec::with_capacity(module_count),
-        }
-    }
-
-    /// Collect sorted predictions, or return None when a change is unpredictable.
-    fn predictions(
         &mut self,
         now: Instant,
-        fallback: Duration,
         rendering: impl IntoIterator<Item = Rendering>,
-    ) -> Option<&mut [TimedCost]> {
-        self.entries.clear();
+    ) -> Option<Instant> {
+        let aboard = self.aboard?;
+        let latest = aboard.since + aboard.size;
+        self.landings.clear();
         for module in rendering {
             match module.estimate {
                 Some(Estimate::Unchanged) => {}
-                Some(Estimate::Changed(render_duration)) => {
-                    self.entries.push(TimedCost {
-                        input_order: self.entries.len(),
-                        after: module.remaining_duration(now, render_duration)?,
-                        cost_nanoseconds: size(fallback, render_duration).as_nanos(),
+                Some(Estimate::Changed(took)) if module.since + took > now => {
+                    self.landings.push(Landing {
+                        after: module.since + took - now,
+                        size: size(self.fallback, took),
                     });
                 }
-                None => return None,
+                // Could land at any moment.
+                _ => return Some(latest),
             }
         }
-        self.entries
-            .sort_unstable_by_key(|entry| (entry.after, entry.input_order));
-        Some(&mut self.entries)
-    }
-}
-
-/// A prediction starts with a redraw cost; planning replaces it with a timetable
-/// cost. Keeping the same representation lets the processed suffix be reused.
-/// Wide costs allow a delay plus future costs to exceed Duration::MAX safely.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-struct TimedCost {
-    input_order: usize,
-    after: Duration,
-    cost_nanoseconds: u128,
-}
-
-/// Transform sorted predictions into undominated departure candidates in place.
-fn cheapest_departure(
-    passengers: Passengers,
-    patience: Duration,
-    entries: &mut [TimedCost],
-) -> Duration {
-    // Waiting can help only if a predicted change fits the current batch.
-    if !entries
-        .first()
-        .is_some_and(|prediction| prediction.after <= patience)
-    {
-        return Duration::ZERO;
-    }
-
-    let mut frontier_start = entries.len();
-    let mut remaining_cost_nanoseconds = 0_u128;
-
-    for index in (0..entries.len()).rev() {
-        let prediction = entries[index];
-        let departure = TimedCost {
-            input_order: prediction.input_order,
-            after: prediction.after,
-            cost_nanoseconds: prediction.after.as_nanos() + remaining_cost_nanoseconds,
-        };
-
-        frontier_start = insert_departure(entries, frontier_start, departure);
-        let cheapest = cheapest_within(
-            &entries[frontier_start..],
-            prediction.after,
-            prediction.cost_nanoseconds,
+        self.landings.sort_unstable_by_key(|landing| landing.after);
+        self.landings.dedup_by(|later, earlier| {
+            let together = later.after == earlier.after;
+            if together {
+                earlier.size = earlier.size.max(later.size);
+            }
+            together
+        });
+        let patience = latest.saturating_duration_since(now);
+        Some(
+            now + cheapest(
+                aboard.passengers,
+                patience,
+                &self.landings,
+                &mut self.departures,
+            ),
         )
-        .expect("the newly inserted departure is within its own batch");
-        remaining_cost_nanoseconds =
-            prediction.cost_nanoseconds + (cheapest.cost_nanoseconds - prediction.after.as_nanos());
     }
-
-    choose_first_departure(
-        passengers,
-        patience,
-        remaining_cost_nanoseconds,
-        &entries[frontier_start..],
-    )
 }
 
-/// Earlier departures with equal or lower cost make later ones unnecessary.
-fn insert_departure(
-    entries: &mut [TimedCost],
-    mut frontier_start: usize,
-    departure: TimedCost,
-) -> usize {
-    while entries
-        .get(frontier_start)
-        .is_some_and(|existing| existing.cost_nanoseconds >= departure.cost_nanoseconds)
-    {
-        frontier_start += 1;
-    }
-
-    // There is always a free slot: only the already-read suffix is overwritten.
-    frontier_start -= 1;
-    entries[frontier_start] = departure;
-    frontier_start
+/// The size of a bus opened for a change that took `took` to render.
+pub fn size(fallback: Span, took: Span) -> Span {
+    let (fallback, took) = (fallback.0.as_nanos(), took.0.as_nanos());
+    // A day squared, in nanoseconds, still fits a u128 many times over.
+    let size = (fallback * fallback)
+        .checked_div(fallback + took)
+        .unwrap_or(0);
+    Span(Duration::from_nanos(size.try_into().unwrap_or(u64::MAX)))
 }
 
-/// Frontier times increase and costs strictly decrease: the last eligible wins.
-fn cheapest_within(
-    frontier: &[TimedCost],
-    batch_start: Duration,
-    maximum_wait_nanoseconds: u128,
-) -> Option<TimedCost> {
-    let eligible_count = frontier.partition_point(|departure| {
-        (departure.after - batch_start).as_nanos() <= maximum_wait_nanoseconds
-    });
-    eligible_count.checked_sub(1).map(|index| frontier[index])
+/// A change expected to land `after` from now, which opens a bus of `size`
+/// unless one is waiting for it.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(super) struct Landing {
+    pub after: Duration,
+    pub size: Span,
 }
 
-fn choose_first_departure(
+/// Leaving once the changes landing up to `at` from now have, at the `cost`
+/// of all the waiting till then, and of the cheapest timetable after.
+#[derive(Clone, Copy, Debug)]
+struct Departure {
+    at: Duration,
+    cost: Duration,
+}
+
+/// How long from now a bus carrying `passengers`, which waits at most
+/// `patience` longer, leaves on the cheapest timetable for `landings`, in the
+/// order they land: at once, or as the last of the next few lands; on equal
+/// cost, sooner.
+///
+/// Planned from the last landing back, a departure at a landing costs its
+/// time plus the cheapest timetable for what lands after it, and the bus a
+/// landing opens leaves on the cheapest departure within its size. A departure
+/// costing no less than a sooner one is never the cheapest, so `departures`
+/// keeps those that are by time, latest first and so costing ever more: the
+/// cheapest within any time is the first that time reaches.
+fn cheapest(
     passengers: Passengers,
     patience: Duration,
-    immediate_cost_nanoseconds: u128,
-    frontier: &[TimedCost],
+    landings: &[Landing],
+    departures: &mut Vec<Departure>,
 ) -> Duration {
-    let Some(departure) = cheapest_within(frontier, Duration::ZERO, patience.as_nanos()) else {
-        return Duration::ZERO;
+    let reached = |departures: &[Departure], limit: Duration| {
+        departures.partition_point(|departure| departure.at > limit)
     };
-
-    if passengers == Passengers::Changes && immediate_cost_nanoseconds <= departure.cost_nanoseconds
-    {
-        Duration::ZERO
-    } else {
-        departure.after
+    departures.clear();
+    // What the buses after a departure cost: none, after the last landing.
+    let mut after = Duration::ZERO;
+    for landing in landings.iter().rev() {
+        let departure = Departure {
+            at: landing.after,
+            cost: landing.after + after,
+        };
+        while departures
+            .last()
+            .is_some_and(|last| last.cost >= departure.cost)
+        {
+            departures.pop();
+        }
+        departures.push(departure);
+        // Its bus reaches the departure just made, at least.
+        let leaves = departures[reached(departures, landing.after + landing.size.0)];
+        after = landing.size.0 + leaves.cost - landing.after;
+    }
+    // Leaving now costs what every bus after it does.
+    match (passengers, departures.get(reached(departures, patience))) {
+        (Passengers::Prompt, Some(waits)) => waits.at,
+        (Passengers::Changes, Some(waits)) if waits.cost < after => waits.at,
+        _ => Duration::ZERO,
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::stream::testing::{Landing, every_timetable};
+    use crate::stream::testing::every_timetable;
     use proptest::prelude::*;
 
-    const FALLBACK: Duration = Duration::from_millis(50);
+    const FALLBACK: Span = Span(Duration::from_millis(50));
 
-    fn plan_departure(
-        passengers: Passengers,
-        patience: Duration,
-        landings: &[Landing],
-    ) -> Duration {
-        let mut entries: Vec<_> = landings
-            .iter()
-            .enumerate()
-            .map(|(input_order, landing)| TimedCost {
-                input_order,
-                after: landing.after,
-                cost_nanoseconds: landing.size.as_nanos(),
-            })
-            .collect();
-        cheapest_departure(passengers, patience, &mut entries)
-    }
-
-    fn milliseconds(milliseconds: u64) -> Duration {
-        Duration::from_millis(milliseconds)
+    fn milliseconds(milliseconds: u64) -> Span {
+        Span(Duration::from_millis(milliseconds))
     }
 
     /// Modules that have been rendering since `start`, expected to change the
@@ -387,21 +311,83 @@ mod tests {
             .collect()
     }
 
+    impl Bus {
+        /// A bus that has drawn the first paint, with nothing aboard.
+        fn empty(start: Instant) -> Self {
+            let mut bus = Self::new(start, FALLBACK, 0);
+            bus.leave();
+            bus
+        }
+    }
+
     #[test]
     fn a_bus_is_smaller_the_longer_the_change_it_opens_for_took() {
-        let sizes = [0, 50, 150, 450].map(|took| size(FALLBACK, milliseconds(took)));
+        let sizes = [0, 50, 150, 450].map(|took| size(FALLBACK, milliseconds(took)).get());
 
         assert_eq!(
             [50_000, 25_000, 12_500, 5_000].map(Duration::from_micros),
             sizes
         );
-        assert_eq!(Duration::ZERO, size(Duration::ZERO, Duration::ZERO));
+        assert_eq!(Span::default(), size(Span::default(), Span::default()));
+        assert_eq!(Span::MAX, size(Span::MAX, Span::default()));
+    }
+
+    #[test]
+    fn the_first_paint_waits_for_what_would_otherwise_flash() {
+        let start = Instant::now();
+        let mut bus = Bus::new(start, FALLBACK, 3);
+
+        assert_eq!(
+            Some(start + milliseconds(16)),
+            bus.departure(start, changing(start, &[1, 7, 16])),
+            "drawn at one millisecond, the prompt would flash at sixteen"
+        );
+        assert_eq!(
+            Some(start),
+            bus.departure(start, changing(start, &[300])),
+            "a module that takes long enough is drawn on its own"
+        );
+        assert_eq!(
+            Some(start + milliseconds(7)),
+            bus.departure(start, changing(start, &[1, 7, 300]))
+        );
+        assert_eq!(
+            Some(start + milliseconds(40)),
+            bus.departure(start, changing(start, &[40, 55, 70])),
+            "the fifty-five is worth waiting for, but beyond the bus"
+        );
+    }
+
+    #[test]
+    fn a_change_that_took_longer_waits_less_for_others() {
+        let start = Instant::now();
+        let at = |milliseconds: u64| start + Duration::from_millis(milliseconds);
+        let mut early = Bus::empty(start);
+        early.board(at(10), milliseconds(10));
+        let mut late = Bus::empty(start);
+        late.board(at(300), milliseconds(300));
+
+        assert_eq!(
+            Some(at(30)),
+            early.departure(at(10), changing(start, &[30])),
+            "twenty milliseconds after a change that took ten would flash"
+        );
+        assert_eq!(
+            Some(at(300)),
+            late.departure(at(300), changing(start, &[320])),
+            "but not after one that took three hundred"
+        );
+        assert_eq!(
+            Some(at(303)),
+            late.departure(at(300), changing(start, &[303])),
+            "which still waits for what lands within its size"
+        );
     }
 
     #[test]
     fn what_cannot_be_predicted_is_waited_for_as_long_as_the_bus_waits() {
         let start = Instant::now();
-        let bus = Bus::new(start, FALLBACK);
+        let mut bus = Bus::new(start, FALLBACK, 1);
         let never_measured = Rendering {
             since: start,
             estimate: None,
@@ -413,8 +399,8 @@ mod tests {
         );
         assert_eq!(
             Some(start + FALLBACK),
-            bus.departure(start + milliseconds(20), changing(start, &[5])),
-            "a module past its estimate could land at any moment"
+            bus.departure(start + milliseconds(5), changing(start, &[5])),
+            "a module that is due, and so past its estimate, could land at any moment"
         );
         assert_eq!(
             Some(start),
@@ -427,7 +413,36 @@ mod tests {
             ),
             "but one that changes nothing is not waited for"
         );
-        assert_eq!(None, Bus::empty(start).departure(start, [never_measured]));
+        let unread = std::iter::from_fn(|| panic!("an empty bus plans nothing"));
+        assert_eq!(None, Bus::empty(start).departure(start, unread));
+    }
+
+    #[test]
+    fn changes_landing_together_take_the_biggest_bus_among_them() {
+        let start = Instant::now();
+        let at = |milliseconds: u64| start + Duration::from_millis(milliseconds);
+        // Rendering again since three hundred milliseconds in, and expected
+        // to change the prompt ten after.
+        let refreshing = [Rendering {
+            since: at(300),
+            estimate: Some(Estimate::Changed(milliseconds(10))),
+        }];
+        let mut slow = Bus::empty(start);
+        slow.board(at(300), milliseconds(300));
+        let mut together = Bus::empty(start);
+        together.board(at(300), milliseconds(300));
+        together.board(at(300), milliseconds(0));
+
+        assert_eq!(
+            Some(at(300)),
+            slow.departure(at(300), refreshing),
+            "ten milliseconds is beyond the bus of a change that took three hundred"
+        );
+        assert_eq!(
+            Some(at(310)),
+            together.departure(at(300), refreshing),
+            "but within that of one that took none"
+        );
     }
 
     #[test]
@@ -451,7 +466,7 @@ mod tests {
     #[test]
     fn modules_that_take_a_millisecond_or_were_never_measured_wait() {
         let waits = [
-            Some(Estimate::Changed(Duration::from_micros(200))),
+            Some(Estimate::Changed(Span(Duration::from_micros(200)))),
             Some(Estimate::Changed(milliseconds(1))),
             Some(Estimate::Unchanged),
             None,
@@ -461,200 +476,30 @@ mod tests {
         assert_eq!([false, true, false, true], waits);
     }
 
-    #[test]
-    fn smoothing_preserves_nanosecond_rounding_and_handles_maximum_durations() {
-        for (previous, measured, expected) in [(10, 9, 9), (9, 10, 9), (1, 0, 0)] {
-            assert_eq!(
-                Estimate::Changed(Duration::from_nanos(expected)),
-                Estimate::after(
-                    Some(Estimate::Changed(Duration::from_nanos(previous))),
-                    Estimate::Changed(Duration::from_nanos(measured)),
-                ),
-            );
-        }
-        assert_eq!(
-            Estimate::Changed(Duration::MAX),
-            Estimate::after(
-                Some(Estimate::Changed(Duration::MAX)),
-                Estimate::Changed(Duration::MAX),
-            ),
-        );
-    }
-
-    #[test]
-    fn public_sizing_keeps_large_fallbacks_without_overflow() {
-        let larger_fallback = MAXIMUM_BATCH_WAIT * 2;
-        assert_eq!(larger_fallback, size(larger_fallback, Duration::ZERO));
-        assert_eq!(
-            Duration::from_nanos(u64::MAX),
-            size(Duration::MAX, Duration::MAX),
-        );
-        assert_eq!(Duration::ZERO, size(Duration::ZERO, Duration::MAX));
-    }
-
-    #[test]
-    fn boarding_an_occupied_batch_keeps_its_deadline() {
-        let start = Instant::now();
-        let mut bus = Bus::new(start, FALLBACK);
-        let unknown = Rendering {
-            since: start,
-            estimate: None,
-        };
-
-        bus.board(start + milliseconds(10), milliseconds(300));
-        bus.board(start + milliseconds(30), milliseconds(1));
-
-        assert_eq!(
-            Some(start + FALLBACK),
-            bus.departure(start + milliseconds(30), [unknown]),
-        );
-    }
-
-    #[test]
-    fn due_predictions_and_expired_deadlines_keep_the_existing_policy() {
-        let start = Instant::now();
-        let bus = Bus::new(start, FALLBACK);
-
-        assert_eq!(
-            Some(start + FALLBACK),
-            bus.departure(start + milliseconds(20), changing(start, &[20])),
-            "an estimate exactly due is unpredictable",
-        );
-        let after_deadline = start + milliseconds(80);
-        assert_eq!(
-            Some(start + FALLBACK),
-            bus.departure(after_deadline, changing(start, &[20])),
-            "an overdue module still returns the original deadline",
-        );
-        assert_eq!(
-            Some(after_deadline),
-            bus.departure(after_deadline, []),
-            "without uncertain modules an expired batch departs now",
-        );
-    }
-
-    #[test]
-    fn future_module_start_times_contribute_to_the_prediction() {
-        let now = Instant::now();
-        let bus = Bus::new(now, FALLBACK);
-        let future = Rendering {
-            since: now + milliseconds(5),
-            estimate: Some(Estimate::Changed(milliseconds(10))),
-        };
-
-        assert_eq!(Some(now + milliseconds(15)), bus.departure(now, [future]));
-    }
-
-    #[test]
-    fn equal_arrival_order_and_earliest_departure_ties_are_preserved() {
-        let predictions = [(1, 10), (1, 1), (2, 1)].map(|(after, size)| Landing {
-            after: milliseconds(after),
-            size: milliseconds(size),
-        });
-        assert_eq!(
-            milliseconds(1),
-            plan_departure(Passengers::Changes, milliseconds(1), &predictions),
-        );
-        let reordered = [predictions[1], predictions[0], predictions[2]];
-        assert_eq!(
-            Duration::ZERO,
-            plan_departure(Passengers::Changes, milliseconds(1), &reordered),
-        );
-    }
-
-    #[test]
-    fn prediction_sort_preserves_input_order_for_equal_arrivals() {
-        let now = Instant::now();
-        let render_durations: Vec<_> = (1..=32).map(milliseconds).collect();
-        let rendering = render_durations.iter().map(|&duration| Rendering {
-            since: now + milliseconds(40) - duration,
-            estimate: Some(Estimate::Changed(duration)),
-        });
-        let mut planner = DeparturePlanner::with_capacity(render_durations.len());
-        let entries = planner.predictions(now, FALLBACK, rendering).unwrap();
-        let costs: Vec<_> = entries.iter().map(|entry| entry.cost_nanoseconds).collect();
-        let expected: Vec<_> = render_durations
-            .iter()
-            .map(|&duration| size(FALLBACK, duration).as_nanos())
-            .collect();
-        assert_eq!(expected, costs);
-        assert!(entries.iter().all(|entry| entry.after == milliseconds(40)));
-    }
-
-    #[test]
-    fn large_arrival_offsets_do_not_overflow_timetable_costs() {
-        let distant_batch_wait = Duration::from_secs(1_800);
-        let predictions = [
-            Landing {
-                after: milliseconds(10),
-                size: FALLBACK,
-            },
-            Landing {
-                after: Duration::from_secs(u64::MAX - 1),
-                size: distant_batch_wait,
-            },
-            Landing {
-                after: Duration::from_secs(u64::MAX),
-                size: distant_batch_wait,
-            },
-        ];
-
-        assert_eq!(
-            milliseconds(10),
-            plan_departure(Passengers::Changes, FALLBACK, &predictions),
-        );
-    }
-
-    #[test]
-    fn a_reused_planner_discards_previous_predictions() {
-        let now = Instant::now();
-        let bus = Bus::new(now, FALLBACK);
-        let modules = changing(now, &[1, 7, 16]);
-        let mut planner = DeparturePlanner::with_capacity(modules.len());
-        let unknown = Rendering {
-            since: now,
-            estimate: None,
-        };
-
-        for (rendering, expected) in [
-            (modules.clone(), milliseconds(16)),
-            (vec![modules[0], unknown], FALLBACK),
-            (changing(now, &[5]), milliseconds(5)),
-            (Vec::new(), Duration::ZERO),
-        ] {
-            assert_eq!(
-                Some(now + expected),
-                bus.departure_with_planner(now, rendering, &mut planner),
-            );
-        }
-    }
-
-    impl Bus {
-        /// A bus that has drawn the first paint, with nothing aboard.
-        fn empty(start: Instant) -> Self {
-            let mut bus = Self::new(start, FALLBACK);
-            bus.leave();
-            bus
-        }
-    }
-
-    fn landing() -> impl Strategy<Value = Landing> {
-        (0_u64..400, 0_u64..60).prop_map(|(after, size)| Landing {
-            after: milliseconds(after),
-            size: milliseconds(size),
-        })
+    /// Any duration at all, as a module could take or a shell could report.
+    fn any_span() -> impl Strategy<Value = Span> {
+        any::<u64>().prop_map(|nanoseconds| Span::from(Duration::from_nanos(nanoseconds)))
     }
 
     proptest! {
+        /// No timetable costs less than the one the bus leaves on, whatever
+        /// is aboard, its patience and whenever the rest is expected, and none
+        /// costing as little leaves sooner.
         #[test]
         fn the_bus_leaves_on_the_cheapest_timetable(
             passengers in prop_oneof![Just(Passengers::Prompt), Just(Passengers::Changes)],
             patience in 0_u64..80,
-            mut landings in prop::collection::vec(landing(), 0..9),
+            landings in prop::collection::btree_map(0_u64..400, 0_u64..60, 0..9),
         ) {
-            landings.sort_unstable_by_key(|landing| landing.after);
-            let patience = milliseconds(patience);
-            let leaves = plan_departure(passengers, patience, &landings);
+            let landings: Vec<_> = landings
+                .into_iter()
+                .map(|(after, size)| Landing {
+                    after: milliseconds(after).get(),
+                    size: milliseconds(size),
+                })
+                .collect();
+            let patience = milliseconds(patience).get();
+            let leaves = cheapest(passengers, patience, &landings, &mut Vec::new());
 
             let timetables = every_timetable(passengers, patience, &landings);
             let cheapest_cost = timetables.iter().map(|&(_, cost)| cost).min();
@@ -664,6 +509,77 @@ mod tests {
                 .map(|&(leaves, _)| leaves)
                 .min();
             prop_assert_eq!(soonest, Some(leaves));
+        }
+
+        /// Whatever durations come in, planning is total: nothing overflows,
+        /// and the bus leaves no later than it waits, or than now if that is
+        /// later.
+        #[test]
+        fn planning_is_total_over_every_duration(
+            fallback in any_span(),
+            since in any_span(),
+            estimates in prop::collection::vec(prop::option::of(any_span()), 0..6),
+        ) {
+            let start = Instant::now();
+            let now = start + since;
+            let mut bus = Bus::new(start, fallback, estimates.len());
+            let rendering: Vec<_> = estimates
+                .iter()
+                .map(|&took| Rendering {
+                    since: now,
+                    estimate: took.map(Estimate::Changed),
+                })
+                .collect();
+
+            let departure = bus.departure(now, rendering.iter().copied());
+            prop_assert!(departure.is_some_and(|departure| departure <= (start + fallback).max(now)));
+            bus.leave();
+            bus.board(now, since);
+            prop_assert!(bus.departure(now, rendering).is_some_and(|departure| departure <= now + fallback));
+        }
+
+        /// Modules expected to land together, from renders started at
+        /// different times, plan the same in whatever order they come.
+        #[test]
+        fn the_order_modules_come_in_never_matters(
+            mut modules in prop::collection::vec((0_u64..4, 0_u64..4), 0..6),
+            aboard in prop::option::of(0_u64..40),
+        ) {
+            let start = Instant::now();
+            let now = start + milliseconds(4);
+            let mut bus = Bus::new(start, FALLBACK, modules.len());
+            if let Some(took) = aboard {
+                bus.board(now, milliseconds(took));
+            }
+            // Each lands between 26 and 30 milliseconds in, from a render
+            // started up to three in: the later it started, the less it took,
+            // and the bigger the bus it opens.
+            let rendering = |modules: &[(u64, u64)]| -> Vec<Rendering> {
+                modules
+                    .iter()
+                    .map(|&(started, early)| Rendering {
+                        since: start + milliseconds(started),
+                        estimate: Some(Estimate::Changed(milliseconds(30 - started - early))),
+                    })
+                    .collect()
+            };
+            let forward = bus.departure(now, rendering(&modules));
+            modules.reverse();
+            prop_assert_eq!(forward, bus.departure(now, rendering(&modules)));
+        }
+
+        /// Blending any two durations never overflows, and lands between them.
+        #[test]
+        fn an_estimate_blends_between_the_last_and_the_new(
+            previous in any_span(),
+            measured in any_span(),
+        ) {
+            let blended = Estimate::after(
+                Some(Estimate::Changed(previous)),
+                Estimate::Changed(measured),
+            );
+            let between = Estimate::Changed(previous.min(measured))..=Estimate::Changed(previous.max(measured));
+            prop_assert!(between.contains(&blended));
         }
     }
 }

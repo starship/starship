@@ -2,11 +2,6 @@
 
 const STARSHIP_JOB = "starship-stream"
 
-## An empty mailbox is normal; `job recv` otherwise throws.
-def starship-recv [tag: int]: nothing -> string {
-    try { job recv --tag $tag --timeout 0sec } catch { "" }
-}
-
 def starship-stream-stop [jobs: table] {
     for stream in ($jobs | where description == $STARSHIP_JOB) { try { job kill $stream.id } }
 }
@@ -22,32 +17,31 @@ def starship-prompt-arguments [jobs: table]: nothing -> list<string> {
     ]
 }
 
-## Deliver startup prompts to the mailbox and updates to the editor.
-def starship-show [main: string, right: string, mailbox: int] {
-    $main | job send 0 --tag $mailbox
-    $right | job send 0 --tag ($mailbox + 2)
-    commandline set-prompt --right $right $main
-}
-
-## `bytes split` reads incrementally; grouping NUL fields preserves multiline prompts.
-def starship-stream-read [arguments: list<string>, timings: string, mailbox: int] {
-    let shown = try {
-        ^::STARSHIP:: prompt --stream ...$arguments $"--timings=($timings)"
+## Every pair of prompts is pushed to the editor, which repaints in place only
+## a prompt pushed to it, and the first also goes to the mailbox the prompt
+## waits on. `bytes split` reads as the stream writes, leaving an empty field
+## after the last NUL; pairing the fields preserves multiline prompts.
+def starship-stream-read [arguments: list<string>, mailbox: int] {
+    let drawn = try {
+        ^::STARSHIP:: prompt --stream ...$arguments
         | bytes split 0x[00]
         | each { decode }
-        | chunks 3
-        | reduce --fold false {|frame, shown|
-            match $frame {
-                ["PROMPT" $main $right] => { starship-show $main $right $mailbox; true }
-                ["COMPLETE" $timings $_] => { $timings | job send 0 --tag ($mailbox + 1); $shown }
-                _ => $shown
+        | chunks 2
+        | where ($it | length) == 2
+        | reduce --fold false {|prompts, drawn|
+            if not $drawn {
+                $prompts.1 | job send 0 --tag ($mailbox + 1)
+                $prompts.0 | job send 0 --tag $mailbox
             }
+            commandline set-prompt --right $prompts.1 $prompts.0
+            true
         }
     } catch { false }
 
-    # Unblock startup even if the stream fails.
-    if not $shown {
-        starship-show "" "" $mailbox
+    # Unblock the prompt even if the stream fails.
+    if not $drawn {
+        "" | job send 0 --tag ($mailbox + 1)
+        "" | job send 0 --tag $mailbox
     }
 }
 
@@ -56,12 +50,11 @@ def starship-stream-start [] {
     let arguments = starship-prompt-arguments $jobs
     starship-stream-stop $jobs
 
-    # Discard stale prompts while retaining the last timing report.
+    # A stream stopped before the prompt read them leaves its first prompts.
     let mailbox = $env.STARSHIP_MAILBOX
     job flush --tag $mailbox
-    job flush --tag ($mailbox + 2)
-    let timings = starship-recv ($mailbox + 1)
-    job spawn --description $STARSHIP_JOB { starship-stream-read $arguments $timings $mailbox }
+    job flush --tag ($mailbox + 1)
+    job spawn --description $STARSHIP_JOB { starship-stream-read $arguments $mailbox }
 
     job recv --tag $mailbox
 }
@@ -80,14 +73,15 @@ export-env {
         }
     )
 
-    # Mailbox slots: main, timings, right.
-    let mailbox = random int 1..9223372036854775803
+    # Mailbox slots: main, right.
+    let mailbox = random int 1..9223372036854775806
     load-env {
         STARSHIP_SESSION_KEY: (random chars -l 16)
         STARSHIP_MAILBOX: $mailbox
         PROMPT_MULTILINE_INDICATOR: (^::STARSHIP:: prompt --continuation)
         PROMPT_INDICATOR: ""
         PROMPT_COMMAND: {|| starship-stream-start }
-        PROMPT_COMMAND_RIGHT: {|| starship-recv ($env.STARSHIP_MAILBOX + 2) }
+        # Sent before the main prompt, so there by the time it is drawn.
+        PROMPT_COMMAND_RIGHT: {|| try { job recv --tag ($env.STARSHIP_MAILBOX + 1) --timeout 0sec } catch { "" } }
     }
 }

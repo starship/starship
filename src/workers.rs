@@ -138,21 +138,9 @@ fn render_module(context: &Context, module_name: &str) -> Vec<Segment> {
     }
 }
 
-/// Run `body` with a scoped worker tree sized for the plan.
+/// Run `body` with a scoped tree of `worker_count` workers.
 /// Return or unwind stops queued work and joins workers; in-flight work finishes.
 pub fn with_workers<Output>(
-    context: &Context,
-    module_names: &IndexSet<String>,
-    waiting_module_count: Option<usize>,
-    body: impl FnOnce(&Workers) -> Output,
-) -> Output {
-    let worker_count = crate::num_module_threads(module_names.len(), waiting_module_count);
-    with_worker_count(context, module_names, worker_count, body)
-}
-
-/// Run `body` with an explicit number of workers.
-/// Kept separate so tests that require concurrency do not depend on user configuration.
-fn with_worker_count<Output>(
     context: &Context,
     module_names: &IndexSet<String>,
     worker_count: usize,
@@ -219,7 +207,8 @@ pub fn render_all(context: &Context, module_names: &IndexSet<String>) -> Vec<Vec
         return Vec::new();
     }
 
-    with_workers(context, module_names, None, |workers| {
+    let worker_count = crate::num_module_threads(module_names.len(), None);
+    with_workers(context, module_names, worker_count, |workers| {
         for position in 0..module_names.len() {
             workers.render(position);
         }
@@ -265,7 +254,7 @@ mod tests {
         context.current_dir = directory.path().to_path_buf();
         let module_names = IndexSet::from(["custom.first".to_owned(), "custom.second".to_owned()]);
 
-        let rendered: Vec<String> = with_worker_count(&context, &module_names, 2, |workers| {
+        let rendered: Vec<String> = with_workers(&context, &module_names, 2, |workers| {
             for position in 0..module_names.len() {
                 workers.render(position);
             }
