@@ -1,12 +1,13 @@
 use clap::{ValueEnum, builder::PossibleValue};
 use rayon::prelude::*;
+use std::borrow::Cow;
 use std::collections::BTreeSet;
 use std::fmt::{Debug, Write as FmtWrite};
 use std::io::{self, Write};
 use std::path::PathBuf;
 use std::time::Duration;
 use terminal_size::terminal_size;
-use unicode_segmentation::UnicodeSegmentation;
+use unicode_segmentation::{GraphemeCursor, UnicodeSegmentation};
 use unicode_width::UnicodeWidthChar;
 
 use crate::configs::PROMPT_ORDER;
@@ -24,8 +25,8 @@ pub struct Grapheme<'a>(pub &'a str);
 
 impl Grapheme<'_> {
     pub fn width(&self) -> usize {
-        self.0
-            .chars()
+        anstream::adapter::strip_str(self.0)
+            .flat_map(str::chars)
             .filter_map(UnicodeWidthChar::width)
             .max()
             .unwrap_or(0)
@@ -48,10 +49,34 @@ where
     }
 }
 
-/// The graphemes a terminal draws for `text`, borrowed from it in order: all
-/// of it but the escape sequences and controls it obeys instead.
+/// Source spans of the graphemes a terminal draws. Controls between a
+/// grapheme's characters stay in its span, so a fill cannot cut through it.
 pub fn graphemes(text: &str) -> impl Iterator<Item = &str> {
-    anstream::adapter::strip_str(text).flat_map(|printable| printable.graphemes(true))
+    let mut chunks = anstream::adapter::strip_str(text);
+    let mut chunk = chunks.next().unwrap_or_default();
+    let mut printable = Cow::Borrowed(chunk);
+    for next in chunks.clone() {
+        printable.to_mut().push_str(next);
+    }
+    let mut cursor = GraphemeCursor::new(0, printable.len(), true);
+    let mut offset = 0;
+    std::iter::from_fn(move || {
+        let start = cursor.cur_cursor();
+        let end = cursor
+            .next_boundary(&printable, 0)
+            .expect("complete printable text supplies every grapheme boundary")?;
+        while start == offset + chunk.len() {
+            offset += chunk.len();
+            chunk = chunks.next()?;
+        }
+        let source_start = chunk.as_ptr().addr() - text.as_ptr().addr() + start - offset;
+        while end > offset + chunk.len() {
+            offset += chunk.len();
+            chunk = chunks.next()?;
+        }
+        let source_end = chunk.as_ptr().addr() - text.as_ptr().addr() + end - offset;
+        Some(&text[source_start..source_end])
+    })
 }
 
 #[test]
@@ -68,6 +93,38 @@ fn test_grapheme_aware_width() {
         "\x1b]8;;https://x\x1b\\link\x1b]8;;\x1b\\\x1b]0;title\x07\x1b[38:2::1:2:3m"
             .width_graphemes()
     );
+}
+
+#[test]
+fn controls_inside_a_grapheme_preserve_its_width_and_source_span() {
+    for plain in ["👩‍👩‍👦‍👦", "Ü", "🇺🇳", "각"] {
+        for control in [
+            "\x1b[31m",
+            "\x1b[38:2::1:2:3m",
+            "\x1b]8;;https://x\x1b\\",
+            "\x1b]0;title\x07",
+            "\x07",
+        ] {
+            for boundary in plain.char_indices().map(|(index, _)| index) {
+                let controlled = format!("{}{control}{}", &plain[..boundary], &plain[boundary..]);
+                assert_eq!(
+                    plain.width_graphemes(),
+                    controlled.width_graphemes(),
+                    "{controlled:?}"
+                );
+                let spans: Vec<_> = graphemes(&controlled).collect();
+                assert_eq!(1, spans.len(), "{controlled:?}");
+                assert_eq!(plain.width_graphemes(), Grapheme(spans[0]).width());
+                assert!(controlled.ends_with(spans[0]));
+            }
+            let controlled = plain
+                .chars()
+                .map(|ch| format!("{ch}{control}"))
+                .collect::<String>();
+            assert_eq!(plain.width_graphemes(), controlled.width_graphemes());
+            assert_eq!(1, graphemes(&controlled).count(), "{controlled:?}");
+        }
+    }
 }
 
 pub fn prompt(args: Properties, target: Target) {
