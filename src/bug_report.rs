@@ -2,6 +2,7 @@ use crate::shadow;
 use crate::utils::{self, DEFAULT_COMMAND_TIMEOUT_MS, exec_cmd};
 use nu_ansi_term::Style;
 
+use std::ffi::OsStr;
 use std::fs;
 use std::path::PathBuf;
 use std::time::Duration;
@@ -236,17 +237,38 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
 }
 
 fn get_starship_config() -> String {
-    std::env::var("STARSHIP_CONFIG")
-        .map(PathBuf::from)
-        .ok()
+    std::env::var_os("STARSHIP_CONFIG")
         .or_else(|| {
             utils::home_dir().map(|mut home_dir| {
                 home_dir.push(".config/starship.toml");
-                home_dir
+                home_dir.into_os_string()
             })
         })
-        .and_then(|config_path| fs::read_to_string(config_path).ok())
-        .unwrap_or_else(|| UNKNOWN_CONFIG.to_string())
+        .map_or_else(
+            || UNKNOWN_CONFIG.to_string(),
+            |path| read_config_files(&path),
+        )
+}
+
+/// Read every file in `config_path`, adding a path header when there are several
+fn read_config_files(config_path: &OsStr) -> String {
+    let config_files: Vec<(PathBuf, String)> = std::env::split_paths(config_path)
+        .filter_map(|path| {
+            fs::read_to_string(&path)
+                .ok()
+                .map(|content| (path, content))
+        })
+        .collect();
+
+    match config_files.as_slice() {
+        [] => UNKNOWN_CONFIG.to_string(),
+        [(_, content)] => content.clone(),
+        _ => config_files
+            .iter()
+            .map(|(path, content)| format!("# {}\n{content}", path.display()))
+            .collect::<Vec<_>>()
+            .join("\n"),
+    }
 }
 
 fn get_shell_version(shell: &str) -> String {
@@ -297,6 +319,50 @@ mod tests {
         assert!(link.contains("2.3.4"));
         assert!(link.contains("No+config"));
         assert!(link.contains("No+Starship+config"));
+    }
+
+    #[test]
+    fn test_read_config_files_single_file() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("starship.toml");
+        fs::write(&config_path, "add_newline = false\n")?;
+
+        assert_eq!(
+            read_config_files(config_path.as_os_str()),
+            "add_newline = false\n"
+        );
+        dir.close()
+    }
+
+    #[test]
+    fn test_read_config_files_multiple_files() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let base_path = dir.path().join("base.toml");
+        let custom_path = dir.path().join("custom.toml");
+        fs::write(&base_path, "add_newline = false\n")?;
+        fs::write(&custom_path, "[character]\ndisabled = true\n")?;
+        let config_path =
+            std::env::join_paths([&base_path, &dir.path().join("missing.toml"), &custom_path])
+                .unwrap();
+
+        assert_eq!(
+            read_config_files(&config_path),
+            format!(
+                "# {}\nadd_newline = false\n\n# {}\n[character]\ndisabled = true\n",
+                base_path.display(),
+                custom_path.display()
+            )
+        );
+        dir.close()
+    }
+
+    #[test]
+    fn test_read_config_files_missing_files() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("missing.toml");
+
+        assert_eq!(read_config_files(config_path.as_os_str()), UNKNOWN_CONFIG);
+        dir.close()
     }
 
     #[test]

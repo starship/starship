@@ -1,3 +1,4 @@
+use std::ffi::OsStr;
 use std::fmt::Write as _;
 use std::process;
 use std::process::Stdio;
@@ -8,7 +9,7 @@ use crate::config::StarshipConfig;
 use crate::configs::PROMPT_ORDER;
 use crate::context::Context;
 use crate::utils;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use toml_edit::DocumentMut;
 
 #[cfg(not(windows))]
@@ -228,9 +229,32 @@ pub fn get_configuration(context: &Context) -> toml::Table {
     starship_config.config.unwrap_or_default()
 }
 
+/// Get the config file to modify, exiting if `STARSHIP_CONFIG` lists multiple files
+fn get_editable_config_path(context: &Context) -> Option<PathBuf> {
+    let config_path = context.get_config_path_os()?;
+    let Some(path) = single_config_path(&config_path) else {
+        eprintln!(
+            "Unable to modify configuration: STARSHIP_CONFIG contains multiple files, edit them directly instead"
+        );
+        process::exit(1);
+    };
+
+    Some(path)
+}
+
+/// Get the only path in `config_path`, or `None` if there are several
+fn single_config_path(config_path: &OsStr) -> Option<PathBuf> {
+    let mut paths = std::env::split_paths(config_path);
+    let path = paths.next()?;
+
+    paths.next().is_none().then_some(path)
+}
+
 pub fn get_configuration_edit(context: &Context) -> DocumentMut {
-    let config_file_path = context.get_config_path_os();
-    let toml_content = StarshipConfig::read_config_content_as_str(config_file_path.as_deref());
+    let config_file_path = get_editable_config_path(context);
+    let toml_content = StarshipConfig::read_config_content_as_str(
+        config_file_path.as_deref().map(Path::as_os_str),
+    );
 
     toml_content
         .unwrap_or_default()
@@ -239,12 +263,10 @@ pub fn get_configuration_edit(context: &Context) -> DocumentMut {
 }
 
 pub fn write_configuration(context: &Context, doc: &DocumentMut) {
-    let Some(config_path) = context.get_config_path_os() else {
+    let Some(config_path) = get_editable_config_path(context) else {
         eprintln!("config path required to write configuration");
         process::exit(1);
     };
-
-    let config_path = PathBuf::from(config_path);
 
     if let Err(e) = crate::utils::write_file_atomic(config_path, doc.to_string(), true) {
         eprintln!("Unable to write configuration: {e}");
@@ -258,7 +280,7 @@ pub fn edit_configuration(
 ) -> Result<(), Box<dyn std::error::Error>> {
     // Argument currently only used for testing, but could be used to specify
     // an editor override on the command line.
-    let config_path = context.get_config_path_os().unwrap_or_else(|| {
+    let config_path = get_editable_config_path(context).unwrap_or_else(|| {
         eprintln!("config path required to edit configuration");
         process::exit(1);
     });
@@ -314,7 +336,7 @@ fn get_editor_internal(visual: Option<String>, editor: Option<String>) -> String
 #[cfg(test)]
 mod tests {
     use std::{
-        fs::{File, create_dir},
+        fs::{self, File, create_dir},
         io::{self, Write},
         path::PathBuf,
     };
@@ -628,6 +650,71 @@ mod tests {
             PRINT_CONFIG_ENV,
         )?;
         Ok(())
+    }
+
+    #[test]
+    fn print_configuration_merges_multiple_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let base_toml = dir.path().join("base.toml");
+        let override_toml = dir.path().join("override.toml");
+        fs::write(&base_toml, "[custom.base]\nformat = \"base\"\n")?;
+        fs::write(&override_toml, "[custom.base]\nformat = \"override\"\n")?;
+
+        let mut env = Env::default();
+        env.insert(
+            "STARSHIP_CONFIG",
+            std::env::join_paths([&base_toml, &override_toml])
+                .unwrap()
+                .to_string_lossy()
+                .to_string(),
+        );
+        let context = Context::new_with_shell_and_path(
+            Properties::default(),
+            Shell::Unknown,
+            Target::Main,
+            PathBuf::default(),
+            PathBuf::default(),
+            env,
+        );
+
+        let config = print_configuration(&context, false, &["custom.base".to_string()]);
+        assert!(config.contains("format = \"override\""), "{config}");
+        dir.close()
+    }
+
+    #[test]
+    fn single_config_path_with_one_file() {
+        let config_path = PathBuf::from("/path/to/starship.toml");
+        assert_eq!(
+            single_config_path(config_path.as_os_str()),
+            Some(config_path)
+        );
+    }
+
+    #[test]
+    fn single_config_path_with_multiple_files() {
+        let config_path =
+            std::env::join_paths(["/path/to/base.toml", "/path/to/custom.toml"]).unwrap();
+        assert_eq!(single_config_path(&config_path), None);
+    }
+
+    #[test]
+    fn get_editable_config_path_with_one_file() {
+        let mut env = Env::default();
+        env.insert("STARSHIP_CONFIG", "/path/to/starship.toml".to_string());
+        let context = Context::new_with_shell_and_path(
+            Properties::default(),
+            Shell::Unknown,
+            Target::Main,
+            PathBuf::default(),
+            PathBuf::default(),
+            env,
+        );
+
+        assert_eq!(
+            get_editable_config_path(&context),
+            Some(PathBuf::from("/path/to/starship.toml"))
+        );
     }
 
     #[derive(Clone, Copy)]
