@@ -8,7 +8,7 @@ use std::path::PathBuf;
 use std::time::Duration;
 use terminal_size::terminal_size;
 use unicode_segmentation::{GraphemeCursor, UnicodeSegmentation};
-use unicode_width::UnicodeWidthChar;
+use unicode_width::UnicodeWidthStr;
 
 use crate::configs::PROMPT_ORDER;
 use crate::context::{Context, Properties, Shell, Target};
@@ -25,11 +25,7 @@ pub struct Grapheme<'a>(pub &'a str);
 
 impl Grapheme<'_> {
     pub fn width(&self) -> usize {
-        anstream::adapter::strip_str(self.0)
-            .flat_map(str::chars)
-            .filter_map(UnicodeWidthChar::width)
-            .max()
-            .unwrap_or(0)
+        self.0.width_graphemes()
     }
 }
 
@@ -41,11 +37,15 @@ impl<T> UnicodeWidthGraphemes for T
 where
     T: AsRef<str>,
 {
+    /// As wide as Unicode says a terminal draws the printable text, measured
+    /// whole, so that controls within a grapheme cannot split it.
     fn width_graphemes(&self) -> usize {
-        graphemes(self.as_ref())
-            .map(Grapheme)
-            .map(|g| g.width())
-            .sum()
+        let mut chunks = anstream::adapter::strip_str(self.as_ref());
+        let mut printable = Cow::Borrowed(chunks.next().unwrap_or_default());
+        for chunk in chunks {
+            printable.to_mut().push_str(chunk);
+        }
+        printable.width()
     }
 }
 
@@ -81,7 +81,7 @@ pub fn graphemes(text: &str) -> impl Iterator<Item = &str> {
 
 #[test]
 fn test_grapheme_aware_width() {
-    // UnicodeWidthStr::width would return 8
+    // A family of four, joined, is drawn as one.
     assert_eq!(2, "👩‍👩‍👦‍👦".width_graphemes());
     assert_eq!(1, "Ü".width_graphemes());
     assert_eq!(11, "normal text".width_graphemes());
@@ -93,6 +93,25 @@ fn test_grapheme_aware_width() {
         "\x1b]8;;https://x\x1b\\link\x1b]8;;\x1b\\\x1b]0;title\x07\x1b[38:2::1:2:3m"
             .width_graphemes()
     );
+}
+
+#[test]
+fn a_grapheme_is_as_wide_as_a_terminal_draws_it() {
+    for (grapheme, width) in [
+        ("\u{2764}\u{fe0f}", 2),
+        ("1\u{fe0f}\u{20e3}", 2),
+        ("\u{1f1fa}\u{1f1f3}", 2),
+        ("\u{1f469}\u{200d}\u{1f469}\u{200d}\u{1f466}", 2),
+        ("U\u{308}", 1),
+        ("\u{ac01}", 2),
+    ] {
+        assert_eq!(width, Grapheme(grapheme).width(), "{grapheme:?}");
+        assert_eq!(
+            width * 3,
+            grapheme.repeat(3).width_graphemes(),
+            "{grapheme:?}"
+        );
+    }
 }
 
 #[test]
