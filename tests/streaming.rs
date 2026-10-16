@@ -744,26 +744,60 @@ fn fish_retries_failed_streams_and_caches_complete_prompt_pairs() {
     assert!(output.stderr.is_empty(), "{output:?}");
 }
 
-/// A stream rendering a module that never finishes ends the moment the shell
-/// stops reading it, whether or not it has drawn the first paint.
-fn a_stream_ends_once_its_shell_stops_reading(asynchronous: bool) {
-    let fixture = Fixture::new(
-        Shell::Bash,
-        &format!(
-            r#"
+/// A module whose command never finishes, writing the command's process ID to
+/// `$STARSHIP_RENDERING` once it runs.
+fn never_finishing(asynchronous: bool) -> String {
+    format!(
+        r#"
 format = "${{custom.slow}}"
 add_newline = false
 [async]
 enabled = {asynchronous}
 [custom.slow]
-command = 'touch "$STARSHIP_RENDERING"; sleep 30'
+command = 'echo $$ > "$STARSHIP_RENDERING"; exec sleep 30'
 shell = ["/bin/sh"]
 when = true
 ignore_timeout = true
 format = "$output"
 "#
-        ),
-    );
+    )
+}
+
+/// The process the module of [`never_finishing`] runs, once it runs.
+fn rendering(path: &Path) -> Pid {
+    let started = Instant::now();
+    loop {
+        if let Some(process) = fs::read_to_string(path)
+            .ok()
+            .and_then(|process| process.trim().parse().ok())
+        {
+            return Pid::from_raw(process);
+        }
+        assert!(
+            started.elapsed() < TIMEOUT,
+            "the module never started rendering"
+        );
+        thread::sleep(Duration::from_millis(10));
+    }
+}
+
+/// Whether `process` ends within two seconds.
+fn ends(process: Pid) -> bool {
+    let deadline = Instant::now() + Duration::from_secs(2);
+    while signal::kill(process, None).is_ok() {
+        if Instant::now() > deadline {
+            return false;
+        }
+        thread::sleep(Duration::from_millis(10));
+    }
+    true
+}
+
+/// A stream rendering a module that never finishes ends the moment the shell
+/// stops reading it, whether or not it has drawn the first paint, and ends
+/// the command the module runs with it.
+fn a_stream_ends_once_its_shell_stops_reading(asynchronous: bool) {
+    let fixture = Fixture::new(Shell::Bash, &never_finishing(asynchronous));
     let rendering = fixture.directory.path().join("rendering");
     let mut stream = Command::new(starship())
         .args(["prompt", "--stream"])
@@ -783,14 +817,7 @@ format = "$output"
             "the first paint, before the module renders"
         );
     }
-    let started = Instant::now();
-    while !rendering.exists() {
-        assert!(
-            started.elapsed() < TIMEOUT,
-            "the module never started rendering"
-        );
-        thread::sleep(Duration::from_millis(10));
-    }
+    let command = self::rendering(&rendering);
 
     drop(prompts);
     let closed = Instant::now();
@@ -806,6 +833,45 @@ format = "$output"
         thread::sleep(Duration::from_millis(10));
     };
     assert!(status.success(), "{status}");
+    assert!(ends(command), "the module's command outlived the stream");
+}
+
+/// Fish can stop waiting for the first prompts before it knows where they
+/// will be, and so before it could ask the stream to stop: the stream stops,
+/// removing its directory and ending the command its module runs.
+#[test]
+#[ignore = "requires /bin/sh"]
+fn a_stream_for_fish_ends_once_fish_stops_waiting_for_the_first_prompts() {
+    let fixture = Fixture::new(Shell::Fish, &never_finishing(false));
+    let rendering = fixture.directory.path().join("rendering");
+    let temporary = fixture.directory.path().join("temporary");
+    fs::create_dir(&temporary).unwrap();
+    let mut fish = Command::new("sleep").arg("30").spawn().unwrap();
+    let mut stream = Command::new(starship())
+        .args(["prompt", "--stream", &format!("--signal-pid={}", fish.id())])
+        .envs(fixture.environment(Shell::Fish))
+        .env("STARSHIP_RENDERING", &rendering)
+        .env("TMPDIR", &temporary)
+        .stdin(Stdio::null())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::null())
+        .spawn()
+        .unwrap();
+    let waiting = stream.stdout.take().unwrap();
+    let command = self::rendering(&rendering);
+    assert_eq!(1, fs::read_dir(&temporary).unwrap().count(), "a directory");
+
+    drop(waiting);
+    let stopped = ends(command);
+    let _ = stream.wait();
+    let _ = fish.kill();
+    let _ = fish.wait();
+    assert!(stopped, "the module's command outlived the stream");
+    assert_eq!(
+        0,
+        fs::read_dir(&temporary).unwrap().count(),
+        "the directory remains"
+    );
 }
 
 #[test]
