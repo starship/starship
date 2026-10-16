@@ -38,8 +38,13 @@ function New-TestStream($reader) {
 }
 
 foreach ($case in @(
+    @{ Wire = ''; Prompt = $null; Refined = $false },
+    @{ Wire = 'unfinished'; Prompt = $null; Refined = $false },
+    @{ Wire = "main`0"; Prompt = $null; Refined = $false },
+    @{ Wire = "`0`0"; Prompt = ''; Refined = $false },
     @{ Wire = "λ🙂`0right`0"; Prompt = 'λ🙂'; Refined = $false },
-    @{ Wire = "λ🙂`0right`0complete 🙂`0right`0"; Prompt = 'complete 🙂'; Refined = $true }
+    @{ Wire = "λ🙂`0right`0complete 🙂`0right`0"; Prompt = 'complete 🙂'; Refined = $true },
+    @{ Wire = "initial`0right`0`0`0"; Prompt = ''; Refined = $true }
 )) {
     $bytes = [SingleByteStream]::new([Text.Encoding]::UTF8.GetBytes($case.Wire))
     $stream = New-TestStream ([IO.StreamReader]::new($bytes))
@@ -48,10 +53,55 @@ foreach ($case in @(
         Add-Member -PassThru ScriptMethod GenerateEvent { param($Name) $this.Raised.Add($Name) }
     & $body $stream $events
     if ($stream.Prompt -cne $case.Prompt) { throw "Read $($stream.Prompt), not $($case.Prompt)" }
+    if (-not $stream.Ready.IsSet) { throw 'End of stream did not release the startup waiter' }
     $refined = @($events.Raised | Where-Object { $_ -eq 'Starship.Refined' })
     if (($refined.Count -eq 1) -ne $case.Refined) { throw "Refined $($refined.Count) times from $($case.Wire)" }
     $stream.Cancellation.Dispose()
     $stream.Ready.Dispose()
+}
+
+# Exercise startup's null-versus-empty decision and cleanup with the same pump.
+foreach ($name in 'Start-StarshipStream', 'Stop-StarshipStream') {
+    $definition = $ast.Find({ param($node)
+        $node -is [Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name
+    }, $true)
+    . ([scriptblock]::Create($definition.Extent.Text))
+}
+function Start-Native {
+    param($Executable, $Arguments)
+    $script:TestProducer = [pscustomobject]@{
+        StandardOutput = [IO.StreamReader]::new([SingleByteStream]::new([Text.Encoding]::UTF8.GetBytes($script:TestWire)))
+        StandardError = [IO.StreamReader]::new([IO.MemoryStream]::new())
+        Killed = $false
+        Disposed = $false
+    } | Add-Member -PassThru ScriptMethod Kill { $this.Killed = $true } |
+        Add-Member -PassThru ScriptMethod Dispose {
+            $this.StandardOutput.Dispose()
+            $this.StandardError.Dispose()
+            $this.Disposed = $true
+        }
+    $script:TestProducer
+}
+$script:StreamPump = $body
+$script:Pump = [PowerShell]::Create()
+$script:Unix = $false
+try {
+    foreach ($case in @(
+        @{ Wire = ''; Prompt = $null },
+        @{ Wire = "main`0"; Prompt = $null },
+        @{ Wire = "`0`0"; Prompt = '' },
+        @{ Wire = "main`0right`0"; Prompt = 'main' }
+    )) {
+        $script:TestWire = $case.Wire
+        $prompt = Start-StarshipStream @('--status=0')
+        if ($prompt -cne $case.Prompt) { throw 'Startup lost the difference between a missing and empty prompt' }
+        if (($null -eq $script:Stream) -ne ($null -eq $case.Prompt)) { throw 'Startup cached an incomplete pair' }
+        Stop-StarshipStream
+        if (-not $script:TestProducer.Killed -or -not $script:TestProducer.Disposed) { throw 'Startup left its producer open' }
+    }
+} finally {
+    Stop-StarshipStream
+    $script:Pump.Dispose()
 }
 
 $info = [Diagnostics.ProcessStartInfo]::new('/bin/sleep', '30')
@@ -77,4 +127,4 @@ try {
     $stream.Cancellation.Dispose()
     $stream.Ready.Dispose()
 }
-'PASS: split UTF-8, one refinement once complete, and cancellation'
+'PASS: split UTF-8, prompt startup and empty pairs, one refinement once complete, and cancellation'
