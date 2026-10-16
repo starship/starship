@@ -70,77 +70,46 @@ add-zsh-hook precmd prompt_starship_precmd
 add-zsh-hook preexec prompt_starship_preexec
 add-zsh-hook zshexit starship_stream_stop
 
-# ZLE watches the stream descriptor while the user types.
-# STARSHIP_STREAM holds prompt text, process state, and timing estimates.
+# ZLE reads the stream while the user types. STARSHIP_STREAM holds the
+# prompts last drawn, and the descriptor they come from.
 typeset -gA STARSHIP_STREAM
 
-starship_arguments() {
-    reply=(
-        --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}"
-        --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}"
-        --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT"
-    )
-}
-
-# Read three NUL-terminated fields from fd $1 into variables $2–$4.
-starship_read_frame() {
-    IFS= read -r -u $1 -d '' $2 &&
-        IFS= read -r -u $1 -d '' $3 &&
-        IFS= read -r -u $1 -d '' $4
-}
-
+# Closing the descriptor ends the stream. Closing with `exec` applies its
+# redirection to the shell itself, so its error output is silenced around the
+# closing alone.
 starship_stream_stop() {
-    local fd=${STARSHIP_STREAM[f]-} pid=${STARSHIP_STREAM[p]-}
-    # Closing with `exec` applies its redirection to the shell itself, so its
-    # error output is silenced around the closing alone.
+    local fd=${STARSHIP_STREAM[f]-}
     [[ -n $fd ]] && { zle -F $fd 2>/dev/null; { exec {fd}<&- } 2>/dev/null }
-    [[ -n $pid ]] && kill $pid 2>/dev/null
-    STARSHIP_STREAM[f]= STARSHIP_STREAM[p]=
+    STARSHIP_STREAM[f]=
 }
 
-starship_stream_consume() {
-    local kind first second
-    if ! starship_read_frame $1 kind first second; then
+# Read the next prompts from descriptor $1, or stop at the end of the stream.
+starship_stream_read() {
+    local main right
+    IFS= read -r -u $1 -d '' main && IFS= read -r -u $1 -d '' right || {
         starship_stream_stop
-        return
-    fi
-    case $kind in
-        # A stream started without waiting announces itself here instead.
-        PROCESS) STARSHIP_STREAM[p]=$first ;;
-        PROMPT)
-            STARSHIP_STREAM[1]=$first STARSHIP_STREAM[2]=$second
-            zle -I
-            zle reset-prompt
-            ;;
-        COMPLETE) STARSHIP_STREAM[t]=$first ;;
-    esac
+        return 1
+    }
+    STARSHIP_STREAM[1]=$main STARSHIP_STREAM[2]=$right
 }
-zle -N starship_stream_consume
 
-# With an argument, adopt without waiting; otherwise wait for the first paint.
+starship_stream_redraw() {
+    starship_stream_read $1 && { zle -I; zle reset-prompt }
+}
+zle -N starship_stream_redraw
+
+# Wait for the first paint, unless given an argument to keep the prompts shown
+# until the new ones arrive.
 starship_stream_start() {
     starship_stream_stop
-    local fd kind first second reply
-    starship_arguments
-    exec {fd}< <(::STARSHIP:: prompt --stream --timings="${STARSHIP_STREAM[t]-}" "${reply[@]}" 2>/dev/null)
+    local fd
+    exec {fd}< <(::STARSHIP:: prompt --stream --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT" 2>/dev/null)
     STARSHIP_STREAM[f]=$fd
-    if (( $# )); then
-        zle -F -w $fd starship_stream_consume
-        return
+    if (( ! $# )); then
+        STARSHIP_STREAM[1]= STARSHIP_STREAM[2]=
+        starship_stream_read $fd
     fi
-
-    STARSHIP_STREAM[1]= STARSHIP_STREAM[2]=
-    while starship_read_frame $fd kind first second; do
-        case $kind in
-            PROCESS) STARSHIP_STREAM[p]=$first ;;
-            PROMPT)
-                STARSHIP_STREAM[1]=$first STARSHIP_STREAM[2]=$second
-                zle -F -w $fd starship_stream_consume
-                return
-                ;;
-        esac
-    done
-    starship_stream_stop
+    [[ -n ${STARSHIP_STREAM[f]} ]] && zle -F -w $fd starship_stream_redraw
 }
 
 # Debounce resize rendering for one second with a nonblocking, fork-free timer.

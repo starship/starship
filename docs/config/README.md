@@ -381,8 +381,12 @@ The initial directory can use an approximation that skips repository discovery a
 checks. Repository shortening, repository styling, and the read-only indicator appear when the
 full directory render finishes.
 The completed prompts use the same formatting as ordinary `starship prompt` output.
-The scheduler uses previous module timings to group results expected close together. Slow modules
-can update the prompt independently. Missing or late estimates use the fallback waiting budget.
+The scheduler uses how long each module took for the previous prompt of the shell session, kept
+beside its log, to group results expected close together. Slow modules can update the prompt
+independently. Missing or late estimates use the fallback waiting budget.
+A stream writes the main and right prompts, each followed by a NUL, every time they change. It
+ends once nothing will change them again, or as soon as the shell stops reading it, and
+`--redraws` limits how often it redraws them for shells that can only redraw so often.
 Supported shell integrations:
 
 - zsh streams both prompts, including refreshes, vi mode changes, and terminal resizing.
@@ -401,10 +405,9 @@ Supported shell integrations:
 | `bus.adaptive` | `true`  | Use previous module timings to schedule redraws. Disable to treat every module as unmeasured.                                                 |
 | `bus.fallback` | `50`    | Maximum waiting budget for initial paint and later redraw batches, in milliseconds. Process startup and configuration loading are additional. |
 
-On shells that support ongoing updates, modules can refresh while the prompt is displayed. When enabled, `time` refreshes every
-second for formats containing seconds or when a valid `time_range` controls its visibility.
-Fractional seconds (`%f`, `%.f`, `%N`) refresh at the displayed precision, with a minimum interval of 10 milliseconds to bound resource use.
-Other time formats refresh every minute; literal formats need no refresh unless a `time_range` is configured.
+On shells that support ongoing updates, modules can refresh while the prompt is displayed. When enabled, `time` refreshes as
+often as what it shows changes: every hundredth or tenth of a second, second, minute, hour or day, whichever its format shows
+first, and at least every second while a valid `time_range` controls its visibility. Literal formats need no refresh.
 `memory_usage` refreshes every five seconds, and `battery` and `localip` every thirty seconds.
 Custom modules repeat only when their `refresh` interval is greater than zero (milliseconds).
 Refreshes align to wall-clock boundaries and redraw only when the resulting prompt changes.
@@ -412,7 +415,6 @@ Refreshing a disabled module does not enable it.
 
 Set `[async].refresh = false` to stop all periodic refreshes, or set an individual built-in
 module's `refresh = false`. Set a custom module's `refresh = 0` to run it once per prompt.
-Disabling `[async].enabled` also disables periodic refreshes.
 
 ### Example
 

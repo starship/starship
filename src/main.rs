@@ -133,27 +133,20 @@ enum Commands {
         /// Print the continuation prompt (instead of the standard left prompt)
         #[clap(long, conflicts_with = "right", conflicts_with = "profile")]
         continuation: bool,
-        /// Stream the main and right prompts as frames instead, drawing them
-        /// before slow modules finish and refining them as they do
+        /// Stream the main and right prompts instead, as `main\0right\0` each
+        /// time they change: drawn before slow modules finish, refined as they
+        /// do, and kept current until standard output closes
         #[clap(long, conflicts_with_all = ["right", "profile", "continuation"])]
         stream: bool,
-        /// Stop this stream when its owning adapter closes standard input.
-        #[clap(long, hide = true, requires = "stream")]
-        #[cfg_attr(unix, clap(conflicts_with = "publish_state"))]
-        stream_control_stdin: bool,
-        /// What each module did for the previous prompt, as the last stream
-        /// reported
-        #[clap(long, requires = "stream", default_value = "")]
-        timings: String,
-        /// Stream in the background to a file in this directory named after the
-        /// process streaming, as `main\0right\0timings\0`, having announced the
-        /// first prompts on standard output as `main\0right\0pid\0` (used by fish)
+        /// Redraw the streamed prompts at most this many times after the first
+        /// paint, the last time once they are complete, then end the stream
+        #[clap(long, requires = "stream")]
+        redraws: Option<usize>,
+        /// Stream in the background to a file in a new directory, named on
+        /// standard output once the first prompts are there, and send this
+        /// process `SIGUSR1` whenever they change (used by fish)
         #[cfg(unix)]
-        #[clap(long, requires_all = ["stream", "signal_pid"])]
-        publish_state: Option<PathBuf>,
-        /// The shell to send `SIGUSR1` whenever the file changes
-        #[cfg(unix)]
-        #[clap(long, requires = "publish_state", value_parser = clap::value_parser!(i32).range(1..))]
+        #[clap(long, requires = "stream", conflicts_with = "redraws", value_parser = clap::value_parser!(i32).range(1..))]
         signal_pid: Option<i32>,
         #[clap(flatten)]
         properties: Properties,
@@ -230,29 +223,21 @@ fn main() {
     // to happen before any thread starts.
     #[cfg(unix)]
     if let Commands::Prompt {
-        publish_state: Some(_),
+        signal_pid: Some(_),
         ..
     } = args.command
     {
         stream::detach();
     }
 
-    if let Commands::Prompt {
-        stream_control_stdin: true,
-        ..
-    } = &args.command
-        && let Err(error) = stream::watch_control_stdin()
-    {
-        eprintln!("Unable to watch stream ownership: {error}");
-        std::process::exit(1);
-    }
-
     logger::init();
-    // Configure Rayon before commands can use its global pool. Starting this in
-    // the background races the first `par_iter` against Rayon initialization.
     init_global_threadpool();
-    // Clean old logs without delaying prompt rendering.
-    std::thread::spawn(|| logger::cleanup_log_files(logger::get_log_dir()));
+
+    // Delete old log files
+    rayon::spawn(|| {
+        let log_dir = logger::get_log_dir();
+        logger::cleanup_log_files(log_dir);
+    });
     log::trace!("Parsed arguments: {args:#?}");
 
     match args.command {
@@ -268,21 +253,19 @@ fn main() {
         }
         Commands::Prompt {
             stream: true,
-            timings,
-            #[cfg(unix)]
-            publish_state,
+            redraws,
             #[cfg(unix)]
             signal_pid,
             properties,
             ..
         } => {
             #[cfg(unix)]
-            let streamed = match (publish_state, signal_pid) {
-                (Some(state), Some(shell)) => stream::publish(properties, &timings, state, shell),
-                _ => stream::stream(properties, &timings),
+            let streamed = match signal_pid {
+                Some(shell) => stream::publish(properties, shell),
+                None => stream::stream(properties, redraws),
             };
             #[cfg(not(unix))]
-            let streamed = stream::stream(properties, &timings);
+            let streamed = stream::stream(properties, redraws);
             // A closed pipe is a shell that no longer wants this prompt.
             if let Err(error) = streamed
                 && error.kind() != io::ErrorKind::BrokenPipe
@@ -385,11 +368,8 @@ fn main() {
 
 /// Initialize global `rayon` thread pool
 fn init_global_threadpool() {
-    // A module that needs the pool before then starts it with every core.
-    if let Err(error) = rayon::ThreadPoolBuilder::new()
+    rayon::ThreadPoolBuilder::new()
         .num_threads(num_rayon_threads())
         .build_global()
-    {
-        log::debug!("The worker thread pool started before it was configured: {error}");
-    }
+        .expect("Failed to initialize worker thread pool");
 }
