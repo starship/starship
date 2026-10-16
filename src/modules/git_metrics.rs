@@ -29,6 +29,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo = context.get_git_repo().ok()?;
     let gix_repo = repo.open();
     gix_repo.workdir()?;
+    let repo_size = config
+        .show_repo_size
+        .then(|| repo_dir_size(gix_repo.common_dir()))
+        .flatten()
+        .map(format_repo_size);
     let status_module = context.new_module("git_status");
     let status_config = GitStatusConfig::try_load(status_module.config);
     // TODO: remove this special case once `gitoxide` can handle sparse indices for tree-index comparisons.
@@ -264,6 +269,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "added" => GitDiff::get_variable(config.only_nonzero_diffs, &stats.added),
                 "deleted" => GitDiff::get_variable(config.only_nonzero_diffs, &stats.deleted),
+                "repo_size" => repo_size.as_deref().map(Ok),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -278,6 +284,52 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
+}
+
+fn repo_dir_size(path: &std::path::Path) -> Option<u64> {
+    let mut size: u64 = 0;
+    let entries = std::fs::read_dir(path).ok()?;
+    for entry in entries.flatten() {
+        let metadata = std::fs::symlink_metadata(entry.path()).ok()?;
+        if metadata.is_dir() {
+            size = size.checked_add(metadata_size(&metadata)?)?;
+            size = size.checked_add(repo_dir_size(&entry.path())?)?;
+        } else if metadata.is_file() {
+            size = size.checked_add(metadata_size(&metadata)?)?;
+        }
+    }
+    Some(size)
+}
+
+fn metadata_size(metadata: &std::fs::Metadata) -> Option<u64> {
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::MetadataExt;
+
+        metadata.blocks().checked_mul(512)
+    }
+
+    #[cfg(not(unix))]
+    {
+        Some(metadata.len())
+    }
+}
+
+fn format_repo_size(size: u64) -> String {
+    const UNITS: [&str; 5] = ["B", "KB", "MB", "GB", "TB"];
+    let mut value = size as f64;
+    let mut unit = 0;
+    while value >= 1024.0 && unit < UNITS.len() - 1 {
+        value /= 1024.0;
+        unit += 1;
+    }
+    if unit == 0 {
+        format!("{size}{}", UNITS[unit])
+    } else if value < 10.0 {
+        format!("{value:.1}{}", UNITS[unit])
+    } else {
+        format!("{value:.0}{}", UNITS[unit])
+    }
 }
 
 fn prevent_external_diff(mut cache: gix::diff::blob::Platform) -> gix::diff::blob::Platform {
@@ -385,6 +437,7 @@ impl GitDiff {
 
 #[cfg(test)]
 mod tests {
+    use super::{format_repo_size, repo_dir_size};
     use crate::utils::{create_command, write_file};
     use std::ffi::OsStr;
     use std::fs::OpenOptions;
@@ -627,6 +680,106 @@ mod tests {
             assert_eq!(expected, actual);
             repo_dir.close()?;
         }
+        Ok(())
+    }
+
+    #[test]
+    fn formats_repository_size_with_binary_units() {
+        assert_eq!(format_repo_size(0), "0B");
+        assert_eq!(format_repo_size(1024), "1.0KB");
+        assert_eq!(format_repo_size(12 * 1024 * 1024), "12MB");
+    }
+
+    #[test]
+    fn calculates_repository_directory_size_without_following_symlinks() -> io::Result<()> {
+        let directory = tempfile::tempdir()?;
+        std::fs::write(directory.path().join("object"), [0_u8; 1024])?;
+        let nested = directory.path().join("nested");
+        std::fs::create_dir(&nested)?;
+        std::fs::write(nested.join("index"), [0_u8; 2048])?;
+        let link = directory.path().join("link");
+        std::fs::File::create(&link)?;
+        let expected_size =
+            repo_dir_size(directory.path()).expect("directory size should be available");
+        std::fs::remove_file(&link)?;
+
+        #[cfg(unix)]
+        std::os::unix::fs::symlink(&nested, &link)?;
+        #[cfg(windows)]
+        if let Err(error) = std::os::windows::fs::symlink_dir(&nested, &link) {
+            if error.kind() == io::ErrorKind::PermissionDenied {
+                return Ok(());
+            }
+            return Err(error);
+        }
+
+        let size = repo_dir_size(directory.path()).expect("directory size should be available");
+        assert_eq!(size, expected_size, "symlinks must not be followed");
+        assert!(size >= 3072, "directory size should include both files");
+        assert_ne!(format_repo_size(size), "0B");
+        Ok(())
+    }
+
+    #[test]
+    fn uses_the_common_directory_for_linked_worktrees() -> io::Result<()> {
+        let repository = create_repo_with_commit(FixtureProvider::Git {
+            bare: false,
+            reftable: false,
+        })?;
+        let linked_worktree = repository.path().join("linked");
+
+        run_git_cmd(
+            [
+                "worktree",
+                "add",
+                "--detach",
+                linked_worktree.to_str().expect("path should be UTF-8"),
+            ],
+            Some(repository.path()),
+            true,
+        )?;
+
+        let linked_repository = gix::open(&linked_worktree).expect("linked worktree should open");
+        assert_ne!(linked_repository.git_dir(), linked_repository.common_dir());
+        assert_eq!(
+            linked_repository
+                .common_dir()
+                .canonicalize()
+                .expect("common directory should exist"),
+            repository
+                .path()
+                .join(".git")
+                .canonicalize()
+                .expect("repository git directory should exist")
+        );
+        assert!(
+            repo_dir_size(linked_repository.git_dir())
+                < repo_dir_size(linked_repository.common_dir()),
+            "linked worktree metadata must be smaller than shared repository data"
+        );
+        Ok(())
+    }
+
+    #[test]
+    fn renders_repository_size_only_when_enabled() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit(FixtureProvider::Git {
+            bare: false,
+            reftable: false,
+        })?;
+        let path = repo_dir.path();
+
+        let actual = ModuleRenderer::new("git_metrics")
+            .config(toml::toml! {
+                [git_metrics]
+                disabled = false
+                show_repo_size = true
+                format = "$repo_size"
+            })
+            .path(path)
+            .collect();
+
+        assert!(actual.is_some_and(|size| size.ends_with('B') && size != "0B"));
+        repo_dir.close()?;
         Ok(())
     }
 
