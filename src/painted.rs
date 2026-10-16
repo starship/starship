@@ -82,42 +82,41 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
         })
     };
     let fills = styled().filter(|&(kind, ..)| kind == Kind::Fill).count();
-    // Each fill's share of what the rest of the line leaves, if that is known
-    // and a column or more: text a shell expands has no width until the shell
-    // has expanded it. Measuring text takes a pass over every grapheme, which
-    // only a fill needs.
-    let allocation = width.filter(|_| fills > 0).and_then(|width| {
-        if styled().any(|(kind, ..)| kind == Kind::Verbatim) {
-            return None;
-        }
-        let used = text_width(segments);
-        let available = width.checked_sub(used)?;
-        Some((available / fills, available % fills)).filter(|&(share, _)| share > 0)
-    });
+    // How wide each fill is in turn, if that is known and each gets a column
+    // or more of what the rest of the line leaves: text a shell expands has
+    // no width until the shell has expanded it. Measuring text takes a pass
+    // over every grapheme, which only a fill needs.
+    let mut widths = width
+        .filter(|_| fills > 0 && styled().all(|(kind, ..)| kind != Kind::Verbatim))
+        .and_then(|width| {
+            let available = width.checked_sub(text_width(segments))?;
+            let share = available / fills;
+            (share > 0)
+                .then(|| (0..fills).map(move |fill| share + usize::from(fill < available % fills)))
+        });
 
     let mut previous = None;
-    let mut fill_index = 0;
     styled()
         .map(|(kind, style, value)| {
-            let inherited = if kind == Kind::Fill {
-                previous.take()
-            } else {
-                previous
+            let resolve = |inherited: Option<AnsiStyle>| {
+                style.map_or_else(AnsiStyle::default, |style| {
+                    style.to_ansi_style(inherited.as_ref())
+                })
             };
-            let style = style.map_or_else(AnsiStyle::default, |style| {
-                style.to_ansi_style(inherited.as_ref())
-            });
-            if kind != Kind::Fill {
-                previous = Some(style);
-            }
-            let text = match allocation.filter(|_| kind == Kind::Fill) {
-                Some((share, remainder)) => {
-                    let width = share + usize::from(fill_index < remainder);
-                    fill_index += 1;
-                    stretch(value, width, style)
+            let (style, text) = match kind {
+                Kind::Fill => {
+                    let style = resolve(previous.take());
+                    let text = match widths.as_mut().and_then(Iterator::next) {
+                        Some(width) => stretch(value, width, style),
+                        None => finish_fill(Cow::Borrowed(value), style),
+                    };
+                    (style, text)
                 }
-                None if kind == Kind::Fill => finish_fill(Cow::Borrowed(value), style),
-                None => Cow::Borrowed(value),
+                Kind::Text | Kind::Verbatim => {
+                    let style = resolve(previous);
+                    previous = Some(style);
+                    (style, Cow::Borrowed(value))
+                }
             };
             Run { kind, style, text }
         })
@@ -138,15 +137,11 @@ fn text_width(segments: &[Segment]) -> usize {
             )
         })
         .map(|group| {
-            let mut values = group.iter().filter_map(|segment| match segment {
-                Segment::Styled { value, .. } => Some(value.as_str()),
-                Segment::LineBreak => None,
-            });
-            let mut text = Cow::Borrowed(values.next().unwrap_or_default());
-            for value in values {
-                text.to_mut().push_str(value);
-            }
-            text.width_graphemes()
+            group
+                .iter()
+                .map(Segment::value)
+                .collect::<String>()
+                .width_graphemes()
         })
         .sum()
 }
