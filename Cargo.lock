@@ -3533,6 +3533,7 @@ name = "starship"
 version = "1.27.0"
 dependencies = [
  "alacritty_terminal",
+ "anstream",
  "clap",
  "clap_complete",
  "clap_complete_nushell",
