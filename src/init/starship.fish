@@ -86,25 +86,39 @@ else
     # each pair of prompts to a file in a directory of its own, and signals.
     set -g __starship_stream_directory
     set -g __starship_stream_prompts '' ''
+    set -g __starship_stream_ready 0
 
     # Restart for a new prompt or changed arguments (width, mode), waiting for
     # the stream to name its directory once the first prompts are there.
     function __starship_prompt --argument-names side
-        if test "$__starship_stream_arguments" != "$argv[2..-1]"
+        if test "$__starship_stream_ready" != 1; or test "$__starship_stream_arguments" != "$argv[2..-1]"
             __starship_stream_stop
-            set -g __starship_stream_arguments $argv[2..-1]
             set -g __starship_stream_prompts '' ''
             ::STARSHIP:: prompt --stream --signal-pid=$fish_pid $argv[2..-1] 2>/dev/null | read -gz __starship_stream_directory
-            __starship_stream_read
+            if __starship_stream_read
+                # Empty prompts are valid; only a complete pair makes this a cache.
+                set -g __starship_stream_arguments $argv[2..-1]
+                set -g __starship_stream_ready 1
+            else
+                # Failed startups must be retried, including by the other side.
+                __starship_stream_stop
+                if test $side = 1
+                    ::STARSHIP:: prompt $argv[2..-1]
+                else
+                    ::STARSHIP:: prompt --right $argv[2..-1]
+                end
+                return
+            end
         end
         printf %s $__starship_stream_prompts[$side]
     end
 
     function __starship_stream_read
         test -n "$__starship_stream_directory"; or return
+        test -r "$__starship_stream_directory/prompt"; or return
         begin
             read -z main; and read -z right
-        end <$__starship_stream_directory/prompt; or return
+        end <$__starship_stream_directory/prompt 2>/dev/null; or return
         set -g __starship_stream_prompts "$main" "$right"
     end
 
@@ -116,13 +130,14 @@ else
 
     # The stream removes its directory once asked to stop.
     function __starship_stream_stop --on-event fish_preexec --on-event fish_exit
-        if test -n "$__starship_stream_directory"
+        if test -n "$__starship_stream_directory"; and test -d "$__starship_stream_directory"
             begin
                 true >$__starship_stream_directory/stop
             end 2>/dev/null
         end
         set -g __starship_stream_directory
         set -g __starship_stream_arguments
+        set -g __starship_stream_ready 0
     end
 end
 
