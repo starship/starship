@@ -231,31 +231,53 @@ where
     }
 }
 
-/// The wall clock as of the start, followed on the monotonic one, so that
-/// refreshes fall due as the wall clock turns over.
+/// How long a stream waiting for a refresh goes without reading the wall
+/// clock, which can be set, or skip a machine's sleep, meanwhile.
+const LOOK_AT_THE_WALL: Duration = Duration::from_secs(1);
+
+/// The monotonic clock as of the start, and the wall clock, as refreshes fall
+/// due when it turns over.
 struct Clock {
     start: Instant,
-    /// Since the Unix epoch, at the start.
-    wall: Duration,
+    wall: Wall,
+}
+
+enum Wall {
+    /// The system's, read anew each time, however it has been set since.
+    System,
+    /// One that read this, since the Unix epoch, at the start, and has run
+    /// with the monotonic clock since.
+    #[cfg(test)]
+    Simulated(Duration),
 }
 
 impl Clock {
     fn now() -> Self {
         Self {
             start: Instant::now(),
-            wall: SystemTime::now()
-                .duration_since(SystemTime::UNIX_EPOCH)
-                .unwrap_or_default(),
+            wall: Wall::System,
         }
     }
 
-    /// The first instant after `now` at which the wall clock reads a multiple
+    /// What the wall clock read at `now`, since the Unix epoch.
+    fn wall(&self, now: Instant) -> Duration {
+        match self.wall {
+            Wall::System => {
+                let wall = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH);
+                let since = Instant::now().saturating_duration_since(now);
+                wall.unwrap_or_default().saturating_sub(since)
+            }
+            #[cfg(test)]
+            Wall::Simulated(start) => start + (now - self.start),
+        }
+    }
+
+    /// The first reading after the wall clock's at `now` that is a multiple
     /// of `period`, unless it has none, being zero.
-    fn next(&self, now: Instant, period: Span) -> Option<Instant> {
-        let period = period.get().as_nanos();
-        let wall = (self.wall + (now - self.start)).as_nanos();
-        let left = period - wall.checked_rem(period)?;
-        Some(now + Duration::from_nanos(u64::try_from(left).ok()?))
+    fn next(&self, now: Instant, period: Duration) -> Option<Duration> {
+        let wall = self.wall(now);
+        let left = period.as_nanos() - wall.as_nanos().checked_rem(period.as_nanos())?;
+        Some(wall + Duration::from_nanos(u64::try_from(left).ok()?))
     }
 }
 
@@ -272,7 +294,7 @@ enum Planning {
 struct Slot {
     shown: Vec<Segment>,
     /// How often it renders again while the prompt is shown, if it does.
-    period: Option<Span>,
+    period: Option<Duration>,
     /// What it is expected to do: what it did for the previous prompt, until
     /// it renders for this one.
     estimate: Option<Estimate>,
@@ -285,8 +307,9 @@ enum State {
     Rendering(Instant),
     /// Rendering again, since then.
     Refreshing(Instant),
-    /// Rendered, to render again then, if it ever does.
-    Rendered(Option<Instant>),
+    /// Rendered, to render again once the wall clock reads this, if it ever
+    /// does.
+    Rendered(Option<Duration>),
 }
 
 impl Slot {
@@ -298,17 +321,23 @@ impl Slot {
         }
     }
 
-    /// When it renders again, if it has rendered and ever does.
-    fn due(&self) -> Option<Instant> {
+    /// When the wall clock reads what it renders again at, if it has
+    /// rendered and ever does.
+    fn due(&self) -> Option<Duration> {
         match self.state {
             State::Rendered(due) => due,
             State::Rendering(_) | State::Refreshing(_) => None,
         }
     }
 
-    /// Starts rendering again if it is due to by `now`.
-    fn refresh(&mut self, now: Instant) -> bool {
-        let due = self.due().is_some_and(|due| due <= now);
+    /// Starts rendering again at `now` if the wall clock, reading `wall`, has
+    /// reached its time, or reads more than a period before it, having been
+    /// set back.
+    fn refresh(&mut self, now: Instant, wall: Duration) -> bool {
+        let due = self
+            .due()
+            .zip(self.period)
+            .is_some_and(|(due, period)| due <= wall || due > wall + period);
         if due {
             self.state = State::Refreshing(now);
         }
@@ -395,9 +424,10 @@ impl<'context> Session<'context> {
             .zip(estimates)
             .map(|(module, estimate)| Slot {
                 shown: Vec::new(),
-                period: modules::period(module, context)
-                    .filter(|_| configuration.refresh)
-                    .map(Span::from),
+                period: configuration
+                    .refresh
+                    .then(|| modules::period(module, context))
+                    .flatten(),
                 estimate,
                 state: State::Rendering(clock.start),
             })
@@ -439,8 +469,9 @@ impl<'context> Session<'context> {
             if self.finished() {
                 return Ok(());
             }
+            let wall = self.clock.wall(now);
             for (position, slot) in self.slots.iter_mut().enumerate() {
-                if slot.refresh(now) {
+                if slot.refresh(now, wall) {
                     renderer.render(position);
                 }
             }
@@ -450,6 +481,7 @@ impl<'context> Session<'context> {
                 .slots
                 .iter()
                 .filter_map(Slot::due)
+                .map(|due| now + due.saturating_sub(wall).min(LOOK_AT_THE_WALL))
                 .chain(departure)
                 .min();
             let Some((then, rendered)) = renderer.wait(deadline) else {
@@ -745,7 +777,7 @@ mod tests {
         };
         let clock = Clock {
             start,
-            wall: milliseconds(settings.wall),
+            wall: Wall::Simulated(milliseconds(settings.wall)),
         };
         let estimates = timings::read(timings, &plan.modules);
         let timings = settings
@@ -1318,6 +1350,30 @@ mod tests {
                 vec![[main.replace('\0', ""), right.replace('\0', "")]],
                 read_prompts(encode(&[main, right]).as_bytes())
             );
+        }
+    }
+
+    #[test]
+    fn a_refresh_falls_due_by_the_wall_clock_however_it_is_set() {
+        let now = Instant::now();
+        let at = Duration::from_secs;
+        let due_at_100 = || Slot {
+            shown: Vec::new(),
+            period: Some(at(1)),
+            estimate: None,
+            state: State::Rendered(Some(at(100))),
+        };
+        for (wall, due, why) in [
+            (99, false, "before its time"),
+            (100, true, "at its time"),
+            (
+                3_600,
+                true,
+                "the clock set forward, or the machine woken from sleep",
+            ),
+            (98, true, "the clock set back by more than a period"),
+        ] {
+            assert_eq!(due, due_at_100().refresh(now, at(wall)), "{why}");
         }
     }
 
