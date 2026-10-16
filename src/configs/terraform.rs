@@ -27,7 +27,7 @@ impl Default for TerraformConfig<'_> {
             symbol: "💠 ",
             style: "bold 105",
             disabled: false,
-            detect_extensions: vec!["tf", "tfplan", "tfstate"],
+            detect_extensions: vec!["tf", "tofu", "tfplan", "tfstate"],
             detect_files: vec![],
             detect_folders: vec![".terraform"],
             commands: vec![
