@@ -194,9 +194,11 @@ mod tests {
     #[test]
     fn malformed_entries_are_skipped_and_the_last_of_a_module_counts() {
         assert_eq!(
-            "rust=12,git_status=40,nodejs",
-            handed_back("rust=12,x=y,=3,,git_status=40,fine=0.5,negative=-1,nodejs"),
-            "a bare name is a module that changed nothing"
+            "rust=12,git_status=40,nodejs,slow=86400000",
+            handed_back(
+                "rust=12,x=y,=3,,git_status=40,fine=0.5,negative=-1,nodejs,slow=86400001,forever=inf"
+            ),
+            "a bare name is a module that changed nothing, and none takes over a day"
         );
         let modules = IndexSet::from(["rust".to_owned(), "character".to_owned()]);
         assert_eq!(
@@ -209,19 +211,6 @@ mod tests {
                 &modules
             )
         );
-    }
-
-    #[test]
-    fn the_next_stream_reads_the_report_kept_in_place_of_those_before() {
-        let directory = tempfile::tempdir().unwrap();
-        let first = at(directory.path(), 1);
-        assert_eq!("", first.previous(), "none kept yet");
-        first.keep("rust=12,character");
-        let second = at(directory.path(), 2);
-        assert_eq!("rust=12,character", second.previous());
-        second.keep("rust=24");
-
-        assert_eq!(["rust=24"], kept(directory.path()).as_slice());
     }
 
     #[test]
@@ -298,14 +287,6 @@ mod tests {
     }
 
     #[test]
-    fn an_estimate_is_at_most_a_day() {
-        assert_eq!(
-            "quick=12,slow=86400000",
-            handed_back("quick=12,slow=86400001,forever=inf")
-        );
-    }
-
-    #[test]
     fn a_name_holding_a_separator_is_not_reported() {
         let reported = report([
             ("custom.a,b", Estimate::Unchanged),
@@ -344,7 +325,7 @@ mod tests {
         /// Streams start a second apart, and each keeps its report, if at
         /// all, at any point after it starts. However they overlap, the next
         /// stream reads the report of the last to start among those that kept
-        /// one.
+        /// one, and each report kept prunes every one started before it.
         #[test]
         fn the_last_stream_started_to_report_is_the_one_read(
             steps in prop::collection::vec((any::<bool>(), any::<Index>()), 0..12),
@@ -352,7 +333,7 @@ mod tests {
             let directory = tempfile::tempdir().unwrap();
             let mut started = 0_u64;
             let mut running: Vec<(u64, Timings)> = Vec::new();
-            let mut kept = Vec::new();
+            let mut remaining = std::collections::BTreeSet::new();
             for (start, which) in steps {
                 if start || running.is_empty() {
                     started += 1;
@@ -360,12 +341,15 @@ mod tests {
                 } else {
                     let (stream, timings) = running.swap_remove(which.index(running.len()));
                     timings.keep(&stream.to_string());
-                    kept.push(stream);
+                    remaining.insert(stream);
+                    remaining.retain(|&kept| kept >= stream);
                 }
             }
 
             let read = at(directory.path(), started + 1).previous;
-            prop_assert_eq!(kept.iter().max().map(ToString::to_string).unwrap_or_default(), read);
+            prop_assert_eq!(remaining.last().map(ToString::to_string).unwrap_or_default(), read);
+            let remaining: Vec<_> = remaining.iter().map(ToString::to_string).collect();
+            prop_assert_eq!(remaining, kept(directory.path()));
         }
     }
 }
