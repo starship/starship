@@ -172,7 +172,7 @@ pub fn get_prompt(context: &Context) -> String {
 
 /// Prompt formats sharing one ordered set of modules to render.
 pub struct Plan<'a, const PROMPTS: usize> {
-    /// Deduplicated modules, in first-use order.
+    /// Deduplicated modules: those of each prompt in turn, alphabetically.
     pub modules: IndexSet<String>,
     /// The format of each requested prompt, in the order requested.
     pub formats: [PromptFormat<'a>; PROMPTS],
