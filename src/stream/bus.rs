@@ -58,11 +58,7 @@ impl Add<Span> for Instant {
 }
 
 /// What a module did for the previous prompt.
-///
-/// Ordered as a stream renders modules when they outnumber its workers, those
-/// that changed the prompt soonest first. A module never measured comes before
-/// any of these, being `None`.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Estimate {
     /// Changed the prompt, after rendering for this long.
     Changed(Span),
@@ -81,18 +77,6 @@ impl Estimate {
                 Self::Changed(Span((estimate.0 * 3 + took.0) / 4))
             }
             _ => measured,
-        }
-    }
-
-    /// Whether a module expected to do `estimate` waits on a subprocess or the
-    /// filesystem, rather than computes, which takes microseconds: one that
-    /// took a millisecond or more to change the prompt, or one never measured,
-    /// which might.
-    pub fn waits(estimate: Option<Self>) -> bool {
-        match estimate {
-            Some(Self::Changed(took)) => took.0 >= Duration::from_millis(1),
-            Some(Self::Unchanged) => false,
-            None => true,
         }
     }
 }
@@ -463,19 +447,6 @@ mod tests {
         );
     }
 
-    #[test]
-    fn modules_that_take_a_millisecond_or_were_never_measured_wait() {
-        let waits = [
-            Some(Estimate::Changed(Span(Duration::from_micros(200)))),
-            Some(Estimate::Changed(milliseconds(1))),
-            Some(Estimate::Unchanged),
-            None,
-        ]
-        .map(Estimate::waits);
-
-        assert_eq!([false, true, false, true], waits);
-    }
-
     /// Any duration at all, as a module could take or a shell could report.
     fn any_span() -> impl Strategy<Value = Span> {
         any::<u64>().prop_map(|nanoseconds| Span::from(Duration::from_nanos(nanoseconds)))
@@ -574,12 +545,13 @@ mod tests {
             previous in any_span(),
             measured in any_span(),
         ) {
-            let blended = Estimate::after(
+            let Estimate::Changed(blended) = Estimate::after(
                 Some(Estimate::Changed(previous)),
                 Estimate::Changed(measured),
-            );
-            let between = Estimate::Changed(previous.min(measured))..=Estimate::Changed(previous.max(measured));
-            prop_assert!(between.contains(&blended));
+            ) else {
+                unreachable!("two durations blend into one")
+            };
+            prop_assert!((previous.min(measured)..=previous.max(measured)).contains(&blended));
         }
     }
 }

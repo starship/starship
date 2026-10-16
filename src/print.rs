@@ -13,7 +13,6 @@ use crate::module::Module;
 use crate::modules;
 use crate::plan::Plan;
 use crate::shadow;
-use crate::workers;
 
 pub struct Grapheme<'a>(pub &'a str);
 
@@ -156,7 +155,7 @@ pub fn get_prompt(context: &Context) -> String {
     }
 
     let plan = Plan::new(context, [context.target.clone()]);
-    let rendered = workers::render_all(context, &plan.modules);
+    let rendered = plan.render(context);
     let [prompt] = plan.prompts(&|position| &rendered[position], context);
     prompt
 }
