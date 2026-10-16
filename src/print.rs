@@ -192,7 +192,7 @@ impl<'a, const PROMPTS: usize> Plan<'a, PROMPTS> {
         let render = |position: usize| {
             let _ = shown[position].set(render(&self.modules[position], context));
         };
-        thread::scope(|scope| fan_out(scope, self.modules.len(), &render));
+        thread::scope(|scope| fan_out(scope, self.modules.len(), render));
         shown
             .into_iter()
             .map(|shown| shown.into_inner().unwrap_or_default())
@@ -227,17 +227,14 @@ pub fn render(module: &str, context: &Context) -> Vec<Segment> {
 /// own. The threads start one another, each the next two of a binary tree, so
 /// that starting a hundred takes about as long as starting seven in turn. A
 /// job whose thread cannot start runs on the thread that tried to start it.
-pub fn fan_out<'scope, 'environment, F: Fn(usize) + Sync>(
-    scope: &'scope Scope<'scope, 'environment>,
-    count: usize,
-    job: &'environment F,
-) {
-    fn branch<'scope, 'environment, F: Fn(usize) + Sync>(
-        scope: &'scope Scope<'scope, 'environment>,
-        index: usize,
-        count: usize,
-        job: &'environment F,
-    ) {
+pub fn fan_out<'scope, F>(scope: &'scope Scope<'scope, '_>, count: usize, job: F)
+where
+    F: Fn(usize) + Send + Copy + 'scope,
+{
+    fn branch<'scope, F>(scope: &'scope Scope<'scope, '_>, index: usize, count: usize, job: F)
+    where
+        F: Fn(usize) + Send + Copy + 'scope,
+    {
         if index >= count {
             return;
         }
@@ -1071,7 +1068,7 @@ mod test {
             let job = |index: usize| {
                 runs[index].fetch_add(1, Ordering::Relaxed);
             };
-            thread::scope(|scope| fan_out(scope, count, &job));
+            thread::scope(|scope| fan_out(scope, count, job));
             let runs: Vec<usize> = runs.into_iter().map(AtomicUsize::into_inner).collect();
             assert_eq!(vec![1; count], runs, "{count} jobs");
         }

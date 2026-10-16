@@ -117,7 +117,7 @@ where
 }
 
 /// Root config of starship.
-#[derive(Default)]
+#[derive(Clone, Default)]
 pub struct StarshipConfig {
     pub config: Option<toml::Table>,
 }
