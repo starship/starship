@@ -80,7 +80,7 @@ fn undistract_me<'a>(
 
             if !in_graphical_session {
                 return module;
-            };
+            }
         }
 
         // On macOS 26+ notify-rust will get stuck finding the current application identifier

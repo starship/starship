@@ -2,7 +2,7 @@ use super::{Context, Module, ModuleConfig};
 use gix::commit::describe::SelectRef::AllTags;
 
 use crate::configs::git_commit::GitCommitConfig;
-use crate::context::Repo;
+use crate::context::GitRepo;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the Git commit in the current directory
@@ -12,7 +12,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_commit");
     let config: GitCommitConfig = GitCommitConfig::try_load(module.config);
 
-    let repo = context.get_repo().ok()?;
+    let repo = context.get_git_repo().ok()?;
     let git_repo = repo.open();
     let git_head = git_repo.head().ok()?;
 
@@ -28,11 +28,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "hash" => Some(Ok(git_hash(context.get_repo().ok()?, &config)?)),
+                "hash" => Some(Ok(git_hash(context.get_git_repo().ok()?, &config)?)),
                 "tag" if !config.tag_disabled => Some(Ok(format!(
                     "{}{}",
                     config.tag_symbol,
-                    git_tag(context.get_repo().ok()?, &config)?
+                    git_tag(context.get_git_repo().ok()?, &config)?
                 ))),
                 _ => None,
             })
@@ -50,7 +50,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn git_tag(repo: &Repo, config: &GitCommitConfig) -> Option<String> {
+fn git_tag(repo: &GitRepo, config: &GitCommitConfig) -> Option<String> {
     let mut git_repo = repo.open();
     // Increase the default object cache size to speed up operation for some repos
     git_repo.object_cache_size_if_unset(4 * 1024 * 1024);
@@ -66,7 +66,7 @@ fn git_tag(repo: &Repo, config: &GitCommitConfig) -> Option<String> {
     Some(formatter.name?.to_string())
 }
 
-fn git_hash(repo: &Repo, config: &GitCommitConfig) -> Option<String> {
+fn git_hash(repo: &GitRepo, config: &GitCommitConfig) -> Option<String> {
     let git_repo = repo.open();
     let head_id = git_repo.head_id().ok()?;
 
@@ -84,6 +84,12 @@ mod tests {
     use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
     use crate::utils::create_command;
 
+    // TODO: Support reftable and switch to `crate::test::COMMON_GIT_PROVIDERS`, e.g. via git-cli
+    static COMMON_GIT_PROVIDERS: &[FixtureProvider] = &[FixtureProvider::Git {
+        bare: false,
+        reftable: false,
+    }];
+
     #[test]
     fn show_nothing_on_empty_dir() -> io::Result<()> {
         let repo_dir = tempfile::tempdir()?;
@@ -100,366 +106,393 @@ mod tests {
 
     #[test]
     fn test_render_commit_hash() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for &provider in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(provider)?;
 
-        let mut git_output = create_command("git")?
-            .args(["rev-parse", "HEAD"])
-            .current_dir(repo_dir.path())
-            .output()?
-            .stdout;
-        git_output.truncate(7);
-        let expected_hash = str::from_utf8(&git_output).unwrap();
+            let mut git_output = create_command("git")?
+                .args(["rev-parse", "HEAD"])
+                .current_dir(repo_dir.path())
+                .output()?
+                .stdout;
+            git_output.truncate(7);
+            let expected_hash = str::from_utf8(&git_output).unwrap();
 
-        let actual = ModuleRenderer::new("git_commit")
-            .config(toml::toml! {
-                [git_commit]
-                    only_detached = false
-            })
-            .path(repo_dir.path())
-            .collect();
+            let actual = ModuleRenderer::new("git_commit")
+                .config(toml::toml! {
+                    [git_commit]
+                        only_detached = false
+                })
+                .path(repo_dir.path())
+                .collect();
 
-        let expected = Some(format!(
-            "{} ",
-            Color::Green.bold().paint(format!("({expected_hash})"))
-        ));
+            let expected = Some(format!(
+                "{} ",
+                Color::Green.bold().paint(format!("({expected_hash})"))
+            ));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn test_render_commit_hash_len_override() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for &provider in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(provider)?;
 
-        let mut git_output = create_command("git")?
-            .args(["rev-parse", "HEAD"])
-            .current_dir(repo_dir.path())
-            .output()?
-            .stdout;
-        git_output.truncate(14);
-        let expected_hash = str::from_utf8(&git_output).unwrap();
+            let mut git_output = create_command("git")?
+                .args(["rev-parse", "HEAD"])
+                .current_dir(repo_dir.path())
+                .output()?
+                .stdout;
+            git_output.truncate(14);
+            let expected_hash = str::from_utf8(&git_output).unwrap();
 
-        let actual = ModuleRenderer::new("git_commit")
-            .config(toml::toml! {
-                [git_commit]
-                    only_detached = false
-                    commit_hash_length = 14
-            })
-            .path(repo_dir.path())
-            .collect();
+            let actual = ModuleRenderer::new("git_commit")
+                .config(toml::toml! {
+                    [git_commit]
+                        only_detached = false
+                        commit_hash_length = 14
+                })
+                .path(repo_dir.path())
+                .collect();
 
-        let expected = Some(format!(
-            "{} ",
-            Color::Green.bold().paint(format!("({expected_hash})"))
-        ));
+            let expected = Some(format!(
+                "{} ",
+                Color::Green.bold().paint(format!("({expected_hash})"))
+            ));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn test_render_commit_hash_only_detached_on_branch() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for &provider in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(provider)?;
 
-        let actual = ModuleRenderer::new("git_commit")
-            .path(repo_dir.path())
-            .collect();
+            let actual = ModuleRenderer::new("git_commit")
+                .path(repo_dir.path())
+                .collect();
 
-        let expected = None;
+            let expected = None;
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn test_render_commit_hash_only_detached_on_detached() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for &provider in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(provider)?;
 
-        create_command("git")?
-            .args(["checkout", "@~1"])
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["checkout", "@~1"])
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        let mut git_output = create_command("git")?
-            .args(["rev-parse", "HEAD"])
-            .current_dir(repo_dir.path())
-            .output()?
-            .stdout;
-        git_output.truncate(7);
-        let expected_hash = str::from_utf8(&git_output).unwrap();
+            let mut git_output = create_command("git")?
+                .args(["rev-parse", "HEAD"])
+                .current_dir(repo_dir.path())
+                .output()?
+                .stdout;
+            git_output.truncate(7);
+            let expected_hash = str::from_utf8(&git_output).unwrap();
 
-        let actual = ModuleRenderer::new("git_commit")
-            .path(repo_dir.path())
-            .collect();
+            let actual = ModuleRenderer::new("git_commit")
+                .path(repo_dir.path())
+                .collect();
 
-        let expected = Some(format!(
-            "{} ",
-            Color::Green.bold().paint(format!("({expected_hash})"))
-        ));
+            let expected = Some(format!(
+                "{} ",
+                Color::Green.bold().paint(format!("({expected_hash})"))
+            ));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn test_render_commit_hash_with_tag_disabled() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for &provider in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(provider)?;
 
-        create_command("git")?
-            .args(["tag", "v1", "-m", "Testing tags"])
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["tag", "v1", "-m", "Testing tags"])
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        let mut git_commit = create_command("git")?
-            .args(["rev-parse", "HEAD"])
-            .current_dir(repo_dir.path())
-            .output()?
-            .stdout;
-        git_commit.truncate(7);
-        let commit_output = str::from_utf8(&git_commit).unwrap().trim();
+            let mut git_commit = create_command("git")?
+                .args(["rev-parse", "HEAD"])
+                .current_dir(repo_dir.path())
+                .output()?
+                .stdout;
+            git_commit.truncate(7);
+            let commit_output = str::from_utf8(&git_commit).unwrap().trim();
 
-        let actual = ModuleRenderer::new("git_commit")
-            .config(toml::toml! {
-                [git_commit]
-                    only_detached = false
-            })
-            .path(repo_dir.path())
-            .collect();
+            let actual = ModuleRenderer::new("git_commit")
+                .config(toml::toml! {
+                    [git_commit]
+                        only_detached = false
+                })
+                .path(repo_dir.path())
+                .collect();
 
-        let expected = Some(format!(
-            "{} ",
-            Color::Green
-                .bold()
-                .paint(format!("({})", commit_output.trim()))
-        ));
+            let expected = Some(format!(
+                "{} ",
+                Color::Green
+                    .bold()
+                    .paint(format!("({})", commit_output.trim()))
+            ));
 
-        assert_eq!(expected, actual);
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
         Ok(())
     }
 
     #[test]
     fn test_render_commit_hash_with_tag_enabled() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for &provider in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(provider)?;
 
-        create_command("git")?
-            .args(["tag", "v1", "-m", "Testing tags"])
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["tag", "v1", "-m", "Testing tags"])
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        let mut git_commit = create_command("git")?
-            .args(["rev-parse", "HEAD"])
-            .current_dir(repo_dir.path())
-            .output()?
-            .stdout;
-        git_commit.truncate(7);
-        let commit_output = str::from_utf8(&git_commit).unwrap().trim();
+            let mut git_commit = create_command("git")?
+                .args(["rev-parse", "HEAD"])
+                .current_dir(repo_dir.path())
+                .output()?
+                .stdout;
+            git_commit.truncate(7);
+            let commit_output = str::from_utf8(&git_commit).unwrap().trim();
 
-        let git_tag = create_command("git")?
-            .args(["describe", "--tags", "--exact-match", "HEAD"])
-            .current_dir(repo_dir.path())
-            .output()?
-            .stdout;
-        let tag_output = str::from_utf8(&git_tag).unwrap().trim();
+            let git_tag = create_command("git")?
+                .args(["describe", "--tags", "--exact-match", "HEAD"])
+                .current_dir(repo_dir.path())
+                .output()?
+                .stdout;
+            let tag_output = str::from_utf8(&git_tag).unwrap().trim();
 
-        let expected_output = format!("{commit_output} {tag_output}");
+            let expected_output = format!("{commit_output} {tag_output}");
 
-        let actual = ModuleRenderer::new("git_commit")
-            .config(toml::toml! {
-                [git_commit]
-                    only_detached = false
-                    tag_disabled = false
-                    tag_symbol = " "
-            })
-            .path(repo_dir.path())
-            .collect();
+            let actual = ModuleRenderer::new("git_commit")
+                .config(toml::toml! {
+                    [git_commit]
+                        only_detached = false
+                        tag_disabled = false
+                        tag_symbol = " "
+                })
+                .path(repo_dir.path())
+                .collect();
 
-        let expected = Some(format!(
-            "{} ",
-            Color::Green
-                .bold()
-                .paint(format!("({})", expected_output.trim()))
-        ));
+            let expected = Some(format!(
+                "{} ",
+                Color::Green
+                    .bold()
+                    .paint(format!("({})", expected_output.trim()))
+            ));
 
-        assert_eq!(expected, actual);
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
         Ok(())
     }
 
     #[test]
     fn test_render_commit_hash_only_detached_on_detached_with_tag_enabled() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for &provider in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(provider)?;
 
-        create_command("git")?
-            .args(["checkout", "@~1"])
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["checkout", "@~1"])
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        create_command("git")?
-            .args(["tag", "tagOnDetached", "-m", "Testing tags on detached"])
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["tag", "tagOnDetached", "-m", "Testing tags on detached"])
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        let mut git_commit = create_command("git")?
-            .args(["rev-parse", "HEAD"])
-            .current_dir(repo_dir.path())
-            .output()?
-            .stdout;
-        git_commit.truncate(7);
-        let commit_output = str::from_utf8(&git_commit).unwrap().trim();
+            let mut git_commit = create_command("git")?
+                .args(["rev-parse", "HEAD"])
+                .current_dir(repo_dir.path())
+                .output()?
+                .stdout;
+            git_commit.truncate(7);
+            let commit_output = str::from_utf8(&git_commit).unwrap().trim();
 
-        let git_tag = create_command("git")?
-            .args(["describe", "--tags", "--exact-match", "HEAD"])
-            .current_dir(repo_dir.path())
-            .output()?
-            .stdout;
-        let tag_output = str::from_utf8(&git_tag).unwrap().trim();
+            let git_tag = create_command("git")?
+                .args(["describe", "--tags", "--exact-match", "HEAD"])
+                .current_dir(repo_dir.path())
+                .output()?
+                .stdout;
+            let tag_output = str::from_utf8(&git_tag).unwrap().trim();
 
-        let expected_output = format!("{commit_output} {tag_output}");
+            let expected_output = format!("{commit_output} {tag_output}");
 
-        let actual = ModuleRenderer::new("git_commit")
-            .config(toml::toml! {
-                [git_commit]
-                    tag_disabled = false
-                    tag_symbol = " "
-            })
-            .path(repo_dir.path())
-            .collect();
+            let actual = ModuleRenderer::new("git_commit")
+                .config(toml::toml! {
+                    [git_commit]
+                        tag_disabled = false
+                        tag_symbol = " "
+                })
+                .path(repo_dir.path())
+                .collect();
 
-        let expected = Some(format!(
-            "{} ",
-            Color::Green
-                .bold()
-                .paint(format!("({})", expected_output.trim()))
-        ));
+            let expected = Some(format!(
+                "{} ",
+                Color::Green
+                    .bold()
+                    .paint(format!("({})", expected_output.trim()))
+            ));
 
-        assert_eq!(expected, actual);
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
         Ok(())
     }
 
     #[test]
     fn test_latest_tag_shown_with_tag_enabled() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for &provider in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(provider)?;
 
-        let mut git_commit = create_command("git")?
-            .args(["rev-parse", "HEAD"])
-            .current_dir(repo_dir.path())
-            .output()?
-            .stdout;
-        git_commit.truncate(7);
-        let commit_output = str::from_utf8(&git_commit).unwrap().trim();
+            let mut git_commit = create_command("git")?
+                .args(["rev-parse", "HEAD"])
+                .current_dir(repo_dir.path())
+                .output()?
+                .stdout;
+            git_commit.truncate(7);
+            let commit_output = str::from_utf8(&git_commit).unwrap().trim();
 
-        create_command("git")?
-            .args(["tag", "--no-sign", "v2", "-m", "Testing tags v2"])
-            .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:00 +0000")
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["tag", "v2", "-m", "Testing tags v2"])
+                .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:00 +0000")
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        create_command("git")?
-            .args(["tag", "--no-sign", "v0", "-m", "Testing tags v0", "HEAD~1"])
-            .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:01 +0000")
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["tag", "v0", "-m", "Testing tags v0", "HEAD~1"])
+                .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:01 +0000")
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        create_command("git")?
-            .args(["tag", "--no-sign", "v1", "-m", "Testing tags v1"])
-            .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:01 +0000")
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["tag", "v1", "-m", "Testing tags v1"])
+                .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:01 +0000")
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        // Annotated tags are preferred over lightweight tags
-        create_command("git")?
-            .args(["tag", "--no-sign", "l0"])
-            .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:02 +0000")
-            .current_dir(repo_dir.path())
-            .output()?;
+            // Annotated tags are preferred over lightweight tags
+            create_command("git")?
+                .args(["tag", "l0"])
+                .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:02 +0000")
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        let git_tag = create_command("git")?
-            .args(["describe", "--tags"])
-            .current_dir(repo_dir.path())
-            .output()?
-            .stdout;
-        let tag_output = str::from_utf8(&git_tag).unwrap().trim();
+            let git_tag = create_command("git")?
+                .args(["describe", "--tags"])
+                .current_dir(repo_dir.path())
+                .output()?
+                .stdout;
+            let tag_output = str::from_utf8(&git_tag).unwrap().trim();
 
-        let expected_output = format!("{commit_output} {tag_output}");
+            let expected_output = format!("{commit_output} {tag_output}");
 
-        let actual = ModuleRenderer::new("git_commit")
-            .config(toml::toml! {
-                [git_commit]
-                    only_detached = false
-                    tag_disabled = false
-                    tag_symbol = " "
-            })
-            .path(repo_dir.path())
-            .collect();
+            let actual = ModuleRenderer::new("git_commit")
+                .config(toml::toml! {
+                    [git_commit]
+                        only_detached = false
+                        tag_disabled = false
+                        tag_symbol = " "
+                })
+                .path(repo_dir.path())
+                .collect();
 
-        let expected = Some(format!(
-            "{} ",
-            Color::Green
-                .bold()
-                .paint(format!("({})", expected_output.trim()))
-        ));
+            let expected = Some(format!(
+                "{} ",
+                Color::Green
+                    .bold()
+                    .paint(format!("({})", expected_output.trim()))
+            ));
 
-        assert_eq!(expected, actual);
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
         Ok(())
     }
 
     #[test]
     fn test_latest_tag_shown_with_tag_enabled_lightweight() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for &provider in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(provider)?;
 
-        let mut git_commit = create_command("git")?
-            .args(["rev-parse", "HEAD"])
-            .current_dir(repo_dir.path())
-            .output()?
-            .stdout;
-        git_commit.truncate(7);
-        let commit_output = str::from_utf8(&git_commit).unwrap().trim();
+            let mut git_commit = create_command("git")?
+                .args(["rev-parse", "HEAD"])
+                .current_dir(repo_dir.path())
+                .output()?
+                .stdout;
+            git_commit.truncate(7);
+            let commit_output = str::from_utf8(&git_commit).unwrap().trim();
 
-        // Lightweight tags are chosen lexicographically
-        create_command("git")?
-            .args(["tag", "--no-sign", "v1"])
-            .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:00 +0000")
-            .current_dir(repo_dir.path())
-            .output()?;
+            // Lightweight tags are chosen lexicographically
+            create_command("git")?
+                .args(["tag", "v1"])
+                .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:00 +0000")
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        create_command("git")?
-            .args(["tag", "--no-sign", "v0", "HEAD~1"])
-            .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:01 +0000")
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["tag", "v0", "HEAD~1"])
+                .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:01 +0000")
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        create_command("git")?
-            .args(["tag", "--no-sign", "v2"])
-            .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:01 +0000")
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["tag", "v2"])
+                .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:01 +0000")
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        let git_tag = create_command("git")?
-            .args(["describe", "--tags"])
-            .current_dir(repo_dir.path())
-            .output()?
-            .stdout;
-        let tag_output = str::from_utf8(&git_tag).unwrap().trim();
+            let git_tag = create_command("git")?
+                .args(["describe", "--tags"])
+                .current_dir(repo_dir.path())
+                .output()?
+                .stdout;
+            let tag_output = str::from_utf8(&git_tag).unwrap().trim();
 
-        let expected_output = format!("{commit_output} {tag_output}");
+            let expected_output = format!("{commit_output} {tag_output}");
 
-        let actual = ModuleRenderer::new("git_commit")
-            .config(toml::toml! {
-                [git_commit]
-                    only_detached = false
-                    tag_disabled = false
-                    tag_symbol = " "
-            })
-            .path(repo_dir.path())
-            .collect();
+            let actual = ModuleRenderer::new("git_commit")
+                .config(toml::toml! {
+                    [git_commit]
+                        only_detached = false
+                        tag_disabled = false
+                        tag_symbol = " "
+                })
+                .path(repo_dir.path())
+                .collect();
 
-        let expected = Some(format!(
-            "{} ",
-            Color::Green
-                .bold()
-                .paint(format!("({})", expected_output.trim()))
-        ));
+            let expected = Some(format!(
+                "{} ",
+                Color::Green
+                    .bold()
+                    .paint(format!("({})", expected_output.trim()))
+            ));
 
-        assert_eq!(expected, actual);
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
         Ok(())
     }
 }

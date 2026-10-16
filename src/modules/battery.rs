@@ -147,7 +147,7 @@ impl BatteryInfoProvider for BatteryInfoProviderImpl {
                         } else {
                             log::Level::Warn
                         };
-                        log::log!(level, "Unable to access battery information:\n{}", &e);
+                        log::log!(level, "Unable to access battery information:\n{e}");
                         None
                     }
                 })

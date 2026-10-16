@@ -49,7 +49,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "vm_version" => versions
                     .deref()
                     .as_ref()
-                    .map(|(_, vm_version)| vm_version.to_string())
+                    .map(|(_, vm_version)| vm_version.clone())
                     .map(Ok),
                 _ => None,
             })

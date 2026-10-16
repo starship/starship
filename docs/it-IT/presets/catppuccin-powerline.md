@@ -8,7 +8,7 @@ This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainb
 
 ### Prerequisiti
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal
+- Un [ Nerd Font ](https://www.nerdfonts.com/) installato e abilitato nel tuo terminale
 
 ### Configurazione
 

@@ -3,7 +3,7 @@
 Pour installer starship, vous devez faire deux choses:
 
 1. Installez le binaire **starship** sur votre ordinateur
-1. Dire à votre shell d'utiliser le binaire de starship comme invite en modifiant ses scripts d'initialisation
+2. Dire à votre shell d'utiliser le binaire de starship comme invite en modifiant ses scripts d'initialisation
 
 Pour la plupart des utilisateurs, les instructions sur [la page principale](../guide/#🚀-installation) fonctionneront bien. Cependant, pour certaines plateformes plus spécialisées, des instructions différentes sont nécessaires.
 

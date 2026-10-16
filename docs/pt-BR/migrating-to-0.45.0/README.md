@@ -80,7 +80,7 @@ format = "took [$duration]($style) "
 
 | Propriedades Removidas  | Substituição     |
 | ----------------------- | ---------------- |
-| `symbol`                | `success_symbol` |
+| `símbolo`               | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |

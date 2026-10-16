@@ -136,6 +136,16 @@ ssh_symbol = "ssh "
 [java]
 symbol = "java "
 
+[jj_bookmark]
+symbol = "jj "
+truncation_symbol = "..."
+
+[jj_status]
+description_empty = "e"
+immutable = "i"
+deleted = "x"
+renamed = "r"
+
 [jobs]
 symbol = "*"
 
@@ -202,6 +212,7 @@ Android = "andr "
 AOSC = "aosc "
 Arch = "rch "
 Artix = "atx "
+Bazzite = "bazz "
 Bluefin = "blfn "
 CachyOS = "cach "
 CentOS = "cent "
@@ -215,10 +226,12 @@ FreeBSD = "fbsd "
 Garuda = "garu "
 Gentoo = "gent "
 HardenedBSD = "hbsd "
+Hurd = "hurd "
 Illumos = "lum "
 Ios = "ios "
 InstantOS = "inst "
 Kali = "kali "
+KDENeon = "kde "
 Linux = "lnx "
 Mabox = "mbox "
 Macos = "mac "

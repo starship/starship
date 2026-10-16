@@ -2,7 +2,7 @@
 
 ## Plain Text Symbolsプリセット
 
-このプリセットはそれぞれのモジュールで記号をテキストに変更します。 Unicodeにアクセスできない場合に最適です。
+このプリセットはそれぞれのモジュールで記号をテキストに変更します。 Unicodeにアクセスできない場合に最適です。 Unicodeにアクセスできない場合に最適です。
 
 ![Plain Text Symbolsプリセットのスクリーンショット](/presets/img/plain-text-symbols.png)
 

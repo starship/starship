@@ -1,3 +1,4 @@
+use super::utils::format;
 use super::{Context, Module, ModuleConfig};
 use crate::configs::git_status::GitStatusConfig;
 use crate::formatter::StringFormatter;
@@ -33,7 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
 
     // Return None if not in git repository
-    let repo = context.get_repo().ok()?;
+    let repo = context.get_git_repo().ok()?;
 
     if repo.open().workdir().is_none() {
         log::debug!("This is a bare repository, git_status is not applicable");
@@ -63,12 +64,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map_variables_to_segments(|variable: &str| {
                 let segments = match variable {
                     "stashed" => info.get_stashed().and_then(|count| {
-                        format_count(config.stashed, "git_status.stashed", context, count)
+                        format::count(config.stashed, "git_status.stashed", context, count)
                     }),
                     "ahead_behind" => info.get_ahead_behind().and_then(|(ahead, behind)| {
                         let (ahead, behind) = (ahead?, behind?);
                         if ahead > 0 && behind > 0 {
-                            format_text(
+                            format::text(
                                 config.diverged,
                                 "git_status.diverged",
                                 context,
@@ -79,36 +80,36 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                 },
                             )
                         } else if ahead > 0 && behind == 0 {
-                            format_count(config.ahead, "git_status.ahead", context, ahead)
+                            format::count(config.ahead, "git_status.ahead", context, ahead)
                         } else if behind > 0 && ahead == 0 {
-                            format_count(config.behind, "git_status.behind", context, behind)
+                            format::count(config.behind, "git_status.behind", context, behind)
                         } else {
-                            format_symbol(config.up_to_date, "git_status.up_to_date", context)
+                            format::symbol(config.up_to_date, "git_status.up_to_date", context)
                         }
                     }),
                     "conflicted" => info.get_conflicted().and_then(|count| {
-                        format_count(config.conflicted, "git_status.conflicted", context, count)
+                        format::count(config.conflicted, "git_status.conflicted", context, count)
                     }),
                     "deleted" => info.get_deleted().and_then(|count| {
-                        format_count(config.deleted, "git_status.deleted", context, count)
+                        format::count(config.deleted, "git_status.deleted", context, count)
                     }),
                     "renamed" => info.get_renamed().and_then(|count| {
-                        format_count(config.renamed, "git_status.renamed", context, count)
+                        format::count(config.renamed, "git_status.renamed", context, count)
                     }),
                     "modified" => info.get_modified().and_then(|count| {
-                        format_count(config.modified, "git_status.modified", context, count)
+                        format::count(config.modified, "git_status.modified", context, count)
                     }),
                     "staged" => info.get_staged().and_then(|count| {
-                        format_count(config.staged, "git_status.staged", context, count)
+                        format::count(config.staged, "git_status.staged", context, count)
                     }),
                     "untracked" => info.get_untracked().and_then(|count| {
-                        format_count(config.untracked, "git_status.untracked", context, count)
+                        format::count(config.untracked, "git_status.untracked", context, count)
                     }),
                     "typechanged" => info.get_typechanged().and_then(|count| {
-                        format_count(config.typechanged, "git_status.typechanged", context, count)
+                        format::count(config.typechanged, "git_status.typechanged", context, count)
                     }),
                     "worktree_added" => info.get_worktree_added().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.worktree_added,
                             "git_status.worktree_added",
                             context,
@@ -116,7 +117,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         )
                     }),
                     "worktree_deleted" => info.get_worktree_deleted().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.worktree_deleted,
                             "git_status.worktree_deleted",
                             context,
@@ -124,7 +125,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         )
                     }),
                     "worktree_modified" => info.get_worktree_modified().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.worktree_modified,
                             "git_status.worktree_modified",
                             context,
@@ -132,7 +133,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         )
                     }),
                     "worktree_typechanged" => info.get_worktree_typechanged().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.worktree_typechanged,
                             "git_status.worktree_typechanged",
                             context,
@@ -140,10 +141,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         )
                     }),
                     "index_added" => info.get_index_added().and_then(|count| {
-                        format_count(config.index_added, "git_status.index_added", context, count)
+                        format::count(config.index_added, "git_status.index_added", context, count)
                     }),
                     "index_deleted" => info.get_index_deleted().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.index_deleted,
                             "git_status.index_deleted",
                             context,
@@ -151,7 +152,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         )
                     }),
                     "index_modified" => info.get_index_modified().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.index_modified,
                             "git_status.index_modified",
                             context,
@@ -159,7 +160,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         )
                     }),
                     "index_typechanged" => info.get_index_typechanged().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.index_typechanged,
                             "git_status.index_typechanged",
                             context,
@@ -191,7 +192,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 struct GitStatusInfo<'a> {
     context: &'a Context<'a>,
-    repo: &'a context::Repo,
+    repo: &'a context::GitRepo,
     config: GitStatusConfig<'a>,
     repo_status: OnceLock<Option<Arc<RepoStatus>>>,
     stashed_count: OnceLock<Option<usize>>,
@@ -200,7 +201,7 @@ struct GitStatusInfo<'a> {
 impl<'a> GitStatusInfo<'a> {
     pub fn load(
         context: &'a Context,
-        repo: &'a context::Repo,
+        repo: &'a context::GitRepo,
         config: GitStatusConfig<'a>,
     ) -> Self {
         Self {
@@ -302,9 +303,9 @@ impl<'a> GitStatusInfo<'a> {
 /// path so the cache is trashed.
 ///
 /// The trashing is only expected when tests run though, as otherwise one path is used with a variety of modules.
-pub(crate) fn get_static_repo_status(
+pub fn get_static_repo_status(
     context: &Context,
-    repo: &context::Repo,
+    repo: &context::GitRepo,
     config: &GitStatusConfig,
 ) -> Option<Arc<RepoStatus>> {
     static REPO_STATUS: parking_lot::Mutex<Option<(Arc<RepoStatus>, PathBuf)>> =
@@ -320,16 +321,16 @@ pub(crate) fn get_static_repo_status(
     status.as_ref().map(|(status, _)| Arc::clone(status))
 }
 
-pub(crate) fn uses_reftables(repo: &gix::Repository) -> bool {
+pub fn uses_reftables(repo: &gix::Repository) -> bool {
     repo.config_snapshot()
         .string("extensions.refstorage")
-        .is_some_and(|kind| kind.as_ref() == "reftable")
+        .is_some_and(|kind| kind == "reftable")
 }
 
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
 fn get_repo_status(
     context: &Context,
-    repo: &context::Repo,
+    repo: &context::GitRepo,
     config: &GitStatusConfig,
 ) -> Option<RepoStatus> {
     log::debug!("New repo status created");
@@ -391,7 +392,7 @@ fn get_repo_status(
         // We don't show details in submodules.
         let check_dirty = true;
         let status = gix_repo
-            .status(gix::features::progress::Discard)
+            .status(gix::progress::Discard)
             .ok()?
             .index_worktree_submodules(if config.ignore_submodules {
                 Submodule::Given {
@@ -576,7 +577,7 @@ fn sanitize_rename_tracking(mut config: gix::diff::Rewrites) -> gix::diff::Rewri
     config
 }
 
-fn get_stashed_count(repo: &context::Repo) -> Option<usize> {
+fn get_stashed_count(repo: &context::GitRepo) -> Option<usize> {
     let repo = repo.open();
     let reference = match repo.try_find_reference("refs/stash") {
         // Only proceed if the found reference has the expected name (not tags/refs/stash etc.)
@@ -603,7 +604,7 @@ fn get_stashed_count(repo: &context::Repo) -> Option<usize> {
 }
 
 #[derive(Default, Debug, Clone)]
-pub(crate) struct RepoStatus {
+pub struct RepoStatus {
     ahead: Option<usize>,
     behind: Option<usize>,
     pub(crate) changes: Vec<gix::status::Item>,
@@ -752,51 +753,6 @@ impl RepoStatus {
     }
 }
 
-fn format_text<F>(
-    format_str: &str,
-    config_path: &str,
-    context: &Context,
-    mapper: F,
-) -> Option<Vec<Segment>>
-where
-    F: Fn(&str) -> Option<String> + Send + Sync,
-{
-    if let Ok(formatter) = StringFormatter::new(format_str) {
-        formatter
-            .map(|variable| mapper(variable).map(Ok))
-            .parse(None, Some(context))
-            .ok()
-    } else {
-        log::warn!("Error parsing format string `{}`", &config_path);
-        None
-    }
-}
-
-fn format_count(
-    format_str: &str,
-    config_path: &str,
-    context: &Context,
-    count: usize,
-) -> Option<Vec<Segment>> {
-    if count == 0 {
-        return None;
-    }
-
-    format_text(
-        format_str,
-        config_path,
-        context,
-        |variable| match variable {
-            "count" => Some(count.to_string()),
-            _ => None,
-        },
-    )
-}
-
-fn format_symbol(format_str: &str, config_path: &str, context: &Context) -> Option<Vec<Segment>> {
-    format_text(format_str, config_path, context, |_variable| None)
-}
-
 #[cfg(target_os = "linux")]
 fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
     use crate::utils::create_command;
@@ -906,19 +862,16 @@ fn git_status_wsl(_context: &Context, _conf: &GitStatusConfig) -> Option<String>
 }
 
 #[cfg(test)]
-pub(crate) mod tests {
-    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
+pub mod tests {
+    use crate::test::{
+        BARE_GIT_PROVIDERS, COMMON_GIT_PROVIDERS, FixtureProvider, ModuleRenderer, fixture_repo,
+    };
     use crate::utils::create_command;
     use nu_ansi_term::{AnsiStrings, Color};
     use std::ffi::OsStr;
     use std::fs::{self, File, OpenOptions};
     use std::io::{self, prelude::*};
     use std::path::Path;
-
-    const NORMAL_AND_REFTABLES: [FixtureProvider; 2] =
-        [FixtureProvider::Git, FixtureProvider::GitReftable];
-    const BARE_AND_REFTABLE: [FixtureProvider; 2] =
-        [FixtureProvider::GitBare, FixtureProvider::GitBareReftable];
 
     #[allow(clippy::unnecessary_wraps)]
     fn format_output(symbols: &str) -> Option<String> {
@@ -943,7 +896,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_behind() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             behind(repo_dir.path())?;
@@ -961,7 +914,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_behind_with_count() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             behind(repo_dir.path())?;
@@ -983,7 +936,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_ahead() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             File::create(repo_dir.path().join("readme.md"))?.sync_all()?;
@@ -1002,7 +955,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_ahead_with_count() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             File::create(repo_dir.path().join("readme.md"))?.sync_all()?;
@@ -1025,7 +978,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_diverged() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             diverge(repo_dir.path())?;
@@ -1043,7 +996,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_diverged_with_count() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             diverge(repo_dir.path())?;
@@ -1065,7 +1018,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_up_to_date_with_upstream() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             let actual = ModuleRenderer::new("git_status")
@@ -1085,7 +1038,7 @@ pub(crate) mod tests {
 
     #[test]
     fn hides_up_to_date_on_untracked_branch() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_branch(repo_dir.path())?;
@@ -1107,7 +1060,7 @@ pub(crate) mod tests {
 
     #[test]
     fn hides_up_to_date_on_gone_branch() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_branch_with_gone_upstream(repo_dir.path())?;
@@ -1129,7 +1082,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_conflicted() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_conflict(repo_dir.path())?;
@@ -1147,7 +1100,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_conflicted_with_count() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_conflict(repo_dir.path())?;
@@ -1169,7 +1122,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_untracked_file() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_untracked(repo_dir.path())?;
@@ -1187,7 +1140,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_untracked_file_with_count() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_untracked(repo_dir.path())?;
@@ -1209,7 +1162,7 @@ pub(crate) mod tests {
 
     #[test]
     fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_untracked(repo_dir.path())?;
@@ -1233,7 +1186,7 @@ pub(crate) mod tests {
     #[test]
     #[cfg(unix)]
     fn doesnt_run_fsmonitor() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             use std::os::unix::fs::PermissionsExt;
             let repo_dir = fixture_repo(mode)?;
 
@@ -1266,7 +1219,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_stashed() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_stash(repo_dir.path())?;
@@ -1284,7 +1237,13 @@ pub(crate) mod tests {
                 .path(repo_dir.path())
                 .collect();
 
-            let expected = if matches!(mode, FixtureProvider::Git) {
+            let expected = if matches!(
+                mode,
+                FixtureProvider::Git {
+                    reftable: false,
+                    ..
+                }
+            ) {
                 Some(String::from("$"))
             } else {
                 // This is a regression in the Git executable implementation,
@@ -1300,7 +1259,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_no_stashed_after_undo() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_stash(repo_dir.path())?;
@@ -1328,7 +1287,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_stashed_with_count_unless_reftable() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_stash(repo_dir.path())?;
@@ -1348,7 +1307,13 @@ pub(crate) mod tests {
                 })
                 .path(repo_dir.path())
                 .collect();
-            let expected = if matches!(mode, FixtureProvider::Git) {
+            let expected = if matches!(
+                mode,
+                FixtureProvider::Git {
+                    reftable: false,
+                    ..
+                }
+            ) {
                 format_output("$2")
             } else {
                 // This is a regression in the Git executable implementation,
@@ -1364,7 +1329,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_typechanged() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_typechanged(repo_dir.path())?;
@@ -1386,7 +1351,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_typechanged_in_index() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_typechanged_in_index(repo_dir.path())?;
@@ -1404,27 +1369,30 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_worktree_typechanged_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for &mode in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_typechanged(repo_dir.path())?;
+            create_typechanged(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                format = "$worktree_typechanged"
-                worktree_typechanged = "$count"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = Some(String::from("1"));
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = "$worktree_typechanged"
+                    worktree_typechanged = "$count"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = Some(String::from("1"));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_modified() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_modified(repo_dir.path())?;
@@ -1442,7 +1410,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_modified_with_count() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_modified(repo_dir.path())?;
@@ -1464,7 +1432,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_modified_with_count_sparse() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             make_sparse(repo_dir.path())?;
@@ -1488,47 +1456,53 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_worktree_modified_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for &mode in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_modified(repo_dir.path())?;
+            create_modified(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                format = "$worktree_modified"
-                worktree_modified = "$count"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = Some(String::from("1"));
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = "$worktree_modified"
+                    worktree_modified = "$count"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = Some(String::from("1"));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_index_modified_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for &mode in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_indexed_modified(repo_dir.path())?;
+            create_indexed_modified(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                format = "$index_modified"
-                index_modified = "$count"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = Some(String::from("1"));
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = "$index_modified"
+                    index_modified = "$count"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = Some(String::from("1"));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_added() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_added(repo_dir.path())?;
@@ -1546,27 +1520,30 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_worktree_added_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for &mode in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_added(repo_dir.path())?;
+            create_added(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                format = "$worktree_added"
-                worktree_added = "$count"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = Some(String::from("1"));
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = "$worktree_added"
+                    worktree_added = "$count"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = Some(String::from("1"));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_staged_file() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_staged(repo_dir.path())?;
@@ -1584,7 +1561,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_staged_file_with_count() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_staged(repo_dir.path())?;
@@ -1613,27 +1590,30 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_index_added_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for &mode in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_staged(repo_dir.path())?;
+            create_staged(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                format = "$index_added"
-                index_added = "$count"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = Some(String::from("1"));
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = "$index_added"
+                    index_added = "$count"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = Some(String::from("1"));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_staged_typechange_with_count() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_staged_typechange(repo_dir.path())?;
@@ -1662,27 +1642,30 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_index_typechanged_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for &mode in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_staged_typechange(repo_dir.path())?;
+            create_staged_typechange(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                format = "$index_typechanged"
-                index_typechanged = "$count"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = Some(String::from("1"));
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = "$index_typechanged"
+                    index_typechanged = "$count"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = Some(String::from("1"));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_staged_and_modified_file() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_staged_and_modified(repo_dir.path())?;
@@ -1700,7 +1683,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_renamed_file() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_renamed(repo_dir.path())?;
@@ -1718,7 +1701,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_renamed_file_with_count() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_renamed(repo_dir.path())?;
@@ -1740,7 +1723,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_renamed_and_modified_file() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_renamed_and_modified(repo_dir.path())?;
@@ -1758,7 +1741,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_deleted_file() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_deleted(repo_dir.path())?;
@@ -1776,7 +1759,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_deleted_file_in_index() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_deleted_in_index(repo_dir.path())?;
@@ -1794,7 +1777,7 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_deleted_file_with_count() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_deleted(repo_dir.path())?;
@@ -1816,47 +1799,53 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_worktree_deleted_file_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for &mode in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_deleted(repo_dir.path())?;
+            create_deleted(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                format = "$worktree_deleted"
-                worktree_deleted = "$count"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = Some(String::from("1"));
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = "$worktree_deleted"
+                    worktree_deleted = "$count"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = Some(String::from("1"));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_index_deleted_file_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for &mode in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_indexed_deleted(repo_dir.path())?;
+            create_indexed_deleted(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                format = "$index_deleted"
-                index_deleted = "$count"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = Some(String::from("1"));
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = "$index_deleted"
+                    index_deleted = "$count"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = Some(String::from("1"));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn doesnt_show_ignored_file() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_staged_and_ignored(repo_dir.path())?;
@@ -1874,7 +1863,7 @@ pub(crate) mod tests {
 
     #[test]
     fn worktree_in_different_dir() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let worktree_dir = tempfile::tempdir()?;
             let repo_dir = fixture_repo(mode)?;
 
@@ -1906,7 +1895,7 @@ pub(crate) mod tests {
     // files are tracked by git_status module in the same way 'git status' does.
     #[test]
     fn ignore_manually_renamed() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
             File::create(repo_dir.path().join("a"))?.sync_all()?;
             File::create(repo_dir.path().join("b"))?.sync_all()?;
@@ -1943,7 +1932,7 @@ pub(crate) mod tests {
 
     #[test]
     fn doesnt_generate_git_status_for_bare_repo() -> io::Result<()> {
-        for mode in BARE_AND_REFTABLE {
+        for &mode in BARE_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_added(repo_dir.path())?;
@@ -1961,7 +1950,7 @@ pub(crate) mod tests {
 
     #[test]
     fn does_generate_git_status_for_worktree_backed_by_bare_repo() -> io::Result<()> {
-        for mode in BARE_AND_REFTABLE {
+        for &mode in BARE_GIT_PROVIDERS {
             let worktree_dir = tempfile::tempdir()?;
             let repo_dir = fixture_repo(mode)?;
 
@@ -2133,7 +2122,7 @@ pub(crate) mod tests {
         Ok(())
     }
 
-    pub(crate) fn make_sparse(repo_dir: &Path) -> io::Result<()> {
+    pub fn make_sparse(repo_dir: &Path) -> io::Result<()> {
         let sparse_dirname = "sparse-dir";
         let dir = repo_dir.join(sparse_dirname);
         std::fs::create_dir(&dir)?;

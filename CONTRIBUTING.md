@@ -218,7 +218,7 @@ mod tests {
 }
 ```
 
-If a module depends on output of another program, then that output should be added to the match statement in [`utils.rs`](src/utils.rs). The match has to be exactly the same as the call to `utils::exec_cmd()`, including positional arguments and flags. The array of arguments is joined by a `" "`, so `utils::exec_cmd("program", &["arg", "more_args"])` would match with the `program arg more_args` match statement.
+If a module depends on output of another program, then that output should be added to the match statement in [`utils/mod.rs`](src/utils/mod.rs). The match has to be exactly the same as the call to `utils::exec_cmd()`, including positional arguments and flags. The array of arguments is joined by a `" "`, so `utils::exec_cmd("program", &["arg", "more_args"])` would match with the `program arg more_args` match statement.
 
 If the program cannot be mocked (e.g. It performs some filesystem operations, either writing or reading files) then it has to added to the project's GitHub Actions workflow file([`.github/workflows/workflow.yml`](.github/workflows/workflow.yml)) and the test has to be marked with an `#[ignored]`. This ensures that anyone can run the test suite locally without needing to pre-configure their environment. The `#[ignored]` attribute is bypassed during CI runs in GitHub Actions.
 
@@ -304,5 +304,6 @@ everyone remember what they are. Don't worry: most of them are quite simple!
   - [ ] A description for the `description()` function (`src/modules/mod.rs`)
 
 Finally, you should make sure to write your module's code in `src/modules`
-and add any commands that need to be mocked when testing in `src/utils.rs`.
+and add any commands that need to be mocked when testing in
+[`src/utils/mod.rs`](src/utils/mod.rs).
 Command output can also be mocked in test by using `ModuleRenderer::cmd`.

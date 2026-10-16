@@ -1,6 +1,6 @@
 # 迁移到 v0.45.0
 
-Starship v0.45.0 是一个含有破坏性变化的版本，它将为大版本v1.0.0作准备。 我们围绕如何迅速进行配置作了一些重大改变，以便能够更大程度地定制化。
+Starship v0.45.0 是一个含有破坏性变化的版本，它将为大版本v1.0.0作准备。 我们围绕如何迅速进行配置作了一些重大改变，以便能够更大程度地定制化。 我们围绕如何迅速进行配置作了一些重大改变，以便能够更大程度地定制化。
 
 本指南将指明版本的破坏性变化。
 
@@ -74,13 +74,13 @@ prefix = "took "
 format = "took [$duration]($style) "
 ```
 
-### Affected Modules
+### 受影响的模块
 
 #### 字符
 
-| Removed Property        | Replacement      |
+| 被移除的属性                  | 取而代之的是           |
 | ----------------------- | ---------------- |
-| `symbol`                | `success_symbol` |
+| `符号`                    | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |
@@ -113,9 +113,9 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### Command Duration 命令执行时长
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| 被移除的属性   | 取而代之的是   |
+| -------- | -------- |
+| `prefix` | `format` |
 
 **更改默认配置**
 
@@ -127,9 +127,9 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### Directory 目录
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| 被移除的属性   | 取而代之的是   |
+| -------- | -------- |
+| `prefix` | `format` |
 
 **更改默认配置**
 
@@ -139,12 +139,12 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 ++ format = "[$path]($style)[$read_only]($read_only_style) "
 ```
 
-#### Environment Variable
+#### 环境变量
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| 被移除的属性   | 取而代之的是   |
+| -------- | -------- |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
 **更改默认配置**
 
@@ -157,10 +157,10 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### Git Commit
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| 被移除的属性   | 取而代之的是   |
+| -------- | -------- |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
 **更改默认配置**
 
@@ -173,11 +173,11 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### Git Status
 
-| Removed Property  | Replacement |
-| ----------------- | ----------- |
-| `prefix`          | `format`    |
-| `suffix`          | `format`    |
-| `show_sync_count` | `format`    |
+| 被移除的属性            | 取而代之的是   |
+| ----------------- | -------- |
+| `prefix`          | `format` |
+| `suffix`          | `format` |
+| `show_sync_count` | `format` |
 
 **更改默认配置**
 
@@ -204,10 +204,10 @@ behind = "⇣${count}"
 
 #### Hostname
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| 被移除的属性   | 取而代之的是   |
+| -------- | -------- |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
 **更改默认配置**
 
@@ -220,11 +220,11 @@ behind = "⇣${count}"
 
 #### Singularity
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `label`          | `format`    |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| 被移除的属性   | 取而代之的是   |
+| -------- | -------- |
+| `label`  | `format` |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
 **更改默认配置**
 
@@ -237,9 +237,9 @@ behind = "⇣${count}"
 
 #### 时间
 
-| Removed Property | Replacement   |
-| ---------------- | ------------- |
-| `format`         | `time_format` |
+| 被移除的属性   | 取而代之的是        |
+| -------- | ------------- |
+| `format` | `time_format` |
 
 **更改默认配置**
 
@@ -252,10 +252,10 @@ behind = "⇣${count}"
 
 #### 自定义命令
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| 被移除的属性   | 取而代之的是   |
+| -------- | -------- |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
 **更改默认配置**
 

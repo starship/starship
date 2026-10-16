@@ -13,7 +13,7 @@ env:
   CARGO_INCREMENTAL: 0
   CARGO_NET_RETRY: 10
   RUST_BACKTRACE: short
-  RUSTFLAGS: "-D warnings"
+  CARGO_BUILD_WARNINGS: deny
   RUSTUP_MAX_RETRIES: 10
   MACOSX_DEPLOYMENT_TARGET: 10.7
 
@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup | Rust
         run: rustup toolchain install stable --profile minimal --component rustfmt --no-self-update
@@ -41,13 +41,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup | Rust
         run: rustup toolchain install stable --profile minimal --component clippy --no-self-update
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
 
       - name: Build | Lint
         run: cargo clippy --workspace --locked -- -D warnings
@@ -58,13 +58,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup | Rust
         run: rustup toolchain install stable --profile minimal --no-self-update
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
 
       - name: Build | Check
         run: cargo check --workspace --locked
@@ -76,13 +76,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup | Rust
         run: rustup toolchain install stable --profile minimal --no-self-update
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
 
       - name: Build | Check
         run: cargo check --workspace --locked --no-default-features
@@ -94,13 +94,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup | Rust
         run: rustup toolchain install stable --profile minimal --no-self-update
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
 
       - name: Build | Check
         run: cargo check --workspace --locked --all-features
@@ -114,13 +114,13 @@ jobs:
       contents: read
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup | Rust
         run: rustup toolchain install stable --profile minimal --no-self-update
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
 
       - name: Run | Generate Schema
         run: cargo run --locked --features config-schema -- config-schema > .github/config-schema.json
@@ -150,7 +150,7 @@ jobs:
       RUSTFLAGS: ${{ matrix.rustflags || '' }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       # Install all the required dependencies for testing
       - name: Setup | Rust
@@ -159,19 +159,19 @@ jobs:
           rustup default ${{ matrix.rust }}
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
 
       - name: Install cargo-llvm-cov
-        uses: taiki-e/install-action@3235f8901fd37ffed0052b276cec25a362fb82e9 # v2.77.7
+        uses: taiki-e/install-action@b20dedce73af6905cdc30d6611090c9b67557c8d # v2.85.12
         with:
-          tool: cargo-llvm-cov@0.8.5
+          tool: cargo-llvm-cov
 
       # For windows installer test
       # On stable rust & main repo pushes only
       - name: Install cargo-wix [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
-        run: cargo install --version 0.3.8 cargo-wix
+        run: cargo install --version 0.3.9 cargo-wix
         env:
           # cargo-wix does not require static crt
           RUSTFLAGS: ""
@@ -197,7 +197,7 @@ jobs:
           -- --include-ignored"
         env:
           # Avoid -D warnings on nightly builds
-          RUSTFLAGS: ""
+          CARGO_BUILD_WARNINGS: ${{ matrix.rust == 'stable' && 'deny' || 'allow' }}
 
       - name: Build | Installer [Windows]
         continue-on-error: true
@@ -223,7 +223,7 @@ jobs:
           STARSHIP_VERSION: v1.2.3
 
       - name: Sign | Upload Executable [Windows]
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         continue-on-error: true
         id: unsigned-artifacts
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable' && github.event_name == 'push' && github.repository == 'starship/starship'
@@ -234,7 +234,7 @@ jobs:
             target/debug/starship-x86_64-pc-windows-msvc.msi
 
       - name: Sign | Sign [Windows]
-        uses: signpath/github-action-submit-signing-request@b9d91eadd323de506c0c81cf0c7fe7438f3360fd # v2.2
+        uses: signpath/github-action-submit-signing-request@f6d04783b4569d051e0c80105fe66e82819d0092 # v3.0
         continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable' && github.event_name == 'push' && github.repository == 'starship/starship'
         with:
@@ -247,7 +247,7 @@ jobs:
           output-artifact-directory: target/debug
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2 # v6.0.0
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         if: github.repository == 'starship/starship'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

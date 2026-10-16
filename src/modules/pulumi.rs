@@ -14,6 +14,7 @@ use crate::configs::pulumi::PulumiConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
 
 static PULUMI_HOME: &str = "PULUMI_HOME";
+static PULUMI_BACKEND_URL: &str = "PULUMI_BACKEND_URL";
 
 #[derive(Deserialize)]
 struct Credentials {
@@ -24,6 +25,15 @@ struct Credentials {
 #[derive(Deserialize)]
 struct Account {
     username: Option<String>,
+}
+
+/// Since v3.256.0 Pulumi records a stack per backend in `stacks`.
+/// It still reads the older `stack`, and so do we, but it no longer writes it.
+#[derive(Debug, Deserialize)]
+struct Workspace {
+    stack: Option<String>,
+    #[serde(default)]
+    stacks: HashMap<String, String>,
 }
 
 /// Creates a module with the current Pulumi version and stack name.
@@ -130,23 +140,28 @@ fn stack_name(project_file: &Path, context: &Context) -> Option<String> {
 
     let mut contents = String::new();
     file.read_to_string(&mut contents).ok()?;
-    let name = YamlLoader::load_from_str(&contents).ok().and_then(
-        |yaml| -> Option<Option<String>> {
-            log::trace!("Parsed {project_file:?} into yaml");
-            let yaml = yaml.into_iter().next()?;
-            yaml.into_hash().map(|mut hash| -> Option<String> {
-                hash.remove(&Yaml::String("name".to_string()))?
-                    .into_string()
-            })
-        },
-    )??;
+    let mut project = YamlLoader::load_from_str(&contents)
+        .ok()
+        .and_then(|yaml| yaml.into_iter().next())
+        .and_then(Yaml::into_hash)?;
+    log::trace!("Parsed {project_file:?} into yaml");
+
+    let name = project
+        .remove(&Yaml::String("name".to_string()))?
+        .into_string()?;
     log::trace!("Found project name: {name:?}");
+
+    let project_backend = project
+        .remove(&Yaml::String("backend".to_string()))
+        .and_then(Yaml::into_hash)
+        .and_then(|mut backend| backend.remove(&Yaml::String("url".to_string())))
+        .and_then(Yaml::into_string);
 
     let workspace_file = get_pulumi_workspace(context, &name, project_file)
         .map(File::open)?
         .ok()?;
     log::trace!("Trying to read workspace_file: {workspace_file:?}");
-    let workspace: serde_json::Value = match serde_json::from_reader(workspace_file) {
+    let workspace: Workspace = match serde_json::from_reader(workspace_file) {
         Ok(k) => k,
         Err(e) => {
             log::debug!("Failed to parse workspace file: {e}");
@@ -154,11 +169,42 @@ fn stack_name(project_file: &Path, context: &Context) -> Option<String> {
         }
     };
     log::trace!("Read workspace_file: {workspace:?}");
-    workspace
-        .as_object()?
-        .get("stack")?
-        .as_str()
-        .map(ToString::to_string)
+
+    let backend = current_backend_url(context, project_backend);
+    log::trace!("Looking for a stack selected for backend {backend:?}");
+
+    selected_stack(workspace, backend.as_deref())
+}
+
+/// Pick the stack Pulumi considers selected, newest file format first.
+fn selected_stack(workspace: Workspace, backend: Option<&str>) -> Option<String> {
+    let Workspace { stack, mut stacks } = workspace;
+
+    if let Some(stack) = backend.and_then(|backend| stacks.remove(backend)) {
+        return Some(stack);
+    }
+
+    if stack.is_some() {
+        return stack;
+    }
+
+    // Only when the backend could not be determined at all: a lone selection
+    // is the one Pulumi would pick too. With a known backend, a selection for
+    // a different one is not ours to report.
+    if backend.is_none() && stacks.len() == 1 {
+        return stacks.into_values().next();
+    }
+
+    None
+}
+
+/// The backend Pulumi is pointed at, in the order the CLI resolves it.
+fn current_backend_url(context: &Context, project_backend: Option<String>) -> Option<String> {
+    if let Some(url) = context.get_env(PULUMI_BACKEND_URL) {
+        return Some(url);
+    }
+
+    project_backend.or_else(|| read_credentials(context)?.current)
 }
 
 /// Calculates the path of the workspace settings file for a given pulumi stack.
@@ -189,15 +235,18 @@ fn pulumi_home_dir(context: &Context) -> Option<PathBuf> {
     }
 }
 
-fn get_pulumi_username(context: &Context) -> Option<String> {
+fn read_credentials(context: &Context) -> Option<Credentials> {
     let home_dir = pulumi_home_dir(context)?;
     let creds_path = home_dir.join("credentials.json");
 
     let file = File::open(creds_path).ok()?;
     let reader = BufReader::new(file);
 
-    // Read the JSON contents of the file as an instance of `User`.
-    let creds: Credentials = serde_json::from_reader(reader).ok()?;
+    serde_json::from_reader(reader).ok()
+}
+
+fn get_pulumi_username(context: &Context) -> Option<String> {
+    let creds = read_credentials(context)?;
 
     let current_api_provider = creds.current?;
 
@@ -290,6 +339,99 @@ mod tests {
         );
     }
 
+    fn workspace(stack: Option<&str>, stacks: &[(&str, &str)]) -> Workspace {
+        Workspace {
+            stack: stack.map(ToString::to_string),
+            stacks: stacks
+                .iter()
+                .map(|(backend, stack)| ((*backend).to_string(), (*stack).to_string()))
+                .collect(),
+        }
+    }
+
+    #[test]
+    fn stack_of_the_current_backend_wins() {
+        let workspace = workspace(
+            Some("stale"),
+            &[
+                ("https://api.pulumi.com", "starship/dev"),
+                ("file:///tmp/state", "local"),
+            ],
+        );
+        assert_eq!(
+            selected_stack(workspace, Some("https://api.pulumi.com")),
+            Some("starship/dev".to_string())
+        );
+    }
+
+    #[test]
+    fn legacy_stack_is_used_when_the_backend_has_no_selection() {
+        let workspace = workspace(Some("launch"), &[("file:///tmp/state", "local")]);
+        assert_eq!(
+            selected_stack(workspace, Some("https://api.pulumi.com")),
+            Some("launch".to_string())
+        );
+    }
+
+    #[test]
+    fn legacy_stack_is_still_read() {
+        assert_eq!(
+            selected_stack(workspace(Some("launch"), &[]), None),
+            Some("launch".to_string())
+        );
+    }
+
+    #[test]
+    fn single_stack_is_used_when_the_backend_is_unknown() {
+        let workspace = workspace(None, &[("https://api.pulumi.com", "starship/dev")]);
+        assert_eq!(
+            selected_stack(workspace, None),
+            Some("starship/dev".to_string())
+        );
+    }
+
+    #[test]
+    fn stack_of_another_backend_is_not_reported() {
+        let workspace = workspace(None, &[("file:///tmp/state", "local")]);
+        assert_eq!(
+            selected_stack(workspace, Some("https://api.pulumi.com")),
+            None
+        );
+    }
+
+    #[test]
+    fn ambiguous_stacks_render_nothing() {
+        let workspace = workspace(
+            None,
+            &[
+                ("https://api.pulumi.com", "starship/dev"),
+                ("file:///tmp/state", "local"),
+            ],
+        );
+        assert_eq!(selected_stack(workspace, None), None);
+    }
+
+    #[test]
+    fn backend_url_prefers_the_environment() {
+        let mut context = Context::new(Properties::default(), Target::Main);
+        context
+            .env
+            .insert("PULUMI_BACKEND_URL", "https://api.pulumi.com".to_string());
+        assert_eq!(
+            current_backend_url(&context, Some("file:///tmp/state".to_string())),
+            Some("https://api.pulumi.com".to_string())
+        );
+    }
+
+    #[test]
+    fn backend_url_falls_back_to_the_project() {
+        let context = Context::new(Properties::default(), Target::Main);
+        assert_eq!(
+            current_backend_url(&context, Some("file:///tmp/state".to_string())),
+            Some("file:///tmp/state".to_string())
+        );
+    }
+
     #[test]
     fn version_render() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
@@ -330,6 +472,73 @@ mod tests {
             &serde_json::json!(
                 {
                     "stack": "launch"
+                }
+            ),
+        )?;
+        workspace.sync_all()?;
+
+        let credential_path = root.join(".pulumi");
+        std::fs::create_dir_all(&credential_path)?;
+        let credential_path = &credential_path.join("credentials.json");
+        let mut credential = File::create(credential_path)?;
+        serde_json::to_writer_pretty(
+            &mut credential,
+            &serde_json::json!(
+                {
+                    "current": "https://api.example.com",
+                    "accessTokens": {
+                        "https://api.example.com": "redacted",
+                        "https://api.pulumi.com": "redacted"
+                    },
+                    "accounts": {
+                        "https://api.example.com": {
+                            "accessToken": "redacted",
+                            "username": "test-user",
+                            "lastValidatedAt": "2022-01-12T00:00:00.000000000-08:00"
+                        }
+                    }
+                }
+            ),
+        )?;
+        credential.sync_all()?;
+        let rendered = module_renderer
+            .path(root.clone())
+            .logical_path(root)
+            .config(toml::toml! {
+                [pulumi]
+                format = "via [$symbol($username@)$stack]($style) "
+            })
+            .collect();
+        let expected = format!(
+            "via {} ",
+            Color::Fixed(5).bold().paint(" test-user@launch")
+        );
+        assert_eq!(expected, rendered.expect("a result"));
+        dir.close()
+    }
+
+    #[test]
+    /// `render_valid_paths` with the file format written since Pulumi v3.256.0.
+    fn render_valid_paths_with_per_backend_stacks() -> io::Result<()> {
+        use io::Write;
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("pulumi")?;
+        let root = dunce::canonicalize(dir.path())?;
+        let mut yaml = File::create(root.join("Pulumi.yml"))?;
+        yaml.write_all("name: starship\nruntime: nodejs\ndescription: A thing\n".as_bytes())?;
+        yaml.sync_all()?;
+
+        let workspace_path = root.join(".pulumi").join("workspaces");
+        std::fs::create_dir_all(&workspace_path)?;
+        let workspace_path = &workspace_path.join("starship-test-workspace.json");
+        let mut workspace = File::create(workspace_path)?;
+        serde_json::to_writer_pretty(
+            &mut workspace,
+            &serde_json::json!(
+                {
+                    "stacks": {
+                        "https://api.example.com": "launch",
+                        "https://api.pulumi.com": "other"
+                    }
                 }
             ),
         )?;

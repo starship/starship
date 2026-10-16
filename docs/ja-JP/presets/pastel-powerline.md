@@ -3,6 +3,7 @@
 # Pastel Powerlineプリセット
 
 このプリセットは[M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json)にインスパイアされています。 また、starshipでパス置換がどのように機能するかを示しています。
+また、starshipでパス置換がどのように機能するかを示しています。
 
 ![Pastel Powerlineプリセットのスクリーンショット](/presets/img/pastel-powerline.png)
 

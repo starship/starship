@@ -13,6 +13,7 @@ pub struct SudoConfig<'a> {
     pub style: &'a str,
     pub allow_windows: bool,
     pub disabled: bool,
+    pub use_legacy_check: bool,
 }
 
 impl Default for SudoConfig<'_> {
@@ -23,6 +24,7 @@ impl Default for SudoConfig<'_> {
             style: "bold blue",
             allow_windows: false,
             disabled: true,
+            use_legacy_check: false,
         }
     }
 }

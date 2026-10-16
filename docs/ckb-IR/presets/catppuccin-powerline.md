@@ -8,7 +8,7 @@ This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainb
 
 ### پێشمەرجەکان
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal
+- [فۆنتێکی Nerd](https://www.nerdfonts.com/) دامەزراوە و چالاککراوە لە تێرمیناڵەکەتا
 
 ### ڕێکخستن
 

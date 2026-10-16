@@ -38,7 +38,7 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#command-duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
+The [Bash implementation](https://github.com/starship/starship/blob/main/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#command-duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
 
 For a list of all flags accepted by `starship prompt`, use the following command:
 
@@ -103,14 +103,15 @@ echo -e "\xee\x82\xa0"
 
 The first line should produce a [snake emoji](https://emojipedia.org/snake/), while the second should produce a [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
 
-If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
+If either symbol fails to display correctly, your system is still misconfigured.
+Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
 
 ## Jak odinstalować Starship?
 
 Starship można odinstalować równie łatwo jak przebiega proces instalacji.
 
 1. Usuń zawartość konfiguracji powłoki (np. `~/.bashrc`) służącą do zainicjalizowania Starship.
-1. Usuń plik wykonywalny programu Starship.
+2. Usuń plik wykonywalny programu Starship.
 
 If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
 

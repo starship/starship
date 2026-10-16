@@ -80,7 +80,9 @@ enable_transience
 
 The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework at v0.4 or higher allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, put this in `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
 
-The \<value\> here is a colon-separated list of `always`, `same-dir` and `trim`. When `prompt_ps1_final` is empty and the option `prompt_ps1_transient` has a non-empty \<value\>, the prompt specified by `PS1` is erased on leaving the current command line. If \<value\> contains a field `trim`, only the last line of multiline `PS1` is preserved and the other lines are erased. Otherwise, the command line will be redrawn as if `PS1=` is specified. When a field `same-dir` is contained in \<value\> and the current working directory is different from the final directory of the previous command line, this option `prompt_ps1_transient` is ignored.
+The \<value\> here is a colon-separated list of `always`, `same-dir` and `trim`.
+When `prompt_ps1_final` is empty and the option `prompt_ps1_transient` has a non-empty \<value\>, the prompt specified by `PS1` is erased on leaving the current command line.
+If \<value\> contains a field `trim`, only the last line of multiline `PS1` is preserved and the other lines are erased. Otherwise, the command line will be redrawn as if `PS1=` is specified. When a field `same-dir` is contained in \<value\> and the current working directory is different from the final directory of the previous command line, this option `prompt_ps1_transient` is ignored.
 
 Make the following changes to your `~/.blerc` (or in `~/.config/blesh/init.sh`) to customize what gets displayed on the left and on the right:
 
@@ -122,7 +124,9 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 ## Custom pre-prompt and pre-execution Commands in Bash
 
-Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
+Bash does not have a formal preexec/precmd framework like most other shells.
+Because of this, it is difficult to provide fully customizable hooks in `bash`.
+However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
 
 - To run a custom function right before the prompt is drawn, define a new function and then assign its name to `starship_precmd_user_func`. For example, to draw a rocket before the prompt, you would do
 
@@ -133,7 +137,9 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- To run a custom function right before a command runs, you can use the [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). However, you **must** trap the DEBUG signal _before_ initializing Starship! Starship can preserve the value of the DEBUG trap, but if the trap is overwritten after starship starts up, some functionality will break.
+- To run a custom function right before a command runs, you can use the [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/).
+  However, you **must** trap the DEBUG signal _before_ initializing Starship!
+  Starship can preserve the value of the DEBUG trap, but if the trap is overwritten after starship starts up, some functionality will break.
 
 ```bash
 function blastoff(){
@@ -147,7 +153,9 @@ set +o functrace
 
 ## Custom pre-prompt and pre-execution Commands in PowerShell
 
-PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
+PowerShell does not have a formal preexec/precmd framework like most other shells.
+Because of this, it is difficult to provide fully customizable hooks in `powershell`.
+However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
 
 Create a function named `Invoke-Starship-PreCommand`
 
@@ -159,7 +167,8 @@ function Invoke-Starship-PreCommand {
 
 ## Change Window Title
 
-Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
+Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default.
+Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
 
 First, define a window title change function (identical in bash and zsh):
 
@@ -241,6 +250,12 @@ right_format = """$all"""
 
 ```
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
+```
+
+When using `zsh` (v5.0.5+), the shell adds a default trailing space to the right prompt. This can cause alignment issues specifically when using the Starship `$fill` module. To remove this gap, add the following to your `.zshrc`:
+
+```zsh
+ZLE_RPROMPT_INDENT=0
 ```
 
 ## Continuation Prompt
@@ -338,22 +353,22 @@ The `claude_model` module displays the current Claude model being used in the se
 
 #### Options
 
-| Option          | Default                      | Description                                                                               |
-| --------------- | ---------------------------- | ----------------------------------------------------------------------------------------- |
-| `format`        | `'[$symbol$model]($style) '` | The format for the module.                                                                |
-| `기호`            | `'🤖 '`                       | The symbol shown before the model name.                                                   |
-| `style`         | `'bold blue'`                | The style for the module.                                                                 |
+| Option          | Default                      | Description                                                                                                               |
+| --------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `format`        | `'[$symbol$model]($style) '` | The format for the module.                                                                                |
+| `기호`            | `'🤖 '`                      | The symbol shown before the model name.                                                                   |
+| `style`         | `'bold blue'`                | The style for the module.                                                                                 |
 | `model_aliases` | `{}`                         | Map of model IDs or display names to shorter aliases. Checks ID first, then display name. |
-| `disabled`      | `false`                      | Disables the `claude_model` module.                                                       |
+| `disabled`      | `false`                      | Disables the `claude_model` module.                                                                       |
 
 #### Variables
 
-|           | 예시                  | Description                           |
-| --------- | ------------------- | ------------------------------------- |
-| model     | `Claude 3.5 Sonnet` | The display name of the current model |
-| model_id  | `claude-3-5-sonnet` | The model ID                          |
-| 기호        |                     | Mirrors the value of option `symbol`  |
-| style\* |                     | Mirrors the value of option `style`   |
+|                               | 예시                  | Description                           |
+| ----------------------------- | ------------------- | ------------------------------------- |
+| model                         | `Claude 3.5 Sonnet` | The display name of the current model |
+| model_id | `claude-3-5-sonnet` | The model ID                          |
+| 기호                            |                     | Mirrors the value of option `symbol`  |
+| style\*                       |                     | Mirrors the value of option `style`   |
 
 \*: This variable can only be used as a part of a style string
 
@@ -383,8 +398,8 @@ The `claude_context` module displays context window usage as a percentage and vi
 
 #### Options
 
-| Option                 | Default                           | Description                                        |
-| ---------------------- | --------------------------------- | -------------------------------------------------- |
+| Option                 | Default                           | Description                                                        |
+| ---------------------- | --------------------------------- | ------------------------------------------------------------------ |
 | `format`               | `'[$gauge $percentage]($style) '` | The format for the module.                         |
 | `기호`                   | `''`                              | The symbol shown before the gauge.                 |
 | `gauge_width`          | `5`                               | The width of the gauge in characters.              |
@@ -402,7 +417,7 @@ The `display` option is an array of objects that define thresholds and styles fo
 | ----------- | ------------ | ------------------------------------------------------------------------ |
 | `threshold` | `0.0`        | The minimum context windows usage percentage to match this configuration |
 | `style`     | `bold green` | The value of `style` if this display configuration is matched            |
-| `hidden`    | `false`      | Hide this module if this the configuration is matched.                   |
+| `hidden`    | `false`      | Hide this module if this the configuration is matched.   |
 
 ```toml
 [[claude_context.display]]
@@ -424,19 +439,19 @@ style = "bold red"
 
 #### Variables
 
-|                              | 예시      | Description                                           |
-| ---------------------------- | ------- | ----------------------------------------------------- |
-| gauge                        | `██▒░░` | Visual representation of context usage                |
-| percentage                   | `65%`   | Context usage as a percentage                         |
-| input_tokens                 | `45.2k` | Total input tokens in conversation                    |
-| output_tokens                | `12.3k` | Total output tokens in conversation                   |
-| curr_input_tokens          | `5.1k`  | Input tokens from most recent API call                |
-| curr_output_tokens         | `1.2k`  | Output tokens from most recent API call               |
+|                                                                                           | 예시      | Description                                           |
+| ----------------------------------------------------------------------------------------- | ------- | ----------------------------------------------------- |
+| gauge                                                                                     | `██▒░░` | Visual representation of context usage                |
+| percentage                                                                                | `65%`   | Context usage as a percentage                         |
+| input_tokens                                                         | `45.2k` | Total input tokens in conversation                    |
+| output_tokens                                                        | `12.3k` | Total output tokens in conversation                   |
+| curr_input_tokens                               | `5.1k`  | Input tokens from most recent API call                |
+| curr_output_tokens                              | `1.2k`  | Output tokens from most recent API call               |
 | curr_cache_creation_tokens | `1.5k`  | Cache creation tokens from most recent API call       |
 | curr_cache_read_tokens     | `23.4k` | Cache read tokens from most recent API call           |
-| total_tokens                 | `200k`  | Total context window size                             |
-| 기호                           |         | Mirrors the value of option `symbol`                  |
-| style\*                    |         | Mirrors the style from the matching display threshold |
+| total_tokens                                                         | `200k`  | Total context window size                             |
+| 기호                                                                                        |         | Mirrors the value of option `symbol`                  |
+| style\*                                                                                   |         | Mirrors the style from the matching display threshold |
 
 \*: This variable can only be used as a part of a style string
 
@@ -502,10 +517,10 @@ The `claude_cost` module displays the total cost of the current Claude Code sess
 
 #### Options
 
-| Option     | Default                            | Description                         |
-| ---------- | ---------------------------------- | ----------------------------------- |
+| Option     | Default                            | Description                                         |
+| ---------- | ---------------------------------- | --------------------------------------------------- |
 | `format`   | `'[$symbol(\\$$cost)]($style) '` | The format for the module.          |
-| `기호`       | `'💰 '`                             | The symbol shown before the cost.   |
+| `기호`       | `'💰 '`                            | The symbol shown before the cost.   |
 | `display`  | [see below](#display-1)            | Threshold and style configurations. |
 | `disabled` | `false`                            | Disables the `claude_cost` module.  |
 
@@ -513,11 +528,11 @@ The `claude_cost` module displays the total cost of the current Claude Code sess
 
 The `display` option is an array of objects that define cost thresholds and styles. The module uses the style from the highest matching threshold or hides the module if `hidden` is `true`.
 
-| Option      | Default      | Description                                                   |
-| ----------- | ------------ | ------------------------------------------------------------- |
-| `threshold` | `0.0`        | The minimum cost in USD to match this configuration           |
-| `style`     | `bold green` | The value of `style` if this display configuration is matched |
-| `hidden`    | `false`      | Hide this module if this configuration is matched.            |
+| Option      | Default      | Description                                                        |
+| ----------- | ------------ | ------------------------------------------------------------------ |
+| `threshold` | `0.0`        | The minimum cost in USD to match this configuration                |
+| `style`     | `bold green` | The value of `style` if this display configuration is matched      |
+| `hidden`    | `false`      | Hide this module if this configuration is matched. |
 
 **Default configuration:**
 
@@ -537,15 +552,15 @@ style = "bold red"
 
 #### Variables
 
-|               | 예시       | Description                                           |
-| ------------- | -------- | ----------------------------------------------------- |
-| cost          | `1.23`   | Total session cost in USD (formatted to 2 decimals)   |
-| duration      | `1m 30s` | Total session duration                                |
-| api_duration  | `45s`    | Total API call duration                               |
-| lines_added   | `1.2k`   | Total lines of code added                             |
-| lines_removed | `500`    | Total lines of code removed                           |
-| 기호            |          | Mirrors the value of option `symbol`                  |
-| style\*     |          | Mirrors the style from the matching display threshold |
+|                                    | 예시       | Description                                                            |
+| ---------------------------------- | -------- | ---------------------------------------------------------------------- |
+| cost                               | `1.23`   | Total session cost in USD (formatted to 2 decimals) |
+| duration                           | `1m 30s` | Total session duration                                                 |
+| api_duration  | `45s`    | Total API call duration                                                |
+| lines_added   | `1.2k`   | Total lines of code added                                              |
+| lines_removed | `500`    | Total lines of code removed                                            |
+| 기호                                 |          | Mirrors the value of option `symbol`                                   |
+| style\*                            |          | Mirrors the style from the matching display threshold                  |
 
 \*: This variable can only be used as a part of a style string
 
@@ -593,7 +608,9 @@ format = "[$symbol$cost ($duration)]($style) "
 - `<color>`
 - `none`
 
-`<color>` 부분은 색상 지정자입니다 (아래에 후술). 현재, `fg:<color>` 와 `<color>`는 동일한 동작을 하지만 차후에 바뀔 수 있습니다. `<color>` can also be set to `prev_fg` or `prev_bg` which evaluates to the previous item's foreground or background color respectively if available or `none` otherwise. `inverted`는 배경 색과 전경 색을 서로 바꿉니다. 문자열의 단어 순서는 중요하지 않습니다.
+`<color>` 부분은 색상 지정자입니다 (아래에 후술). 현재, `fg:<color>` 와 `<color>`는 동일한 동작을 하지만 차후에 바뀔 수 있습니다.
+`<color>` can also be set to `prev_fg` or `prev_bg` which evaluates to the previous item's foreground or background color respectively if available or `none` otherwise.
+`inverted`는 배경 색과 전경 색을 서로 바꿉니다. 문자열의 단어 순서는 중요하지 않습니다.
 
 The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. 향후 다른 토큰과 함께 `none`을 사용하는 것은 오류가 발생할 수 있습니다.
 

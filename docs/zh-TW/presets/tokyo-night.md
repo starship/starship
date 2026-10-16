@@ -8,7 +8,7 @@ This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/t
 
 ### 先決要求
 
--
+- 已安裝 [Nerd Font](https://www.nerdfonts.com/)，並在終端機被啟用。
 
 ### 設定
 
