@@ -2,8 +2,14 @@
 
 const STARSHIP_JOB = "starship-stream"
 
+# `job kill` kills a stream outright, which would leave the commands its
+# modules run running: they are in the process group the stream leads, which
+# is ended first, as the stream ends it itself.
 def starship-stream-stop [jobs: table] {
-    for stream in ($jobs | where description == $STARSHIP_JOB) { try { job kill $stream.id } }
+    for stream in ($jobs | where description == $STARSHIP_JOB) {
+        for process in $stream.pids { try { kill --signal 15 (0 - $process) } }
+        try { job kill $stream.id }
+    }
 }
 
 def starship-prompt-arguments [jobs: table]: nothing -> list<string> {
