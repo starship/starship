@@ -111,10 +111,19 @@ $null = New-Module starship {
         (Get-PSCallStack).Command -contains 'PSConsoleHostReadLine'
     }
 
-    # Ignore stale streams and accepted lines to preserve command output.
+    # Whether nothing has been typed into the line PSReadLine reads.
+    function Test-StarshipLineEmpty {
+        $line = $null
+        $cursor = $null
+        [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
+        -not $line
+    }
+
+    # Ignore stale streams and accepted lines to preserve command output, and
+    # lines being typed: PSReadLine misplaces a prompt redrawn beneath them.
     function Update-StarshipPrompt {
         param($Stream)
-        if ([object]::ReferenceEquals($Stream, $script:Stream) -and (Test-StarshipReadingLine)) {
+        if ([object]::ReferenceEquals($Stream, $script:Stream) -and (Test-StarshipReadingLine) -and (Test-StarshipLineEmpty)) {
             $script:Refining = $true
             try {
                 [Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
