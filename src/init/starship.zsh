@@ -71,16 +71,27 @@ add-zsh-hook preexec prompt_starship_preexec
 add-zsh-hook zshexit starship_stream_stop
 
 # ZLE reads the stream while the user types. STARSHIP_STREAM holds the
-# prompts last drawn, and the descriptor they come from.
+# prompts last read, and the descriptor they come from.
 typeset -gA STARSHIP_STREAM
 
 # Closing the descriptor ends the stream. Closing with `exec` applies its
 # redirection to the shell itself, so its error output is silenced around the
 # closing alone.
 starship_stream_stop() {
-    local fd=${STARSHIP_STREAM[f]-}
-    [[ -n $fd ]] && { zle -F $fd 2>/dev/null; { exec {fd}<&- } 2>/dev/null }
+    local descriptor=${STARSHIP_STREAM[f]-}
+    [[ -n $descriptor ]] && { zle -F $descriptor 2>/dev/null; { exec {descriptor}<&- } 2>/dev/null }
     STARSHIP_STREAM[f]=
+}
+
+# Show the prompts last read as they are: text, which a user who turns on
+# promptsubst has escaped to expand to itself.
+starship_stream_show() {
+    local main=${STARSHIP_STREAM[1]-} right=${STARSHIP_STREAM[2]-}
+    if [[ -o promptsubst ]]; then
+        main=${${${main//\\/\\\\}//\$/\\\$}//\`/\\\`}
+        right=${${${right//\\/\\\\}//\$/\\\$}//\`/\\\`}
+    fi
+    PROMPT=$main RPROMPT=$right
 }
 
 # Read the next prompts from descriptor $1, or stop at the end of the stream.
@@ -94,7 +105,7 @@ starship_stream_read() {
 }
 
 starship_stream_redraw() {
-    starship_stream_read $1 && { zle -I; zle reset-prompt }
+    starship_stream_read $1 && { starship_stream_show; zle -I; zle reset-prompt }
 }
 zle -N starship_stream_redraw
 
@@ -102,14 +113,15 @@ zle -N starship_stream_redraw
 # until the new ones arrive.
 starship_stream_start() {
     starship_stream_stop
-    local fd
-    exec {fd}< <(::STARSHIP:: prompt --stream --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT" 2>/dev/null)
-    STARSHIP_STREAM[f]=$fd
+    local descriptor
+    exec {descriptor}< <(::STARSHIP:: prompt --stream --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT" 2>/dev/null)
+    STARSHIP_STREAM[f]=$descriptor
     if (( ! $# )); then
         STARSHIP_STREAM[1]= STARSHIP_STREAM[2]=
-        starship_stream_read $fd
+        starship_stream_read $descriptor
+        starship_stream_show
     fi
-    [[ -n ${STARSHIP_STREAM[f]} ]] && zle -F -w $fd starship_stream_redraw
+    [[ -n ${STARSHIP_STREAM[f]} ]] && zle -F -w $descriptor starship_stream_redraw
 }
 
 # Debounce resize rendering for one second with a nonblocking, fork-free timer.
@@ -159,9 +171,4 @@ export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if
 
 VIRTUAL_ENV_DISABLE_PROMPT=1
 
-setopt promptsubst
-
-# Expanded from what the stream last drew, so redrawing never runs starship.
-PROMPT='${STARSHIP_STREAM[1]}'
-RPROMPT='${STARSHIP_STREAM[2]}'
 PROMPT2="$(::STARSHIP:: prompt --continuation)"
