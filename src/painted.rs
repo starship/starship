@@ -255,6 +255,18 @@ mod tests {
         }
     }
 
+    #[test]
+    fn a_fill_never_cuts_a_grapheme_however_wide() {
+        // One grapheme, four columns wide: ten columns hold two of it.
+        let pattern = "\u{1f7e6}\u{301}\u{200d}\u{1f469}";
+        let segments = [fill(pattern)];
+
+        assert_eq!(
+            pattern.repeat(2),
+            Painted::new(&segments, Some(10)).lines[0][0].text
+        );
+    }
+
     /// Pieces of text that test graphemes and controls: narrow, wide, joined
     /// and combining, and a joiner with what it joins, so that graphemes
     /// often span pieces; a bell; styles; hyperlinks opened and closed with
@@ -284,10 +296,11 @@ mod tests {
 
     proptest! {
         /// A fill draws whole repetitions of the text of its pattern, then a
-        /// prefix of one more that ends on a grapheme and draws something, a
-        /// column short at most; or else that text as it is: without a width
-        /// to fill, or when it has no width, or when its repetitions would
-        /// join into fewer graphemes.
+        /// prefix of one more that ends on a grapheme and draws something,
+        /// short of the width by less than the next grapheme, which would not
+        /// fit; or else that text as it is: without a width to fill, or when it
+        /// has no width, or when its repetitions would join into fewer
+        /// graphemes.
         #[test]
         fn a_fill_draws_whole_graphemes_of_its_text(
             pattern in pieces(0..6),
@@ -310,8 +323,13 @@ mod tests {
             prop_assert!(text.starts_with(partial));
             prop_assert!(boundaries.chain([text.len()]).any(|end| end == partial.len()));
             prop_assert!(partial.is_empty() || partial.width_graphemes() > 0);
+            let next = text[partial.len()..]
+                .graphemes(true)
+                .map(|grapheme| grapheme.width_graphemes())
+                .find(|&wide| wide > 0);
             let drawn = drawn.width_graphemes();
-            prop_assert!(drawn <= width && drawn + 1 >= width, "{} columns of {}", drawn, width);
+            prop_assert!(drawn <= width, "{} columns of {}", drawn, width);
+            prop_assert!(drawn == width || next.is_some_and(|next| drawn + next > width), "{} columns of {}", drawn, width);
         }
 
         /// Fills share exactly what the rest of their line leaves, so that it
