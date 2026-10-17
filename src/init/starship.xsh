@@ -45,7 +45,6 @@ class StarshipStream:
             [starship_program, "prompt", "--stream", *([] if refined else ["--redraws=0"]), *starship_arguments()],
             env=__xonsh__.env.detype(),
             stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
         )
         descriptor = self.process.stdout.fileno()
         drawn = self.apply()
