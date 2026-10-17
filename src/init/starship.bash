@@ -181,9 +181,9 @@ if [[ ${STARSHIP_BLE_STREAM-} ]]; then
 
     # Closing the descriptor ends the stream.
     starship_ble_stream_stop() {
-        local fd=${STARSHIP_STREAM[f]-}
+        local descriptor=${STARSHIP_STREAM[f]-}
         ble/util/idle.cancel starship_ble_stream_step
-        [[ $fd ]] && exec {fd}<&-
+        [[ $descriptor ]] && exec {descriptor}<&-
         STARSHIP_STREAM[f]=
     }
 
@@ -191,23 +191,23 @@ if [[ ${STARSHIP_BLE_STREAM-} ]]; then
     # more: ble.sh looks every time it is idle. It may defer rendering when
     # another idle task is due soon, so draw explicitly.
     starship_ble_stream_step() {
-        local fd=${STARSHIP_STREAM[f]} drawn=
-        while builtin read -t 0 -u "$fd"; do
-            starship_ble_read "$fd" || { starship_ble_stream_stop; break; }
+        local descriptor=${STARSHIP_STREAM[f]} drawn=
+        while builtin read -t 0 -u "$descriptor"; do
+            starship_ble_read "$descriptor" || { starship_ble_stream_stop; break; }
             drawn=1
         done
         [[ $drawn ]] && ble/application/render
-        [[ ${STARSHIP_STREAM[f]} ]] && ble/util/idle.wait-condition "builtin read -t 0 -u $fd"
+        [[ ${STARSHIP_STREAM[f]} ]] && ble/util/idle.wait-condition "builtin read -t 0 -u $descriptor"
     }
 
     starship_ble_stream_start() {
         starship_ble_stream_stop
-        local fd
-        exec {fd}< <(::STARSHIP:: prompt --stream "$@" 2>/dev/null)
-        STARSHIP_STREAM[f]=$fd
+        local descriptor
+        exec {descriptor}< <(::STARSHIP:: prompt --stream "$@")
+        STARSHIP_STREAM[f]=$descriptor
         starship_ble_set_prompts "" ""
-        if starship_ble_read "$fd"; then
-            ble/util/idle.push -C "builtin read -t 0 -u $fd" starship_ble_stream_step
+        if starship_ble_read "$descriptor"; then
+            ble/util/idle.push -C "builtin read -t 0 -u $descriptor" starship_ble_stream_step
         else
             starship_ble_stream_stop
         fi
