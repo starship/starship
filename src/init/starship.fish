@@ -90,11 +90,19 @@ else
     # Restart for a new prompt or changed arguments (width, mode), waiting for
     # the stream to name its directory once the first prompts are there. Only
     # a stream that has published them stands for its arguments, even none, so
-    # that a failed one is tried again, by either side.
+    # that a failed one is tried again, by either side. One replacing a stream
+    # for other arguments starts while fish draws the line, so what it reports
+    # goes to the log alone.
     function __starship_prompt --argument-names side
         if not set -q __starship_stream_arguments; or test "$__starship_stream_arguments" != "$argv[2..-1]"
+            set -q __starship_stream_arguments
+            set -l replacing $status
             __starship_stream_stop
-            ::STARSHIP:: prompt --stream --signal-pid=$fish_pid $argv[2..-1] | read -gz __starship_stream_directory
+            if test $replacing -eq 0
+                ::STARSHIP:: prompt --stream --signal-pid=$fish_pid $argv[2..-1] 2>/dev/null | read -gz __starship_stream_directory
+            else
+                ::STARSHIP:: prompt --stream --signal-pid=$fish_pid $argv[2..-1] | read -gz __starship_stream_directory
+            end
             if not __starship_stream_read
                 __starship_stream_stop
                 if test $side = 1
