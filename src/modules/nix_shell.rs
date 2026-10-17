@@ -65,17 +65,40 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: NixShellConfig = NixShellConfig::try_load(module.config);
 
     let shell_type = NixShellType::detect_shell_type(config.heuristic, context)?;
-    let shell_type_format = match shell_type {
+    let state_format = match shell_type {
         NixShellType::Pure => config.pure_msg,
         NixShellType::Impure => config.impure_msg,
         NixShellType::Unknown => config.unknown_msg,
+    };
+    let name = context.get_env("name");
+    let level = context.get_env("NIX_SHELL_LEVEL");
+    // Rendering the message to segments lets `($state )` in `format` hide when
+    // the message is empty, which a meta variable can't do.
+    let state = StringFormatter::new(state_format).and_then(|formatter| {
+        formatter
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "name" => name.as_deref().map(Ok),
+                "level" => level.as_deref().map(Ok),
+                _ => None,
+            })
+            .parse(None, Some(context))
+    });
+    let state = match state {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `nix_shell`:\n{error}");
+            return None;
+        }
     };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
                 "symbol" => Some(config.symbol),
-                "state" => Some(shell_type_format),
                 _ => None,
             })
             .map_style(|variable| match variable {
@@ -83,8 +106,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "name" => context.get_env("name").map(Ok),
-                "level" => context.get_env("NIX_SHELL_LEVEL").map(Ok),
+                "name" => name.as_deref().map(Ok),
+                "level" => level.as_deref().map(Ok),
+                _ => None,
+            })
+            .map_variables_to_segments(|variable| match variable {
+                "state" => Some(Ok(state.clone())),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -104,7 +131,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use nu_ansi_term::Color;
+    use nu_ansi_term::{AnsiStrings, Color};
 
     #[test]
     fn no_env_variables() {
@@ -129,7 +156,7 @@ mod tests {
         let actual = ModuleRenderer::new("nix_shell")
             .env("IN_NIX_SHELL", "pure")
             .collect();
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  pure")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("❄️  pure ")));
 
         assert_eq!(expected, actual);
     }
@@ -139,7 +166,58 @@ mod tests {
         let actual = ModuleRenderer::new("nix_shell")
             .env("IN_NIX_SHELL", "impure")
             .collect();
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  impure")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("❄️  ")));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn impure_shell_custom_msg() {
+        let actual = ModuleRenderer::new("nix_shell")
+            .env("IN_NIX_SHELL", "impure")
+            .config(toml::toml! {
+                [nix_shell]
+                impure_msg = "impure"
+            })
+            .collect();
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("❄️  impure ")));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn impure_shell_styled_msg() {
+        let actual = ModuleRenderer::new("nix_shell")
+            .env("IN_NIX_SHELL", "impure")
+            .env("name", "starship")
+            .config(toml::toml! {
+                [nix_shell]
+                impure_msg = "[⌽](bold dimmed red)"
+            })
+            .collect();
+        let expected = Some(format!(
+            "via {}",
+            AnsiStrings(&[
+                Color::Blue.bold().paint("❄️  "),
+                Color::Red.bold().dimmed().paint("⌽"),
+                Color::Blue.bold().paint(" (starship) "),
+            ])
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn impure_shell_msg_uses_module_style() {
+        let actual = ModuleRenderer::new("nix_shell")
+            .env("IN_NIX_SHELL", "impure")
+            .config(toml::toml! {
+                [nix_shell]
+                format = "$symbol$state "
+                impure_msg = "[impure]($style)"
+            })
+            .collect();
+        let expected = Some(format!("❄️  {} ", Color::Blue.bold().paint("impure")));
 
         assert_eq!(expected, actual);
     }
@@ -151,8 +229,8 @@ mod tests {
             .env("name", "starship")
             .collect();
         let expected = Some(format!(
-            "via {} ",
-            Color::Blue.bold().paint("❄️  pure (starship)")
+            "via {}",
+            Color::Blue.bold().paint("❄️  pure (starship) ")
         ));
 
         assert_eq!(expected, actual);
@@ -165,8 +243,8 @@ mod tests {
             .env("name", "starship")
             .collect();
         let expected = Some(format!(
-            "via {} ",
-            Color::Blue.bold().paint("❄️  impure (starship)")
+            "via {}",
+            Color::Blue.bold().paint("❄️  (starship) ")
         ));
 
         assert_eq!(expected, actual);
@@ -184,7 +262,7 @@ mod tests {
                 heuristic = true
             })
             .collect();
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  ")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("❄️  ")));
 
         assert_eq!(expected, actual);
     }
@@ -238,6 +316,7 @@ mod tests {
             .config(toml::toml! {
                 [nix_shell]
                 format = "via [$symbol$state( \\($name\\)) $level]($style) "
+                impure_msg = "impure"
             })
             .collect();
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  impure 3")));
