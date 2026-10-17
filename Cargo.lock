@@ -3496,7 +3496,6 @@ version = "1.27.0"
 dependencies = [
  "alacritty_terminal",
  "anstream",
- "anstyle-parse",
  "clap",
  "clap_complete",
  "clap_complete_nushell",
