@@ -93,6 +93,15 @@ impl Shell {
         }
     }
 
+    /// The command that turns on the shell's vi key bindings, if it has them.
+    const fn vi_key_bindings(self) -> Option<&'static str> {
+        match self {
+            Self::Zsh => Some("bindkey -v"),
+            Self::Fish => Some("fish_vi_key_bindings"),
+            Self::Nushell | Self::Bash | Self::BashWithBle | Self::Xonsh | Self::Pwsh => None,
+        }
+    }
+
     /// The shell's arguments, and the command that then loads starship, if
     /// they do not.
     fn arguments(self, fixture: &Fixture) -> (Vec<String>, Option<&'static str>) {
@@ -610,6 +619,50 @@ vimcmd_symbol = "NORMAL"
     session.close();
 }
 
+/// A stream started while the line is edited, as for the vi command keymap,
+/// reports into the log alone: here the keymap's malformed symbol, which
+/// nothing reported before, must not land in the line.
+fn a_stream_started_while_editing_reports_into_the_log_alone(shell: Shell) {
+    let mut session = Session::start(
+        shell,
+        r#"
+format = "MARK$character"
+add_newline = false
+
+[character]
+success_symbol = "INSERT"
+vimcmd_symbol = "[NORMAL"
+"#,
+    );
+    session.wait_for("MARKINSERT");
+    let bindings = shell
+        .vi_key_bindings()
+        .expect("a shell with vi key bindings");
+    session.send(bindings);
+    session.wait_for(bindings);
+    session.enter();
+    session.settle();
+    session.send("\x1b");
+    let logs = session._fixture.directory.path().join(".cache/starship");
+    let deadline = Instant::now() + TIMEOUT;
+    while !logged(&logs, "Error in module `character`") {
+        assert!(
+            Instant::now() < deadline,
+            "the vi command keymap was never drawn"
+        );
+        session.pump(Duration::from_millis(25));
+    }
+    session.pump(QUIET);
+    let screen = session.screen();
+    assert!(
+        !screen.contains("Error in module"),
+        "a report landed in the line:\n{screen}"
+    );
+    // Back to insert mode, so that `exit` is typed rather than run as commands.
+    session.send("i");
+    session.close();
+}
+
 /// A stream ends as the command typed at its prompt starts, rather than
 /// render and refresh while the command runs.
 fn a_command_runs_without_its_stream(shell: Shell) {
@@ -716,14 +769,16 @@ in_shells! {
         zsh_keeps_the_right_prompt_current => the_right_prompt_is_kept_current,
         zsh_redraws_the_vi_mode_indicator => vi_mode_redraws_the_indicator,
         zsh_runs_a_command_without_its_stream => a_command_runs_without_its_stream,
-        zsh_shows_warnings_only_before_the_first_paint => warnings_are_shown_only_before_the_first_paint;
+        zsh_shows_warnings_only_before_the_first_paint => warnings_are_shown_only_before_the_first_paint,
+        zsh_reports_into_the_log_alone_while_editing => a_stream_started_while_editing_reports_into_the_log_alone;
     Fish, "requires fish":
         fish_streams => streams,
         fish_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
         fish_shows_text_as_it_is => text_is_shown_as_it_is,
         fish_keeps_the_right_prompt_current => the_right_prompt_is_kept_current,
         fish_runs_a_command_without_its_stream => a_command_runs_without_its_stream,
-        fish_shows_warnings_only_before_the_first_paint => warnings_are_shown_only_before_the_first_paint;
+        fish_shows_warnings_only_before_the_first_paint => warnings_are_shown_only_before_the_first_paint,
+        fish_reports_into_the_log_alone_while_editing => a_stream_started_while_editing_reports_into_the_log_alone;
     Nushell, "requires nu 0.115 or later":
         nushell_streams => streams,
         nushell_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
