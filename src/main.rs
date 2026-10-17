@@ -10,7 +10,7 @@ use clap_complete::generate;
 use rand::RngExt;
 use starship::context::{Context, Properties, Target};
 use starship::module::ALL_MODULES;
-use starship::{bug_report, configure, init, logger, num_rayon_threads, print, shadow};
+use starship::{bug_report, configure, init, logger, print, shadow, stream};
 
 #[derive(Parser, Debug)]
 #[clap(
@@ -133,6 +133,21 @@ enum Commands {
         /// Print the continuation prompt (instead of the standard left prompt)
         #[clap(long, conflicts_with = "right", conflicts_with = "profile")]
         continuation: bool,
+        /// Stream the main and right prompts instead, as `main\0right\0` each
+        /// time they change: drawn before slow modules finish, refined as they
+        /// do, and kept current until standard output closes
+        #[clap(long, conflicts_with_all = ["right", "profile", "continuation"])]
+        stream: bool,
+        /// Redraw the streamed prompts at most this many times after the first
+        /// paint, the last time once they are complete, then end the stream
+        #[clap(long, requires = "stream")]
+        redraws: Option<usize>,
+        /// Stream in the background to a file in a new directory, named on
+        /// standard output once the first prompts are there, and send this
+        /// process `SIGUSR1` whenever they change (used by fish)
+        #[cfg(unix)]
+        #[clap(long, requires = "stream", conflicts_with = "redraws", value_parser = clap::value_parser!(i32).range(1..))]
+        signal_pid: Option<i32>,
         #[clap(flatten)]
         properties: Properties,
     },
@@ -169,14 +184,6 @@ fn main() {
     // Configure the current terminal on windows to support ANSI escape sequences.
     #[cfg(windows)]
     let _ = nu_ansi_term::enable_ansi_support();
-    logger::init();
-    init_global_threadpool();
-
-    // Delete old log files
-    rayon::spawn(|| {
-        let log_dir = logger::get_log_dir();
-        logger::cleanup_log_files(log_dir);
-    });
 
     let args = match Cli::try_parse() {
         Ok(args) => args,
@@ -211,6 +218,25 @@ fn main() {
             std::process::exit(exit_code);
         }
     };
+
+    // A stream that publishes to a file goes into the background, which has
+    // to happen before any thread starts.
+    #[cfg(unix)]
+    if let Commands::Prompt {
+        signal_pid: Some(_),
+        ..
+    } = args.command
+    {
+        stream::detach();
+    }
+
+    logger::init();
+
+    // Delete old log files
+    std::thread::spawn(|| {
+        let log_dir = logger::get_log_dir();
+        logger::cleanup_log_files(log_dir);
+    });
     log::trace!("Parsed arguments: {args:#?}");
 
     match args.command {
@@ -225,10 +251,25 @@ fn main() {
             }
         }
         Commands::Prompt {
+            stream: true,
+            redraws,
+            #[cfg(unix)]
+            signal_pid,
+            properties,
+            ..
+        } => {
+            #[cfg(unix)]
+            if let Some(shell) = signal_pid {
+                stream::publish(properties, shell)
+            }
+            stream::stream(properties, redraws)
+        }
+        Commands::Prompt {
             properties,
             right,
             profile,
             continuation,
+            ..
         } => {
             let target = match (right, profile, continuation) {
                 (true, _, _) => Target::Right,
@@ -313,12 +354,4 @@ fn main() {
         #[cfg(feature = "config-schema")]
         Commands::ConfigSchema => print::print_schema(),
     }
-}
-
-/// Initialize global `rayon` thread pool
-fn init_global_threadpool() {
-    rayon::ThreadPoolBuilder::new()
-        .num_threads(num_rayon_threads())
-        .build_global()
-        .expect("Failed to initialize worker thread pool");
 }

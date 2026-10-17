@@ -14,6 +14,14 @@ use crate::{
     utils::create_command,
 };
 
+/// How often the custom module `name` runs again while a prompt is shown, if
+/// it is enabled and configured to.
+pub fn period(name: &str, context: &Context) -> Option<Duration> {
+    let configuration = CustomConfig::load(get_config(name, context)?);
+    (!configuration.disabled && configuration.refresh > 0)
+        .then(|| Duration::from_millis(configuration.refresh))
+}
+
 /// Creates a custom module with some configuration
 ///
 /// The relevant TOML config will set the files, extensions, and directories needed
@@ -781,12 +789,14 @@ mod tests {
     }
 
     #[test]
-    fn output_is_escaped() -> io::Result<()> {
+    fn output_is_only_escaped_when_composing_a_prompt() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("custom.test")
+        let context: Context = ModuleRenderer::new("custom.test")
             .path(dir.path())
             .config(toml::toml! {
+                format = "${custom.test}"
+                add_newline = false
                 [custom.test]
                 format = "$output"
                 command = "__starship_to_be_escaped"
@@ -794,9 +804,12 @@ mod tests {
                 ignore_timeout = true
             })
             .shell(Shell::Bash)
-            .collect();
-        let expected = Some("\\`to_be_escaped\\`".to_string());
-        assert_eq!(expected, actual);
+            .into();
+        assert_eq!(
+            Some("`to_be_escaped`".to_string()),
+            crate::print::get_module("custom.test", &context)
+        );
+        assert_eq!("\\`to_be_escaped\\`", crate::print::get_prompt(&context));
 
         dir.close()
     }
@@ -805,9 +818,11 @@ mod tests {
     fn unsafe_no_escape() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("custom.test")
+        let context: Context = ModuleRenderer::new("custom.test")
             .path(dir.path())
             .config(toml::toml! {
+                format = "${custom.test}"
+                add_newline = false
                 [custom.test]
                 format = "$output"
                 command = "__starship_to_be_escaped"
@@ -816,9 +831,12 @@ mod tests {
                 unsafe_no_escape = true
             })
             .shell(Shell::Bash)
-            .collect();
-        let expected = Some("`to_be_escaped`".to_string());
-        assert_eq!(expected, actual);
+            .into();
+        assert_eq!(
+            Some("`to_be_escaped`".to_string()),
+            crate::print::get_module("custom.test", &context)
+        );
+        assert_eq!("`to_be_escaped`", crate::print::get_prompt(&context));
 
         dir.close()
     }

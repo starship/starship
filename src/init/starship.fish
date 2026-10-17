@@ -38,7 +38,7 @@ function fish_prompt
             printf "\e[1;32m❯\e[0m "
         end
     else
-        ::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+        __starship_prompt 1 --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
     end
 end
 
@@ -66,7 +66,88 @@ function fish_right_prompt
             printf ""
         end
     else
-        ::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+        __starship_prompt 2 --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+    end
+end
+
+# Prints one side of the prompt, 1 for the main and 2 for the right.
+if test "$OS" = Windows_NT
+    # A starship built for Windows cannot stream in the background, so each
+    # prompt is drawn once every module has rendered.
+    function __starship_prompt --argument-names side
+        if test $side = 1
+            ::STARSHIP:: prompt $argv[2..-1]
+        else
+            ::STARSHIP:: prompt --right $argv[2..-1]
+        end
+    end
+else
+    # Fish cannot watch a pipe while it waits for input, so a stream publishes
+    # each pair of prompts to a file in a directory of its own, and signals.
+    set -g __starship_stream_directory
+    set -g __starship_stream_prompts '' ''
+
+    # Restart for a new prompt or changed arguments (width, mode), waiting for
+    # the stream to name its directory once the first prompts are there. Only
+    # a stream that has published them stands for its arguments, even none, so
+    # that a failed one is tried again, by either side. One replacing a stream
+    # for other arguments starts while fish draws the line, so what it reports
+    # goes to the log alone.
+    function __starship_prompt --argument-names side
+        if not set -q __starship_stream_arguments; or test "$__starship_stream_arguments" != "$argv[2..-1]"
+            set -q __starship_stream_arguments
+            set -l replacing $status
+            __starship_stream_stop
+            if test $replacing -eq 0
+                ::STARSHIP:: prompt --stream --signal-pid=$fish_pid $argv[2..-1] 2>/dev/null | read -gz __starship_stream_directory
+            else
+                ::STARSHIP:: prompt --stream --signal-pid=$fish_pid $argv[2..-1] | read -gz __starship_stream_directory
+            end
+            if not __starship_stream_read
+                __starship_stream_stop
+                if test $side = 1
+                    ::STARSHIP:: prompt $argv[2..-1]
+                else
+                    ::STARSHIP:: prompt --right $argv[2..-1]
+                end
+                return
+            end
+            set -g __starship_stream_arguments $argv[2..-1]
+        else
+            # Each side reads the newest pair as it is drawn: one published in
+            # between is drawn whole once fish is signaled for it.
+            __starship_stream_read
+        end
+        printf %s $__starship_stream_prompts[$side]
+    end
+
+    # Fish warns of a redirection that fails before silencing the block, so
+    # the file is looked for first. Its fields are read into variables of
+    # this function's own, never into the user's.
+    function __starship_stream_read
+        test -n "$__starship_stream_directory"; and test -r "$__starship_stream_directory/prompt"; or return
+        set -l main
+        set -l right
+        begin
+            read -z main; and read -z right
+        end <$__starship_stream_directory/prompt 2>/dev/null; or return
+        set -g __starship_stream_prompts "$main" "$right"
+    end
+
+    # Repainting reads the newest prompts. Keeping nothing itself, a signal
+    # handled while they are being read cannot leave older ones in their place.
+    function __starship_stream_update --on-signal USR1
+        # A prompt drawn as the command line is accepted is drawn once, as is.
+        test "$TRANSIENT" = 1; or commandline -f repaint
+    end
+
+    # The stream removes its directory once asked to stop.
+    function __starship_stream_stop --on-event fish_preexec --on-event fish_exit
+        if test -n "$__starship_stream_directory"; and test -d "$__starship_stream_directory"
+            true >$__starship_stream_directory/stop
+        end
+        set -g __starship_stream_directory
+        set -e -g __starship_stream_arguments
     end
 end
 

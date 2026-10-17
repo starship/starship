@@ -757,6 +757,7 @@ mod tests {
                 .config(
                     toml::from_str(&format!(
                         "
+                    command_timeout = 10000
                     [git_branch]
                         truncation_length = {truncate_length}
                         {config_options}

@@ -20,6 +20,10 @@ starship_preexec() {
     # Save previous command's last argument, otherwise it will be set to "starship_preexec"
     local PREV_LAST_ARG=$1
 
+    if [[ ${STARSHIP_BLE_STREAM-} ]]; then
+        starship_ble_stream_stop
+    fi
+
     # Avoid restarting the timer for commands in the same pipeline
     if [ "${STARSHIP_PREEXEC_READY:-}" = "true" ]; then
         STARSHIP_PREEXEC_READY=false
@@ -77,19 +81,26 @@ starship_precmd() {
         ARGS+=( --cmd-duration="${STARSHIP_DURATION}")
         STARSHIP_START_TIME=""
     fi
-    PS1="$(::STARSHIP:: prompt "${ARGS[@]}")"
-    if [[ ${BLE_ATTACHED-} ]]; then
-        local nlns=${PS1//[!$'\n']}
-        bleopt prompt_rps1="$nlns$(::STARSHIP:: prompt --right "${ARGS[@]}")"
+    if [[ ${STARSHIP_BLE_STREAM-} ]]; then
+        starship_ble_stream_start "${ARGS[@]}"
+        PS1='\q{starship}'
+    else
+        PS1="$(::STARSHIP:: prompt "${ARGS[@]}")"
+        if [[ ${BLE_ATTACHED-} ]]; then
+            local nlns=${PS1//[!$'\n']}
+            bleopt prompt_rps1="$nlns$(::STARSHIP:: prompt --right "${ARGS[@]}")"
+        fi
     fi
     STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
 }
 
 # If the user appears to be using https://github.com/akinomyoga/ble.sh,
-# then hook our functions into their framework.
+# then hook our functions into their framework, and stream the prompt where
+# bash names descriptors by variables and declares globals inside functions.
 if [[ ${BLE_VERSION-} && _ble_version -ge 400 ]]; then
     blehook PREEXEC!='starship_preexec "$_"'
     blehook PRECMD!='starship_precmd'
+    ((BASH_VERSINFO[0] * 100 + BASH_VERSINFO[1] >= 402)) && STARSHIP_BLE_STREAM=1
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
 # then hook our functions into their framework.
 elif [[ -n "${bash_preexec_imported:-}" || -n "${__bp_imported:-}" || -n "${preexec_functions-}" || -n "${precmd_functions-}" ]]; then
@@ -140,6 +151,68 @@ fi
 
 # Ensure that $COLUMNS gets set
 shopt -s checkwinsize
+
+# ble.sh reads the stream in an idle task while the user types.
+if [[ ${STARSHIP_BLE_STREAM-} ]]; then
+    declare -gA STARSHIP_STREAM
+
+    # ble.sh draws a part of a prompt again only when one of its hashes expands
+    # differently, so the hash is the variable holding the main prompt.
+    function ble/prompt/backslash:starship {
+        ble/prompt/unit/add-hash '${STARSHIP_STREAM[1]}'
+        ble/prompt/process-prompt-string "${STARSHIP_STREAM[1]}"
+    }
+
+    # Align the right prompt with the last line of the main prompt.
+    starship_ble_set_prompts() {
+        STARSHIP_STREAM[1]=$1
+        local lines=${1//[!$'\n']}
+        bleopt prompt_rps1="$lines$2"
+    }
+
+    # Read the next prompts from descriptor $1. The builtin, since ble.sh
+    # overrides read to consume terminal input.
+    starship_ble_read() {
+        local main right
+        IFS= builtin read -r -d '' -u "$1" main &&
+            IFS= builtin read -r -d '' -u "$1" right &&
+            starship_ble_set_prompts "$main" "$right"
+    }
+
+    # Closing the descriptor ends the stream.
+    starship_ble_stream_stop() {
+        local descriptor=${STARSHIP_STREAM[f]-}
+        ble/util/idle.cancel starship_ble_stream_step
+        [[ $descriptor ]] && exec {descriptor}<&-
+        STARSHIP_STREAM[f]=
+    }
+
+    # Draw the newest prompts once whenever the stream has some, then wait for
+    # more: ble.sh looks every time it is idle. It may defer rendering when
+    # another idle task is due soon, so draw explicitly.
+    starship_ble_stream_step() {
+        local descriptor=${STARSHIP_STREAM[f]} drawn=
+        while builtin read -t 0 -u "$descriptor"; do
+            starship_ble_read "$descriptor" || { starship_ble_stream_stop; break; }
+            drawn=1
+        done
+        [[ $drawn ]] && ble/application/render
+        [[ ${STARSHIP_STREAM[f]} ]] && ble/util/idle.wait-condition "builtin read -t 0 -u $descriptor"
+    }
+
+    starship_ble_stream_start() {
+        starship_ble_stream_stop
+        local descriptor
+        exec {descriptor}< <(::STARSHIP:: prompt --stream "$@")
+        STARSHIP_STREAM[f]=$descriptor
+        starship_ble_set_prompts "" ""
+        if starship_ble_read "$descriptor"; then
+            ble/util/idle.push -C "builtin read -t 0 -u $descriptor" starship_ble_stream_step
+        else
+            starship_ble_stream_stop
+        fi
+    }
+fi
 
 # Set up the start time and STARSHIP_SHELL, which controls shell-specific sequences
 STARSHIP_START_TIME=$(::STARSHIP:: time)
