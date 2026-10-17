@@ -1036,8 +1036,8 @@ mod test {
         assert_eq!(expected, actual);
     }
 
-    fn planned_modules(config: toml::Table) -> Vec<String> {
-        let context = default_context().set_config(config);
+    fn planned_modules(configuration: toml::Table) -> Vec<String> {
+        let context = default_context().set_config(configuration);
         Plan::new(&context, [Target::Main, Target::Right])
             .modules
             .into_iter()
@@ -1082,7 +1082,7 @@ mod test {
     #[test]
     fn disabled_env_var_base_preserves_enabled_children() {
         for format in ["$env_var", "$all"] {
-            let mut config = toml::toml! {
+            let mut configuration = toml::toml! {
                 format = format
                 right_format = format
                 add_newline = false
@@ -1099,10 +1099,10 @@ mod test {
             };
             // Isolate $all from filesystem, command, and platform modules.
             for module in ALL_MODULES.iter().filter(|module| **module != "env_var") {
-                config.insert((*module).to_owned(), toml::toml! { disabled = true }.into());
+                configuration.insert((*module).to_owned(), toml::toml! { disabled = true }.into());
             }
 
-            let context = default_context().set_config(config);
+            let context = default_context().set_config(configuration);
             let plan = Plan::new(&context, [Target::Main, Target::Right]);
             assert_eq!(
                 ["env_var.ENABLED"],
