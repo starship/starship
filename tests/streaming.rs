@@ -711,7 +711,9 @@ success_symbol = ">"
         assert!(Instant::now() < deadline, "the command never ran");
         session.pump(Duration::from_millis(25));
     }
-    // Ended by the next prompt, they would end in the same moment it prints.
+    // Ended by the next prompt, they would end in the same moment it prints,
+    // which may still wait to be read.
+    session.pump(QUIET);
     let screen = session.screen();
     assert!(
         !screen.contains("RESULT:typed"),
