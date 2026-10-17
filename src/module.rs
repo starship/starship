@@ -1,6 +1,6 @@
+use crate::painted::Painted;
 use crate::segment;
-use crate::segment::{FillSegment, Segment};
-use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
+use crate::segment::Segment;
 use std::fmt;
 use std::time::Duration;
 
@@ -180,74 +180,11 @@ impl<'a> Module<'a> {
     pub fn get_segments(&self) -> Vec<&str> {
         self.segments.iter().map(segment::Segment::value).collect()
     }
-
-    /// Returns a vector of colored `AnsiString` elements to be later used with
-    /// `AnsiStrings()` to optimize ANSI codes
-    pub fn ansi_strings(&self) -> Vec<AnsiString<'_>> {
-        self.ansi_strings_for_width(None)
-    }
-
-    pub fn ansi_strings_for_width(&self, width: Option<usize>) -> Vec<AnsiString<'_>> {
-        let mut iter = self.segments.iter().peekable();
-        let mut ansi_strings: Vec<AnsiString> = Vec::new();
-        while iter.peek().is_some() {
-            ansi_strings.extend(ansi_line(&mut iter, width));
-        }
-        ansi_strings
-    }
 }
 
 impl fmt::Display for Module<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let ansi_strings = self.ansi_strings();
-        write!(f, "{}", AnsiStrings(&ansi_strings))
-    }
-}
-
-fn ansi_line<'a, I>(segments: &mut I, term_width: Option<usize>) -> Vec<AnsiString<'a>>
-where
-    I: Iterator<Item = &'a Segment>,
-{
-    let mut used = 0usize;
-    let mut current: Vec<AnsiString> = Vec::new();
-    let mut chunks: Vec<(Vec<AnsiString>, &FillSegment)> = Vec::new();
-    let mut prev_style: Option<AnsiStyle> = None;
-
-    for segment in segments {
-        if let Segment::Fill(fs) = segment {
-            chunks.push((current, fs));
-            current = Vec::new();
-            prev_style = None;
-        } else {
-            used += segment.width_graphemes();
-            let current_segment_string = segment.ansi_string(prev_style.as_ref());
-
-            prev_style = Some(*current_segment_string.style_ref());
-            current.push(current_segment_string);
-        }
-
-        if matches!(segment, Segment::LineTerm) {
-            break;
-        }
-    }
-
-    if chunks.is_empty() {
-        current
-    } else {
-        let fill_size = term_width
-            .and_then(|tw| if tw > used { Some(tw - used) } else { None })
-            .map(|remaining| remaining / chunks.len());
-        chunks
-            .into_iter()
-            .flat_map(|(strs, fill)| {
-                let fill_string = fill.ansi_string(
-                    fill_size,
-                    strs.last().map(nu_ansi_term::AnsiGenericString::style_ref),
-                );
-                strs.into_iter().chain(std::iter::once(fill_string))
-            })
-            .chain(current)
-            .collect::<Vec<AnsiString>>()
+        write!(f, "{}", Painted::new(&self.segments, None))
     }
 }
 
