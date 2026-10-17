@@ -405,6 +405,14 @@ fn get_galaxy_version(context: &Context, config: &PackageConfig) -> Option<Strin
     format_version(raw_version, config.version_format)
 }
 
+fn get_zig_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = context.read_file_from_pwd("build.zig.zon")?;
+    let re = Regex::new(r#"(?m)^\s*\.version\s*=\s*"(?P<version>[^"]+)""#).unwrap();
+    let caps = re.captures(&file_contents)?;
+
+    format_version(&caps["version"], config.version_format)
+}
+
 fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let package_version_fn: Vec<fn(&Context, &PackageConfig) -> Option<String>> = vec![
         get_cargo_version,
@@ -428,6 +436,7 @@ fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
         get_dart_pub_version,
         get_rlang_version,
         get_galaxy_version,
+        get_zig_version,
     ];
 
     package_version_fn.iter().find_map(|f| f(context, config))
@@ -1685,6 +1694,39 @@ Title: Starship
         fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, Some("v1.2.3"), None);
 
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_zig_version() -> io::Result<()> {
+        let config_name = "build.zig.zon";
+        let config_content = r#".{
+    .name = .starship,
+    .version = "1.0.0",
+    .fingerprint = 0xc23d1996901833d9, // Changing this has security and trust implications.
+    .minimum_zig_version = "0.16.0",
+    .dependencies = .{},
+    .paths = .{ "build.zig", "build.zig.zon", "src" },
+}"#;
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, Some("v1.0.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_zig_version_without_version() -> io::Result<()> {
+        let config_name = "build.zig.zon";
+        let config_content = r#".{
+    .name = .starship,
+    .fingerprint = 0xc23d1996901833d9,
+    .paths = .{ "build.zig" },
+}"#;
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 

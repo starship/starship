@@ -392,7 +392,7 @@ fn get_repo_status(
         // We don't show details in submodules.
         let check_dirty = true;
         let status = gix_repo
-            .status(gix::features::progress::Discard)
+            .status(gix::progress::Discard)
             .ok()?
             .index_worktree_submodules(if config.ignore_submodules {
                 Submodule::Given {
