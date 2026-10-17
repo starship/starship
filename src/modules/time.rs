@@ -17,14 +17,14 @@ use crate::formatter::StringFormatter;
 /// otherwise; and else every minute, as the hours and days of every time zone
 /// turn over on the minute too. A time range is kept to the second.
 pub fn period(context: &Context) -> Option<Duration> {
-    let config = TimeConfig::try_load(context.config.get_module_config("time"));
-    if config.disabled || !config.refresh {
+    let configuration = TimeConfig::try_load(context.config.get_module_config("time"));
+    if configuration.disabled || !configuration.refresh {
         return None;
     }
 
-    let format = config
+    let format = configuration
         .time_format
-        .unwrap_or(if config.use_12hr { "%r" } else { "%T" });
+        .unwrap_or(if configuration.use_12hr { "%r" } else { "%T" });
     // Each step crosses a boundary of its own size and no larger.
     let probe = date(2001, 2, 3)
         .at(11, 5, 6, 789_000_000)
@@ -44,7 +44,7 @@ pub fn period(context: &Context) -> Option<Duration> {
     .find(|&step| shown(step) != before)
     .unwrap_or(Duration::from_secs(60));
 
-    let (display_start, display_end) = parse_time_range(config.time_range);
+    let (display_start, display_end) = parse_time_range(configuration.time_range);
     Some(if display_start.is_some() || display_end.is_some() {
         turns_over.min(Duration::from_secs(1))
     } else {
