@@ -417,6 +417,9 @@ impl Session {
     }
 
     fn close(mut self) {
+        // Typed ahead of the line editor, text meets the terminal's own line
+        // discipline, which turns Enter into a line feed.
+        self.settle();
         self.send("exit");
         // Typed text and an Enter that arrive together read as a paste to some
         // line editors, which then insert a newline rather than run the line.
@@ -647,6 +650,67 @@ in_shells! {
         pwsh_redraws_once_finished => redraws_once_finished,
         pwsh_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
         pwsh_shows_text_as_it_is => text_is_shown_as_it_is;
+}
+
+/// PowerShell redraws its prompt once complete only while nothing has been
+/// typed: PSReadLine misplaces a prompt redrawn beneath typed text, which
+/// command output then overwrites.
+#[test]
+#[ignore = "requires pwsh"]
+fn pwsh_leaves_a_line_being_typed_alone() {
+    let mut session = Session::start(
+        Shell::Pwsh,
+        r#"
+format = "${custom.fast}${custom.slow}$line_break$character"
+add_newline = true
+
+[custom.fast]
+command = "printf FAST"
+when = true
+shell = ["/bin/sh"]
+
+[custom.slow]
+command = "sleep 2; touch finished; printf SLOW"
+when = true
+shell = ["/bin/sh"]
+ignore_timeout = true
+
+[character]
+success_symbol = ">"
+"#,
+    );
+    session.wait_for(">");
+    let input = Shell::Pwsh.input();
+    let (first, rest) = input.split_at(input.len() / 2);
+    session.send(first);
+    session.wait_for(first);
+    let finished = session._fixture.directory.path().join("finished");
+    let deadline = Instant::now() + TIMEOUT;
+    while !finished.exists() {
+        assert!(Instant::now() < deadline, "the slow module never finished");
+        session.pump(Duration::from_millis(25));
+    }
+    // Time for the stream to send the complete prompt, which PSReadLine takes
+    // up as it reads the next key.
+    session.pump(Duration::from_secs(1));
+    for character in rest.chars() {
+        session.send(character.encode_utf8(&mut [0; 4]));
+        session.pump(Duration::from_millis(50));
+    }
+    let typed = session.wait_for(input);
+    assert!(
+        !typed.contains("SLOW"),
+        "redrawn beneath typed text:\n{typed}"
+    );
+
+    session.enter();
+    let screen = session.wait_for("RESULT:typed");
+    assert_eq!(1, screen.matches("RESULT:typed").count(), "{screen}");
+    assert!(
+        screen.contains("FAST"),
+        "output overwrote the prompt:\n{screen}"
+    );
+    session.close();
 }
 
 #[test]
