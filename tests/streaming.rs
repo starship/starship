@@ -2,12 +2,9 @@
 //! correct frame does not by itself make a correct redraw, which is up to the
 //! shell's line editor.
 #![cfg(unix)]
-// The lint keeps a program run by name from being found in the working
-// directory; these tests run starship by its absolute path.
-#![expect(clippy::disallowed_methods)]
 
 use std::collections::HashMap;
-use std::ffi::OsString;
+use std::ffi::{OsStr, OsString};
 use std::fs;
 use std::io::{ErrorKind, Read, Write};
 use std::path::{Path, PathBuf};
@@ -203,7 +200,7 @@ impl Fixture {
     fn new(shell: Shell, config: &str) -> Self {
         let directory = tempfile::tempdir().expect("a scratch directory");
         fs::write(directory.path().join("starship.toml"), config).expect("a configuration");
-        let output = Command::new(starship())
+        let output = command(starship())
             .args(shell.init_arguments())
             .env("PATH", shell.search_path())
             .output()
@@ -239,6 +236,15 @@ impl Fixture {
 
 fn starship() -> &'static Path {
     Path::new(env!("CARGO_BIN_EXE_starship"))
+}
+
+/// A command running `program`, looked up on `PATH` unless it is a path, so
+/// that nothing in the working directory runs in its place.
+fn command(program: impl AsRef<OsStr>) -> Command {
+    let found = which::which(program.as_ref())
+        .unwrap_or_else(|error| panic!("{:?} is not found: {error}", program.as_ref()));
+    #[expect(clippy::disallowed_methods, reason = "the program was looked up")]
+    Command::new(found)
 }
 
 #[derive(Clone)]
@@ -604,6 +610,40 @@ vimcmd_symbol = "NORMAL"
     session.close();
 }
 
+/// A stream ends as the command typed at its prompt starts, rather than
+/// render and refresh while the command runs.
+fn a_command_runs_without_its_stream(shell: Shell) {
+    let mut session = Session::start(
+        shell,
+        r#"
+format = "${custom.stream}$character"
+add_newline = false
+
+[custom.stream]
+command = 'echo $PPID > "$HOME/stream"; printf LIVE'
+when = true
+shell = ["/bin/sh"]
+format = "$output"
+refresh = 100
+
+[character]
+success_symbol = ">"
+"#,
+    );
+    session.wait_for("LIVE>");
+    session.send(shell.sleep_then_input());
+    session.wait_for(shell.sleep_then_input());
+    session.enter();
+    session.pump(QUIET);
+    // The module's command records the process that runs it: the stream.
+    let record = session._fixture.directory.path().join("stream");
+    let stream = fs::read_to_string(record).expect("the stream rendered");
+    let stream = Pid::from_raw(stream.trim().parse().expect("a process ID"));
+    assert!(ends(stream), "the stream outlived the start of the command");
+    session.wait_for("RESULT:typed");
+    session.close();
+}
+
 /// What a stream reports before its first paint, such as warnings about its
 /// configuration, is shown ahead of the prompt, as for a prompt printed
 /// whole; what it reports later goes to the log alone, rather than into the
@@ -675,18 +715,21 @@ in_shells! {
         zsh_shows_text_as_it_is => text_is_shown_as_it_is,
         zsh_keeps_the_right_prompt_current => the_right_prompt_is_kept_current,
         zsh_redraws_the_vi_mode_indicator => vi_mode_redraws_the_indicator,
+        zsh_runs_a_command_without_its_stream => a_command_runs_without_its_stream,
         zsh_shows_warnings_only_before_the_first_paint => warnings_are_shown_only_before_the_first_paint;
     Fish, "requires fish":
         fish_streams => streams,
         fish_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
         fish_shows_text_as_it_is => text_is_shown_as_it_is,
         fish_keeps_the_right_prompt_current => the_right_prompt_is_kept_current,
+        fish_runs_a_command_without_its_stream => a_command_runs_without_its_stream,
         fish_shows_warnings_only_before_the_first_paint => warnings_are_shown_only_before_the_first_paint;
     Nushell, "requires nu 0.115 or later":
         nushell_streams => streams,
         nushell_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
         nushell_shows_text_as_it_is => text_is_shown_as_it_is,
         nushell_keeps_the_right_prompt_current => the_right_prompt_is_kept_current,
+        nushell_runs_a_command_without_its_stream => a_command_runs_without_its_stream,
         nushell_shows_warnings_only_before_the_first_paint => warnings_are_shown_only_before_the_first_paint;
     Bash, "requires bash":
         bash_shows_text_as_it_is => text_is_shown_as_it_is;
@@ -695,17 +738,20 @@ in_shells! {
         bash_with_ble_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
         bash_with_ble_shows_text_as_it_is => text_is_shown_as_it_is,
         bash_with_ble_keeps_the_right_prompt_current => the_right_prompt_is_kept_current,
+        bash_with_ble_runs_a_command_without_its_stream => a_command_runs_without_its_stream,
         bash_with_ble_shows_warnings_only_before_the_first_paint => warnings_are_shown_only_before_the_first_paint;
     Xonsh, "requires xonsh":
         xonsh_streams => streams,
         xonsh_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
         xonsh_shows_text_as_it_is => text_is_shown_as_it_is,
         xonsh_keeps_the_right_prompt_current => the_right_prompt_is_kept_current,
+        xonsh_runs_a_command_without_its_stream => a_command_runs_without_its_stream,
         xonsh_shows_warnings_only_before_the_first_paint => warnings_are_shown_only_before_the_first_paint;
     Pwsh, "requires pwsh":
         pwsh_redraws_once_finished => redraws_once_finished,
         pwsh_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
         pwsh_shows_text_as_it_is => text_is_shown_as_it_is,
+        pwsh_runs_a_command_without_its_stream => a_command_runs_without_its_stream,
         pwsh_shows_warnings_only_before_the_first_paint => warnings_are_shown_only_before_the_first_paint;
 }
 
@@ -807,7 +853,7 @@ shell = ["/bin/sh"]
 ignore_timeout = true
 "#,
     );
-    let output = Command::new(Shell::Fish.program())
+    let output = command(Shell::Fish.program())
         .args([
             "--no-config",
             "--command",
@@ -850,7 +896,7 @@ fn fish_retries_failed_streams_and_caches_complete_prompt_pairs() {
         source.replace(starship().to_str().unwrap(), "__starship_test_command"),
     )
     .unwrap();
-    let output = Command::new(Shell::Fish.program())
+    let output = command(Shell::Fish.program())
         .arg("--no-config")
         .arg(Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/fish-stream.fish"))
         .envs(fixture.environment(Shell::Fish))
@@ -920,7 +966,7 @@ fn ends(process: Pid) -> bool {
 fn a_stream_ends_once_its_shell_stops_reading(asynchronous: bool) {
     let fixture = Fixture::new(Shell::Bash, &never_finishing(asynchronous));
     let rendering = fixture.directory.path().join("rendering");
-    let mut stream = Command::new(starship())
+    let mut stream = command(starship())
         .args(["prompt", "--stream"])
         .envs(fixture.environment(Shell::Bash))
         .env("STARSHIP_RENDERING", &rendering)
@@ -961,14 +1007,13 @@ fn a_stream_ends_once_its_shell_stops_reading(asynchronous: bool) {
 /// will be, and so before it could ask the stream to stop: the stream stops,
 /// removing its directory and ending the command its module runs.
 #[test]
-#[ignore = "requires /bin/sh"]
 fn a_stream_for_fish_ends_once_fish_stops_waiting_for_the_first_prompts() {
     let fixture = Fixture::new(Shell::Fish, &never_finishing(false));
     let rendering = fixture.directory.path().join("rendering");
     let temporary = fixture.directory.path().join("temporary");
     fs::create_dir(&temporary).unwrap();
-    let mut fish = Command::new("sleep").arg("30").spawn().unwrap();
-    let mut stream = Command::new(starship())
+    let mut fish = command("sleep").arg("30").spawn().unwrap();
+    let mut stream = command(starship())
         .args(["prompt", "--stream", &format!("--signal-pid={}", fish.id())])
         .envs(fixture.environment(Shell::Fish))
         .env("STARSHIP_RENDERING", &rendering)
@@ -996,13 +1041,11 @@ fn a_stream_for_fish_ends_once_fish_stops_waiting_for_the_first_prompts() {
 }
 
 #[test]
-#[ignore = "requires /bin/sh"]
 fn a_stream_ends_once_its_shell_stops_reading_the_first_paint() {
     a_stream_ends_once_its_shell_stops_reading(true);
 }
 
 #[test]
-#[ignore = "requires /bin/sh"]
 fn a_stream_without_async_ends_once_its_shell_stops_waiting_for_it() {
     a_stream_ends_once_its_shell_stops_reading(false);
 }
@@ -1010,7 +1053,7 @@ fn a_stream_without_async_ends_once_its_shell_stops_waiting_for_it() {
 #[test]
 #[ignore = "requires pwsh"]
 fn pwsh_reads_prompts_split_anywhere_and_cancels_its_reader() {
-    let output = Command::new(Shell::Pwsh.program())
+    let output = command(Shell::Pwsh.program())
         .args(["-NoLogo", "-NoProfile", "-NonInteractive", "-File"])
         .arg(Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/powershell-stream.ps1"))
         .arg("-Starship")
