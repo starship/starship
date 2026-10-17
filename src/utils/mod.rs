@@ -6,7 +6,7 @@ use process_control::{ChildExt, Control};
 use std::ffi::OsStr;
 use std::fmt::Debug;
 use std::fs;
-use std::io::{Error, ErrorKind, Result, Write};
+use std::io::{Error, ErrorKind, Read, Result, Write};
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
@@ -40,11 +40,54 @@ pub fn context_path<S: AsRef<OsStr> + ?Sized>(context: &Context, s: &S) -> PathB
     }
 }
 
+/// The largest file `read_file` is willing to read.
+const MAX_FILE_SIZE: u64 = 100 * 1024 * 1024;
+
 /// Return the string contents of a file
 pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
     log::trace!("Trying to read from {file_name:?}");
 
-    let result = fs::read_to_string(file_name);
+    // `O_NONBLOCK` so that the open itself cannot hang
+    let mut options = fs::OpenOptions::new();
+    options.read(true);
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::OpenOptionsExt;
+        options.custom_flags(nix::fcntl::OFlag::O_NONBLOCK.bits());
+    }
+    let file = options.open(file_name.as_ref())?;
+
+    let stat = file.metadata()?;
+    if !stat.is_file() {
+        return Err(Error::new(
+            ErrorKind::InvalidData,
+            format!("{file_name:?} is not a file"),
+        ));
+    }
+    if stat.len() > MAX_FILE_SIZE {
+        return Err(Error::new(
+            ErrorKind::InvalidData,
+            format!("{file_name:?} is too large"),
+        ));
+    }
+
+    // Bound the read as well, so a file that grows once it is open, or one whose
+    // reported size is wrong, still cannot be read without limit.
+    let mut out = String::new();
+    #[allow(clippy::disallowed_methods)]
+    let result = file
+        .take(MAX_FILE_SIZE + 1)
+        .read_to_string(&mut out)
+        .and_then(|read| {
+            if read as u64 > MAX_FILE_SIZE {
+                Err(Error::new(
+                    ErrorKind::InvalidData,
+                    format!("{file_name:?} is too large"),
+                ))
+            } else {
+                Ok(())
+            }
+        });
 
     if result.is_err() {
         log::debug!("Error reading file: {result:?}");
@@ -52,7 +95,7 @@ pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
         log::trace!("File read successfully");
     }
 
-    result
+    result.map(|()| out)
 }
 
 /// Write a string to a file
@@ -1159,6 +1202,72 @@ mod tests {
 
         let actual = read_file(&path)?;
         assert_eq!(actual, expected);
+
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn read_file_rejects_directories() -> Result<()> {
+        let tmp_dir = tempfile::tempdir()?;
+
+        let error = read_file(tmp_dir.path()).unwrap_err();
+
+        assert_eq!(error.kind(), ErrorKind::InvalidData);
+        assert!(error.to_string().contains("is not a file"));
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn read_file_rejects_files_larger_than_100_mib() -> Result<()> {
+        let tmp_dir = tempdir()?;
+        let tmp_file = tmp_dir.path().join("large-file");
+        let file = std::fs::File::create(&tmp_file)?;
+        file.set_len(MAX_FILE_SIZE + 1)?;
+
+        let error = read_file(&tmp_file).unwrap_err();
+
+        assert_eq!(error.kind(), ErrorKind::InvalidData);
+        assert!(error.to_string().contains("is too large"));
+        tmp_dir.close()
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn read_file_rejects_non_regular_files() -> Result<()> {
+        use nix::sys::stat::Mode;
+        use std::sync::mpsc::channel;
+
+        let tmp_dir = tempdir()?;
+        let fifo = tmp_dir.path().join("package.json");
+        nix::unistd::mkfifo(&fifo, Mode::S_IRUSR)?;
+
+        // A blocked `open` cannot be interrupted from this thread, so read from a
+        // worker and fail the test instead of hanging the suite if it does not return.
+        let (tx, rx) = channel();
+        std::thread::spawn(move || tx.send(read_file(fifo)));
+
+        let error = rx
+            .recv_timeout(Duration::from_secs(10))
+            .expect("read_file blocked on a FIFO")
+            .unwrap_err();
+
+        assert_eq!(error.kind(), ErrorKind::InvalidData);
+        assert!(error.to_string().contains("is not a file"));
+        tmp_dir.close()
+    }
+
+    /// Symlinked config files, such as a `package.json` or `.haxerc` kept in a
+    /// dotfiles repository, must keep working.
+    #[cfg(unix)]
+    #[test]
+    fn read_file_follows_symlinks_to_files() -> Result<()> {
+        let tmp_dir = tempdir()?;
+        let target = tmp_dir.path().join("target.json");
+        write_file(&target, r#"{"version":"1.2.3"}"#)?;
+        let package_json = tmp_dir.path().join("package.json");
+        std::os::unix::fs::symlink(&target, &package_json)?;
+
+        assert_eq!(read_file(&package_json)?, r#"{"version":"1.2.3"}"#);
 
         tmp_dir.close()
     }
