@@ -408,9 +408,10 @@ While the prompt is shown, modules whose values go stale render again, aligned t
 and the prompt is redrawn when that changes it. `time` renders again every hundredth or tenth of a
 second, or every second, if its format shows them, and otherwise every minute, on which the hours,
 days and offset transitions of every timezone fall too; with a valid `time_range`, at least every
-second. `memory_usage` renders again every five seconds, `battery` and `localip` every thirty, and a
-custom module as often as its `refresh` says, in milliseconds. Set `[async].refresh = false`, or a
-built-in module's `refresh = false`, to stop them.
+second; and if its format shows nothing of the time, outside a `time_range`, never. `memory_usage`
+renders again every five seconds, `battery` and `localip` every thirty, and a custom module as often
+as its `refresh` says, in milliseconds. Set `[async].refresh = false`, or a built-in module's
+`refresh = false`, to stop them.
 
 ### Example
 
