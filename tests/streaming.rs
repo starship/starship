@@ -664,12 +664,13 @@ vimcmd_symbol = "[NORMAL"
 }
 
 /// A stream ends as the command typed at its prompt starts, rather than
-/// render and refresh while the command runs.
+/// render and refresh while the command runs, and ends the commands its
+/// modules still run with it.
 fn a_command_runs_without_its_stream(shell: Shell) {
     let mut session = Session::start(
         shell,
         r#"
-format = "${custom.stream}$character"
+format = "${custom.stream}${custom.slow}$character"
 add_newline = false
 
 [custom.stream]
@@ -679,20 +680,43 @@ shell = ["/bin/sh"]
 format = "$output"
 refresh = 100
 
+[custom.slow]
+command = 'echo $$ > "$HOME/command"; exec sleep 30'
+when = true
+shell = ["/bin/sh"]
+ignore_timeout = true
+
 [character]
 success_symbol = ">"
 "#,
     );
     session.wait_for("LIVE>");
+    // The modules' commands record the process that runs them, the stream,
+    // and the one that never finishes.
+    let directory = session._fixture.directory.path().to_path_buf();
+    let stream = rendering(&directory.join("stream"));
+    let command = rendering(&directory.join("command"));
     session.send(shell.sleep_then_input());
     session.wait_for(shell.sleep_then_input());
     session.enter();
-    session.pump(QUIET);
-    // The module's command records the process that runs it: the stream.
-    let record = session._fixture.directory.path().join("stream");
-    let stream = fs::read_to_string(record).expect("the stream rendered");
-    let stream = Pid::from_raw(stream.trim().parse().expect("a process ID"));
-    assert!(ends(stream), "the stream outlived the start of the command");
+    // Both end as the command starts, so long before it prints, three
+    // seconds after, however long the shell takes to start it.
+    let deadline = Instant::now() + TIMEOUT;
+    while signal::kill(stream, None).is_ok() || signal::kill(command, None).is_ok() {
+        let screen = session.screen();
+        assert!(
+            !screen.contains("RESULT:typed"),
+            "the stream, or a module's command, outlived the start of the command:\n{screen}"
+        );
+        assert!(Instant::now() < deadline, "the command never ran");
+        session.pump(Duration::from_millis(25));
+    }
+    // Ended by the next prompt, they would end in the same moment it prints.
+    let screen = session.screen();
+    assert!(
+        !screen.contains("RESULT:typed"),
+        "the stream, or a module's command, ended only once the command did:\n{screen}"
+    );
     session.wait_for("RESULT:typed");
     session.close();
 }
