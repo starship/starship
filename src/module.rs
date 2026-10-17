@@ -218,6 +218,8 @@ where
             chunks.push((current, fs));
             current = Vec::new();
             prev_style = None;
+        } else if let Segment::Control(cs) = segment {
+            current.push(cs.ansi_string());
         } else {
             used += segment.width_graphemes();
             let current_segment_string = segment.ansi_string(prev_style.as_ref());
