@@ -347,6 +347,18 @@ $null = New-Module starship {
         $null = Register-EngineEvent -SourceIdentifier Starship.Refined -Action {
             $null = $Sender.Redraw.Invoke($Sender)
         }
+
+        # A command runs without the stream of the prompt it was typed at.
+        # PSReadLine has no hook for a line being accepted, but reading the
+        # line ends there.
+        $script:ReadLine = ${function:PSConsoleHostReadLine}
+        function global:PSConsoleHostReadLine {
+            try {
+                & $script:ReadLine
+            } finally {
+                Stop-StarshipStream
+            }
+        }
     }
 
     if ($PSVersionTable.PSVersion.Major -gt 5) {
