@@ -4,7 +4,7 @@ use sha1::{Digest, Sha1};
 use std::collections::HashMap;
 use std::ffi::OsStr;
 use std::fs::File;
-use std::io::{BufReader, Read};
+use std::io::BufReader;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use yaml_rust2::{Yaml, YamlLoader};
@@ -12,6 +12,7 @@ use yaml_rust2::{Yaml, YamlLoader};
 use super::{Context, Module, ModuleConfig};
 use crate::configs::pulumi::PulumiConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
+use crate::utils::read_file;
 
 static PULUMI_HOME: &str = "PULUMI_HOME";
 static PULUMI_BACKEND_URL: &str = "PULUMI_BACKEND_URL";
@@ -136,10 +137,7 @@ fn find_package_file(path: &Path) -> Option<PathBuf> {
 /// Pulumi has no CLI option that is fast enough to get this for us, but finding
 /// the location is simple. We get it ourselves.
 fn stack_name(project_file: &Path, context: &Context) -> Option<String> {
-    let mut file = File::open(project_file).ok()?;
-
-    let mut contents = String::new();
-    file.read_to_string(&mut contents).ok()?;
+    let contents = read_file(project_file).ok()?;
     let mut project = YamlLoader::load_from_str(&contents)
         .ok()
         .and_then(|yaml| yaml.into_iter().next())
