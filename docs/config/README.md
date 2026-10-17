@@ -5101,7 +5101,7 @@ format = 'via [$symbol$workspace]($style) '
 ## Time
 
 The `time` module shows the current **local** time.
-The `format` configuration value is used by the [`jiff`](https://crates.io/crates/jiff) crate to control how the time is displayed. Take a look [at the jiff strftime docs](https://docs.rs/jiff/latest/jiff/fmt/strtime/index.html) to see what options are available.
+The `time_format` configuration value is used by the [`jiff`](https://crates.io/crates/jiff) crate to control how the time is displayed. Take a look [at the jiff strftime docs](https://docs.rs/jiff/latest/jiff/fmt/strtime/index.html) to see what options are available.
 
 > [!TIP]
 > This module is disabled by default.
