@@ -110,11 +110,16 @@ starship_stream_redraw() {
 zle -N starship_stream_redraw
 
 # Wait for the first paint, unless given an argument to keep the prompts shown
-# until the new ones arrive.
+# until the new ones arrive: ZLE is then drawing the line, so what the stream
+# reports goes to the log alone.
 starship_stream_start() {
     starship_stream_stop
-    local descriptor
-    exec {descriptor}< <(::STARSHIP:: prompt --stream --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")
+    local descriptor arguments=(prompt --stream --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")
+    if (( $# )); then
+        exec {descriptor}< <(::STARSHIP:: "${arguments[@]}" 2>/dev/null)
+    else
+        exec {descriptor}< <(::STARSHIP:: "${arguments[@]}")
+    fi
     STARSHIP_STREAM[f]=$descriptor
     if (( ! $# )); then
         STARSHIP_STREAM[1]= STARSHIP_STREAM[2]=
