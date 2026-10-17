@@ -604,6 +604,57 @@ vimcmd_symbol = "NORMAL"
     session.close();
 }
 
+/// What a stream reports before its first paint, such as warnings about its
+/// configuration, is shown ahead of the prompt, as for a prompt printed
+/// whole; what it reports later goes to the log alone, rather than into the
+/// line being typed.
+fn warnings_are_shown_only_before_the_first_paint(shell: Shell) {
+    let mut session = Session::start(
+        shell,
+        r#"
+format = "${custom.late}MARK$character"
+add_newline = false
+command_timeout = 500
+
+[character]
+success_symbol = ">"
+unknown_option = true
+
+[custom.late]
+command = "sleep 2"
+when = true
+shell = ["/bin/sh"]
+"#,
+    );
+    let screen = session.wait_for("MARK>");
+    assert!(
+        screen.contains("unknown_option"),
+        "the configuration's warning is missing:\n{screen}"
+    );
+    let logs = session._fixture.directory.path().join(".cache/starship");
+    let deadline = Instant::now() + TIMEOUT;
+    while !logged(&logs, "timed out") {
+        assert!(Instant::now() < deadline, "the module never timed out");
+        session.pump(Duration::from_millis(25));
+    }
+    session.pump(QUIET);
+    let screen = session.screen();
+    assert!(
+        !screen.contains("timed out"),
+        "a warning landed after the first paint:\n{screen}"
+    );
+    session.close();
+}
+
+/// Whether a session's log in `directory` holds `text`.
+fn logged(directory: &Path, text: &str) -> bool {
+    fs::read_dir(directory)
+        .into_iter()
+        .flatten()
+        .flatten()
+        .any(|entry| fs::read_to_string(entry.path()).is_ok_and(|log| log.contains(text)))
+}
+
 /// Each behavior, as a test in each shell that has it, named for both.
 macro_rules! in_shells {
     ($($shell:ident, $requirement:literal: $($test:ident => $behavior:ident),+;)+) => {
@@ -623,33 +674,39 @@ in_shells! {
         zsh_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
         zsh_shows_text_as_it_is => text_is_shown_as_it_is,
         zsh_keeps_the_right_prompt_current => the_right_prompt_is_kept_current,
-        zsh_redraws_the_vi_mode_indicator => vi_mode_redraws_the_indicator;
+        zsh_redraws_the_vi_mode_indicator => vi_mode_redraws_the_indicator,
+        zsh_shows_warnings_only_before_the_first_paint => warnings_are_shown_only_before_the_first_paint;
     Fish, "requires fish":
         fish_streams => streams,
         fish_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
         fish_shows_text_as_it_is => text_is_shown_as_it_is,
-        fish_keeps_the_right_prompt_current => the_right_prompt_is_kept_current;
+        fish_keeps_the_right_prompt_current => the_right_prompt_is_kept_current,
+        fish_shows_warnings_only_before_the_first_paint => warnings_are_shown_only_before_the_first_paint;
     Nushell, "requires nu 0.115 or later":
         nushell_streams => streams,
         nushell_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
         nushell_shows_text_as_it_is => text_is_shown_as_it_is,
-        nushell_keeps_the_right_prompt_current => the_right_prompt_is_kept_current;
+        nushell_keeps_the_right_prompt_current => the_right_prompt_is_kept_current,
+        nushell_shows_warnings_only_before_the_first_paint => warnings_are_shown_only_before_the_first_paint;
     Bash, "requires bash":
         bash_shows_text_as_it_is => text_is_shown_as_it_is;
     BashWithBle, "requires bash 4.2 or later, and STARSHIP_TEST_BLE naming ble.sh":
         bash_with_ble_streams => streams,
         bash_with_ble_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
         bash_with_ble_shows_text_as_it_is => text_is_shown_as_it_is,
-        bash_with_ble_keeps_the_right_prompt_current => the_right_prompt_is_kept_current;
+        bash_with_ble_keeps_the_right_prompt_current => the_right_prompt_is_kept_current,
+        bash_with_ble_shows_warnings_only_before_the_first_paint => warnings_are_shown_only_before_the_first_paint;
     Xonsh, "requires xonsh":
         xonsh_streams => streams,
         xonsh_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
         xonsh_shows_text_as_it_is => text_is_shown_as_it_is,
-        xonsh_keeps_the_right_prompt_current => the_right_prompt_is_kept_current;
+        xonsh_keeps_the_right_prompt_current => the_right_prompt_is_kept_current,
+        xonsh_shows_warnings_only_before_the_first_paint => warnings_are_shown_only_before_the_first_paint;
     Pwsh, "requires pwsh":
         pwsh_redraws_once_finished => redraws_once_finished,
         pwsh_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
-        pwsh_shows_text_as_it_is => text_is_shown_as_it_is;
+        pwsh_shows_text_as_it_is => text_is_shown_as_it_is,
+        pwsh_shows_warnings_only_before_the_first_paint => warnings_are_shown_only_before_the_first_paint;
 }
 
 /// PowerShell redraws its prompt once complete only while nothing has been

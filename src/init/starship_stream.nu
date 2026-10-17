@@ -20,10 +20,12 @@ def starship-prompt-arguments [jobs: table]: nothing -> list<string> {
 ## Every pair of prompts is pushed to the editor, which repaints in place only
 ## a prompt pushed to it, and the first also goes to the mailbox the prompt
 ## waits on. `bytes split` reads as the stream writes, leaving an empty field
-## after the last NUL; pairing the fields preserves multiline prompts.
-def starship-stream-read [arguments: list<string>, mailbox: int] {
+## after the last NUL; pairing the fields preserves multiline prompts. What
+## the stream reports goes to the file `reports`, as Nushell shows nothing a
+## job reports.
+def starship-stream-read [arguments: list<string>, mailbox: int, reports: string] {
     let drawn = try {
-        ^::STARSHIP:: prompt --stream ...$arguments
+        ^::STARSHIP:: prompt --stream ...$arguments e> $reports
         | bytes split 0x[00]
         | each { decode }
         | chunks 2
@@ -54,9 +56,15 @@ def starship-stream-start [] {
     let mailbox = $env.STARSHIP_MAILBOX
     job flush --tag $mailbox
     job flush --tag ($mailbox + 1)
-    job spawn --description $STARSHIP_JOB { starship-stream-read $arguments $mailbox }
+    let reports = $env.STARSHIP_REPORTS
+    job spawn --description $STARSHIP_JOB { starship-stream-read $arguments $mailbox $reports }
 
-    job recv --tag $mailbox
+    let main = job recv --tag $mailbox
+    # The stream closes its error output as it first paints, so what it
+    # reported before then comes ahead of the prompt.
+    let reported = try { open --raw $reports } catch { "" }
+    if ($reported | is-not-empty) { print --stderr --no-newline $reported }
+    $main
 }
 
 export-env {
@@ -75,9 +83,11 @@ export-env {
 
     # Mailbox slots: main, right.
     let mailbox = random int 1..9223372036854775806
+    let session = random chars -l 16
     load-env {
-        STARSHIP_SESSION_KEY: (random chars -l 16)
+        STARSHIP_SESSION_KEY: $session
         STARSHIP_MAILBOX: $mailbox
+        STARSHIP_REPORTS: ($nu.temp-dir | path join $"starship_($session).reports")
         PROMPT_MULTILINE_INDICATOR: (^::STARSHIP:: prompt --continuation)
         PROMPT_INDICATOR: ""
         PROMPT_COMMAND: {|| starship-stream-start }

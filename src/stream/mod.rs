@@ -44,8 +44,15 @@ pub fn stream(properties: Properties, redraws: Option<usize>) -> ! {
         let _ = nix::unistd::setpgid(nix::unistd::Pid::from_raw(0), nix::unistd::Pid::from_raw(0));
         end_with_reader();
     }
+    #[cfg(windows)]
+    keep_error_output_from_commands();
     let context = Context::new(properties, Target::Main);
-    run(&context, redraws, &mut io::stdout().lock(), end)
+    run(
+        &context,
+        redraws,
+        &mut Reporting::new(io::stdout().lock()),
+        end,
+    )
 }
 
 /// Streams both prompts to fish, which it signals as `shell`; see [`snapshot`].
@@ -53,11 +60,84 @@ pub fn stream(properties: Properties, redraws: Option<usize>) -> ! {
 pub fn publish(properties: Properties, shell: i32) -> ! {
     let context = Context::new(properties, Target::Main);
     match snapshot::Snapshot::for_fish(nix::unistd::Pid::from_raw(shell)) {
-        Ok(mut snapshot) => run(&context, None, &mut snapshot, |streamed| match streamed {
-            Ok(()) => snapshot::linger(),
-            Err(error) => end(Err(error)),
-        }),
+        Ok(snapshot) => run(
+            &context,
+            None,
+            &mut Reporting::new(snapshot),
+            |streamed| match streamed {
+                Ok(()) => snapshot::linger(),
+                Err(error) => end(Err(error)),
+            },
+        ),
         Err(error) => end(Err(error)),
+    }
+}
+
+/// Draws on a sink, first closing the error output: what the stream reported
+/// before its first paint, such as warnings about its configuration, is then
+/// on the terminal ahead of the prompt, as for a prompt printed whole, and
+/// nothing it reports later can land in the line being typed. The log keeps
+/// all of it.
+struct Reporting<S> {
+    sink: S,
+    open: bool,
+}
+
+impl<S> Reporting<S> {
+    const fn new(sink: S) -> Self {
+        Self { sink, open: true }
+    }
+}
+
+impl<S: Sink> Sink for Reporting<S> {
+    fn draw(&mut self, prompts: &Prompts) -> io::Result<()> {
+        if std::mem::take(&mut self.open) {
+            close_error_output();
+        }
+        self.sink.draw(prompts)
+    }
+}
+
+/// Closes the error output the process inherited, so that what it reports
+/// from now on goes to the log alone, and whatever reads that output, such as
+/// PowerShell, sees it end.
+fn close_error_output() {
+    #[cfg(unix)]
+    if let Ok(null) = std::fs::File::options().write(true).open("/dev/null") {
+        let _ = nix::unistd::dup2_stderr(null);
+    }
+    #[cfg(windows)]
+    {
+        use std::os::windows::io::IntoRawHandle;
+        use windows::Win32::Foundation::{CloseHandle, HANDLE};
+        use windows::Win32::System::Console::{GetStdHandle, STD_ERROR_HANDLE, SetStdHandle};
+        let Ok(null) = std::fs::File::options().write(true).open("NUL") else {
+            return;
+        };
+        // SAFETY: the null device's handle is open and stays so for the rest
+        // of the process, and the inherited one is closed only once replaced.
+        unsafe {
+            let inherited = GetStdHandle(STD_ERROR_HANDLE);
+            if SetStdHandle(STD_ERROR_HANDLE, HANDLE(null.into_raw_handle())).is_ok()
+                && let Ok(inherited) = inherited
+            {
+                let _ = CloseHandle(inherited);
+            }
+        }
+    }
+}
+
+/// Keeps the error output from the commands that modules run, which Windows
+/// would have inherit it and so hold it open once the stream closes it.
+#[cfg(windows)]
+fn keep_error_output_from_commands() {
+    use windows::Win32::Foundation::{HANDLE_FLAG_INHERIT, HANDLE_FLAGS, SetHandleInformation};
+    use windows::Win32::System::Console::{GetStdHandle, STD_ERROR_HANDLE};
+    // SAFETY: changing whether a handle is inherited leaves it open as it was.
+    unsafe {
+        if let Ok(inherited) = GetStdHandle(STD_ERROR_HANDLE) {
+            let _ = SetHandleInformation(inherited, HANDLE_FLAG_INHERIT.0, HANDLE_FLAGS(0));
+        }
     }
 }
 
