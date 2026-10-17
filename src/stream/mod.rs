@@ -1666,6 +1666,7 @@ mod tests {
 
     /// A shell that creates a marker once drawn the first prompts, and stops
     /// reading once drawn prompts showing `until`, or at a deadline.
+    #[cfg(unix)]
     struct Watching {
         written: Vec<u8>,
         marker: PathBuf,
@@ -1673,6 +1674,7 @@ mod tests {
         deadline: Instant,
     }
 
+    #[cfg(unix)]
     impl Write for Watching {
         fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
             let shown = String::from_utf8_lossy(&self.written).contains(self.until);
