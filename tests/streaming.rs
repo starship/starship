@@ -197,9 +197,9 @@ struct Fixture {
 }
 
 impl Fixture {
-    fn new(shell: Shell, config: &str) -> Self {
+    fn new(shell: Shell, configuration: &str) -> Self {
         let directory = tempfile::tempdir().expect("a scratch directory");
-        fs::write(directory.path().join("starship.toml"), config).expect("a configuration");
+        fs::write(directory.path().join("starship.toml"), configuration).expect("a configuration");
         let output = command(starship())
             .args(shell.init_arguments())
             .env("PATH", shell.search_path())
@@ -286,11 +286,11 @@ struct Session {
 }
 
 impl Session {
-    fn start(shell: Shell, config: &str) -> Self {
+    fn start(shell: Shell, configuration: &str) -> Self {
         let turn = ONE_SHELL_AT_A_TIME
             .lock()
             .unwrap_or_else(PoisonError::into_inner);
-        let fixture = Fixture::new(shell, config);
+        let fixture = Fixture::new(shell, configuration);
         let (arguments, load) = shell.arguments(&fixture);
         let pty = tty::new(
             &Options {
@@ -533,7 +533,7 @@ fn an_accepted_line_is_left_alone(shell: Shell) {
 const LITERAL: &str = r"$(echo EXPANDED) `echo EXPANDED` %n \w {user} 100% \$HOME \$(echo EXPANDED) \`echo EXPANDED` \\$HOME \\";
 
 fn text_is_shown_as_it_is(shell: Shell) {
-    let config = r#"
+    let configuration = r#"
 format = "${custom.literal}END"
 add_newline = false
 
@@ -542,7 +542,7 @@ command = '''printf '%s' 'LITERAL' '''
 when = true
 shell = ["/bin/sh"]
 "#;
-    let mut session = Session::start(shell, &config.replace("LITERAL", LITERAL));
+    let mut session = Session::start(shell, &configuration.replace("LITERAL", LITERAL));
     let screen = session.wait_for("END");
     assert!(
         screen.contains(LITERAL),
