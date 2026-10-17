@@ -4,8 +4,9 @@ use std::borrow::Cow;
 use std::fmt;
 
 use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
+use unicode_segmentation::UnicodeSegmentation;
 
-use crate::print::{Grapheme, UnicodeWidthGraphemes, graphemes};
+use crate::print::{UnicodeWidthGraphemes, printable};
 use crate::segment::{Kind, Segment};
 
 /// Text drawn in a single style, borrowed from the segment it was painted
@@ -53,9 +54,10 @@ impl<'a> Painted<'a> {
 /// remainder columns going to the first fills. Without a width, or without
 /// room for each fill, they keep their natural width.
 ///
-/// A run inherits from its left neighbor on the same line, except that nothing
-/// inherits across a fill: the fill resolves against the run before it, and
-/// the run after it starts afresh.
+/// A fill draws the text of its pattern, without its controls, in its own
+/// style. A run inherits from its left neighbor on the same line, except that
+/// nothing inherits across a fill: the fill resolves against the run before
+/// it, and the run after it starts afresh.
 fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
     let styled = || {
         segments.iter().filter_map(|segment| match segment {
@@ -84,12 +86,12 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
             };
             let (style, text) = match kind {
                 Kind::Fill => {
-                    let style = resolve(previous.take());
+                    let pattern = printable(value);
                     let text = match widths.as_mut().and_then(Iterator::next) {
-                        Some(width) => stretch(value, width, style),
-                        None => finish_fill(Cow::Borrowed(value), style),
+                        Some(width) => stretch(pattern, width),
+                        None => pattern,
                     };
-                    (style, text)
+                    (resolve(previous.take()), text)
                 }
                 Kind::Text => {
                     let style = resolve(previous);
@@ -126,72 +128,27 @@ fn text_width(segments: &[Segment]) -> usize {
 }
 
 /// `pattern` repeated across `width` columns: whole repetitions, then one
-/// more up to the last grapheme that fits, if that draws anything. Escape
-/// sequences among them could leave a hyperlink open or a style other than
-/// the fill's; both are reset after them. A pattern without width keeps its
-/// natural text, as does one whose repetitions would join into fewer
-/// graphemes, such as one ending in a joiner.
-fn stretch(pattern: &str, width: usize, style: AnsiStyle) -> Cow<'_, str> {
+/// more up to the last grapheme that fits, if that draws anything. A pattern
+/// without width keeps its natural text, as does one whose repetitions would
+/// join into fewer graphemes, such as one ending in a joiner.
+fn stretch(pattern: Cow<'_, str>, width: usize) -> Cow<'_, str> {
     let pattern_width = pattern.width_graphemes();
     if pattern_width == 0 || pattern.repeat(2).width_graphemes() != 2 * pattern_width {
-        return finish_fill(Cow::Borrowed(pattern), style);
+        return pattern;
     }
-    let end = graphemes(pattern)
-        .scan(width % pattern_width, |room, grapheme| {
-            *room = room.checked_sub(Grapheme(grapheme).width())?;
-            Some(end_within(pattern, grapheme))
+    let mut room = width % pattern_width;
+    let partial: String = pattern
+        .graphemes(true)
+        .map_while(|grapheme| {
+            room = room.checked_sub(grapheme.width_graphemes())?;
+            Some(grapheme)
         })
-        .last()
-        .unwrap_or(0);
-    let partial = Some(&pattern[..end]).filter(|partial| partial.width_graphemes() > 0);
-    let stretched = pattern.repeat(width / pattern_width) + partial.unwrap_or_default();
-    finish_fill(Cow::Owned(stretched), style)
-}
-
-/// A fill cannot leave controls active in the run painted after it, whether
-/// stretched or kept at its natural width.
-fn finish_fill(mut text: Cow<'_, str>, style: AnsiStyle) -> Cow<'_, str> {
-    if text.contains('\x1b') {
-        if hyperlink_is_open(&text) {
-            text.to_mut().push_str(CLOSE_HYPERLINK);
-        }
-        text.to_mut()
-            .push_str(&format!("{RESET}{}", style.prefix()));
-    }
-    text
-}
-
-/// Where `part`, borrowed from `text`, ends within it.
-fn end_within(text: &str, part: &str) -> usize {
-    part.as_ptr().addr() - text.as_ptr().addr() + part.len()
-}
-
-/// What returns a terminal to its default style, whatever came before.
-const RESET: &str = "\x1b[0m";
-
-const CLOSE_HYPERLINK: &str = "\x1b]8;;\x1b\\";
-
-/// OSC 8 state after the bytes that actually fit, including complete repeats.
-/// The parser handles terminators and unrelated control strings for us.
-fn hyperlink_is_open(text: &str) -> bool {
-    #[derive(Default)]
-    struct Hyperlink(bool);
-
-    impl anstyle_parse::Perform for Hyperlink {
-        fn osc_dispatch(&mut self, params: &[&[u8]], _bell_terminated: bool) {
-            if params.len() >= 3 && params[0] == b"8" {
-                // Semicolons in a URI become further OSC parameters.
-                self.0 = !params[2].is_empty() || params.len() > 3;
-            }
-        }
-    }
-
-    let mut parser: anstyle_parse::Parser = Default::default();
-    let mut hyperlink = Hyperlink::default();
-    for byte in text.bytes() {
-        parser.advance(&mut hyperlink, byte);
-    }
-    hyperlink.0
+        .collect();
+    let whole = pattern.repeat(width / pattern_width);
+    Cow::Owned(match partial.width_graphemes() {
+        0 => whole,
+        _ => whole + &partial,
+    })
 }
 
 /// The bytes a terminal draws, with escape sequences collapsed between runs.
@@ -207,6 +164,7 @@ mod tests {
     use super::*;
     use crate::config::parse_style_string;
     use nu_ansi_term::Color;
+    use proptest::prelude::*;
 
     fn text(style: &str, value: &str) -> Segment {
         Segment::from_text(parse_style_string(style, None), value).remove(0)
@@ -217,404 +175,191 @@ mod tests {
     }
 
     #[test]
-    fn previous_colors_resolve_against_the_run_to_the_left_as_painted() {
+    fn a_run_resolves_its_style_against_the_one_to_its_left_on_its_line() {
         let segments = [
             text("fg:red bg:blue", "a"),
             text("fg:prev_bg bg:prev_fg", "b"),
             text("fg:prev_bg", "c"),
-        ];
-        for width in [None, Some(8)] {
-            let painted = Painted::new(&segments, width);
-            assert_eq!(
-                Color::Blue.on(Color::Red),
-                painted.lines[0][1].style,
-                "the second run swaps the first run's colors"
-            );
-            assert_eq!(
-                Color::Red.normal(),
-                painted.lines[0][2].style,
-                "the third run takes the background the second was painted with"
-            );
-        }
-    }
-
-    #[test]
-    fn nothing_inherits_across_a_line_break_or_a_fill() {
-        let segments = [
-            text("red", "a"),
-            Segment::LineBreak,
-            text("fg:prev_fg", "b"),
-            text("green", "c"),
-            fill("."),
-            text("fg:prev_fg", "d"),
-        ];
-        let painted = Painted::new(&segments, None);
-
-        let foregrounds: Vec<_> = painted.lines[1]
-            .iter()
-            .map(|run| run.style.foreground)
-            .collect();
-        assert_eq!(vec![None, Some(Color::Green), None, None], foregrounds);
-    }
-
-    #[test]
-    fn a_fill_inherits_from_the_run_before_it() {
-        let segments = [
-            text("fg:red bg:blue", "a"),
             Segment::fill(parse_style_string("fg:prev_bg", None), "."),
-        ];
-        let painted = Painted::new(&segments, Some(3));
-
-        assert_eq!(Color::Blue.normal(), painted.lines[0][1].style);
-    }
-
-    #[test]
-    fn fills_share_the_width_their_line_leaves() {
-        let segments = [
-            text("", "a"),
-            fill("."),
-            text("", "b"),
-            fill("-"),
-            text("", "c"),
+            text("fg:prev_fg", "d"),
             Segment::LineBreak,
-            text("", "next"),
-            fill("."),
-        ];
-        let painted = Painted::new(&segments, Some(12));
-
-        assert_eq!("a.....b----c\nnext........", painted.to_string());
-    }
-
-    #[test]
-    fn remainder_columns_go_to_the_first_two_or_three_fills() {
-        let two = [
-            text("", "a"),
-            fill("."),
-            text("", "b"),
-            fill("-"),
-            text("", "c"),
-        ];
-        let three = [
-            text("", "a"),
-            fill("."),
-            text("", "b"),
-            fill("-"),
-            text("", "c"),
-            fill("_"),
-        ];
-        for (width, expected) in [
-            (10, "a....b---c"),
-            (11, "a....b----c"),
-            (12, "a.....b----c"),
-        ] {
-            assert_eq!(expected, Painted::new(&two, Some(width)).to_string());
-        }
-        for (width, expected) in [
-            (10, "a...b--c__"),
-            (11, "a...b---c__"),
-            (12, "a...b---c___"),
-        ] {
-            assert_eq!(expected, Painted::new(&three, Some(width)).to_string());
-        }
-        for width in 6..30 {
-            assert_eq!(
-                width,
-                Painted::new(&two, Some(width))
-                    .to_string()
-                    .width_graphemes()
-            );
-            assert_eq!(
-                width,
-                Painted::new(&three, Some(width))
-                    .to_string()
-                    .width_graphemes()
-            );
-        }
-    }
-
-    #[test]
-    fn fill_layout_measures_graphemes_across_adjacent_styles() {
-        let segments = [
-            text("red", "👩"),
-            text("blue", "‍👩‍"),
-            text("green", "👦‍👦"),
-            fill("."),
-            text("red", "a"),
-            text("blue", "\u{301}"),
+            text("fg:prev_fg", "e"),
         ];
         let painted = Painted::new(&segments, Some(8));
-        assert_eq!(".....", painted.lines[0][3].text);
-        assert_eq!(8, painted.to_string().width_graphemes());
-        assert_eq!(Some(Color::Red), painted.lines[0][0].style.foreground);
-        assert_eq!(Some(Color::Blue), painted.lines[0][1].style.foreground);
-        assert_eq!(Some(Color::Green), painted.lines[0][2].style.foreground);
+        let styles: Vec<_> = painted
+            .lines
+            .iter()
+            .flatten()
+            .map(|run| run.style)
+            .collect();
 
-        let segments = [text("red", "👩"), fill("."), text("blue", "‍👩‍👦‍👦")];
-        let painted = Painted::new(&segments, Some(8));
-        assert_eq!("....", painted.lines[0][1].text);
-        assert_eq!(8, painted.to_string().width_graphemes());
-    }
-
-    #[test]
-    fn a_fill_whose_repetitions_would_join_keeps_its_natural_text() {
-        let joining = "\u{1f469}\u{200d}";
-        assert_eq!(joining, stretch(joining, 8, AnsiStyle::new()));
         assert_eq!(
-            "\u{1f469}".repeat(4),
-            stretch("\u{1f469}", 8, AnsiStyle::new())
+            vec![
+                Color::Red.on(Color::Blue),
+                Color::Blue.on(Color::Red),
+                Color::Red.normal(),
+                AnsiStyle::default(),
+                AnsiStyle::default(),
+                AnsiStyle::default(),
+            ],
+            styles,
+            "a run takes what the run before it was painted with, a fill takes \
+             what came before it, and nothing goes past a fill or a line break"
         );
     }
 
     #[test]
-    fn a_fill_repeats_whole_graphemes_that_fit() {
-        for (pattern, stretched) in [
-            (".", ".........."),
-            (".:", ".:.:.:.:.:"),
-            ("-:-", "-:--:--:--"),
-            ("🟦", "🟦🟦🟦🟦🟦"),
-            ("🟢🔵🟡", "🟢🔵🟡🟢🔵"),
-        ] {
-            assert_eq!(
-                stretched,
-                stretch(pattern, 10, AnsiStyle::new()),
-                "{pattern}"
-            );
-        }
-    }
-
-    /// Every pattern of up to three pieces, among graphemes narrow, wide and
-    /// without width, a bell and escape sequences, stretched across every
-    /// width up to nine: whole repetitions, then a prefix of one more that
-    /// ends on a grapheme and draws something, a column short at most, and the
-    /// fill's style restored after any escape sequence.
-    #[test]
-    fn every_short_pattern_stretches_to_whole_graphemes() {
-        const PIECES: [&str; 7] = [
-            ".",
-            "🟦",
-            "\u{301}",
-            "\u{7}",
-            "\x1b[31m",
-            "\x1b[0m",
-            "\x1b]8;;x\x1b\\",
-        ];
-        let style = Color::Green.normal();
-        let restore = format!("{RESET}{}", style.prefix());
-        let patterns = (1..=3).flat_map(|length| {
-            (0..PIECES.len().pow(length)).map(move |mut choice| {
-                (0..length)
-                    .map(|_| {
-                        let piece = PIECES[choice % PIECES.len()];
-                        choice /= PIECES.len();
-                        piece
-                    })
-                    .collect::<String>()
-            })
-        });
-        for pattern in patterns {
-            let pattern_width = pattern.width_graphemes();
-            for width in 0..10 {
-                let stretched = stretch(&pattern, width, style);
-                let drawn = stretched.strip_suffix(&restore).unwrap_or(&stretched);
-                assert_eq!(drawn.contains('\x1b'), drawn.len() < stretched.len());
-                assert!(!hyperlink_is_open(&stretched), "{pattern:?} at {width}");
-                let drawn = drawn.strip_suffix(CLOSE_HYPERLINK).unwrap_or(drawn);
-                if pattern_width == 0 {
-                    assert_eq!(pattern, drawn);
-                    continue;
-                }
-                let whole = pattern.repeat(width / pattern_width);
-                let partial = drawn.strip_prefix(&whole).unwrap();
-                assert!(pattern.starts_with(partial));
-                assert!(
-                    graphemes(partial)
-                        .last()
-                        .is_none_or(|last| end_within(partial, last) == partial.len())
-                );
-                assert!(partial.is_empty() || partial.width_graphemes() > 0);
-                let columns = drawn.width_graphemes();
-                assert!(
-                    columns <= width && columns + 1 >= width,
-                    "{pattern:?} at {width}"
-                );
-            }
-        }
-    }
-
-    #[test]
-    fn a_fill_restores_its_style_after_its_escape_sequences() {
-        let segments = [
-            Segment::fill(parse_style_string("green", None), "\x1b[31ma🟦"),
-            text("green", "NEXT"),
-        ];
-
-        assert_eq!(
-            "\x1b[32m\x1b[31ma🟦\x1b[31ma\x1b[0m\x1b[32mNEXT\x1b[0m",
-            Painted::new(&segments, Some(8)).to_string(),
-        );
-    }
-
-    #[test]
-    fn partial_fills_keep_graphemes_whole_across_controls_and_restore_their_style() {
-        let style = Color::Green.normal();
-        let restore = format!("{RESET}{}", style.prefix());
-        for (grapheme, columns) in [
-            ("👩\x1b[31m‍👩‍👦‍👦", 2),
-            ("a\x1b[31m\u{301}", 1),
-            ("👩\x1b]0;title\x07‍👩‍👦‍👦", 2),
-        ] {
-            let pattern = format!("{grapheme}🟦");
-            assert_eq!("", stretch(&pattern, columns - 1, style));
-            assert_eq!(
-                format!("{grapheme}{restore}"),
-                stretch(&pattern, columns, style)
-            );
-            assert_eq!(
-                format!("{grapheme}{restore}"),
-                stretch(&pattern, columns + 1, style)
-            );
-            let segments = [
-                Segment::fill(parse_style_string("green", None), &pattern),
-                text("green", "NEXT"),
-            ];
-            assert_eq!(
-                format!("\x1b[32m{grapheme}{restore}NEXT\x1b[0m"),
-                Painted::new(&segments, Some(columns + 4)).to_string()
-            );
-        }
-        let pattern = "👩\x07‍👩‍👦‍👦🟦";
-        assert_eq!("👩\x07‍👩‍👦‍👦", stretch(pattern, 2, style));
-    }
-
-    #[test]
-    fn partial_fills_close_hyperlinks_before_the_following_run() {
-        let style = Color::Green.normal();
-        let restore = format!("{RESET}{}", style.prefix());
-        for terminator in ["\x1b\\", "\x07"] {
-            for uri in ["https://x", "https://x;a"] {
-                let open = format!("\x1b]8;id=fill;{uri}{terminator}");
-                let close = format!("\x1b]8;;{terminator}");
-                let pattern = format!("{open}a{close}🟦");
-                assert_eq!(
-                    format!("{open}a{CLOSE_HYPERLINK}{restore}"),
-                    stretch(&pattern, 1, style)
-                );
-                let segments = [
-                    Segment::fill(parse_style_string("green", None), &pattern),
-                    text("green", "NEXT"),
-                ];
-                assert_eq!(
-                    format!("\x1b[32m{open}a{CLOSE_HYPERLINK}{restore}NEXT{RESET}"),
-                    Painted::new(&segments, Some(5)).to_string()
-                );
-            }
-        }
-    }
-
-    #[test]
-    fn linked_graphemes_stay_whole_when_a_fill_closes_their_hyperlink() {
-        let style = Color::Green.normal();
-        let open = "\x1b]8;;https://x\x1b\\";
-        let family = format!("👩{open}‍👩‍👦‍👦");
-        let pattern = format!("{family}{CLOSE_HYPERLINK}🟦");
-        assert_eq!("", stretch(&pattern, 1, style));
-        assert_eq!(
-            format!("{family}{CLOSE_HYPERLINK}{RESET}{}", style.prefix()),
-            stretch(&pattern, 2, style)
-        );
-    }
-
-    #[test]
-    fn fill_cleanup_only_closes_hyperlinks_left_open_by_emitted_bytes() {
-        let style = Color::Green.normal();
-        let restore = format!("{RESET}{}", style.prefix());
-        let open = "\x1b]8;;https://x\x1b\\";
-        let closed = format!("{open}a{CLOSE_HYPERLINK}");
-        assert_eq!(
-            format!("{closed}{closed}{restore}"),
-            stretch(&closed, 2, style)
-        );
-        let future = format!("\x1b[31ma{open}🟦{CLOSE_HYPERLINK}");
-        assert_eq!(format!("\x1b[31ma{restore}"), stretch(&future, 1, style));
-        let title = "\x1b]0;title\x07a🟦";
-        assert_eq!(
-            format!("\x1b]0;title\x07a{restore}"),
-            stretch(title, 1, style)
-        );
-    }
-
-    #[test]
-    fn zero_width_and_natural_fills_restore_controls_before_the_following_run() {
-        let open = "\x1b]8;;https://x\x1b\\";
-        for (pattern, expected, columns) in [
-            ("\x1b[31m", "\x1b[31m".to_owned(), 0),
-            (open, format!("{open}{CLOSE_HYPERLINK}"), 0),
-            ("\x1b[31ma", "\x1b[31ma".to_owned(), 1),
-            (
-                "\x1b]8;;https://x\x1b\\a",
-                format!("{open}a{CLOSE_HYPERLINK}"),
-                1,
-            ),
-        ] {
-            let segments = [
-                Segment::fill(parse_style_string("green", None), pattern),
-                text("green", "NEXT"),
-            ];
-            for width in [None, Some(4), Some(4 + columns)] {
-                assert_eq!(
-                    format!("\x1b[32m{expected}{RESET}\x1b[32mNEXT{RESET}"),
-                    Painted::new(&segments, width).to_string(),
-                    "{pattern:?} at {width:?}"
-                );
-            }
-            if columns == 0 {
-                assert_eq!(
-                    format!("\x1b[32m{expected}{RESET}\x1b[32mNEXT{RESET}"),
-                    Painted::new(&segments, Some(8)).to_string()
-                );
-            }
-        }
-        for pattern in ["", "\u{301}", "\x07"] {
-            assert!(matches!(
-                finish_fill(Cow::Borrowed(pattern), Color::Green.normal()),
-                Cow::Borrowed(_)
-            ));
-        }
-    }
-
-    #[test]
-    fn a_fill_keeps_its_natural_width_without_room_to_stretch() {
-        let segments = [text("", "ab"), fill("-:-")];
-        for width in [None, Some(2)] {
-            let painted = Painted::new(&segments, width);
-            assert_eq!("ab-:-", painted.to_string(), "for width {width:?}");
-        }
-        let segments = [text("", "ab"), fill("-:-"), fill(".")];
-        assert_eq!("ab-:-.", Painted::new(&segments, Some(3)).to_string());
-        assert_eq!("ab-.", Painted::new(&segments, Some(4)).to_string());
-    }
-
-    #[test]
-    fn trailing_line_breaks_survive_painting() {
+    fn styles_change_as_little_as_they_can_and_reset_before_a_line_break() {
         assert_eq!("", Painted::new(&[], None).to_string());
-        assert_eq!(
-            "a\n",
-            Painted::new(&[text("", "a"), Segment::LineBreak], None).to_string()
-        );
-    }
-
-    #[test]
-    fn escape_sequences_collapse_across_runs_and_reset_before_a_line_break() {
         let segments = [
             text("red", "a"),
             text("red bold", "b"),
             Segment::LineBreak,
             text("red", "c"),
+            Segment::LineBreak,
         ];
 
         assert_eq!(
-            "\u{1b}[31ma\u{1b}[1mb\u{1b}[0m\n\u{1b}[31mc\u{1b}[0m",
+            "\x1b[31ma\x1b[1mb\x1b[0m\n\x1b[31mc\x1b[0m\n",
             Painted::new(&segments, None).to_string()
         );
+    }
+
+    #[test]
+    fn text_is_measured_as_drawn_whatever_styles_split_its_graphemes() {
+        // A family of four, painted in three styles, is drawn two columns wide.
+        let segments = [
+            text("red", "\u{1f469}"),
+            text("blue", "\u{200d}\u{1f469}\u{200d}"),
+            text("green", "\u{1f466}\u{200d}\u{1f466}"),
+            fill("."),
+        ];
+        let painted = Painted::new(&segments, Some(8));
+
+        assert_eq!("......", painted.lines[0][3].text);
+    }
+
+    #[test]
+    fn a_fill_draws_the_text_of_its_pattern_in_its_own_style() {
+        let pattern = "\x1b[31m-\x1b]8;;https://x\x1b\\:\x1b]8;;\x07\x07";
+        let segments = [
+            Segment::fill(parse_style_string("green", None), pattern),
+            text("green", "NEXT"),
+        ];
+
+        for (width, expected) in [(None, "-:"), (Some(9), "-:-:-")] {
+            assert_eq!(
+                format!("\x1b[32m{expected}NEXT\x1b[0m"),
+                Painted::new(&segments, width).to_string()
+            );
+        }
+    }
+
+    /// Pieces of text that test graphemes and controls: narrow, wide, joined
+    /// and combining, and a joiner with what it joins, so that graphemes
+    /// often span pieces; a bell; styles; hyperlinks opened and closed with
+    /// either terminator, with and without parameters; and a title.
+    const PIECES: [&str; 15] = [
+        "a",
+        ".",
+        "🟦",
+        "👩",
+        "\u{200d}",
+        "\u{200d}\u{1f469}",
+        "\u{301}",
+        "\u{7}",
+        "\x1b[31m",
+        "\x1b[0m",
+        "\x1b]8;;x\x1b\\",
+        "\x1b]8;id=a;https://x;y\x07",
+        "\x1b]8;;\x1b\\",
+        "\x1b]8;;\x07",
+        "\x1b]0;title\x07",
+    ];
+
+    fn pieces(count: std::ops::Range<usize>) -> impl Strategy<Value = String> {
+        prop::collection::vec(prop::sample::select(&PIECES[..]), count)
+            .prop_map(|pieces| pieces.concat())
+    }
+
+    proptest! {
+        /// A fill draws whole repetitions of the text of its pattern, then a
+        /// prefix of one more that ends on a grapheme and draws something, a
+        /// column short at most; or else that text as it is: without a width
+        /// to fill, or when it has no width, or when its repetitions would
+        /// join into fewer graphemes.
+        #[test]
+        fn a_fill_draws_whole_graphemes_of_its_text(
+            pattern in pieces(0..6),
+            width in prop::option::of(0_usize..20),
+        ) {
+            let segments = [fill(&pattern)];
+            let painted = Painted::new(&segments, width);
+            let drawn = &painted.lines[0][0].text;
+
+            let text = printable(&pattern);
+            let columns = text.width_graphemes();
+            let additive = text.repeat(2).width_graphemes() == 2 * columns;
+            let Some(width) = width.filter(|&width| width > 0 && columns > 0 && additive) else {
+                prop_assert_eq!(&text, drawn);
+                return Ok(());
+            };
+            let partial = drawn.strip_prefix(&text.repeat(width / columns));
+            let partial = partial.expect("whole repetitions first");
+            let boundaries = text.grapheme_indices(true).map(|(index, _)| index);
+            prop_assert!(text.starts_with(partial));
+            prop_assert!(boundaries.chain([text.len()]).any(|end| end == partial.len()));
+            prop_assert!(partial.is_empty() || partial.width_graphemes() > 0);
+            let drawn = drawn.width_graphemes();
+            prop_assert!(drawn <= width && drawn + 1 >= width, "{} columns of {}", drawn, width);
+        }
+
+        /// Fills share exactly what the rest of their line leaves, so that it
+        /// is as wide as the terminal, the first of them taking a column more
+        /// until none is left over; and without a column for each, every fill
+        /// keeps its natural width. Text between them is measured whole,
+        /// whatever styles split it.
+        #[test]
+        fn fills_share_what_their_line_leaves(
+            line in prop::collection::vec((pieces(0..4), any::<bool>()), 1..6),
+            width in 0_usize..40,
+        ) {
+            let mut segments = Vec::new();
+            let mut patterns = Vec::new();
+            for (index, (shown, is_fill)) in line.iter().enumerate() {
+                if *is_fill {
+                    let pattern = [".", "-", ":"][index % 3];
+                    patterns.push(pattern);
+                    segments.push(fill(pattern));
+                } else {
+                    let style = ["red", "blue"][index % 2];
+                    segments.extend(Segment::from_text(parse_style_string(style, None), shown.as_str()));
+                }
+            }
+            // Each pattern is a column wide.
+            let fills = patterns.len();
+            let natural = Painted::new(&segments, None).to_string().width_graphemes();
+            let room = (fills > 0 && width >= natural).then(|| width - natural + fills);
+
+            let painted = Painted::new(&segments, Some(width));
+            let drawn: Vec<String> = segments
+                .iter()
+                .zip(&painted.lines[0])
+                .filter(|(segment, _)| matches!(segment, Segment::Styled { kind: Kind::Fill, .. }))
+                .map(|(_, run)| run.text.to_string())
+                .collect();
+            let expected: Vec<String> = patterns
+                .iter()
+                .enumerate()
+                .map(|(index, pattern)| match room {
+                    Some(room) => pattern.repeat(room / fills + usize::from(index < room % fills)),
+                    None => (*pattern).to_owned(),
+                })
+                .collect();
+            prop_assert_eq!(expected, drawn);
+            if room.is_some() {
+                prop_assert_eq!(width, painted.to_string().width_graphemes());
+            }
+        }
     }
 }
