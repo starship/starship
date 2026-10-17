@@ -794,6 +794,7 @@ look at [this example](#with-custom-error-shape).
 | `vimcmd_replace_one_symbol` | `'[❮](bold purple)'` | The format string used before the text input if the shell is in vim `replace_one` mode. |
 | `vimcmd_replace_symbol`     | `'[❮](bold purple)'` | The format string used before the text input if the shell is in vim replace mode.       |
 | `vimcmd_visual_symbol`      | `'[❮](bold yellow)'` | The format string used before the text input if the shell is in vim visual mode.        |
+| `success_exit_codes`        | `[0]`                | The exit codes treated as success, replacing the default. Others use `error_symbol`.    |
 | `disabled`                  | `false`              | Disables the `character` module.                                                        |
 
 ### Variables
@@ -831,6 +832,18 @@ error_symbol = '[➜](bold red) '
 
 [character]
 vimcmd_symbol = '[V](bold green) '
+```
+
+#### Keep the character green on Ctrl+C
+
+Shells report an interrupted command as exit code 130 (128 + SIGINT), which
+would otherwise turn the character red.
+
+```toml
+# ~/.config/starship.toml
+
+[character]
+success_exit_codes = [0, 130]
 ```
 
 ## CMake
