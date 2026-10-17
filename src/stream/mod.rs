@@ -460,6 +460,14 @@ impl Slot {
         due
     }
 
+    /// When to look at the wall clock again, at `now` reading `wall`, for it
+    /// to render again, if it does: once the wall clock reaches its time, and
+    /// meanwhile every so often, in case the clock is set.
+    fn look(&self, now: Instant, wall: Duration) -> Option<Instant> {
+        self.due()
+            .map(|due| now + due.saturating_sub(wall).min(LOOK_AT_THE_WALL))
+    }
+
     /// Shows `segments`, rendered by `now`, and returns how long they took if
     /// they change what it shows. Only its render for this prompt measures
     /// what it does for the next.
@@ -596,8 +604,7 @@ impl<'context> Session<'context> {
             let deadline = self
                 .slots
                 .iter()
-                .filter_map(Slot::due)
-                .map(|due| now + due.saturating_sub(wall).min(LOOK_AT_THE_WALL))
+                .filter_map(|slot| slot.look(now, wall))
                 .chain(departure)
                 .min();
             let Some((then, rendered)) = renderer.wait(deadline) else {
@@ -1491,6 +1498,28 @@ mod tests {
         ] {
             assert_eq!(due, due_at_100().refresh(now, at(wall)), "{why}");
         }
+        // Looked for as its time comes, and meanwhile every second, in case
+        // the clock is set before then.
+        for (wall, look) in [
+            (milliseconds(99_750), milliseconds(250)),
+            (at(40), LOOK_AT_THE_WALL),
+            (at(101), Duration::ZERO),
+        ] {
+            assert_eq!(Some(now + look), due_at_100().look(now, wall));
+        }
+    }
+
+    #[test]
+    fn the_wall_clock_reads_what_it_read_at_the_instant_asked_about() {
+        let clock = Clock::now();
+        let second_ago = Instant::now() - Duration::from_secs(1);
+        let then = clock.wall(second_ago);
+        let now = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH);
+        let behind = now.unwrap() - then;
+        assert!(
+            (Duration::from_secs(1)..Duration::from_secs(2)).contains(&behind),
+            "{behind:?} behind"
+        );
     }
 
     /// Too rare to generate: modules that refresh together and swap what they
