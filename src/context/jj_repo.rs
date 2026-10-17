@@ -145,7 +145,7 @@ impl JJRepo {
                             concat(
                                 "current.statuses = \"",
                                 self
-                                    .diff(".")
+                                    .diff()
                                     .files()
                                     .map(|file| file.status_char())
                                     .join(""),
