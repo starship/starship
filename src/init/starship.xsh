@@ -84,9 +84,14 @@ class StarshipStream:
             return
         if self.loop is not None and not self.loop.is_closed():
             self.loop.remove_reader(self.process.stdout.fileno())
-        self.process.kill()
-        self.process.wait()
+        # A stream ends once nothing reads it, and ends the commands its
+        # modules still run with it, which killing it would leave running.
         self.process.stdout.close()
+        try:
+            self.process.wait(timeout=1)
+        except subprocess.TimeoutExpired:
+            self.process.kill()
+            self.process.wait()
         self.process = self.loop = None
         self.received = b""
 
