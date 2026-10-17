@@ -459,6 +459,29 @@ where
     }
 }
 
+/// Reverse `shell_prompt_escape`, returning the text as the shell will display it.
+///
+/// This is used to measure the width of already escaped text, e.g. for `$fill`.
+pub fn shell_prompt_unescape(text: &str, shell: Shell) -> Cow<'_, str> {
+    match shell {
+        Shell::Bash if text.contains('\\') => {
+            let mut unescaped = String::with_capacity(text.len());
+            let mut chars = text.chars();
+            while let Some(c) = chars.next() {
+                // Every backslash is the start of an escape sequence added above
+                unescaped.push(if c == '\\' {
+                    chars.next().unwrap_or(c)
+                } else {
+                    c
+                });
+            }
+            Cow::Owned(unescaped)
+        }
+        Shell::Zsh if text.contains("%%") => Cow::Owned(text.replace("%%", "%")),
+        _ => Cow::Borrowed(text),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -853,6 +876,17 @@ mod tests {
                 .parse(None, None)
         });
         assert!(segments.is_err());
+    }
+
+    #[test]
+    fn test_shell_prompt_unescape() {
+        let test = r"$(echo a) `echo b` \n 100% %%";
+        for shell in [Shell::Bash, Shell::Zsh, Shell::Fish, Shell::PowerShell] {
+            assert_eq!(
+                shell_prompt_unescape(&shell_prompt_escape(test, shell), shell),
+                test
+            );
+        }
     }
 
     #[test]
