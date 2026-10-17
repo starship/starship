@@ -16,7 +16,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("spack");
     let config: SpackConfig = SpackConfig::try_load(module.config);
 
-    let spack_env = truncate(&spack_env, config.truncation_length).unwrap_or(spack_env);
+    let spack_env = truncate(
+        &spack_env,
+        config.truncation_length,
+        config.truncation_width,
+    )
+    .unwrap_or(spack_env);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -78,6 +83,25 @@ mod tests {
             .collect();
 
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("🅢 my_env")));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn truncation_width() {
+        let actual = ModuleRenderer::new("spack")
+            .env("SPACK_ENV", "/some/really/long/and/really/annoying/path/that/shouldnt/be/displayed/fully/spack/my_env")
+            .config(toml::toml! {
+                [spack]
+                truncation_length = 0
+                truncation_width = 15
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Blue.bold().paint("🅢 spack/my_env")
+        ));
 
         assert_eq!(expected, actual);
     }
