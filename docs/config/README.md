@@ -383,7 +383,10 @@ are drawn together; a module never measured, or late, is waited for no longer th
 
 A stream writes the main and right prompts, each followed by a NUL, every time they change. It ends
 once nothing will change them again, or the moment the shell stops reading, and `--redraws` limits
-how often it redraws them for shells that can only redraw so often. Supported shell integrations:
+how often it redraws them for shells that can only redraw so often. Warnings it reports before the
+first paint, such as those about the configuration, are shown ahead of the prompt; those it reports
+later are written only to the log, so that none land in the line being typed. Supported shell
+integrations:
 
 - zsh streams both prompts, including refreshes, vi mode changes, and terminal resizing.
 - fish streams and refreshes both prompts on Unix. With a Windows Starship binary, prompts render synchronously.

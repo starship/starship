@@ -114,7 +114,7 @@ zle -N starship_stream_redraw
 starship_stream_start() {
     starship_stream_stop
     local descriptor
-    exec {descriptor}< <(::STARSHIP:: prompt --stream --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT" 2>/dev/null)
+    exec {descriptor}< <(::STARSHIP:: prompt --stream --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")
     STARSHIP_STREAM[f]=$descriptor
     if (( ! $# )); then
         STARSHIP_STREAM[1]= STARSHIP_STREAM[2]=

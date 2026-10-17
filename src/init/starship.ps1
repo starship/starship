@@ -149,13 +149,18 @@ $null = New-Module starship {
             # An exiting direct child pauses PSReadLine events until a keypress.
             # Launch as a grandchild through a short-lived shell instead.
             $stream.Process = Start-Native '/bin/sh' (
-                @('-c', '"$0" "$@" 2>/dev/null &', ::STARSHIP::) + $arguments)
-            $null = $stream.Process.StandardError.ReadToEnd()
-            $stream.Process.WaitForExit()
+                @('-c', '"$0" "$@" &', ::STARSHIP::) + $arguments)
         } else {
             $stream.Process = Start-Native ::STARSHIP:: $arguments
-            # Drain the pipe so the writer can finish.
-            $null = $stream.Process.StandardError.ReadToEndAsync()
+        }
+        # The stream closes its error output as it first paints, so what it
+        # reported before then comes ahead of the prompt.
+        $reported = $stream.Process.StandardError.ReadToEnd()
+        if ($reported.Trim() -ne '') {
+            $host.ui.WriteErrorLine($reported)
+        }
+        if ($script:Unix) {
+            $stream.Process.WaitForExit()
         }
         $script:Pump.Commands.Clear()
         $null = $script:Pump.AddScript($script:StreamPump)

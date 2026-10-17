@@ -94,7 +94,7 @@ else
     function __starship_prompt --argument-names side
         if not set -q __starship_stream_arguments; or test "$__starship_stream_arguments" != "$argv[2..-1]"
             __starship_stream_stop
-            ::STARSHIP:: prompt --stream --signal-pid=$fish_pid $argv[2..-1] 2>/dev/null | read -gz __starship_stream_directory
+            ::STARSHIP:: prompt --stream --signal-pid=$fish_pid $argv[2..-1] | read -gz __starship_stream_directory
             if not __starship_stream_read
                 __starship_stream_stop
                 if test $side = 1
