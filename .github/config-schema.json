@@ -2378,6 +2378,16 @@
         "disabled": {
           "type": "boolean",
           "default": false
+        },
+        "vimcmd_symbol": {
+          "description": "Deprecated alias of `vimcmd_success_symbol`.",
+          "type": "string",
+          "deprecated": true
+        },
+        "vicmd_symbol": {
+          "description": "Deprecated alias of `vimcmd_success_symbol`.",
+          "type": "string",
+          "deprecated": true
         }
       },
       "additionalProperties": false

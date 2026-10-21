@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 #[cfg_attr(
     feature = "config-schema",
     derive(schemars::JsonSchema),
-    schemars(deny_unknown_fields)
+    schemars(deny_unknown_fields, transform = add_legacy_vimcmd_symbols)
 )]
 #[serde(default)]
 pub struct CharacterConfig<'a> {
@@ -36,6 +36,25 @@ impl Default for CharacterConfig<'_> {
             vimcmd_replace_symbol: "[❮](bold purple)",
             vimcmd_replace_one_symbol: "[❮](bold purple)",
             disabled: false,
+        }
+    }
+}
+
+#[cfg(feature = "config-schema")]
+fn add_legacy_vimcmd_symbols(schema: &mut schemars::Schema) {
+    for legacy in ["vimcmd_symbol", "vicmd_symbol"] {
+        if let Some(properties) = schema
+            .get_mut("properties")
+            .and_then(serde_json::Value::as_object_mut)
+        {
+            properties.insert(
+                legacy.to_owned(),
+                serde_json::json!({
+                    "type": "string",
+                    "deprecated": true,
+                    "description": "Deprecated alias of `vimcmd_success_symbol`."
+                }),
+            );
         }
     }
 }

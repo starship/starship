@@ -779,7 +779,7 @@ By default it only changes color. If you also want to change its shape take a
 look at [this example](#with-custom-error-shape).
 
 > [!WARNING]
-> `vimcmd_success_symbol` is only supported in cmd, fish and zsh.
+> `vimcmd_success_symbol`, `vimcmd_cancel_symbol` and `vimcmd_error_symbol` are only supported in cmd, fish, PowerShell and zsh.
 > `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol`
 > are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 

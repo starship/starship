@@ -8,8 +8,13 @@ use crate::formatter::StringFormatter;
 /// exit-code of the last executed command:
 /// - If the exit-code was "0", it will be formatted with `success_symbol`
 ///   (green arrow by default)
+/// - If the exit-code was "130" (cancelled with Ctrl-C), it will be formatted
+///   with `cancel_symbol` (yellow arrow by default)
 /// - If the exit-code was anything else, it will be formatted with
 ///   `error_symbol` (red arrow by default)
+///
+/// In vi normal mode the `vimcmd_success_symbol`, `vimcmd_cancel_symbol` and
+/// `vimcmd_error_symbol` variants are used for the same statuses.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     enum ShellEditMode {
         Normal,
