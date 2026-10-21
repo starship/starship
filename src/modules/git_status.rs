@@ -467,6 +467,7 @@ fn get_repo_status(
                             repo_status.index_added += 1;
                         }
                         Change::Deletion { .. } => {
+                            repo_status.staged += 1;
                             repo_status.deleted += 1;
                             repo_status.index_deleted += 1;
                         }
@@ -483,6 +484,7 @@ fn get_repo_status(
                             }
                         }
                         Change::Rewrite { .. } => {
+                            repo_status.staged += 1;
                             repo_status.renamed += 1;
                         }
                     }
@@ -683,7 +685,11 @@ impl RepoStatus {
 
         self.deleted = self.worktree_deleted + self.index_deleted;
         self.modified = self.worktree_modified + self.worktree_added;
-        self.staged = self.index_modified + self.index_added + self.index_typechanged;
+        self.staged = self.index_modified
+            + self.index_added
+            + self.index_deleted
+            + self.index_typechanged
+            + self.renamed;
         self.typechanged = self.worktree_typechanged;
     }
 
@@ -1605,6 +1611,58 @@ pub mod tests {
     }
 
     #[test]
+    fn shows_staged_deleted_file_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_indexed_deleted(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                staged = "+[$count](green)"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            AnsiStrings(&[
+                Color::Red.bold().paint("[✘+"),
+                Color::Green.paint("1"),
+                Color::Red.bold().paint("]"),
+            ])
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_staged_renamed_file_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_renamed(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                staged = "+[$count](green)"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            AnsiStrings(&[
+                Color::Red.bold().paint("[»+"),
+                Color::Green.paint("1"),
+                Color::Red.bold().paint("]"),
+            ])
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
     fn shows_index_added_with_count() -> io::Result<()> {
         for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
@@ -1707,7 +1765,7 @@ pub mod tests {
             let actual = ModuleRenderer::new("git_status")
                 .path(repo_dir.path())
                 .collect();
-            let expected = format_output("»");
+            let expected = format_output("»+");
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
@@ -1729,7 +1787,7 @@ pub mod tests {
                 })
                 .path(repo_dir.path())
                 .collect();
-            let expected = format_output("»1");
+            let expected = format_output("»1+");
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
@@ -1747,7 +1805,7 @@ pub mod tests {
             let actual = ModuleRenderer::new("git_status")
                 .path(repo_dir.path())
                 .collect();
-            let expected = format_output("»!");
+            let expected = format_output("»!+");
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
@@ -1783,7 +1841,7 @@ pub mod tests {
             let actual = ModuleRenderer::new("git_status")
                 .path(repo_dir.path())
                 .collect();
-            let expected = format_output("✘");
+            let expected = format_output("✘+");
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
