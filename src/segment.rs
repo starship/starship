@@ -182,10 +182,14 @@ impl Segment {
     /// measurement only; the stored value is still what gets printed.
     pub fn width_graphemes_shell(&self, shell: Shell) -> usize {
         match self {
-            Self::Fill(fs) => fs.value.width_graphemes(),
+            Self::Fill(fs) => fs.value.width_graphemes_for_shell(shell),
             Self::Text(ts) => unescaped_width(&ts.value, shell),
             Self::LineTerm => 0,
         }
+    }
+
+    pub fn width_graphemes_for_shell(&self, shell: Shell) -> usize {
+        self.width_graphemes_shell(shell)
     }
 }
 

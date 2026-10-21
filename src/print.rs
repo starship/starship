@@ -34,8 +34,21 @@ impl Grapheme<'_> {
     }
 }
 
-pub trait UnicodeWidthGraphemes {
+pub trait UnicodeWidthGraphemes: AsRef<str> {
     fn width_graphemes(&self) -> usize;
+
+    fn width_graphemes_for_shell(&self, shell: Shell) -> usize {
+        let width = self.width_graphemes();
+        if shell == Shell::Tcsh {
+            width + self.as_ref().matches('!').count()
+        } else {
+            width
+        }
+    }
+
+    fn width_graphemes_shell(&self, shell: Shell) -> usize {
+        self.width_graphemes_for_shell(shell)
+    }
 }
 
 static ANSI_REGEX: OnceLock<Regex> = OnceLock::new();

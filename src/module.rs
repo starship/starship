@@ -1,4 +1,5 @@
 use crate::context::Shell;
+use crate::print::UnicodeWidthGraphemes;
 use crate::segment;
 use crate::segment::{FillSegment, Segment};
 use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
@@ -247,9 +248,33 @@ where
     if chunks.is_empty() {
         current
     } else {
-        let fill_size = term_width
-            .and_then(|tw| if tw > used { Some(tw - used) } else { None })
-            .map(|remaining| remaining / chunks.len());
+        let fill_size = term_width.and_then(|tw| {
+            if tw <= used {
+                return None;
+            }
+
+            let remaining = tw - used;
+            let mut min_size = 0;
+            let mut max_size = remaining / chunks.len();
+            while min_size < max_size {
+                let size = min_size + (max_size - min_size).div_ceil(2);
+                let fill_width: usize = chunks
+                    .iter()
+                    .map(|(_, fill)| {
+                        fill.ansi_string(Some(size), None)
+                            .to_string()
+                            .width_graphemes_for_shell(shell)
+                    })
+                    .sum();
+
+                if fill_width <= remaining {
+                    min_size = size;
+                } else {
+                    max_size = size - 1;
+                }
+            }
+            Some(min_size)
+        });
         chunks
             .into_iter()
             .flat_map(|(strs, fill)| {
