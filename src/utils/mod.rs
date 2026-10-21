@@ -1203,8 +1203,13 @@ mod tests {
 
         let error = read_file(tmp_dir.path()).unwrap_err();
 
-        assert_eq!(error.kind(), ErrorKind::InvalidData);
-        assert!(error.to_string().contains("is not a file"));
+        if cfg!(windows) {
+            // Windows refuses to open a directory before its type can be checked.
+            assert_eq!(error.kind(), ErrorKind::PermissionDenied);
+        } else {
+            assert_eq!(error.kind(), ErrorKind::InvalidData);
+            assert!(error.to_string().contains("is not a file"));
+        }
         tmp_dir.close()
     }
 
