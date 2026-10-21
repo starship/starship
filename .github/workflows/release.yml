@@ -326,6 +326,8 @@ jobs:
           bin: starship
           tag: ${{ needs.release_please.outputs.tag_name }}
           upload: false
+          resources: |
+            completion/bash,elvish,fish,nushell,powershell,zsh=exec:starship completions {shell}
 
       - name: Sign | Upload bundle
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
