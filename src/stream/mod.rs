@@ -1355,26 +1355,30 @@ mod tests {
             .collect()
     }
 
-    /// What the timetable drawn cost: the wait for the first paint, and for
-    /// each redraw, the size of the bus its first change opened and the wait.
+    /// What the timetable drawn cost: how long the prompt waited for the first
+    /// paint, and every change for the draw that showed it, and for each
+    /// redraw, the size of the bus its first change opened.
     fn drawn_cost(
         drawn: &[(Duration, &str)],
         visible: &[(Duration, &str)],
         fallback: Span,
     ) -> Duration {
-        let redraws = drawn.windows(2).map(|pair| {
-            let [(_, before), (at, after)] = pair else {
-                unreachable!("a pair")
-            };
-            let first = visible
+        let mut cost = drawn[0].0;
+        for (index, &(at, after)) in drawn.iter().enumerate() {
+            let before = index
+                .checked_sub(1)
+                .map_or("", |previous| drawn[previous].1);
+            let landed = visible
                 .iter()
                 .filter(|(_, output)| after.contains(output) && !before.contains(output))
-                .map(|&(took, _)| took)
-                .min()
-                .expect("a redraw draws a change");
-            bus::size(fallback, Span::from(first)).get() + (*at - first)
-        });
-        drawn[0].0 + redraws.sum::<Duration>()
+                .map(|&(took, _)| took);
+            cost += landed.clone().map(|took| at - took).sum::<Duration>();
+            if index > 0 {
+                let opened = landed.min().expect("a redraw draws a change");
+                cost += bus::size(fallback, Span::from(opened)).get();
+            }
+        }
+        cost
     }
 
     fn cheapest_cost(visible: &[(Duration, &str)], fallback: Span) -> Option<Duration> {
@@ -1383,12 +1387,13 @@ mod tests {
             .map(|&(took, _)| bus::Landing {
                 after: took,
                 size: bus::size(fallback, Span::from(took)),
+                count: 1,
             })
             .collect();
         landings.sort_unstable_by_key(|landing| landing.after);
-        testing::every_timetable(bus::Passengers::Prompt, fallback.get(), &landings)
+        testing::every_timetable(1, fallback.get(), &landings)
             .into_iter()
-            .map(|(_, cost)| cost)
+            .map(|timetable| timetable.cost)
             .min()
     }
 
