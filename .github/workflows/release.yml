@@ -318,6 +318,36 @@ jobs:
           path: dist
           merge-multiple: true
 
+      - name: Validate | All expected archives present
+        run: |
+          set -euo pipefail
+          expected=( \
+            starship-x86_64-unknown-linux-gnu.tar.gz \
+            starship-x86_64-unknown-linux-musl.tar.gz \
+            starship-i686-unknown-linux-musl.tar.gz \
+            starship-aarch64-unknown-linux-musl.tar.gz \
+            starship-arm-unknown-linux-musleabihf.tar.gz \
+            starship-riscv64gc-unknown-linux-musl.tar.gz \
+            starship-x86_64-apple-darwin.tar.gz \
+            starship-aarch64-apple-darwin.tar.gz \
+            starship-x86_64-unknown-freebsd.tar.gz \
+            starship-x86_64-pc-windows-msvc.zip \
+            starship-i686-pc-windows-msvc.zip \
+            starship-aarch64-pc-windows-msvc.zip \
+          )
+          missing=0
+          for f in "${expected[@]}"; do
+            if [ ! -f "dist/$f" ]; then
+              echo "::error::Missing expected archive: $f"
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            echo "One or more build targets failed; refusing to sign a partial release."
+            exit 1
+          fi
+          echo "All expected archives present."
+
       - name: Sign | Packslip
         uses: jdx/packslip@7d397618045bd98b76cd5cb8177767b2f52789b8 # v1.10.1
         id: packslip
