@@ -47,6 +47,17 @@ const MAX_FILE_SIZE: u64 = 100 * 1024 * 1024;
 pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
     log::trace!("Trying to read from {file_name:?}");
 
+    // Reject directories up front. On Unix, opening a directory for reading
+    // succeeds and is caught by the `is_file` check below; on Windows, the
+    // open itself fails, so handle it here for consistent behavior.
+    let path = file_name.as_ref();
+    if path.is_dir() {
+        return Err(Error::new(
+            ErrorKind::InvalidData,
+            format!("{file_name:?} is not a file"),
+        ));
+    }
+
     // `O_NONBLOCK` so that the open itself cannot hang
     let mut options = fs::OpenOptions::new();
     options.read(true);
