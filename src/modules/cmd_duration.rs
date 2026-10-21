@@ -111,7 +111,10 @@ fn undistract_me<'a>(
 
 #[cfg(any(feature = "notify", test))]
 fn notification_body(module: &Module) -> String {
-    format!("Command execution {}", anstream::adapter::strip_str(&module.get_segments().concat()))
+    format!(
+        "Command execution {}",
+        anstream::adapter::strip_str(&module.get_segments().concat())
+    )
 }
 
 #[cfg(test)]
