@@ -216,9 +216,11 @@ jobs:
         if: matrix.os != 'windows-latest'
         run: pipx install 'xonsh[full]==0.24.2'
 
-      # Run the ignored tests that expect the above setup
+      # Shell tests stop instrumented processes, which can leave partial profiles.
+      # Keep valid coverage; failing tests and wholly unreadable coverage still fail.
       - name: Build | Test
         run: "cargo llvm-cov
+          --failure-mode all
           --all-features
           --locked
           --workspace
