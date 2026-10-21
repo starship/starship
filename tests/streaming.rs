@@ -23,6 +23,23 @@ use nix::sys::signal::{self, Signal};
 use nix::unistd::Pid;
 use tempfile::TempDir;
 
+/// Reads a test fixture or log without allowing it to grow without limit.
+fn read_file(path: impl AsRef<Path>) -> std::io::Result<String> {
+    let mut text = String::new();
+    const LIMIT: u64 = 1024 * 1024;
+    #[allow(clippy::disallowed_methods)]
+    fs::File::open(path)?
+        .take(LIMIT + 1)
+        .read_to_string(&mut text)?;
+    if text.len() as u64 > LIMIT {
+        return Err(std::io::Error::new(
+            ErrorKind::InvalidData,
+            "file too large",
+        ));
+    }
+    Ok(text)
+}
+
 /// Generous, because these tests share a busy machine with the rest of the
 /// suite, and a starved shell is slow without being wrong.
 const TIMEOUT: Duration = Duration::from_secs(45);
@@ -771,7 +788,7 @@ fn logged(directory: &Path, text: &str) -> bool {
         .into_iter()
         .flatten()
         .flatten()
-        .any(|entry| fs::read_to_string(entry.path()).is_ok_and(|log| log.contains(text)))
+        .any(|entry| read_file(entry.path()).is_ok_and(|log| log.contains(text)))
 }
 
 /// Each behavior, as a test in each shell that has it, named for both.
@@ -971,7 +988,7 @@ printf 'STOPPED\n'
 fn fish_retries_failed_streams_and_caches_complete_prompt_pairs() {
     let fixture = Fixture::new(Shell::Fish, "format = \"MARK\"\nadd_newline = false\n");
     // Replace only the native command, keeping the generated integration intact.
-    let source = fs::read_to_string(&fixture.init).unwrap();
+    let source = read_file(&fixture.init).unwrap();
     fs::write(
         &fixture.init,
         source.replace(starship().to_str().unwrap(), "__starship_test_command"),
@@ -1015,7 +1032,7 @@ format = "$output"
 fn rendering(path: &Path) -> Pid {
     let started = Instant::now();
     loop {
-        if let Some(process) = fs::read_to_string(path)
+        if let Some(process) = read_file(path)
             .ok()
             .and_then(|process| process.trim().parse().ok())
         {
