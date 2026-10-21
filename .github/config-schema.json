@@ -1803,7 +1803,9 @@
         "style": "bold blue",
         "allow_windows": false,
         "disabled": true,
-        "use_legacy_check": false
+        "use_legacy_check": false,
+        "detect_sudo": true,
+        "detect_run0": true
       }
     },
     "swift": {
@@ -6909,6 +6911,14 @@
         "use_legacy_check": {
           "type": "boolean",
           "default": false
+        },
+        "detect_sudo": {
+          "type": "boolean",
+          "default": true
+        },
+        "detect_run0": {
+          "type": "boolean",
+          "default": true
         }
       },
       "additionalProperties": false

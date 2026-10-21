@@ -4898,8 +4898,9 @@ disabled = false
 
 ## Sudo
 
-The `sudo` module displays if sudo credentials are currently cached.
-The module will only be shown if credentials are cached.
+The `sudo` module displays if sudo credentials are currently cached, or if the current shell was started by [`run0`](https://www.freedesktop.org/software/systemd/man/latest/run0.html).
+
+`run0` does not cache credentials like `sudo` does; each invocation is authorized through polkit. Starship therefore treats "this shell was started by `run0`" as the equivalent state, and detects it by checking whether `run0` exported the `SHELL_PROMPT_PREFIX` environment variable into the session (available since systemd v257). Note that the same variable can also be set for regular login shells through the systemd `shell.prompt.prefix` credential.
 
 > [!TIP]
 > This module is disabled by default.
@@ -4910,11 +4911,13 @@ The module will only be shown if credentials are cached.
 | Option             | Default                  | Description                                                                 |
 | ------------------ | ------------------------ | --------------------------------------------------------------------------- |
 | `format`           | `'[as $symbol]($style)'` | The format of the module                                                    |
-| `symbol`           | `'🧙 '`                  | The symbol displayed when credentials are cached                            |
+| `symbol`           | `'🧙 '`                  | The symbol displayed when sudo or run0 is detected                          |
 | `style`            | `'bold blue'`            | The style for the module.                                                   |
 | `allow_windows`    | `false`                  | Since windows has no default sudo, default is disabled.                     |
 | `disabled`         | `true`                   | Disables the `sudo` module.                                                 |
 | `use_legacy_check` | `false`                  | Uses the legacy sudo check for compatibility with older versions of `sudo`. |
+| `detect_sudo`      | `true`                   | Whether to detect cached `sudo` credentials.                                |
+| `detect_run0`      | `true`                   | Whether to detect a shell session started by `run0`.                        |
 
 ### Variables
 

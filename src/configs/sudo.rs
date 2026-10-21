@@ -14,6 +14,8 @@ pub struct SudoConfig<'a> {
     pub allow_windows: bool,
     pub disabled: bool,
     pub use_legacy_check: bool,
+    pub detect_sudo: bool,
+    pub detect_run0: bool,
 }
 
 impl Default for SudoConfig<'_> {
@@ -25,6 +27,8 @@ impl Default for SudoConfig<'_> {
             allow_windows: false,
             disabled: true,
             use_legacy_check: false,
+            detect_sudo: true,
+            detect_run0: true,
         }
     }
 }

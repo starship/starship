@@ -5,7 +5,7 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::sudo::SudoConfig;
 use crate::formatter::StringFormatter;
 
-/// Creates a module with sudo credential cache status
+/// Creates a module with sudo credential cache status or run0 session status
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("sudo");
     let config = SudoConfig::try_load(module.config);
@@ -24,9 +24,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         "-Nnv"
     };
 
-    let is_sudo_cached = context.exec_cmd("sudo", &[sudo_flags]).is_some();
+    let is_sudo_cached = config.detect_sudo && context.exec_cmd("sudo", &[sudo_flags]).is_some();
 
-    if !is_sudo_cached {
+    // run0 has no credential cache (it authorizes every invocation through
+    // polkit), so the closest equivalent is "this shell was started by run0".
+    // run0 exports a prompt prefix into the session it starts via
+    // `$SHELL_PROMPT_PREFIX` (systemd v257+). Beware that the same variable can
+    // also be set for regular login shells through the systemd
+    // `shell.prompt.prefix` credential.
+    let is_run0_session = config.detect_run0 && context.get_env("SHELL_PROMPT_PREFIX").is_some();
+
+    if !is_sudo_cached && !is_run0_session {
         return None;
     }
 
@@ -139,6 +147,104 @@ mod tests {
 
         test_new_sudo();
         test_legacy_sudo();
+    }
+
+    #[test]
+    fn test_run0_session_detected() {
+        let actual = ModuleRenderer::new("sudo")
+            .cmd("sudo -Nnv", None)
+            .env("SHELL_PROMPT_PREFIX", "🦸 ")
+            .config(toml::toml! {
+                [sudo]
+                disabled = false
+                allow_windows = true
+            })
+            .collect();
+        let expected = Some(format!("{}", Color::Blue.bold().paint("as 🧙 ")));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_run0_session_not_detected() {
+        let actual = ModuleRenderer::new("sudo")
+            .cmd("sudo -Nnv", None)
+            .config(toml::toml! {
+                [sudo]
+                disabled = false
+                allow_windows = true
+            })
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_run0_detection_disabled() {
+        let actual = ModuleRenderer::new("sudo")
+            .cmd("sudo -Nnv", None)
+            .env("SHELL_PROMPT_PREFIX", "🦸 ")
+            .config(toml::toml! {
+                [sudo]
+                disabled = false
+                allow_windows = true
+                detect_run0 = false
+            })
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_sudo_detection_disabled() {
+        let actual = ModuleRenderer::new("sudo")
+            .cmd(
+                "sudo -Nnv",
+                Some(CommandOutput {
+                    stdout: String::new(),
+                    stderr: String::new(),
+                }),
+            )
+            .config(toml::toml! {
+                [sudo]
+                disabled = false
+                allow_windows = true
+                detect_sudo = false
+            })
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_run0_custom_format() {
+        let actual = ModuleRenderer::new("sudo")
+            .cmd("sudo -Nnv", None)
+            .env("SHELL_PROMPT_PREFIX", "🦸 ")
+            .config(toml::toml! {
+                [sudo]
+                disabled = false
+                allow_windows = true
+                format = "[run0]($style)"
+            })
+            .collect();
+        let expected = Some(format!("{}", Color::Blue.bold().paint("run0")));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_run0_detected_but_disabled() {
+        let actual = ModuleRenderer::new("sudo")
+            .cmd("sudo -Nnv", None)
+            .env("SHELL_PROMPT_PREFIX", "🦸 ")
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
     }
 
     #[test]
