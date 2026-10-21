@@ -1231,10 +1231,10 @@
     "nix_shell": {
       "$ref": "#/$defs/NixShellConfig",
       "default": {
-        "format": "via [$symbol$state( \\($name\\))]($style) ",
+        "format": "via [$symbol($state )(\\($name\\) )]($style)",
         "symbol": "❄️  ",
         "style": "bold blue",
-        "impure_msg": "impure",
+        "impure_msg": "",
         "pure_msg": "pure",
         "unknown_msg": "",
         "disabled": false,
@@ -5395,7 +5395,7 @@
       "properties": {
         "format": {
           "type": "string",
-          "default": "via [$symbol$state( \\($name\\))]($style) "
+          "default": "via [$symbol($state )(\\($name\\) )]($style)"
         },
         "symbol": {
           "type": "string",
@@ -5407,7 +5407,7 @@
         },
         "impure_msg": {
           "type": "string",
-          "default": "impure"
+          "default": ""
         },
         "pure_msg": {
           "type": "string",

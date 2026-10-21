@@ -24,10 +24,10 @@ unless you can show that your changes do not affect this workaround.  */
 impl Default for NixShellConfig<'_> {
     fn default() -> Self {
         Self {
-            format: "via [$symbol$state( \\($name\\))]($style) ",
+            format: "via [$symbol($state )(\\($name\\) )]($style)",
             symbol: "❄️  ",
             style: "bold blue",
-            impure_msg: "impure",
+            impure_msg: "",
             pure_msg: "pure",
             unknown_msg: "",
             disabled: false,
