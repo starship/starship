@@ -191,11 +191,13 @@ mod tests {
         snapshot
             .draw(&["ma\0in".to_owned(), "ri\0ght".to_owned()])
             .unwrap();
-        let mut announced = Vec::new();
-        waiting.read_to_end(&mut announced).unwrap();
+        let expected = [path.as_os_str().as_bytes(), b"\0"].concat();
+        let mut announced = vec![0; expected.len()];
+        waiting.read_exact(&mut announced).unwrap();
+        assert_eq!(expected, announced);
         assert_eq!(
-            [path.as_os_str().as_bytes(), b"\0"].concat(),
-            announced,
+            0,
+            waiting.read(&mut [0]).unwrap(),
             "the pipe closes once it names the directory"
         );
         drop(waiting);
@@ -205,7 +207,7 @@ mod tests {
         );
         assert_eq!(
             "main\0right\0",
-            fs::read_to_string(path.join("prompt")).unwrap()
+            crate::utils::read_file(path.join("prompt")).unwrap()
         );
 
         snapshot
@@ -213,7 +215,7 @@ mod tests {
             .unwrap();
         assert_eq!(
             "next\n> \0\0",
-            fs::read_to_string(path.join("prompt")).unwrap()
+            crate::utils::read_file(path.join("prompt")).unwrap()
         );
         assert!(!fish.wait().unwrap().success(), "fish was signaled");
         snapshot.directory.remove();

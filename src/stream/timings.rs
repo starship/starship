@@ -54,7 +54,7 @@ impl Timings {
         let newest = reports(&directory, &session).max();
         let previous = newest
             .as_ref()
-            .and_then(|(_, path)| fs::read_to_string(path).ok())
+            .and_then(|(_, path)| crate::utils::read_file(path).ok())
             .unwrap_or_default();
         let now = now
             .duration_since(SystemTime::UNIX_EPOCH)
@@ -187,7 +187,7 @@ mod tests {
         let mut kept: Vec<_> = reports(directory, "session_key.").collect();
         kept.sort();
         kept.into_iter()
-            .map(|(_, path)| fs::read_to_string(path).unwrap())
+            .map(|(_, path)| crate::utils::read_file(path).unwrap())
             .collect()
     }
 
