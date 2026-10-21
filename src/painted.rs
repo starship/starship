@@ -8,8 +8,8 @@ use nu_ansi_term::Style as AnsiStyle;
 use unicode_segmentation::UnicodeSegmentation;
 
 use crate::config::Style;
-use crate::print::{UnicodeWidthGraphemes, printable};
 use crate::context::Shell;
+use crate::print::{UnicodeWidthGraphemes, printable};
 use crate::segment::{Kind, Segment};
 
 /// Text in one style, borrowed from its segment unless it is a stretched fill.
@@ -206,12 +206,25 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
     // How wide each fill is in turn, if each gets a column or more of what
     // the rest of the line leaves. Measuring text takes a pass over every
     // grapheme, which only a fill needs.
-    let mut widths = width.filter(|_| fills > 0 && !segments.iter().any(|segment| matches!(segment, Segment::Styled { kind: Kind::Verbatim, .. }))).and_then(|width| {
-        let available = width.checked_sub(text_width(segments))?;
-        let share = available / fills;
-        (share > 0)
-            .then(|| (0..fills).map(move |fill| share + usize::from(fill < available % fills)))
-    });
+    let mut widths = width
+        .filter(|_| {
+            fills > 0
+                && !segments.iter().any(|segment| {
+                    matches!(
+                        segment,
+                        Segment::Styled {
+                            kind: Kind::Verbatim,
+                            ..
+                        }
+                    )
+                })
+        })
+        .and_then(|width| {
+            let available = width.checked_sub(text_width(segments))?;
+            let share = available / fills;
+            (share > 0)
+                .then(|| (0..fills).map(move |fill| share + usize::from(fill < available % fills)))
+        });
 
     let mut previous = None;
     let mut runs = Vec::with_capacity(segments.len());
