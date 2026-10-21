@@ -153,6 +153,9 @@ format = 'via [$symbol]($style)'
 [vagrant]
 format = 'via [$symbol]($style)'
 
+[vault]
+format = 'via [$symbol]($style)'
+
 [vlang]
 format = 'via [$symbol]($style)'
 
