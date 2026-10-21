@@ -3,34 +3,26 @@
 
 use std::time::Duration;
 
-use super::bus::{Landing, Passengers};
+use super::bus::{Departure, Landing};
 
-/// What every timetable that keeps each bus within its size costs, with when
-/// its first bus leaves: a bus carrying `passengers` and waiting at most
-/// `patience` longer leaves first, with what lands by then, and the rest of
+/// Every timetable that keeps each bus within its size, as when its first
+/// bus leaves and what it costs: a bus carrying `count` changes and holding
+/// `room` more waiting leaves first, with what lands by then, and the rest of
 /// `landings`, in order, ride buses that each open for a change, cost their
-/// size, and wait for whatever lands within it. Each bus costs, besides, the
-/// waiting of what is aboard it longest, which for the first bus is counted
-/// from now. The prompt alone does not leave before a change lands, unless
-/// none lands within its patience.
-pub(super) fn every_timetable(
-    passengers: Passengers,
-    patience: Duration,
-    landings: &[Landing],
-) -> Vec<(Duration, Duration)> {
-    let waits_for_a_change = passengers == Passengers::Prompt
-        && landings
-            .first()
-            .is_some_and(|landing| landing.after <= patience);
+/// size, and take whatever lands before what they carry has waited, in all,
+/// longer than it. Each bus costs, besides, how long everything aboard waits,
+/// which for the first bus is counted from now.
+pub(super) fn every_timetable(count: u32, room: Duration, landings: &[Landing]) -> Vec<Departure> {
     let mut timetables = Vec::new();
-    for first in usize::from(waits_for_a_change)..=landings.len() {
+    for first in 0..=landings.len() {
         let leaves = first
             .checked_sub(1)
             .map_or(Duration::ZERO, |last| landings[last].after);
-        if leaves > patience {
+        let waited = leaves * count + waiting(&landings[..first], leaves);
+        if waited > room {
             break;
         }
-        later_buses(&landings[first..], leaves, leaves, &mut timetables);
+        later_buses(&landings[first..], leaves, waited, &mut timetables);
     }
     timetables
 }
@@ -41,14 +33,14 @@ fn later_buses(
     landings: &[Landing],
     first: Duration,
     cost: Duration,
-    timetables: &mut Vec<(Duration, Duration)>,
+    timetables: &mut Vec<Departure>,
 ) {
     let Some(opened) = landings.first() else {
-        timetables.push((first, cost));
+        timetables.push(Departure { at: first, cost });
         return;
     };
     for (last, landing) in landings.iter().enumerate() {
-        let waited = landing.after - opened.after;
+        let waited = waiting(&landings[..=last], landing.after);
         if waited > opened.size.get() {
             break;
         }
@@ -59,4 +51,13 @@ fn later_buses(
             timetables,
         );
     }
+}
+
+/// How long the changes of `landings`, each aboard once it lands, have waited
+/// in all when their bus leaves, `leaves` from now.
+fn waiting(landings: &[Landing], leaves: Duration) -> Duration {
+    landings
+        .iter()
+        .map(|landing| (leaves - landing.after) * landing.count)
+        .sum()
 }

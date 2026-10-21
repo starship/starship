@@ -2043,7 +2043,7 @@
           "default": true
         },
         "fallback": {
-          "description": "The longest, in milliseconds, the first paint waits for modules, and\nhow much a redraw that soon is worth in waiting. Later redraws are worth\nless, the longer the module that makes them took.",
+          "description": "How much waiting, in milliseconds, a redraw of a module that took no\ntime is worth, shared by everything drawn with it: the more is ready,\nthe sooner it is drawn. Redraws of modules that took longer are worth\nless. A module never measured is waited for this long.",
           "type": "integer",
           "format": "uint64",
           "minimum": 0,

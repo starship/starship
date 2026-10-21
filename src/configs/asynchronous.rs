@@ -45,9 +45,10 @@ pub struct BusConfig {
     /// disabled, every module is waited for as one never measured is.
     pub adaptive: bool,
 
-    /// The longest, in milliseconds, the first paint waits for modules, and
-    /// how much a redraw that soon is worth in waiting. Later redraws are worth
-    /// less, the longer the module that makes them took.
+    /// How much waiting, in milliseconds, a redraw of a module that took no
+    /// time is worth, shared by everything drawn with it: the more is ready,
+    /// the sooner it is drawn. Redraws of modules that took longer are worth
+    /// less. A module never measured is waited for this long.
     pub fallback: u64,
 }
 

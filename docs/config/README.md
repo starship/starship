@@ -377,8 +377,9 @@ format = '$all$directory$character'
 
 `starship prompt --stream` draws the prompts before slow modules finish, then redraws them as they
 do, ending on what `starship prompt` prints. Redraws follow how long each module took for the
-previous prompt of the shell session, so that results expected close together are drawn together; a
-module never measured, or late, is waited for no longer than the fallback.
+previous prompt of the shell session, so that results expected close together are drawn together,
+while what renders at once is not held back for what takes longer; a module never measured is
+waited for no longer than the fallback.
 
 A stream writes the main and right prompts, each followed by a NUL, every time they change. It ends
 once nothing will change them again, or the moment the shell stops reading, and `--redraws` limits
@@ -396,12 +397,12 @@ integrations:
 
 ### Options
 
-| Option         | Default | Description                                                                                                                                   |
-| -------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `enabled`      | `true`  | Allow a partial prompt while modules render. Set to `false` to wait for all modules.                                                          |
-| `refresh`      | `true`  | Refresh time-varying modules while the prompt is displayed.                                                                                   |
-| `bus.adaptive` | `true`  | Use previous module timings to schedule redraws. Disable to use the fallback waiting budget for every module.                                 |
-| `bus.fallback` | `50`    | Maximum waiting budget for initial paint and later redraw batches, in milliseconds. Process startup and configuration loading are additional. |
+| Option         | Default | Description                                                                                                                                                                     |
+| -------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `enabled`      | `true`  | Allow a partial prompt while modules render. Set to `false` to wait for all modules.                                                                                            |
+| `refresh`      | `true`  | Refresh time-varying modules while the prompt is displayed.                                                                                                                     |
+| `bus.adaptive` | `true`  | Use previous module timings to schedule redraws. Disable to use the fallback waiting budget for every module.                                                                   |
+| `bus.fallback` | `50`    | Waiting budget of a redraw, in milliseconds, shared by all it draws. A module never measured is waited for this long. Process startup and configuration loading are additional. |
 
 While the prompt is shown, modules whose values go stale render again, aligned to the wall clock,
 and the prompt is redrawn when that changes it. `time` renders again every hundredth or tenth of a
