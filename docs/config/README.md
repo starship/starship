@@ -376,10 +376,9 @@ format = '$all$directory$character'
 ## Async
 
 `starship prompt --stream` draws the prompts before slow modules finish, then redraws them as they
-do, ending on what `starship prompt` prints. Until the directory renders in full, it is shown without
-repository shortening, repository styling or the read-only indicator. Redraws follow how long each
-module took for the previous prompt of the shell session, so that results expected close together
-are drawn together; a module never measured, or late, is waited for no longer than the fallback.
+do, ending on what `starship prompt` prints. Redraws follow how long each module took for the
+previous prompt of the shell session, so that results expected close together are drawn together; a
+module never measured, or late, is waited for no longer than the fallback.
 
 A stream writes the main and right prompts, each followed by a NUL, every time they change. It ends
 once nothing will change them again, or the moment the shell stops reading, and `--redraws` limits
