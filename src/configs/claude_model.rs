@@ -13,6 +13,7 @@ pub struct ClaudeModelConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub model_aliases: IndexMap<String, &'a str>,
+    pub effort_styles: IndexMap<String, &'a str>,
     pub disabled: bool,
 }
 
@@ -23,6 +24,7 @@ impl Default for ClaudeModelConfig<'_> {
             symbol: "🤖 ",
             style: "bold blue",
             model_aliases: IndexMap::new(),
+            effort_styles: IndexMap::new(),
             disabled: false,
         }
     }
