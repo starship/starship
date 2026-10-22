@@ -254,6 +254,12 @@ where
             }
 
             let remaining = tw - used;
+            // The tcsh-specific `!` -> `\!` escape only affects the result
+            // under tcsh; for every other shell the search converges to
+            // `remaining / chunks.len()`, so skip it there for performance.
+            if shell != Shell::Tcsh {
+                return Some(remaining / chunks.len());
+            }
             let mut min_size = 0;
             let mut max_size = remaining / chunks.len();
             while min_size < max_size {
@@ -402,5 +408,27 @@ mod tests {
         )
         .to_string();
         assert_eq!(rendered, "%%.......ab");
+    }
+
+    #[test]
+    fn tcsh_fill_bang_symbol_does_not_overflow() {
+        // A fill symbol containing `!` renders as `\!` under tcsh, so the
+        // fill size must be halved to stay within the requested width.
+        let mut segments = Vec::new();
+        segments.push(Segment::fill(None, "!"));
+        segments.extend(Segment::from_text(None, "ab"));
+        let module = Module {
+            config: None,
+            name: "unit_test".to_string(),
+            description: "This is a unit test".to_string(),
+            segments,
+            duration: Duration::default(),
+        };
+
+        let rendered = nu_ansi_term::AnsiStrings(
+            &module.ansi_strings_for_width_and_shell(Some(10), Shell::Tcsh),
+        )
+        .to_string();
+        assert_eq!(rendered, "!!!!ab");
     }
 }
