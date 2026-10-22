@@ -321,4 +321,21 @@ mod tests {
 
         assert!(!module.is_empty());
     }
+
+    #[test]
+    fn fill_counts_zwj_emoji_as_one_grapheme() {
+        let module = Module {
+            config: None,
+            name: "unit_test".to_string(),
+            description: "This is a unit test".to_string(),
+            segments: Segment::from_text(None, "🧑🏻‍🔬")
+                .into_iter()
+                .chain([Segment::fill(None, ".")])
+                .collect(),
+            duration: Duration::default(),
+        };
+
+        let rendered = module.ansi_strings_for_width(Some(10));
+        assert_eq!("🧑🏻‍🔬........", format!("{}", AnsiStrings(&rendered)));
+    }
 }
