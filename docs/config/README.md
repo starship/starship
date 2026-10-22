@@ -4248,7 +4248,7 @@ By default, the module will be shown if any of the following conditions are met:
 - The current directory contains a `tox.ini` file
 - The current directory contains a file with the `.py` extension.
 - The current directory contains a file with the `.ipynb` extension.
-- A virtual environment is currently activated
+- The `VIRTUAL_ENV` environment variable is set
 
 ### Options
 
@@ -4264,6 +4264,7 @@ By default, the module will be shown if any of the following conditions are met:
 | `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Which extensions should trigger this module                                           |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Which filenames should trigger this module                                            |
 | `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                              |
+| `detect_env_vars`    | `['VIRTUAL_ENV']`                                                                                            | Which environment variable(s) should trigger this module                              |
 | `generic_venv_names` | `[]`                                                                                                         | Which venv names should be replaced with the parent directory name.                   |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                         |
 
