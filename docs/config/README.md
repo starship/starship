@@ -5352,7 +5352,7 @@ the module will be activated if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'△ '`                               | The symbol used before the version of cmake.                              |
+| `symbol`            | `'△ '`                               | The symbol used before the version of xmake.                              |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module                               |
 | `detect_files`      | `['xmake.lua']`                      | Which filenames should trigger this module                                |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module                                  |
