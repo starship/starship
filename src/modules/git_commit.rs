@@ -17,7 +17,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let git_head = git_repo.head().ok()?;
 
     let is_detached = git_head.is_detached();
-    if config.only_detached && !is_detached {
+    if (config.only_detached && !is_detached) || git_head.is_unborn() {
         return None;
     }
 
@@ -101,6 +101,28 @@ mod tests {
         let expected = None;
 
         assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn show_nothing_on_unborn_head() -> io::Result<()> {
+        let repo_dir = tempfile::tempdir()?;
+
+        let output = create_command("git")?
+            .args(["init"])
+            .current_dir(repo_dir.path())
+            .output()?;
+        assert!(output.status.success());
+
+        let actual = ModuleRenderer::new("git_commit")
+            .config(toml::toml! {
+                [git_commit]
+                only_detached = false
+            })
+            .path(repo_dir.path())
+            .collect();
+
+        assert_eq!(None, actual);
         repo_dir.close()
     }
 
