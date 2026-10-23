@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let five_hour = live(&rate_limits.five_hour);
     let seven_day = live(&rate_limits.seven_day);
 
-    let max_pct = [&five_hour, &seven_day]
+    let max_percentage = [&five_hour, &seven_day]
         .into_iter()
         .flatten()
         .map(|w| w.2)
@@ -44,7 +44,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let display_style = config
         .display
         .iter()
-        .filter(|s| max_pct >= s.threshold)
+        .filter(|s| max_percentage >= s.threshold)
         .max_by(|a, b| {
             a.threshold
                 .partial_cmp(&b.threshold)
@@ -64,9 +64,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "five_hour_pct" => five_hour.as_ref().map(|w| Ok(w.0.as_str())),
+                "five_hour_percentage" => five_hour.as_ref().map(|w| Ok(w.0.as_str())),
                 "five_hour_reset" => five_hour.as_ref().map(|w| Ok(w.1.as_str())),
-                "seven_day_pct" => seven_day.as_ref().map(|w| Ok(w.0.as_str())),
+                "seven_day_percentage" => seven_day.as_ref().map(|w| Ok(w.0.as_str())),
                 "seven_day_reset" => seven_day.as_ref().map(|w| Ok(w.1.as_str())),
                 _ => None,
             })
@@ -135,7 +135,7 @@ mod tests {
         let actual = ModuleRenderer::new("claude_usage")
             .config(toml::toml! {
                 [claude_usage]
-                format = "[$five_hour_pct%]($style) "
+                format = "[$five_hour_percentage%]($style) "
                 [[claude_usage.display]]
                 threshold = 0.0
                 hidden = true
@@ -160,7 +160,7 @@ mod tests {
         let actual = ModuleRenderer::new("claude_usage")
             .config(toml::toml! {
                 [claude_usage]
-                format = "[$five_hour_pct%]($style) "
+                format = "[$five_hour_percentage%]($style) "
                 [[claude_usage.display]]
                 threshold = 0.0
                 hidden = true
@@ -182,7 +182,7 @@ mod tests {
         let actual = ModuleRenderer::new("claude_usage")
             .config(toml::toml! {
                 [claude_usage]
-                format = "[$seven_day_pct%]($style) "
+                format = "[$seven_day_percentage%]($style) "
                 [[claude_usage.display]]
                 threshold = 0.0
                 hidden = true
@@ -285,8 +285,8 @@ mod tests {
     }
 
     fn make_data(
-        five_hour_pct: f32,
-        seven_day_pct: f32,
+        five_hour_percentage: f32,
+        seven_day_percentage: f32,
         five_hour_resets_at: u64,
         seven_day_resets_at: u64,
     ) -> crate::context::ClaudeCodeData {
@@ -316,11 +316,11 @@ mod tests {
             effort: None,
             rate_limits: Some(RateLimits {
                 five_hour: Some(RateLimitWindow {
-                    used_percentage: five_hour_pct,
+                    used_percentage: five_hour_percentage,
                     resets_at: five_hour_resets_at,
                 }),
                 seven_day: Some(RateLimitWindow {
-                    used_percentage: seven_day_pct,
+                    used_percentage: seven_day_percentage,
                     resets_at: seven_day_resets_at,
                 }),
             }),
