@@ -4248,7 +4248,7 @@ By default, the module will be shown if any of the following conditions are met:
 - The current directory contains a `tox.ini` file
 - The current directory contains a file with the `.py` extension.
 - The current directory contains a file with the `.ipynb` extension.
-- A virtual environment is currently activated
+- The `VIRTUAL_ENV` environment variable is set
 
 ### Options
 
@@ -4264,6 +4264,7 @@ By default, the module will be shown if any of the following conditions are met:
 | `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Which extensions should trigger this module                                           |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Which filenames should trigger this module                                            |
 | `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                              |
+| `detect_env_vars`    | `['VIRTUAL_ENV']`                                                                                            | Which environment variable(s) should trigger this module                              |
 | `generic_venv_names` | `[]`                                                                                                         | Which venv names should be replaced with the parent directory name.                   |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                         |
 
@@ -5352,7 +5353,7 @@ the module will be activated if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'△ '`                               | The symbol used before the version of cmake.                              |
+| `symbol`            | `'△ '`                               | The symbol used before the version of xmake.                              |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module                               |
 | `detect_files`      | `['xmake.lua']`                      | Which filenames should trigger this module                                |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module                                  |
@@ -5453,7 +5454,7 @@ These modules will be shown if any of the following conditions are met:
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the `shell` returns a `0` status code from executing it.                                                        |
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `description`       | `'<custom module>'`             | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `'<custom config>'`             | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                                                                                                                                                                 |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
