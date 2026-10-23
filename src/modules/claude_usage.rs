@@ -327,7 +327,7 @@ mod tests {
 
     #[test]
     fn test_low_window_hidden_independently() {
-        let data = make_data(75.0, 10.0, u64::MAX, u64::MAX);
+        let data = make_data(75.0, 10.0, future(3600), future(86400));
         let out = ModuleRenderer::new("claude_usage")
             .claude_code_data(data)
             .collect()

@@ -679,7 +679,7 @@ The `display` option is an array of objects that define usage percentage thresho
 | ----------- | ------------ | ------------------------------------------------------------------- |
 | `threshold` | `0.0`        | The minimum rate limit usage percentage to match this configuration |
 | `style`     | `bold green` | The value of `style` if this display configuration is matched       |
-| `hidden`    | `false`      | Hide the module if this configuration is matched                    |
+| `hidden`    | `false`      | Hide the window if this configuration is matched                    |
 
 **Default configuration:**
 
