@@ -660,11 +660,8 @@ format = "[$symbol$cost ($duration)]($style) "
 
 The `claude_usage` module displays Claude Code's 5-hour and 7-day rate limit usage. The style automatically changes based on the highest window usage percentage.
 
-::: tip
-
-Claude Code only reports rate limits for claude.ai Pro and Max subscriptions, and only after the first API response of a session. With API-key billing the module is never shown. Windows that are missing or have already reset are omitted. Gateway `spend_limit` data is not supported.
-
-:::
+> [!TIP]
+> Claude Code only reports rate limits for claude.ai Pro and Max subscriptions, and only after the first API response of a session. With API-key billing the module is never shown. Windows that are missing or have already reset are omitted. Gateway `spend_limit` data is not supported.
 
 #### Options
 
@@ -705,9 +702,9 @@ style = "bold red"
 | Variable        | Example | Description                                           |
 | --------------- | ------- | ----------------------------------------------------- |
 | five_hour_pct   | `65`    | Percentage of 5-hour window used                      |
-| five_hour_reset | `1h23m` | Time until 5-hour window resets                       |
+| five_hour_reset | `1h23m5s` | Time until 5-hour window resets                       |
 | seven_day_pct   | `7`     | Percentage of 7-day window used                       |
-| seven_day_reset | `2d14h` | Time until 7-day window resets                        |
+| seven_day_reset | `2d14h0m0s` | Time until 7-day window resets                        |
 | style\*         |         | Mirrors the style from the matching display threshold |
 
 \*: This variable can only be used as a part of a style string

@@ -78,7 +78,9 @@ pub struct Workspace {
 #[derive(Deserialize, Debug, Clone, Default)]
 #[serde(default)]
 pub struct RateLimitWindow {
+    #[serde(deserialize_with = "deserialize_null_default")]
     pub used_percentage: f32,
+    #[serde(deserialize_with = "deserialize_null_default")]
     pub resets_at: u64,
 }
 
@@ -185,5 +187,14 @@ mod tests {
         let limits = data.rate_limits.unwrap();
         assert_eq!(limits.five_hour.unwrap().resets_at, 1_738_425_600);
         assert!(limits.seven_day.is_none());
+    }
+
+    #[test]
+    fn test_null_rate_limit_fields_default() {
+        let payload =
+            r#"{ "rate_limits": { "five_hour": { "used_percentage": null, "resets_at": null } } }"#;
+        let data: ClaudeCodeData = serde_json::from_str(payload).unwrap();
+        let w = data.rate_limits.unwrap().five_hour.unwrap();
+        assert_eq!((w.used_percentage, w.resets_at), (0.0, 0));
     }
 }
