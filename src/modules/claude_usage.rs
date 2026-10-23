@@ -25,10 +25,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Windows may be absent, and an elapsed window is stale.
     let live = |w: &Option<RateLimitWindow>| {
         w.as_ref().filter(|w| w.resets_at > now_secs).map(|w| {
+            let pct = w.used_percentage.clamp(0.0, 100.0);
             (
-                format!("{:.0}", w.used_percentage),
+                format!("{:.0}%", pct),
                 render_time((w.resets_at - now_secs) as u128 * 1000, false),
-                w.used_percentage,
+                pct,
             )
         })
     };
@@ -135,7 +136,7 @@ mod tests {
         let actual = ModuleRenderer::new("claude_usage")
             .config(toml::toml! {
                 [claude_usage]
-                format = "[$five_hour_percentage%]($style) "
+                format = "[$five_hour_percentage]($style) "
                 [[claude_usage.display]]
                 threshold = 0.0
                 hidden = true
@@ -160,7 +161,7 @@ mod tests {
         let actual = ModuleRenderer::new("claude_usage")
             .config(toml::toml! {
                 [claude_usage]
-                format = "[$five_hour_percentage%]($style) "
+                format = "[$five_hour_percentage]($style) "
                 [[claude_usage.display]]
                 threshold = 0.0
                 hidden = true
@@ -182,7 +183,7 @@ mod tests {
         let actual = ModuleRenderer::new("claude_usage")
             .config(toml::toml! {
                 [claude_usage]
-                format = "[$seven_day_percentage%]($style) "
+                format = "[$seven_day_percentage]($style) "
                 [[claude_usage.display]]
                 threshold = 0.0
                 hidden = true
@@ -282,6 +283,16 @@ mod tests {
         ))
         .expect("should render");
         assert!(out.contains("80%") && !out.contains("95%"), "{out}");
+    }
+
+    #[test]
+    fn test_percentage_is_clamped() {
+        let out = render_json(&format!(
+            r#"{{"five_hour":{{"used_percentage":130,"resets_at":{}}}}}"#,
+            future(3600)
+        ))
+        .expect("should render");
+        assert!(out.contains("100%") && !out.contains("130"), "{out}");
     }
 
     fn make_data(

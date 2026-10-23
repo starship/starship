@@ -665,21 +665,21 @@ The `claude_usage` module displays Claude Code's 5-hour and 7-day rate limit usa
 
 #### Options
 
-| Option     | Default                                                                                                                         | Description                         |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
-| `format`   | `'[($five_hour_percentage% \(resets in $five_hour_reset\)  )($seven_day_percentage% \(resets in $seven_day_reset\))]($style) '` | The format for the module.          |
-| `display`  | [see below](#display-2)                                                                                                         | Threshold and style configurations. |
-| `disabled` | `false`                                                                                                                         | Disables the `claude_usage` module. |
+| Option     | Default                                                                                                                       | Description                         |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| `format`   | `'[($five_hour_percentage \(resets in $five_hour_reset\)  )($seven_day_percentage \(resets in $seven_day_reset\))]($style) '` | The format for the module.          |
+| `display`  | [see below](#display-2)                                                                                                       | Threshold and style configurations. |
+| `disabled` | `false`                                                                                                                       | Disables the `claude_usage` module. |
 
 ##### Display
 
 The `display` option is an array of objects that define usage percentage thresholds and styles. The module is hidden unless the highest window's percentage meets or exceeds a threshold with `hidden = false`. The style from the highest matching threshold is used.
 
-| Option      | Default      | Description                                                      |
-| ----------- | ------------ | ---------------------------------------------------------------- |
-| `threshold` | `0.0`        | The minimum usage percentage (0–100) to match this configuration |
-| `style`     | `bold green` | The value of `style` if this display configuration is matched    |
-| `hidden`    | `false`      | Hide the module if this configuration is matched                 |
+| Option      | Default      | Description                                                         |
+| ----------- | ------------ | ------------------------------------------------------------------- |
+| `threshold` | `0.0`        | The minimum rate limit usage percentage to match this configuration |
+| `style`     | `bold green` | The value of `style` if this display configuration is matched       |
+| `hidden`    | `false`      | Hide the module if this configuration is matched                    |
 
 **Default configuration:**
 
@@ -701,9 +701,9 @@ style = "bold red"
 
 | Variable             | Example     | Description                                           |
 | -------------------- | ----------- | ----------------------------------------------------- |
-| five_hour_percentage | `65`        | Percentage of 5-hour window used                      |
+| five_hour_percentage | `65%`       | Percentage of 5-hour window used                      |
 | five_hour_reset      | `1h23m5s`   | Time until 5-hour window resets                       |
-| seven_day_percentage | `7`         | Percentage of 7-day window used                       |
+| seven_day_percentage | `7%`        | Percentage of 7-day window used                       |
 | seven_day_reset      | `2d14h0m0s` | Time until 7-day window resets                        |
 | style\*              |             | Mirrors the style from the matching display threshold |
 
@@ -716,7 +716,7 @@ style = "bold red"
 
 # Show only the 5-hour window
 [claude_usage]
-format = '[$five_hour_percentage% \(resets in $five_hour_reset\)]($style) '
+format = '[$five_hour_percentage \(resets in $five_hour_reset\)]($style) '
 
 # Custom thresholds
 [[claude_usage.display]]
