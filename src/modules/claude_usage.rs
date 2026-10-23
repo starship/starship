@@ -243,6 +243,7 @@ mod tests {
             },
             cost: None,
             workspace: None,
+            effort: None,
             rate_limits: Some(RateLimits {
                 five_hour: RateLimitWindow {
                     used_percentage: five_hour_pct,

@@ -729,8 +729,6 @@ threshold = 85.0
 style = "bold red"
 ```
 
-## Style Strings
-
 ## Style Strings {#style-strings}
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:

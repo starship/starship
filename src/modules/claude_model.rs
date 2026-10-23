@@ -163,6 +163,7 @@ mod tests {
             effort: Some(crate::utils::statusline::EffortInfo {
                 level: "high".to_string(),
             }),
+            rate_limits: None,
         };
 
         let actual = ModuleRenderer::new("claude_model")
@@ -190,6 +191,7 @@ mod tests {
             cost: None,
             workspace: None,
             effort: None,
+            rate_limits: None,
         };
 
         let actual = ModuleRenderer::new("claude_model")
