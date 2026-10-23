@@ -214,6 +214,72 @@ mod tests {
         );
     }
 
+    // Claude Code may omit either window, and drops one once it has reset.
+    fn render_json(rate_limits: &str) -> Option<String> {
+        let payload = format!(
+            r#"{{"model":{{"id":"m","display_name":"M"}},"context_window":{{}},"rate_limits":{rate_limits}}}"#
+        );
+        let data: crate::context::ClaudeCodeData = serde_json::from_str(&payload).unwrap();
+        ModuleRenderer::new("claude_usage")
+            .claude_code_data(data)
+            .collect()
+    }
+
+    fn future(secs: u64) -> u64 {
+        SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap()
+            .as_secs()
+            + secs
+    }
+
+    #[test]
+    fn test_only_five_hour_window() {
+        let out = render_json(&format!(
+            r#"{{"five_hour":{{"used_percentage":75,"resets_at":{}}}}}"#,
+            future(3600)
+        ))
+        .expect("should render");
+        assert!(out.contains("75%"), "{out}");
+        assert_eq!(out.matches('%').count(), 1, "absent window shown: {out}");
+    }
+
+    #[test]
+    fn test_only_seven_day_window() {
+        let out = render_json(&format!(
+            r#"{{"seven_day":{{"used_percentage":80,"resets_at":{}}}}}"#,
+            future(86400)
+        ))
+        .expect("should render");
+        assert!(out.contains("80%"), "{out}");
+        assert_eq!(out.matches('%').count(), 1, "absent window shown: {out}");
+    }
+
+    #[test]
+    fn test_empty_rate_limits() {
+        assert_eq!(render_json("{}"), None);
+    }
+
+    #[test]
+    fn test_expired_window_is_ignored() {
+        // The expired 95% window must not drive the style or be displayed.
+        let out = render_json(&format!(
+            r#"{{"five_hour":{{"used_percentage":95,"resets_at":1}},"seven_day":{{"used_percentage":10,"resets_at":{}}}}}"#,
+            future(86400)
+        ));
+        assert_eq!(out, None);
+    }
+
+    #[test]
+    fn test_expired_window_hidden_when_other_is_visible() {
+        let out = render_json(&format!(
+            r#"{{"five_hour":{{"used_percentage":95,"resets_at":1}},"seven_day":{{"used_percentage":80,"resets_at":{}}}}}"#,
+            future(86400)
+        ))
+        .expect("should render");
+        assert!(out.contains("80%") && !out.contains("95%"), "{out}");
+    }
+
     fn make_data(
         five_hour_pct: f32,
         seven_day_pct: f32,
