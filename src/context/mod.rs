@@ -1005,6 +1005,7 @@ mod tests {
     fn properties_require_a_status_value() {
         for flag in ["-s", "--status"] {
             assert!(Properties::try_parse_from(["starship", flag, "--jobs"]).is_err());
+            assert!(Properties::try_parse_from(["starship", flag, "--not-a-number"]).is_err());
         }
     }
 
