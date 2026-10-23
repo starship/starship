@@ -320,4 +320,26 @@ mod tests {
         );
         Ok(())
     }
+
+    #[test]
+    fn zsh_init_compatible_with_sh_glob() -> io::Result<()> {
+        let Ok(mut cmd) = create_command("zsh") else {
+            return Ok(());
+        };
+        let script = ZSH_INIT.replace("::STARSHIP::", "true");
+        let output = cmd
+            .args([
+                "-fc",
+                &format!(
+                    "setopt sh_glob\n{script}\nprompt_starship_preexec\nprompt_starship_precmd"
+                ),
+            ])
+            .output()?;
+        assert!(
+            output.status.success(),
+            "zsh init failed with sh_glob: {}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        Ok(())
+    }
 }
