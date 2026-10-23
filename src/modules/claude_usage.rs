@@ -2,6 +2,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use super::{Context, Module, ModuleConfig};
 use crate::configs::claude_usage::ClaudeUsageConfig;
+use crate::context::RateLimitWindow;
 use crate::formatter::StringFormatter;
 use crate::utils::render_time;
 
@@ -16,9 +17,29 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let claude_data = context.claude_code_data.as_ref()?;
     let rate_limits = claude_data.rate_limits.as_ref()?;
 
-    let five_hour_pct = rate_limits.five_hour.used_percentage;
-    let seven_day_pct = rate_limits.seven_day.used_percentage;
-    let max_pct = five_hour_pct.max(seven_day_pct);
+    let now_secs = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_secs();
+
+    // Windows may be absent, and an elapsed window is stale.
+    let live = |w: &Option<RateLimitWindow>| {
+        w.as_ref().filter(|w| w.resets_at > now_secs).map(|w| {
+            (
+                format!("{:.0}", w.used_percentage),
+                render_time((w.resets_at - now_secs) as u128 * 1000, false),
+                w.used_percentage,
+            )
+        })
+    };
+    let five_hour = live(&rate_limits.five_hour);
+    let seven_day = live(&rate_limits.seven_day);
+
+    let max_pct = [&five_hour, &seven_day]
+        .into_iter()
+        .flatten()
+        .map(|w| w.2)
+        .reduce(f32::max)?;
 
     let display_style = config
         .display
@@ -36,23 +57,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let display_style = display_style?;
 
-    let now_secs = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .unwrap_or_default()
-        .as_secs();
-
-    let five_hour_reset = render_time(
-        (rate_limits.five_hour.resets_at.saturating_sub(now_secs) as u128) * 1000,
-        false,
-    );
-    let seven_day_reset = render_time(
-        (rate_limits.seven_day.resets_at.saturating_sub(now_secs) as u128) * 1000,
-        false,
-    );
-
-    let five_hour_pct_str = format!("{:.0}", five_hour_pct);
-    let seven_day_pct_str = format!("{:.0}", seven_day_pct);
-
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
@@ -60,10 +64,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "five_hour_pct" => Some(Ok(five_hour_pct_str.as_str())),
-                "five_hour_reset" => Some(Ok(five_hour_reset.as_str())),
-                "seven_day_pct" => Some(Ok(seven_day_pct_str.as_str())),
-                "seven_day_reset" => Some(Ok(seven_day_reset.as_str())),
+                "five_hour_pct" => five_hour.as_ref().map(|w| Ok(w.0.as_str())),
+                "five_hour_reset" => five_hour.as_ref().map(|w| Ok(w.1.as_str())),
+                "seven_day_pct" => seven_day.as_ref().map(|w| Ok(w.0.as_str())),
+                "seven_day_reset" => seven_day.as_ref().map(|w| Ok(w.1.as_str())),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -311,14 +315,14 @@ mod tests {
             workspace: None,
             effort: None,
             rate_limits: Some(RateLimits {
-                five_hour: RateLimitWindow {
+                five_hour: Some(RateLimitWindow {
                     used_percentage: five_hour_pct,
                     resets_at: five_hour_resets_at,
-                },
-                seven_day: RateLimitWindow {
+                }),
+                seven_day: Some(RateLimitWindow {
                     used_percentage: seven_day_pct,
                     resets_at: seven_day_resets_at,
-                },
+                }),
             }),
         }
     }

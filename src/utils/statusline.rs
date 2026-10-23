@@ -85,8 +85,8 @@ pub struct RateLimitWindow {
 #[derive(Deserialize, Debug, Clone, Default)]
 #[serde(default)]
 pub struct RateLimits {
-    pub five_hour: RateLimitWindow,
-    pub seven_day: RateLimitWindow,
+    pub five_hour: Option<RateLimitWindow>,
+    pub seven_day: Option<RateLimitWindow>,
 }
 
 #[cfg(test)]
@@ -176,5 +176,14 @@ mod tests {
             msg.contains("invalid type") && msg.contains("f32"),
             "error should be a serde type error, got: {msg}"
         );
+    }
+
+    #[test]
+    fn test_deserializes_partial_rate_limits() {
+        let payload = r#"{ "rate_limits": { "five_hour": { "used_percentage": 42.5, "resets_at": 1738425600 } } }"#;
+        let data: ClaudeCodeData = serde_json::from_str(payload).unwrap();
+        let limits = data.rate_limits.unwrap();
+        assert_eq!(limits.five_hour.unwrap().resets_at, 1_738_425_600);
+        assert!(limits.seven_day.is_none());
     }
 }
