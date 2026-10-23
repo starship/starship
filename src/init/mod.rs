@@ -279,9 +279,40 @@ const XONSH_INIT: &str = include_str!("starship.xsh");
 
 const CMDEXE_INIT: &str = include_str!("starship.lua");
 
+/// Pad a PowerShell transient prompt so it occupies the same number of rows as
+/// the live prompt. `buffer == None` means the edit buffer could not be read.
+///
+/// Keep in sync with `Get-StarshipTransientPromptText` in `starship.ps1`.
+#[cfg(test)]
+fn align_pwsh_transient_prompt(
+    transient: &str,
+    live_line_count: usize,
+    buffer: Option<&str>,
+) -> String {
+    let align_height = match buffer {
+        Some(buf) if !buf.contains('\n') => false,
+        _ => true,
+    };
+    if !align_height {
+        return transient.to_string();
+    }
+
+    let transient_line_count = transient.split('\n').count();
+    if live_line_count <= transient_line_count {
+        return transient.to_string();
+    }
+
+    format!(
+        "{}{transient}",
+        "\n".repeat(live_line_count - transient_line_count)
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::io::Write;
+    use std::process::{Command, Stdio};
     #[test]
     fn escape_pwsh() -> io::Result<()> {
         let starship_path = StarshipPath {
@@ -319,5 +350,177 @@ mod tests {
             r#""C:\Cool Tools\starship.exe""#
         );
         Ok(())
+    }
+
+    #[test]
+    fn pwsh_init_wires_transient_height_alignment() {
+        assert!(
+            PWSH_INIT.contains("function Get-StarshipTransientPromptText"),
+            "starship.ps1 must define Get-StarshipTransientPromptText"
+        );
+        assert!(
+            PWSH_INIT.contains(
+                "Get-StarshipTransientPromptText -TransientText $transient -LiveLineCount $liveLineCount -Buffer $buffer"
+            ),
+            "transient prompt path must align height using ExtraPromptLineCount and the edit buffer"
+        );
+    }
+
+    #[test]
+    fn pwsh_transient_actual_function_pads_multiline_prompt() {
+        let Ok(pwsh) = which("pwsh").or_else(|_| which("powershell")) else {
+            return;
+        };
+        let function_start = PWSH_INIT
+            .find("function Get-StarshipTransientPromptText")
+            .expect("starship.ps1 must define Get-StarshipTransientPromptText");
+        let function_end = PWSH_INIT[function_start..]
+            .find("\n    function global:prompt")
+            .map(|offset| function_start + offset)
+            .expect("transient prompt helper must end before the prompt function");
+        let function = &PWSH_INIT[function_start..function_end];
+        let script = format!(
+            r#"{function}
+$result = Get-StarshipTransientPromptText -TransientText ([string][char]0x276F + ' ') -LiveLineCount 2 -Buffer "a`nb"
+[Console]::Write((($result.ToCharArray() | ForEach-Object {{ [int]$_ }}) -join ','))
+"#
+        );
+
+        let mut child = Command::new(pwsh)
+            .args(["-NoLogo", "-NoProfile", "-NonInteractive", "-Command", "-"])
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()
+            .expect("failed to start PowerShell");
+        child
+            .stdin
+            .take()
+            .expect("PowerShell stdin must be piped")
+            .write_all(script.as_bytes())
+            .expect("failed to write PowerShell test script");
+        let output = child
+            .wait_with_output()
+            .expect("failed to wait for PowerShell");
+
+        assert!(
+            output.status.success(),
+            "PowerShell helper failed: {}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        assert_eq!(
+            strip_terminal_control_sequences(&stdout).trim(),
+            "10,10095,32",
+            "PowerShell helper returned unexpected output: {}",
+            stdout
+        );
+    }
+
+    fn strip_terminal_control_sequences(input: &str) -> String {
+        let mut output = String::new();
+        let mut chars = input.chars().peekable();
+
+        while let Some(ch) = chars.next() {
+            if ch != '\u{1b}' {
+                output.push(ch);
+                continue;
+            }
+
+            match chars.peek().copied() {
+                Some('[') => {
+                    chars.next();
+                    for ch in chars.by_ref() {
+                        if ('@'..='~').contains(&ch) {
+                            break;
+                        }
+                    }
+                }
+                Some(']') => {
+                    chars.next();
+                    while let Some(ch) = chars.next() {
+                        if ch == '\u{7}' {
+                            break;
+                        }
+                        if ch == '\u{1b}' && chars.peek() == Some(&'\\') {
+                            chars.next();
+                            break;
+                        }
+                    }
+                }
+                Some('=') | Some('>') => {
+                    chars.next();
+                }
+                _ => {}
+            }
+        }
+
+        output
+    }
+
+    #[test]
+    fn terminal_control_sequence_stripper_preserves_prompt_char_codes() {
+        assert_eq!(
+            strip_terminal_control_sequences("\u{1b}[?1h\u{1b}=10,10095,32\u{1b}[?25h"),
+            "10,10095,32"
+        );
+        assert_eq!(
+            strip_terminal_control_sequences("\u{1b}]0;title\u{7}10,10095,32"),
+            "10,10095,32"
+        );
+        assert_eq!(
+            strip_terminal_control_sequences("\u{1b}]0;title\u{1b}\\10,10095,32"),
+            "10,10095,32"
+        );
+        assert_eq!(strip_terminal_control_sequences("\u{1b}>10"), "10");
+        assert_eq!(strip_terminal_control_sequences("\u{1b}X10"), "X10");
+    }
+
+    #[test]
+    fn pwsh_transient_multiline_two_row_live_pads_one_newline() {
+        let buffer =
+            "Write-Host \"test line 1\"\nWrite-Host \"test line 2\"\nWrite-Host \"test line 3\"";
+        assert_eq!(align_pwsh_transient_prompt("❯ ", 2, Some(buffer)), "\n❯ ");
+    }
+
+    #[test]
+    fn pwsh_transient_single_line_stays_compact() {
+        assert_eq!(
+            align_pwsh_transient_prompt("❯ ", 2, Some(r#"1..3 | % { Write-Host "test $_" }"#)),
+            "❯ "
+        );
+    }
+
+    #[test]
+    fn pwsh_transient_three_row_live_pads_two_newlines() {
+        assert_eq!(align_pwsh_transient_prompt("❯ ", 3, Some("a\nb")), "\n\n❯ ");
+    }
+
+    #[test]
+    fn pwsh_transient_already_matching_height_unchanged() {
+        assert_eq!(align_pwsh_transient_prompt("\n❯ ", 2, Some("a\nb")), "\n❯ ");
+    }
+
+    #[test]
+    fn pwsh_transient_unknown_buffer_pads_to_be_safe() {
+        assert_eq!(align_pwsh_transient_prompt("❯ ", 2, None), "\n❯ ");
+    }
+
+    #[test]
+    fn pwsh_transient_empty_buffer_stays_compact() {
+        assert_eq!(align_pwsh_transient_prompt("❯ ", 2, Some("")), "❯ ");
+    }
+
+    #[test]
+    fn pwsh_transient_taller_than_live_unchanged() {
+        assert_eq!(
+            align_pwsh_transient_prompt("\n\n❯ ", 2, Some("a\nb")),
+            "\n\n❯ "
+        );
+    }
+
+    #[test]
+    fn pwsh_transient_one_row_live_multiline_no_pad() {
+        assert_eq!(align_pwsh_transient_prompt("❯ ", 1, Some("a\nb")), "❯ ");
     }
 }
