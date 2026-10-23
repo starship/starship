@@ -34,46 +34,39 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .unwrap_or_default()
         .as_secs();
 
-    // Windows may be absent, and an elapsed window is stale.
+    // A window is skipped when absent, stale, or when its own matching
+    // `display` entry is hidden. Each window is styled independently.
     let live = |w: &Option<RateLimitWindow>| {
-        w.as_ref().filter(|w| w.resets_at > now_secs).map(|w| {
-            let pct = w.used_percentage.clamp(0.0, 100.0);
-            (
-                format!("{:.0}%", pct),
-                short_duration(w.resets_at - now_secs),
-                pct,
-            )
-        })
+        let w = w.as_ref().filter(|w| w.resets_at > now_secs)?;
+        let pct = w.used_percentage.clamp(0.0, 100.0);
+        let display = config
+            .display
+            .iter()
+            .filter(|d| pct >= d.threshold)
+            .max_by(|a, b| a.threshold.total_cmp(&b.threshold))
+            .filter(|d| !d.hidden)?;
+        Some((
+            format!("{pct:.0}%"),
+            short_duration(w.resets_at - now_secs),
+            display,
+        ))
     };
     let five_hour = live(&rate_limits.five_hour);
     let seven_day = live(&rate_limits.seven_day);
 
-    let max_percentage = [&five_hour, &seven_day]
+    // `$style` mirrors the most severe visible window.
+    let overall = [&five_hour, &seven_day]
         .into_iter()
         .flatten()
         .map(|w| w.2)
-        .reduce(f32::max)?;
-
-    let display_style = config
-        .display
-        .iter()
-        .filter(|s| max_percentage >= s.threshold)
-        .max_by(|a, b| {
-            a.threshold
-                .partial_cmp(&b.threshold)
-                .unwrap_or(std::cmp::Ordering::Equal)
-        });
-
-    if display_style.is_some_and(|s| s.hidden) {
-        return None;
-    }
-
-    let display_style = display_style?;
+        .max_by(|a, b| a.threshold.total_cmp(&b.threshold))?;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
-                "style" => Some(Ok(display_style.style)),
+                "style" => Some(Ok(overall.style)),
+                "five_hour_style" => five_hour.as_ref().map(|w| Ok(w.2.style)),
+                "seven_day_style" => seven_day.as_ref().map(|w| Ok(w.2.style)),
                 _ => None,
             })
             .map(|variable| match variable {
@@ -316,6 +309,30 @@ mod tests {
         assert_eq!(short_duration(4985), "1h23m");
         assert_eq!(short_duration(86400), "1d");
         assert_eq!(short_duration(2 * 86400 + 7 * 3600 + 2000), "2d7h");
+    }
+
+    #[test]
+    fn test_windows_styled_independently() {
+        let data = make_data(75.0, 95.0, u64::MAX, u64::MAX);
+        let out = ModuleRenderer::new("claude_usage")
+            .claude_code_data(data)
+            .collect()
+            .expect("should render");
+        let yellow = Color::Yellow.bold().prefix().to_string();
+        let red = Color::Red.bold().prefix().to_string();
+        assert_eq!(out.matches(&yellow).count(), 1, "{out}");
+        assert_eq!(out.matches(&red).count(), 1, "{out}");
+        assert!(out.find(&yellow) < out.find(&red), "{out}");
+    }
+
+    #[test]
+    fn test_low_window_hidden_independently() {
+        let data = make_data(75.0, 10.0, u64::MAX, u64::MAX);
+        let out = ModuleRenderer::new("claude_usage")
+            .claude_code_data(data)
+            .collect()
+            .expect("should render");
+        assert!(out.contains("5h") && !out.contains("7d"), "{out}");
     }
 
     fn make_data(
