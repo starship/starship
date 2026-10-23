@@ -4,7 +4,19 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::claude_usage::ClaudeUsageConfig;
 use crate::context::RateLimitWindow;
 use crate::formatter::StringFormatter;
-use crate::utils::render_time;
+
+/// Remaining time with at most two units, e.g. `2d7h`, `1h23m`, `12m`, `45s`.
+fn short_duration(secs: u64) -> String {
+    let (d, h, m) = (secs / 86400, secs % 86400 / 3600, secs % 3600 / 60);
+    match (d, h, m) {
+        (0, 0, 0) => format!("{secs}s"),
+        (0, 0, m) => format!("{m}m"),
+        (0, h, 0) => format!("{h}h"),
+        (0, h, m) => format!("{h}h{m}m"),
+        (d, 0, _) => format!("{d}d"),
+        (d, h, _) => format!("{d}d{h}h"),
+    }
+}
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("claude_usage");
@@ -28,7 +40,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let pct = w.used_percentage.clamp(0.0, 100.0);
             (
                 format!("{:.0}%", pct),
-                render_time((w.resets_at - now_secs) as u128 * 1000, false),
+                short_duration(w.resets_at - now_secs),
                 pct,
             )
         })
@@ -89,6 +101,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod tests {
     use std::time::{SystemTime, UNIX_EPOCH};
 
+    use super::short_duration;
     use crate::test::ModuleRenderer;
     use nu_ansi_term::Color;
 
@@ -293,6 +306,16 @@ mod tests {
         ))
         .expect("should render");
         assert!(out.contains("100%") && !out.contains("130"), "{out}");
+    }
+
+    #[test]
+    fn test_short_duration() {
+        assert_eq!(short_duration(45), "45s");
+        assert_eq!(short_duration(720), "12m");
+        assert_eq!(short_duration(3600), "1h");
+        assert_eq!(short_duration(4985), "1h23m");
+        assert_eq!(short_duration(86400), "1d");
+        assert_eq!(short_duration(2 * 86400 + 7 * 3600 + 2000), "2d7h");
     }
 
     fn make_data(
