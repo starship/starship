@@ -403,7 +403,7 @@ is read from the `AWS_SSO_PROFILE` env var.
 | Option              | Default                                                           | Description                                                                                                 |
 | ------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | The format for the module.                                                                                  |
-| `symbol`            | `'☁️ '`                                                           | The symbol used before displaying the current AWS profile.                                                  |
+| `symbol`            | `'☁️  '`                                                          | The symbol used before displaying the current AWS profile.                                                  |
 | `region_aliases`    | `{}`                                                              | Table of region aliases to display in addition to the AWS name.                                             |
 | `profile_aliases`   | `{}`                                                              | Table of profile aliases to display in addition to the AWS name.                                            |
 | `style`             | `'bold yellow'`                                                   | The style for the module.                                                                                   |
@@ -3226,7 +3226,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 | ----------- | ----------------------------------------- | -------------------------------------------------------- |
 | `threshold` | `75`                                      | Hide the memory usage unless it exceeds this percentage. |
 | `format`    | `'via $symbol[$ram( \| $swap)]($style) '` | The format for the module.                               |
-| `symbol`    | `'🐏'`                                    | The symbol used before displaying the memory usage.      |
+| `symbol`    | `'🐏 '`                                   | The symbol used before displaying the memory usage.      |
 | `style`     | `'bold dimmed white'`                     | The style for the module.                                |
 | `disabled`  | `true`                                    | Disables the `memory_usage` module.                      |
 
@@ -3563,7 +3563,7 @@ The module will be shown when inside a nix-shell environment.
 | Option        | Default                                      | Description                                                           |
 | ------------- | -------------------------------------------- | --------------------------------------------------------------------- |
 | `format`      | `'via [$symbol$state( \($name\))]($style) '` | The format for the module.                                            |
-| `symbol`      | `'❄️ '`                                      | A format string representing the symbol of nix-shell.                 |
+| `symbol`      | `'❄️  '`                                     | A format string representing the symbol of nix-shell.                 |
 | `style`       | `'bold blue'`                                | The style for the module.                                             |
 | `impure_msg`  | `'impure'`                                   | A format string shown when the shell is impure.                       |
 | `pure_msg`    | `'pure'`                                     | A format string shown when the shell is pure.                         |
@@ -3778,7 +3778,7 @@ to fetch the current project in use.
 | Option     | Default                                       | Description                                                    |
 | ---------- | --------------------------------------------- | -------------------------------------------------------------- |
 | `format`   | `'on [$symbol$cloud(\($project\))]($style) '` | The format for the module.                                     |
-| `symbol`   | `'☁️ '`                                       | The symbol used before displaying the current OpenStack cloud. |
+| `symbol`   | `'☁️  '`                                      | The symbol used before displaying the current OpenStack cloud. |
 | `style`    | `'bold yellow'`                               | The style for the module.                                      |
 | `disabled` | `false`                                       | Disables the `openstack` module.                               |
 
@@ -4811,7 +4811,7 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 | Option              | Default                                | Description                                                                                                                                    |
 | ------------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `'🅢  '`                                | The symbol used before the environment name.                                                                                                   |
+| `symbol`            | `'🅢 '`                                 | The symbol used before the environment name.                                                                                                   |
 | `style`             | `'bold blue'`                          | The style for the module.                                                                                                                      |
 | `format`            | `'via [$symbol$environment]($style) '` | The format for the module.                                                                                                                     |
 | `disabled`          | `false`                                | Disables the `spack` module.                                                                                                                   |
@@ -5007,7 +5007,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol$workspace]($style) '`                    | The format string for the module.                                         |
 | `version_format`    | `'v${raw}'`                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'💠'`                                                  | A format string shown before the terraform workspace.                     |
+| `symbol`            | `'💠 '`                                                 | A format string shown before the terraform workspace.                     |
 | `detect_extensions` | `['tf', 'tofu', 'tfplan', 'tfstate']`                   | Which extensions should trigger this module.                              |
 | `detect_files`      | `[]`                                                    | Which filenames should trigger this module.                               |
 | `detect_folders`    | `['.terraform']`                                        | Which folders should trigger this module.                                 |
