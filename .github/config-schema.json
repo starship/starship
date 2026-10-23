@@ -265,12 +265,12 @@
           },
           {
             "threshold": 70.0,
-            "style": "bold yellow",
+            "style": "yellow",
             "hidden": false
           },
           {
             "threshold": 90.0,
-            "style": "bold red",
+            "style": "red",
             "hidden": false
           }
         ],
@@ -2565,12 +2565,12 @@
             },
             {
               "threshold": 70.0,
-              "style": "bold yellow",
+              "style": "yellow",
               "hidden": false
             },
             {
               "threshold": 90.0,
-              "style": "bold red",
+              "style": "red",
               "hidden": false
             }
           ]

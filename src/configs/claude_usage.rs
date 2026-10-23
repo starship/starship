@@ -28,12 +28,12 @@ impl Default for ClaudeUsageConfig<'_> {
                 },
                 ClaudeDisplayConfig {
                     threshold: 70.0,
-                    style: "bold yellow",
+                    style: "yellow",
                     ..Default::default()
                 },
                 ClaudeDisplayConfig {
                     threshold: 90.0,
-                    style: "bold red",
+                    style: "red",
                     ..Default::default()
                 },
             ],

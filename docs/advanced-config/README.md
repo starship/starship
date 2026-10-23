@@ -690,11 +690,11 @@ hidden = true
 
 [[claude_usage.display]]
 threshold = 70.0
-style = "bold yellow"
+style = "yellow"
 
 [[claude_usage.display]]
 threshold = 90.0
-style = "bold red"
+style = "red"
 ```
 
 #### Variables

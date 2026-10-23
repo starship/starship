@@ -318,8 +318,8 @@ mod tests {
             .claude_code_data(data)
             .collect()
             .expect("should render");
-        let yellow = Color::Yellow.bold().prefix().to_string();
-        let red = Color::Red.bold().prefix().to_string();
+        let yellow = Color::Yellow.normal().prefix().to_string();
+        let red = Color::Red.normal().prefix().to_string();
         assert_eq!(out.matches(&yellow).count(), 1, "{out}");
         assert_eq!(out.matches(&red).count(), 1, "{out}");
         assert!(out.find(&yellow) < out.find(&red), "{out}");
