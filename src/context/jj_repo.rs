@@ -141,7 +141,13 @@ impl JJRepo {
                             concat("current.lines_added = ", diff.stat().total_added()),
                             concat("current.lines_removed = ", diff.stat().total_removed()),
                             concat("current.conflicted = ", conflict),
-                            concat("current.bookmarks = [", bookmarks.map(|bm| concat("\"", bm, "\"")).join(","), "]"),
+                            concat(
+                                "current.bookmarks = [",
+                                bookmarks
+                                    .map(|bm| concat("\"", stringify(bm).replace(regex:"(^\"|\"$)", ""), "\""))
+                                    .join(","),
+                                "]",
+                            ),
                             concat(
                                 "current.statuses = \"",
                                 self
@@ -160,7 +166,13 @@ impl JJRepo {
                             ),
                             if(
                                 bookmarks.len() > 0,
-                                concat("parents.bookmarks = [", bookmarks.map(|bm| concat("\"", bm, "\"")).join(","), "]\n"),
+                                concat(
+                                    "parents.bookmarks = [",
+                                    bookmarks
+                                        .map(|bm| concat("\"", stringify(bm).replace(regex:"(^\"|\"$)", ""), "\""))
+                                        .join(","),
+                                    "]\n",
+                                ),
                             ),
                         ),
                     )"#.as_ref(),
