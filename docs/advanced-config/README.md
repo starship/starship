@@ -665,11 +665,13 @@ The `claude_usage` module displays Claude Code's 5-hour and 7-day rate limit usa
 
 #### Options
 
-| Option     | Default                                                                                                                                    | Description                         |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------- |
-| `format`   | `'([5h: $five_hour_percentage ↺ $five_hour_reset]($five_hour_style) )([7d: $seven_day_percentage ↺ $seven_day_reset]($seven_day_style) )'` | The format for the module.          |
-| `display`  | [see below](#display-2)                                                                                                                    | Threshold and style configurations. |
-| `disabled` | `false`                                                                                                                                    | Disables the `claude_usage` module. |
+| Option                   | Default                                                                                                                                    | Description                                                                         |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
+| `format`                 | `'([5h: $five_hour_percentage ↺ $five_hour_reset]($five_hour_style) )([7d: $seven_day_percentage ↺ $seven_day_reset]($seven_day_style) )'` | The format for the module.                                                          |
+| `reset_time_format`      | `'%H:%M'`                                                                                                                                  | The [strftime][strftime] format for `$*_reset_at` when the reset is today.          |
+| `reset_date_time_format` | `'%a %H:%M'`                                                                                                                               | The [strftime][strftime] format for `$*_reset_at` when the reset is on a later day. |
+| `display`                | [see below](#display-2)                                                                                                                    | Threshold and style configurations.                                                 |
+| `disabled`               | `false`                                                                                                                                    | Disables the `claude_usage` module.                                                 |
 
 ##### Display
 
@@ -699,19 +701,33 @@ style = "red"
 
 #### Variables
 
-| Variable             | Example | Description                                         |
-| -------------------- | ------- | --------------------------------------------------- |
-| five_hour_percentage | `65%`   | Percentage of 5-hour window used                    |
-| five_hour_reset      | `1h23m` | Time until 5-hour window resets (two units at most) |
-| seven_day_percentage | `7%`    | Percentage of 7-day window used                     |
-| seven_day_reset      | `2d14h` | Time until 7-day window resets                      |
-| five_hour_style\*    |         | Style matching the 5-hour window's usage            |
-| seven_day_style\*    |         | Style matching the 7-day window's usage             |
-| style\*              |         | Style of the most severe visible window             |
+| Variable             | Example     | Description                                         |
+| -------------------- | ----------- | --------------------------------------------------- |
+| five_hour_percentage | `65%`       | Percentage of 5-hour window used                    |
+| five_hour_reset      | `1h23m`     | Time until 5-hour window resets (two units at most) |
+| five_hour_reset_at   | `19:42`     | Local time at which the 5-hour window resets        |
+| seven_day_percentage | `7%`        | Percentage of 7-day window used                     |
+| seven_day_reset      | `2d14h`     | Time until 7-day window resets                      |
+| seven_day_reset_at   | `Mon 09:00` | Local time at which the 7-day window resets         |
+| five_hour_style\*    |             | Style matching the 5-hour window's usage            |
+| seven_day_style\*    |             | Style matching the 7-day window's usage             |
+| style\*              |             | Style of the most severe visible window             |
 
 \*: This variable can only be used as a part of a style string
 
+The `_reset_at` variables are unset when the format is invalid.
+
 #### Examples
+
+```toml
+# ~/.config/starship.toml
+
+# Show the local reset time instead of the time left, e.g. `5h: 75% ↺ 7:42 PM`
+[claude_usage]
+format = '([5h: $five_hour_percentage ↺ $five_hour_reset_at]($five_hour_style) )([7d: $seven_day_percentage ↺ $seven_day_reset_at]($seven_day_style) )'
+reset_time_format = "%-I:%M %p"
+reset_date_time_format = "%a %-I:%M %p"
+```
 
 ```toml
 # ~/.config/starship.toml
@@ -773,3 +789,5 @@ Not every style string will be displayed correctly by every terminal. In particu
 - Many terminals disable support for `blink` by default.
 - `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
 - `strikethrough` is not supported by the default macOS Terminal.app.
+
+[strftime]: https://docs.rs/jiff/latest/jiff/fmt/strtime/index.html#conversion-specifications
