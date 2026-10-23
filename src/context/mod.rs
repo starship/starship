@@ -916,7 +916,7 @@ pub enum Target {
 #[derive(Parser, Debug)]
 pub struct Properties {
     /// The status code of the previously run command as an unsigned or signed 32bit integer
-    #[clap(short = 's', long = "status")]
+    #[clap(short = 's', long = "status", allow_negative_numbers = true)]
     pub status_code: Option<String>,
     /// Bash, Fish and Zsh support returning codes for each process in a pipeline.
     #[clap(long, value_delimiter = ' ')]
@@ -987,6 +987,26 @@ mod tests {
     use super::*;
     use crate::test::default_context;
     use std::io;
+
+    #[test]
+    fn properties_accept_signed_and_unsigned_status_codes() {
+        for status in ["-1", "-2147483648", "0", "4294967295"] {
+            for flag in ["-s", "--status"] {
+                let properties =
+                    Properties::try_parse_from(["starship", flag, status, "--jobs", "2"]).unwrap();
+
+                assert_eq!(properties.status_code.as_deref(), Some(status));
+                assert_eq!(properties.jobs, 2);
+            }
+        }
+    }
+
+    #[test]
+    fn properties_require_a_status_value() {
+        for flag in ["-s", "--status"] {
+            assert!(Properties::try_parse_from(["starship", flag, "--jobs"]).is_err());
+        }
+    }
 
     #[test]
     fn git_executable_preference_requires_full_trust() -> io::Result<()> {
