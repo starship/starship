@@ -373,6 +373,56 @@ modules you explicitly add to the format will not be duplicated. Eg.
 format = '$all$directory$character'
 ```
 
+## Async
+
+`starship prompt --stream` draws the prompts before slow modules finish, then redraws them as they
+do, ending on what `starship prompt` prints. Redraws follow how long each module took for the
+previous prompt of the shell session, so that results expected close together are drawn together,
+while what renders at once is not held back for what takes longer; a module never measured is
+waited for no longer than the fallback.
+
+A stream writes the main and right prompts, each followed by a NUL, every time they change. It ends
+once nothing will change them again, or the moment the shell stops reading, and `--redraws` limits
+how often it redraws them for shells that can only redraw so often. Warnings it reports before the
+first paint, such as those about the configuration, are shown ahead of the prompt; those it reports
+later are written only to the log, so that none land in the line being typed. Supported shell
+integrations:
+
+- zsh streams both prompts, including refreshes, vi mode changes, and terminal resizing.
+- fish streams and refreshes both prompts on Unix. With a Windows Starship binary, prompts render synchronously.
+- Nushell streams both prompts when its async prompt and job mailbox commands are available; otherwise, it uses synchronous prompts.
+- Bash 4.2 or newer with ble.sh 0.4 or newer. Bash without compatible ble.sh draws each prompt in full.
+- xonsh with prompt_toolkit on Unix. Other editors and platforms wait for the complete prompt.
+- PowerShell with PSReadLine draws an initial prompt and can redraw once after all modules finish, provided typing has not started. It does not refresh modules afterward. Without PSReadLine, each prompt is drawn in full.
+
+### Options
+
+| Option         | Default | Description                                                                                                                                                                     |
+| -------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `enabled`      | `true`  | Allow a partial prompt while modules render. Set to `false` to wait for all modules.                                                                                            |
+| `refresh`      | `true`  | Refresh time-varying modules while the prompt is displayed.                                                                                                                     |
+| `bus.adaptive` | `true`  | Use previous module timings to schedule redraws. Disable to use the fallback waiting budget for every module.                                                                   |
+| `bus.fallback` | `50`    | Waiting budget of a redraw, in milliseconds, shared by all it draws. A module never measured is waited for this long. Process startup and configuration loading are additional. |
+
+While the prompt is shown, modules whose values go stale render again, aligned to the wall clock,
+and the prompt is redrawn when that changes it. `time` renders again every hundredth or tenth of a
+second, or every second, if its format shows them, and otherwise every minute, on which the hours,
+days and offset transitions of every timezone fall too; with a valid `time_range`, at least every
+second; and if its format shows nothing of the time, outside a `time_range`, never. `memory_usage`
+renders again every five seconds, `battery` and `localip` every thirty, and a custom module as often
+as its `refresh` says, in milliseconds. Set `[async].refresh = false`, or a built-in module's
+`refresh = false`, to stop them.
+
+### Example
+
+```toml
+[async]
+refresh = false
+
+[async.bus]
+fallback = 100
+```
+
 ## AWS
 
 The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials.
@@ -528,16 +578,17 @@ The module is only visible when the device's battery is below 10%.
 
 ### Options
 
-| Option               | Default                           | Description                                         |
-| -------------------- | --------------------------------- | --------------------------------------------------- |
-| `full_symbol`        | `'󰁹 '`                            | The symbol shown when the battery is full.          |
-| `charging_symbol`    | `'󰂄 '`                            | The symbol shown when the battery is charging.      |
-| `discharging_symbol` | `'󰂃 '`                            | The symbol shown when the battery is discharging.   |
-| `unknown_symbol`     | `'󰂑 '`                            | The symbol shown when the battery state is unknown. |
-| `empty_symbol`       | `'󰂎 '`                            | The symbol shown when the battery state is empty.   |
-| `format`             | `'[$symbol$percentage]($style) '` | The format for the module.                          |
-| `display`            | [link](#battery-display)          | Display threshold and style for the module.         |
-| `disabled`           | `false`                           | Disables the `battery` module.                      |
+| Option               | Default                           | Description                                                       |
+| -------------------- | --------------------------------- | ----------------------------------------------------------------- |
+| `full_symbol`        | `'󰁹 '`                            | The symbol shown when the battery is full.                        |
+| `charging_symbol`    | `'󰂄 '`                            | The symbol shown when the battery is charging.                    |
+| `discharging_symbol` | `'󰂃 '`                            | The symbol shown when the battery is discharging.                 |
+| `unknown_symbol`     | `'󰂑 '`                            | The symbol shown when the battery state is unknown.               |
+| `empty_symbol`       | `'󰂎 '`                            | The symbol shown when the battery state is empty.                 |
+| `format`             | `'[$symbol$percentage]($style) '` | The format for the module.                                        |
+| `display`            | [link](#battery-display)          | Display threshold and style for the module.                       |
+| `disabled`           | `false`                           | Disables the `battery` module.                                    |
+| `refresh`            | `true`                            | Redraw the charge every thirty seconds while the prompt is shown. |
 
 ### Example
 
@@ -3106,12 +3157,13 @@ The `localip` module shows the IPv4 address of the primary network interface.
 
 ### Options
 
-| Option     | Default                   | Description                                            |
-| ---------- | ------------------------- | ------------------------------------------------------ |
-| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
-| `format`   | `'[$localipv4]($style) '` | The format for the module.                             |
-| `style`    | `'bold yellow'`           | The style for the module.                              |
-| `disabled` | `true`                    | Disables the `localip` module.                         |
+| Option     | Default                   | Description                                                        |
+| ---------- | ------------------------- | ------------------------------------------------------------------ |
+| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session.             |
+| `format`   | `'[$localipv4]($style) '` | The format for the module.                                         |
+| `style`    | `'bold yellow'`           | The style for the module.                                          |
+| `disabled` | `true`                    | Disables the `localip` module.                                     |
+| `refresh`  | `true`                    | Redraw the address every thirty seconds while the prompt is shown. |
 
 ### Variables
 
@@ -3222,13 +3274,14 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ### Options
 
-| Option      | Default                                   | Description                                              |
-| ----------- | ----------------------------------------- | -------------------------------------------------------- |
-| `threshold` | `75`                                      | Hide the memory usage unless it exceeds this percentage. |
-| `format`    | `'via $symbol[$ram( \| $swap)]($style) '` | The format for the module.                               |
-| `symbol`    | `'🐏'`                                    | The symbol used before displaying the memory usage.      |
-| `style`     | `'bold dimmed white'`                     | The style for the module.                                |
-| `disabled`  | `true`                                    | Disables the `memory_usage` module.                      |
+| Option      | Default                                   | Description                                                    |
+| ----------- | ----------------------------------------- | -------------------------------------------------------------- |
+| `threshold` | `75`                                      | Hide the memory usage unless it exceeds this percentage.       |
+| `format`    | `'via $symbol[$ram( \| $swap)]($style) '` | The format for the module.                                     |
+| `symbol`    | `'🐏'`                                    | The symbol used before displaying the memory usage.            |
+| `style`     | `'bold dimmed white'`                     | The style for the module.                                      |
+| `disabled`  | `true`                                    | Disables the `memory_usage` module.                            |
+| `refresh`   | `true`                                    | Redraw the usage every five seconds while the prompt is shown. |
 
 ### Variables
 
@@ -5049,7 +5102,7 @@ format = 'via [$symbol$workspace]($style) '
 ## Time
 
 The `time` module shows the current **local** time.
-The `format` configuration value is used by the [`jiff`](https://crates.io/crates/jiff) crate to control how the time is displayed. Take a look [at the jiff strftime docs](https://docs.rs/jiff/latest/jiff/fmt/strtime/index.html) to see what options are available.
+The `time_format` configuration value is used by the [`jiff`](https://crates.io/crates/jiff) crate to control how the time is displayed. Take a look [at the jiff strftime docs](https://docs.rs/jiff/latest/jiff/fmt/strtime/index.html) to see what options are available.
 
 > [!TIP]
 > This module is disabled by default.
@@ -5065,6 +5118,7 @@ The `format` configuration value is used by the [`jiff`](https://crates.io/crate
 | `style`           | `'bold yellow'`         | The style for the module time                                                                                                                             |
 | `utc_time_offset` | `'local'`               | Sets the UTC offset to use. Either an IANA time zone name or a range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
 | `disabled`        | `true`                  | Disables the `time` module.                                                                                                                               |
+| `refresh`         | `true`                  | Redraw the time while the prompt is shown, as often as what it shows changes.                                                                             |
 | `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                     |
 
 If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`.
@@ -5463,6 +5517,7 @@ These modules will be shown if any of the following conditions are met:
 | `style`             | `'bold green'`                  | The style for the module.                                                                                                                                                                                                                                                                     |
 | `format`            | `'[$symbol($output )]($style)'` | The format for the module.                                                                                                                                                                                                                                                                    |
 | `disabled`          | `false`                         | Disables this `custom` module.                                                                                                                                                                                                                                                                |
+| `refresh`           | `0`                             | How often, in milliseconds, to run `command` again while the prompt is shown, redrawing the prompt if the output changes. `0` runs it once.                                                                                                                                                   |
 | `os`                |                                 | Operating System name on which the module will be shown (unix, linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                                                 |
 | `use_stdin`         |                                 | An optional boolean value that overrides whether commands should be forwarded to the shell via the standard input or as an argument. If unset standard input is used by default, unless the shell does not support it (cmd, nushell). Setting this disables shell-specific argument handling. |
 | `ignore_timeout`    | `false`                         | Ignore global `command_timeout` setting and keep running external commands, no matter how long they take.                                                                                                                                                                                     |

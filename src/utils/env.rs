@@ -4,7 +4,7 @@ use std::collections::HashMap;
 use std::env;
 use std::ffi::OsString;
 
-#[derive(Default)]
+#[derive(Clone, Default)]
 pub struct Env<'a> {
     /// A `HashMap` of environment variable mocks
     #[cfg(test)]

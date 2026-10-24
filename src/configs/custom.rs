@@ -31,6 +31,9 @@ pub struct CustomConfig<'a> {
     pub use_stdin: Option<bool>,
     pub ignore_timeout: bool,
     pub unsafe_no_escape: bool,
+    /// How often, in milliseconds, to run the command again while the prompt
+    /// is shown, redrawing it if the output changes. `0` runs it once.
+    pub refresh: u64,
 }
 
 impl Default for CustomConfig<'_> {
@@ -52,6 +55,7 @@ impl Default for CustomConfig<'_> {
             use_stdin: None,
             ignore_timeout: false,
             unsafe_no_escape: false,
+            refresh: 0,
         }
     }
 }
