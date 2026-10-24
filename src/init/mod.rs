@@ -282,6 +282,44 @@ const CMDEXE_INIT: &str = include_str!("starship.lua");
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn zsh_preserves_partial_lines() -> io::Result<()> {
+        let script = ZSH_INIT.replace("::STARSHIP::", "starship_stub");
+        let mut command = match crate::utils::create_command("zsh") {
+            Err(error) if error.kind() == io::ErrorKind::NotFound => {
+                eprintln!("Skipping Zsh partial-line test: zsh is not installed");
+                return Ok(());
+            }
+            result => result?,
+        };
+        let output = command
+            .args(["-f", "-c"])
+            .arg(format!(
+                r#"
+                starship_stub() {{ return 0; }}
+                for setup in ':' 'setopt promptcr; unsetopt promptsp' 'unsetopt promptcr promptsp'; do
+                    for marker in 'custom marker' ''; do
+                        eval "$setup"
+                        PROMPT_EOL_MARK=$marker
+                        for repeat in 1 2; do
+                            {script}
+                            [[ -o promptcr && -o promptsp && -o promptsubst ]] || exit 1
+                            [[ $PROMPT_EOL_MARK == "$marker" ]] || exit 2
+                        done
+                    done
+                done
+                "#
+            ))
+            .output()?;
+        assert!(
+            output.status.success(),
+            "Zsh initialization failed: {}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        Ok(())
+    }
+
     #[test]
     fn escape_pwsh() -> io::Result<()> {
         let starship_path = StarshipPath {
