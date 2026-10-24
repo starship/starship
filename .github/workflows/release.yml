@@ -300,10 +300,75 @@ jobs:
           KEYCHAIN_PATH="$RUNNER_TEMP/$KEYCHAIN_FILENAME"
           security delete-keychain $KEYCHAIN_PATH
 
+  # Sign a packslip manifest of the final release archives.
+  # Kept in its own job so the signing identity never holds `contents: write`.
+  packslip:
+    name: Sign Packslip
+    needs: [release_please, github_build, notarize_and_pkgbuild]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - name: Setup | Artifacts
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: starship-*
+          path: dist
+          merge-multiple: true
+
+      - name: Validate | All expected archives present
+        run: |
+          set -euo pipefail
+          expected=( \
+            starship-x86_64-unknown-linux-gnu.tar.gz \
+            starship-x86_64-unknown-linux-musl.tar.gz \
+            starship-i686-unknown-linux-musl.tar.gz \
+            starship-aarch64-unknown-linux-musl.tar.gz \
+            starship-arm-unknown-linux-musleabihf.tar.gz \
+            starship-riscv64gc-unknown-linux-musl.tar.gz \
+            starship-x86_64-apple-darwin.tar.gz \
+            starship-aarch64-apple-darwin.tar.gz \
+            starship-x86_64-unknown-freebsd.tar.gz \
+            starship-x86_64-pc-windows-msvc.zip \
+            starship-i686-pc-windows-msvc.zip \
+            starship-aarch64-pc-windows-msvc.zip \
+          )
+          missing=0
+          for f in "${expected[@]}"; do
+            if [ ! -f "dist/$f" ]; then
+              echo "::error::Missing expected archive: $f"
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            echo "One or more build targets failed; refusing to sign a partial release."
+            exit 1
+          fi
+          echo "All expected archives present."
+
+      - name: Sign | Packslip
+        uses: jdx/packslip@7d397618045bd98b76cd5cb8177767b2f52789b8 # v1.10.1
+        id: packslip
+        with:
+          artifacts: dist/starship-*.tar.gz dist/starship-*.zip
+          bin: starship
+          tag: ${{ needs.release_please.outputs.tag_name }}
+          upload: false
+          resources: |
+            completion/bash,elvish,fish,nushell,powershell,zsh=exec:starship completions {shell}
+
+      - name: Sign | Upload bundle
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: packslip
+          path: ${{ steps.packslip.outputs.bundle }}
+
   # Create GitHub release with Rust build targets and release notes
   upload_artifacts:
     name: Add Build Artifacts to Release
-    needs: [release_please, github_build, notarize_and_pkgbuild]
+    needs: [release_please, github_build, notarize_and_pkgbuild, packslip]
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Artifacts
@@ -312,13 +377,14 @@ jobs:
       - name: Setup | Checksums
         run: for file in starship-*/starship-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
 
-      - name: Setup | Publish Release
-        run: gh release edit ${{ needs.release_please.outputs.tag_name }} --draft=false --repo=starship/starship
+      - name: Build | Add Artifacts to Release
+        run: gh release upload ${{ needs.release_please.outputs.tag_name }} starship-*/starship-* packslip/packslip.sigstore.json --repo starship/starship
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build | Add Artifacts to Release
-        run: gh release upload ${{ needs.release_please.outputs.tag_name }} starship-*/starship-* --repo starship/starship
+      # Publish only once every asset, including the packslip bundle, is attached
+      - name: Setup | Publish Release
+        run: gh release edit ${{ needs.release_please.outputs.tag_name }} --draft=false --repo=starship/starship
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
