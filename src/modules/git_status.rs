@@ -11,6 +11,29 @@ use std::path::PathBuf;
 use std::sync::atomic::AtomicBool;
 use std::sync::{Arc, OnceLock};
 
+#[cfg(test)]
+use std::cell::Cell;
+
+/// Guidance shared with the external-git timeout warning in `crate::utils`.
+const GITOXIDE_STATUS_TIMEOUT_WARNING: &str = "You can set command_timeout in your config to a higher value to allow longer-running commands to keep executing.";
+
+#[cfg(test)]
+thread_local! {
+    static GITOXIDE_TIMEOUT_WARNING_SEEN: Cell<bool> = const { Cell::new(false) };
+}
+
+fn warn_gitoxide_status_timeout() {
+    log::warn!("Executing command \"gitoxide\" timed out.");
+    log::warn!("{GITOXIDE_STATUS_TIMEOUT_WARNING}");
+    #[cfg(test)]
+    GITOXIDE_TIMEOUT_WARNING_SEEN.with(|seen| seen.set(true));
+}
+
+#[cfg(test)]
+fn gitoxide_timeout_warning_seen() -> bool {
+    GITOXIDE_TIMEOUT_WARNING_SEEN.with(|seen| seen.replace(false))
+}
+
 const ALL_STATUS_FORMAT: &str =
     "$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked";
 
@@ -364,21 +387,26 @@ fn get_repo_status(
             }
         });
     } else {
-        let is_interrupted = Arc::new(AtomicBool::new(false));
-        std::thread::Builder::new()
-            .name("starship timer".into())
-            .stack_size(256 * 1024)
-            .spawn({
-                let is_interrupted = is_interrupted.clone();
-                let abort_after =
-                    std::time::Duration::from_millis(context.root_config.command_timeout);
-                move || {
-                    std::thread::sleep(abort_after);
-                    is_interrupted.store(true, std::sync::atomic::Ordering::SeqCst);
-                }
-            })
-            .expect("should be able to spawn timer thread");
+        let abort_after = std::time::Duration::from_millis(context.root_config.command_timeout);
+        // A zero budget has already expired; skip the timer thread so the walk cannot publish a
+        // partial result before the flag is observed.
+        let is_interrupted = Arc::new(AtomicBool::new(abort_after.is_zero()));
+        if !abort_after.is_zero() {
+            std::thread::Builder::new()
+                .name("starship timer".into())
+                .stack_size(256 * 1024)
+                .spawn({
+                    let is_interrupted = is_interrupted.clone();
+                    move || {
+                        std::thread::sleep(abort_after);
+                        is_interrupted.store(true, std::sync::atomic::Ordering::SeqCst);
+                    }
+                })
+                .expect("should be able to spawn timer thread");
+        }
         // We don't show details in submodules.
+        // Precedence matches Git: an explicit Starship override, then the no-untracked
+        // optimization, otherwise `diff.ignoreSubmodules` via gitoxide's configured mode.
         let check_dirty = true;
         let status = gix_repo
             .status(gix::progress::Discard)
@@ -407,9 +435,13 @@ fn get_repo_status(
                     Some(num_rayon_threads())
                 };
                 if config.untracked.is_empty() {
+                    // Skip the directory walk when untracked paths are not displayed.
                     opts.dirwalk_options.take();
                 } else if let Some(opts) = opts.dirwalk_options.as_mut() {
-                    opts.set_emit_untracked(gix::dir::walk::EmissionMode::Matching)
+                    // Collapse pure untracked directories the way `git status` does.
+                    // A directory that also contains tracked changes is left expanded, so each
+                    // untracked path stays visible next to those other statuses.
+                    opts.set_emit_untracked(gix::dir::walk::EmissionMode::CollapseDirectory)
                         .set_emit_ignored(None)
                         .set_emit_pruned(false)
                         .set_emit_empty_directories(false);
@@ -430,7 +462,18 @@ fn get_repo_status(
 
         // This will start the status machinery, collecting status items in the background.
         // Thus, we can do some work in this thread without blocking, before starting to count status items.
-        let status = status.into_iter(None).ok()?;
+        let status = match status.into_iter(None) {
+            Ok(status) => status,
+            Err(err) => {
+                // An interrupted or failed walk is indeterminate: a zero `RepoStatus` would look clean.
+                if is_interrupted.load(std::sync::atomic::Ordering::Relaxed) || err.is_cancelled() {
+                    warn_gitoxide_status_timeout();
+                } else {
+                    log::debug!("get_repo_status: gitoxide status iteration failed: {err}");
+                }
+                return None;
+            }
+        };
 
         // for performance reasons, only pass flags if necessary...
         let has_ahead_behind = !config.ahead.is_empty() || !config.behind.is_empty();
@@ -456,7 +499,24 @@ fn get_repo_status(
             }
         }
 
-        for change in status.filter_map(Result::ok) {
+        for change in status {
+            if is_interrupted.load(std::sync::atomic::Ordering::Relaxed) {
+                warn_gitoxide_status_timeout();
+                return None;
+            }
+            let change = match change {
+                Ok(change) => change,
+                Err(err) => {
+                    if is_interrupted.load(std::sync::atomic::Ordering::Relaxed)
+                        || err.is_cancelled()
+                    {
+                        warn_gitoxide_status_timeout();
+                    } else {
+                        log::debug!("get_repo_status: gitoxide status iteration failed: {err}");
+                    }
+                    return None;
+                }
+            };
             use gix::status;
             match &change {
                 status::Item::TreeIndex(change) => {
@@ -550,12 +610,11 @@ fn get_repo_status(
             // Keep it for potential reuse by `git_metrics`
             repo_status.changes.push(change);
         }
+        // The iterator stops early on interrupt without always yielding `Err`, which would otherwise
+        // publish a zero or partial status and look like a clean repository.
         if is_interrupted.load(std::sync::atomic::Ordering::Relaxed) {
-            repo_status = RepoStatus {
-                ahead: repo_status.ahead,
-                behind: repo_status.behind,
-                ..Default::default()
-            };
+            warn_gitoxide_status_timeout();
+            return None;
         }
     }
 
@@ -1174,6 +1233,179 @@ pub mod tests {
             repo_dir.close()?;
         }
         Ok(())
+    }
+
+    #[test]
+    fn counts_untracked_directory_once() -> io::Result<()> {
+        for &mode in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(mode)?;
+            let untracked = repo_dir.path().join("untracked_dir").join("nested");
+            fs::create_dir_all(&untracked)?;
+            File::create(untracked.join("a"))?.sync_all()?;
+            File::create(untracked.join("b"))?.sync_all()?;
+
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    untracked = "?$count"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("?1");
+
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn does_not_collapse_directory_with_mixed_status() -> io::Result<()> {
+        for &mode in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(mode)?;
+            let dir = repo_dir.path().join("mixed");
+            fs::create_dir(&dir)?;
+            File::create(dir.join("tracked"))?.sync_all()?;
+            run_git(repo_dir.path(), &["add", "mixed"])?;
+            run_git(
+                repo_dir.path(),
+                &["commit", "-qm", "add mixed", "--no-gpg-sign"],
+            )?;
+
+            fs::write(dir.join("tracked"), "changed\n")?;
+            File::create(dir.join("u1"))?.sync_all()?;
+            File::create(dir.join("u2"))?.sync_all()?;
+
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = "$modified$untracked"
+                    modified = "!$count"
+                    untracked = "?$count"
+                })
+                .path(repo_dir.path())
+                .collect();
+
+            assert_eq!(Some(String::from("!1?2")), actual);
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn honors_diff_ignore_submodules_and_explicit_override() -> io::Result<()> {
+        for &mode in COMMON_GIT_PROVIDERS {
+            let (repo_dir, origins) = prepare_submodule_status_repo(mode)?;
+            run_git(
+                repo_dir.path(),
+                &["config", "diff.ignoreSubmodules", "none"],
+            )?;
+            assert_eq!(
+                Some(String::from("!3")),
+                render_modified_count(repo_dir.path(), false)
+            );
+            for origin in origins {
+                origin.close()?;
+            }
+            repo_dir.close()?;
+
+            let (repo_dir, origins) = prepare_submodule_status_repo(mode)?;
+            run_git(
+                repo_dir.path(),
+                &["config", "diff.ignoreSubmodules", "dirty"],
+            )?;
+            assert_eq!(
+                Some(String::from("!1")),
+                render_modified_count(repo_dir.path(), false)
+            );
+            for origin in origins {
+                origin.close()?;
+            }
+            repo_dir.close()?;
+
+            let (repo_dir, origins) = prepare_submodule_status_repo(mode)?;
+            run_git(
+                repo_dir.path(),
+                &["config", "diff.ignoreSubmodules", "none"],
+            )?;
+            assert_eq!(
+                Some(String::from("!1")),
+                render_modified_count(repo_dir.path(), true)
+            );
+            for origin in origins {
+                origin.close()?;
+            }
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn disabled_untracked_keeps_submodule_ignore_optimization() -> io::Result<()> {
+        for &mode in COMMON_GIT_PROVIDERS {
+            let (repo_dir, origins) = prepare_submodule_status_repo(mode)?;
+            // `none` would report the untracked-only submodule; the empty untracked format must
+            // still ignore that content while keeping tracked submodule modifications.
+            run_git(
+                repo_dir.path(),
+                &["config", "diff.ignoreSubmodules", "none"],
+            )?;
+
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = "$modified$untracked"
+                    modified = "!$count"
+                    untracked = ""
+                })
+                .path(repo_dir.path())
+                .collect();
+
+            assert_eq!(Some(String::from("!2")), actual);
+            for origin in origins {
+                origin.close()?;
+            }
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn gitoxide_timeout_does_not_report_clean_status() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git {
+            reftable: false,
+            bare: false,
+        })?;
+        let untracked = repo_dir.path().join("untracked_dir");
+        fs::create_dir(&untracked)?;
+        File::create(untracked.join("a"))?.sync_all()?;
+        File::create(untracked.join("b"))?.sync_all()?;
+
+        let _ = super::gitoxide_timeout_warning_seen();
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                command_timeout = 0
+                [git_status]
+                format = "$untracked"
+                ahead = ""
+                behind = ""
+                up_to_date = ""
+                diverged = ""
+                untracked = "?$count"
+            })
+            .path(repo_dir.path())
+            .collect();
+
+        assert_eq!(None, actual);
+        assert!(
+            super::GITOXIDE_STATUS_TIMEOUT_WARNING.contains("command_timeout"),
+            "timeout guidance should mention command_timeout"
+        );
+        assert!(
+            super::gitoxide_timeout_warning_seen(),
+            "interrupted gitoxide status should record the command_timeout warning"
+        );
+        repo_dir.close()
     }
 
     #[test]
@@ -2119,6 +2351,104 @@ pub mod tests {
         File::create(repo_dir.join("license"))?.sync_all()?;
 
         Ok(())
+    }
+
+    fn run_git(repo_dir: &Path, args: &[&str]) -> io::Result<()> {
+        let output = create_command("git")?
+            .args(args)
+            .current_dir(repo_dir)
+            .output()?;
+        if output.status.success() {
+            Ok(())
+        } else {
+            Err(io::Error::other(format!(
+                "git {args:?} failed: {}",
+                String::from_utf8_lossy(&output.stderr)
+            )))
+        }
+    }
+
+    fn render_modified_count(repo_dir: &Path, ignore_submodules: bool) -> Option<String> {
+        ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                format = "$modified"
+                modified = "!$count"
+                ignore_submodules = ignore_submodules
+            })
+            .path(repo_dir)
+            .collect()
+    }
+
+    /// Parent modification plus one untracked-only submodule and one worktree-modified submodule.
+    /// Returns the parent repo and the submodule origins that must stay alive for the gitlinks.
+    fn prepare_submodule_status_repo(
+        mode: FixtureProvider,
+    ) -> io::Result<(tempfile::TempDir, Vec<tempfile::TempDir>)> {
+        let repo_dir = fixture_repo(mode)?;
+        let untracked_origin = add_dirty_submodule(repo_dir.path(), "sub_untracked", false)?;
+        let modified_origin = add_dirty_submodule(repo_dir.path(), "sub_modified", true)?;
+        create_modified(repo_dir.path())?;
+        Ok((repo_dir, vec![untracked_origin, modified_origin]))
+    }
+
+    fn add_dirty_submodule(
+        repo_dir: &Path,
+        name: &str,
+        modify_tracked: bool,
+    ) -> io::Result<tempfile::TempDir> {
+        let origin = tempfile::tempdir()?;
+        let object_format = create_command("git")?
+            .args(["rev-parse", "--show-object-format"])
+            .current_dir(repo_dir)
+            .output()?;
+        let object_format = String::from_utf8_lossy(&object_format.stdout);
+        let init_args: &[&str] = if object_format.trim() == "sha256" {
+            &["init", "-q", "--object-format=sha256"]
+        } else {
+            &["init", "-q"]
+        };
+        run_git(origin.path(), init_args)?;
+        run_git(
+            origin.path(),
+            &["config", "user.email", "starship@example.com"],
+        )?;
+        run_git(origin.path(), &["config", "user.name", "starship"])?;
+        fs::write(origin.path().join("file"), "base\n")?;
+        run_git(origin.path(), &["add", "file"])?;
+        run_git(origin.path(), &["commit", "-qm", "init", "--no-gpg-sign"])?;
+
+        let url = origin.path().to_str().expect("submodule path is utf-8");
+        let output = create_command("git")?
+            .args([
+                "-c",
+                "protocol.file.allow=always",
+                "submodule",
+                "add",
+                "-q",
+                url,
+                name,
+            ])
+            .current_dir(repo_dir)
+            .output()?;
+        if !output.status.success() {
+            return Err(io::Error::other(format!(
+                "git submodule add failed: {}",
+                String::from_utf8_lossy(&output.stderr)
+            )));
+        }
+        run_git(
+            repo_dir,
+            &["commit", "-qm", "add submodule", "--no-gpg-sign"],
+        )?;
+
+        let worktree = repo_dir.join(name);
+        if modify_tracked {
+            fs::write(worktree.join("file"), "changed\n")?;
+        } else {
+            File::create(worktree.join("untracked"))?.sync_all()?;
+        }
+        Ok(origin)
     }
 
     fn create_added(repo_dir: &Path) -> io::Result<()> {
