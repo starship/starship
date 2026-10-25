@@ -277,7 +277,7 @@
         "style": "yellow bold",
         "show_milliseconds": false,
         "disabled": false,
-        "show_notifications": false,
+        "show_notifications": "none",
         "min_time_to_notify": 45000
       }
     },
@@ -2596,8 +2596,8 @@
           "default": false
         },
         "show_notifications": {
-          "type": "boolean",
-          "default": false
+          "$ref": "#/$defs/Either",
+          "default": "none"
         },
         "min_time_to_notify": {
           "type": "integer",
@@ -2614,6 +2614,24 @@
         }
       },
       "additionalProperties": false
+    },
+    "Either": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "$ref": "#/$defs/NotificationMode"
+        }
+      ]
+    },
+    "NotificationMode": {
+      "type": "string",
+      "enum": [
+        "none",
+        "desktop",
+        "ansi"
+      ]
     },
     "CobolConfig": {
       "type": "object",
@@ -2953,7 +2971,7 @@
           "default": true
         },
         "substitutions": {
-          "$ref": "#/$defs/Either",
+          "$ref": "#/$defs/Either2",
           "default": []
         },
         "fish_style_pwd_dir_length": {
@@ -3018,7 +3036,7 @@
       },
       "additionalProperties": false
     },
-    "Either": {
+    "Either2": {
       "anyOf": [
         {
           "type": "array",
@@ -7453,7 +7471,7 @@
           "default": ""
         },
         "when": {
-          "$ref": "#/$defs/Either2",
+          "$ref": "#/$defs/Either3",
           "default": false
         },
         "require_repo": {
@@ -7520,7 +7538,7 @@
       },
       "additionalProperties": false
     },
-    "Either2": {
+    "Either3": {
       "anyOf": [
         {
           "type": "boolean"
