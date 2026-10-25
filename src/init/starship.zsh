@@ -8,6 +8,7 @@
 # ever drawn once (for the prompt immediately after it is run).
 
 zmodload zsh/parameter  # Needed to access jobstates variable for STARSHIP_JOBS_COUNT
+zmodload zsh/sched  # Debounce terminal resizing without starting another process
 
 # Defines a function `__starship_get_time` that sets the time since epoch in millis in STARSHIP_CAPTURED_TIME.
 if [[ $ZSH_VERSION == ([1-4]*) ]]; then
@@ -51,11 +52,15 @@ prompt_starship_precmd() {
     # Use length of jobstates array as number of jobs. Expansion fails inside
     # quotes so we set it here and then use the value later on.
     STARSHIP_JOBS_COUNT="${#jobstates[*]}"
+
+    # Run after every precmd hook has updated the shell environment.
+    sched +0 starship_stream_start
 }
 
 # Runs after the user submits the command line, but before it is executed and
 # only if there's an actual command to run
 prompt_starship_preexec() {
+    starship_stream_stop
     __starship_get_time && STARSHIP_START_TIME=$STARSHIP_CAPTURED_TIME
 }
 
@@ -63,10 +68,86 @@ prompt_starship_preexec() {
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd prompt_starship_precmd
 add-zsh-hook preexec prompt_starship_preexec
+add-zsh-hook zshexit starship_stream_stop
 
-# Set up a function to redraw the prompt if the user switches vi modes
-starship_zle-keymap-select() {
+# ZLE reads the stream while the user types. STARSHIP_STREAM holds the
+# prompts last read, and the descriptor they come from.
+typeset -gA STARSHIP_STREAM
+
+# Closing the descriptor ends the stream. Closing with `exec` applies its
+# redirection to the shell itself, so its error output is silenced around the
+# closing alone.
+starship_stream_stop() {
+    local descriptor=${STARSHIP_STREAM[f]-}
+    [[ -n $descriptor ]] && { zle -F $descriptor 2>/dev/null; { exec {descriptor}<&- } 2>/dev/null }
+    STARSHIP_STREAM[f]=
+}
+
+# Show the prompts last read as they are: text, which a user who turns on
+# promptsubst has escaped to expand to itself.
+starship_stream_show() {
+    local main=${STARSHIP_STREAM[1]-} right=${STARSHIP_STREAM[2]-}
+    if [[ -o promptsubst ]]; then
+        main=${${${main//\\/\\\\}//\$/\\\$}//\`/\\\`}
+        right=${${${right//\\/\\\\}//\$/\\\$}//\`/\\\`}
+    fi
+    PROMPT=$main RPROMPT=$right
+}
+
+# Read the next prompts from descriptor $1, or stop at the end of the stream.
+starship_stream_read() {
+    local main right
+    IFS= read -r -u $1 -d '' main && IFS= read -r -u $1 -d '' right || {
+        starship_stream_stop
+        return 1
+    }
+    STARSHIP_STREAM[1]=$main STARSHIP_STREAM[2]=$right
+}
+
+starship_stream_redraw() {
+    starship_stream_read $1 && { starship_stream_show; zle -I; zle reset-prompt }
+}
+zle -N starship_stream_redraw
+
+# Wait for the first paint, unless given an argument to keep the prompts shown
+# until the new ones arrive: ZLE is then drawing the line, so what the stream
+# reports goes to the log alone.
+starship_stream_start() {
+    starship_stream_stop
+    local descriptor arguments=(prompt --stream --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")
+    if (( $# )); then
+        exec {descriptor}< <(::STARSHIP:: "${arguments[@]}" 2>/dev/null)
+    else
+        exec {descriptor}< <(::STARSHIP:: "${arguments[@]}")
+    fi
+    STARSHIP_STREAM[f]=$descriptor
+    if (( ! $# )); then
+        STARSHIP_STREAM[1]= STARSHIP_STREAM[2]=
+        starship_stream_read $descriptor
+        starship_stream_show
+    fi
+    [[ -n ${STARSHIP_STREAM[f]} ]] && zle -F -w $descriptor starship_stream_redraw
+}
+
+# Debounce resize rendering for one second with a nonblocking, fork-free timer.
+(( ${+functions[TRAPWINCH]} )) && functions[starship_preserved_winch]=$functions[TRAPWINCH]
+starship_stream_resize() {
+    zle && starship_stream_start adopt
+}
+TRAPWINCH() {
+    (( ${+functions[starship_preserved_winch]} )) && starship_preserved_winch "$@"
+    zle || return
+    local pending=$zsh_scheduled_events[(I)*starship_stream_resize*]
+    (( pending )) && sched -$pending
+    sched +1 starship_stream_resize
+    # Rewrap the prompt already shown until the new one arrives.
+    zle -I
     zle reset-prompt
+}
+
+# Restart asynchronously when vi mode changes.
+starship_zle-keymap-select() {
+    starship_stream_start adopt
 }
 
 ## Check for existing keymap-select widget.
@@ -95,8 +176,4 @@ export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if
 
 VIRTUAL_ENV_DISABLE_PROMPT=1
 
-setopt promptsubst
-
-PROMPT='$('::STARSHIP::' prompt --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
-RPROMPT='$('::STARSHIP::' prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
 PROMPT2="$(::STARSHIP:: prompt --continuation)"

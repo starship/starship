@@ -149,7 +149,8 @@ onMounted(() => {
    #### Nushell
    > [!WARNING]
    > This will change in the future.
-   > Only Nushell v0.96+ is supported.
+   > Nushell 0.96+ is supported. Starship probes for the async prompt and job
+   > mailbox commands at runtime; when they are available, it streams the prompt.
 
    Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 

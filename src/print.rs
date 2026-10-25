@@ -1,16 +1,17 @@
 use clap::{ValueEnum, builder::PossibleValue};
-use nu_ansi_term::AnsiStrings;
-use rayon::prelude::*;
-use regex::Regex;
-use std::collections::BTreeSet;
+use indexmap::IndexSet;
+use std::borrow::Cow;
+use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::{Debug, Write as FmtWrite};
 use std::io::{self, Write};
+use std::panic::{AssertUnwindSafe, catch_unwind};
 use std::path::PathBuf;
 use std::sync::OnceLock;
+use std::thread::{self, Scope};
 use std::time::Duration;
 use terminal_size::terminal_size;
 use unicode_segmentation::UnicodeSegmentation;
-use unicode_width::UnicodeWidthChar;
+use unicode_width::UnicodeWidthStr;
 
 use crate::configs::PROMPT_ORDER;
 use crate::context::{Context, Properties, Shell, Target};
@@ -18,19 +19,15 @@ use crate::formatter::{StringFormatter, VariableHolder};
 use crate::module::ALL_MODULES;
 use crate::module::Module;
 use crate::modules;
+use crate::painted::Painted;
 use crate::segment::Segment;
 use crate::shadow;
-use crate::utils::wrap_colorseq_for_shell;
 
 pub struct Grapheme<'a>(pub &'a str);
 
 impl Grapheme<'_> {
     pub fn width(&self) -> usize {
-        self.0
-            .chars()
-            .filter_map(UnicodeWidthChar::width)
-            .max()
-            .unwrap_or(0)
+        self.0.width_graphemes()
     }
 }
 
@@ -38,35 +35,88 @@ pub trait UnicodeWidthGraphemes {
     fn width_graphemes(&self) -> usize;
 }
 
-static ANSI_REGEX: OnceLock<Regex> = OnceLock::new();
-
-fn ansi_strip() -> &'static Regex {
-    ANSI_REGEX.get_or_init(|| Regex::new(r"\x1B\[[0-9;]*m").unwrap())
-}
-
 impl<T> UnicodeWidthGraphemes for T
 where
     T: AsRef<str>,
 {
+    /// As wide as Unicode says a terminal draws the printable text, measured
+    /// whole, so that controls within a grapheme cannot split it.
     fn width_graphemes(&self) -> usize {
-        ansi_strip()
-            .replace_all(self.as_ref(), "")
-            .into_owned()
-            .graphemes(true)
-            .map(Grapheme)
-            .map(|g| g.width())
-            .sum()
+        printable(self.as_ref()).width()
     }
+}
+
+/// What a terminal draws of `text`: all of it but its controls.
+pub fn printable(text: &str) -> Cow<'_, str> {
+    let mut chunks = anstream::adapter::strip_str(text);
+    let mut printable = Cow::Borrowed(chunks.next().unwrap_or_default());
+    for chunk in chunks {
+        printable.to_mut().push_str(chunk);
+    }
+    printable
 }
 
 #[test]
 fn test_grapheme_aware_width() {
-    // UnicodeWidthStr::width would return 8
+    // A family of four, joined, is drawn as one.
     assert_eq!(2, "👩‍👩‍👦‍👦".width_graphemes());
     assert_eq!(1, "Ü".width_graphemes());
     assert_eq!(11, "normal text".width_graphemes());
     // Magenta string test
     assert_eq!(11, "\x1B[35;6mnormal text".width_graphemes());
+    // A hyperlink, a window title and a true color draw only their text.
+    assert_eq!(
+        4,
+        "\x1b]8;;https://x\x1b\\link\x1b]8;;\x1b\\\x1b]0;title\x07\x1b[38:2::1:2:3m"
+            .width_graphemes()
+    );
+}
+
+#[test]
+fn a_grapheme_is_as_wide_as_a_terminal_draws_it() {
+    for (grapheme, width) in [
+        ("\u{2764}\u{fe0f}", 2),
+        ("1\u{fe0f}\u{20e3}", 2),
+        ("\u{1f1fa}\u{1f1f3}", 2),
+        ("\u{1f469}\u{200d}\u{1f469}\u{200d}\u{1f466}", 2),
+        ("U\u{308}", 1),
+        ("\u{ac01}", 2),
+    ] {
+        assert_eq!(width, Grapheme(grapheme).width(), "{grapheme:?}");
+        assert_eq!(
+            width * 3,
+            grapheme.repeat(3).width_graphemes(),
+            "{grapheme:?}"
+        );
+    }
+}
+
+#[test]
+fn controls_inside_a_grapheme_preserve_its_width() {
+    for plain in ["👩‍👩‍👦‍👦", "Ü", "🇺🇳", "각"] {
+        for control in [
+            "\x1b[31m",
+            "\x1b[38:2::1:2:3m",
+            "\x1b]8;;https://x\x1b\\",
+            "\x1b]0;title\x07",
+            "\x07",
+        ] {
+            let interleaved = plain
+                .chars()
+                .map(|character| format!("{character}{control}"))
+                .collect::<String>();
+            let inserted = plain.char_indices().map(|(boundary, _)| {
+                format!("{}{control}{}", &plain[..boundary], &plain[boundary..])
+            });
+            for controlled in inserted.chain([interleaved]) {
+                assert_eq!(
+                    plain.width_graphemes(),
+                    controlled.width_graphemes(),
+                    "{controlled:?}"
+                );
+            }
+        }
+    }
 }
 
 pub fn prompt(args: Properties, target: Target) {
@@ -90,70 +140,175 @@ pub fn prompt_with_claude_code(args: Properties, target: Target) {
     write!(handle, "{}", get_prompt(&context)).unwrap();
 }
 
-pub fn get_prompt(context: &Context) -> String {
-    let config = &context.root_config;
-    let mut buf = String::new();
+/// What starship shows in place of a prompt under a terminal that cannot draw one.
+pub(crate) const DUMB_TERMINAL_PROMPT: &str = "Starship disabled due to TERM=dumb > ";
 
-    match std::env::var_os("TERM") {
-        Some(term) if term == "dumb" => {
-            log::error!("Under a 'dumb' terminal (TERM=dumb).");
-            buf.push_str("Starship disabled due to TERM=dumb > ");
-            return buf;
-        }
-        _ => {}
+pub(crate) fn is_dumb_terminal(context: &Context) -> bool {
+    context.get_env("TERM").as_deref() == Some("dumb")
+}
+
+pub fn get_prompt(context: &Context) -> String {
+    if is_dumb_terminal(context) {
+        log::error!("Under a 'dumb' terminal (TERM=dumb).");
+        return DUMB_TERMINAL_PROMPT.to_owned();
     }
+
+    let plan = Plan::new(context, [context.target.clone()]);
+    let rendered = plan.render(context);
+    let [prompt] = plan.prompts(&|position| &rendered[position], context);
+    prompt
+}
+
+/// Prompt formats sharing one ordered set of modules to render.
+pub struct Plan<'a, const PROMPTS: usize> {
+    /// Deduplicated modules: those of each prompt in turn, alphabetically.
+    pub modules: IndexSet<String>,
+    /// The format of each requested prompt, in the order requested.
+    pub formats: [PromptFormat<'a>; PROMPTS],
+}
+
+impl<'a, const PROMPTS: usize> Plan<'a, PROMPTS> {
+    pub fn new(context: &'a Context, targets: [Target; PROMPTS]) -> Self {
+        let mut modules = IndexSet::new();
+        let formats = targets.map(|target| PromptFormat::new(context, target, &mut modules));
+        Self { modules, formats }
+    }
+
+    /// Renders every module of the plan at once, each into a cell of its own.
+    pub fn render(&self, context: &Context) -> Vec<Vec<Segment>> {
+        let shown: Vec<OnceLock<Vec<Segment>>> =
+            self.modules.iter().map(|_| OnceLock::new()).collect();
+        let render = |position: usize| {
+            let _ = shown[position].set(render(&self.modules[position], context));
+        };
+        thread::scope(|scope| fan_out(scope, self.modules.len(), render));
+        shown
+            .into_iter()
+            .map(|shown| shown.into_inner().unwrap_or_default())
+            .collect()
+    }
+
+    /// Compose shell-ready prompts from plan-indexed segments.
+    pub fn prompts<'s>(
+        &self,
+        shown: &impl Fn(usize) -> &'s [Segment],
+        context: &Context,
+    ) -> [String; PROMPTS] {
+        self.formats
+            .each_ref()
+            .map(|format| format.prompt(shown, context))
+    }
+}
+
+/// What `module` shows: nothing if it panics while rendering, which takes no
+/// other module down with it.
+pub fn render(module: &str, context: &Context) -> Vec<Segment> {
+    match catch_unwind(AssertUnwindSafe(|| modules::handle(module, context))) {
+        Ok(rendered) => rendered.map_or_else(Vec::new, |rendered| rendered.segments),
+        Err(_) => {
+            log::error!("The {module} module panicked while rendering");
+            Vec::new()
+        }
+    }
+}
+
+/// Runs `job` for every index below `count` at once, each on a thread of its
+/// own. The threads start one another, each the next two of a binary tree, so
+/// that starting a hundred takes about as long as starting seven in turn. A
+/// job whose thread cannot start runs on the thread that tried to start it.
+pub fn fan_out<'scope, F>(scope: &'scope Scope<'scope, '_>, count: usize, job: F)
+where
+    F: Fn(usize) + Send + Copy + 'scope,
+{
+    fn branch<'scope, F>(scope: &'scope Scope<'scope, '_>, index: usize, count: usize, job: F)
+    where
+        F: Fn(usize) + Send + Copy + 'scope,
+    {
+        if index >= count {
+            return;
+        }
+        let subtree = move || {
+            branch(scope, 2 * index + 1, count, job);
+            branch(scope, 2 * index + 2, count, job);
+            job(index);
+        };
+        if let Err(error) = thread::Builder::new().spawn_scoped(scope, subtree) {
+            log::debug!("Unable to start a thread to render on: {error}");
+            subtree();
+        }
+    }
+    branch(scope, 0, count, job);
+}
+
+/// One format with variables resolved to module positions.
+pub struct PromptFormat<'a> {
+    target: Target,
+    formatter: StringFormatter<'a>,
+    /// Plan positions for each variable; disabled variables are absent.
+    variables: BTreeMap<String, Vec<usize>>,
+}
+
+impl<'a> PromptFormat<'a> {
+    fn new(context: &'a Context, target: Target, modules: &mut IndexSet<String>) -> Self {
+        let (formatter, module_list) = load_formatter_and_modules(context, &target);
+        let variables = formatter
+            .get_variables()
+            .into_iter()
+            .filter(|variable| {
+                matches!(variable.as_str(), "all" | "env_var")
+                    || !context.is_module_disabled_in_config(variable)
+            })
+            .map(|variable| {
+                let positions = modules_named(&variable, context, &module_list)
+                    .into_iter()
+                    .map(|module| modules.insert_full(module).0)
+                    .collect();
+                (variable, positions)
+            })
+            .collect();
+        Self {
+            target,
+            formatter,
+            variables,
+        }
+    }
+
+    fn prompt<'s>(&self, shown: &impl Fn(usize) -> &'s [Segment], context: &Context) -> String {
+        let segments = self
+            .formatter
+            .clone()
+            .map_variables_to_segments(|variable| {
+                let positions = self.variables.get(variable)?;
+                Some(Ok(positions
+                    .iter()
+                    .flat_map(|&position| shown(position).iter().cloned())
+                    .collect()))
+            })
+            .parse(None, Some(context))
+            .expect("Unexpected error returned in root format variables");
+        let painted = Painted::new(&segments, Some(context.width));
+        // continuation prompts normally do not include newlines, but they can
+        if context.root_config.add_newline && self.target != Target::Continuation {
+            shell_prompt(&painted.below_a_line_break(), context, &self.target)
+        } else {
+            shell_prompt(&painted, context, &self.target)
+        }
+    }
+}
+
+/// The text a shell's prompt variable holds for the painted `target` prompt.
+fn shell_prompt(painted: &Painted, context: &Context, target: &Target) -> String {
+    let mut buf = String::new();
 
     // A workaround for a fish bug (see #739,#279). Applying it to all shells
     // breaks things (see #808,#824,#834). Should only be printed in fish.
-    if Shell::Fish == context.shell && context.target == Target::Main {
+    if Shell::Fish == context.shell && *target == Target::Main {
         buf.push_str("\x1b[J"); // An ASCII control code to clear screen
     }
 
-    let (formatter, modules) = load_formatter_and_modules(context);
+    buf.push_str(&painted.escaped_for(context.shell));
 
-    let formatter = formatter.map_variables_to_segments(|module| {
-        // Make $all display all modules not explicitly referenced
-        if module == "all" {
-            Some(Ok(all_modules_uniq(&modules)
-                .par_iter()
-                .flat_map(|module| {
-                    handle_module(module, context, &modules)
-                        .into_iter()
-                        .flat_map(|module| module.segments)
-                        .collect::<Vec<Segment>>()
-                })
-                .collect::<Vec<_>>()))
-        } else if context.is_module_disabled_in_config(module) {
-            None
-        } else {
-            // Get segments from module
-            Some(Ok(handle_module(module, context, &modules)
-                .into_iter()
-                .flat_map(|module| module.segments)
-                .collect::<Vec<Segment>>()))
-        }
-    });
-
-    // Creates a root module and prints it.
-    let mut root_module = Module::new("Starship Root", "The root module", None);
-    root_module.set_segments(
-        formatter
-            .parse(None, Some(context))
-            .expect("Unexpected error returned in root format variables"),
-    );
-
-    let module_strings = root_module.ansi_strings_for_width(Some(context.width));
-    if config.add_newline && context.target != Target::Continuation {
-        // continuation prompts normally do not include newlines, but they can
-        writeln!(buf).unwrap();
-    }
-    // AnsiStrings strips redundant ANSI color sequences, so apply it before modifying the ANSI
-    // color sequences for this specific shell
-    let shell_wrapped_output =
-        wrap_colorseq_for_shell(AnsiStrings(&module_strings).to_string(), context.shell);
-    write!(buf, "{shell_wrapped_output}").unwrap();
-
-    if context.target == Target::Right {
+    if *target == Target::Right {
         // right prompts generally do not allow newlines
         buf = buf.replace('\n', "");
     }
@@ -175,7 +330,7 @@ pub fn module(module_name: &str, args: Properties) {
 }
 
 pub fn get_module(module_name: &str, context: &Context) -> Option<String> {
-    modules::handle(module_name, context).map(|m| m.to_string())
+    modules::handle(module_name, context).map(|module| module.to_string())
 }
 
 pub fn timings(args: Properties) {
@@ -195,9 +350,7 @@ pub fn timings(args: Properties) {
         .map(|module| ModuleTiming {
             name: String::from(module.get_name().as_str()),
             name_len: module.get_name().width_graphemes(),
-            value: nu_ansi_term::AnsiStrings(&module.ansi_strings())
-                .to_string()
-                .replace('\n', "\\n"),
+            value: module.to_string().replace('\n', "\\n"),
             duration: module.duration,
             duration_len: format_duration(&module.duration).width_graphemes(),
         })
@@ -244,7 +397,7 @@ pub fn explain(args: Properties) {
         .map(|module| {
             let value = module.get_segments().join("");
             ModuleInfo {
-                value: nu_ansi_term::AnsiStrings(&module.ansi_strings()).to_string(),
+                value: module.to_string(),
                 value_len: value.width_graphemes()
                     + format_duration(&module.duration).width_graphemes(),
                 desc: module.get_description().clone(),
@@ -320,77 +473,58 @@ pub fn explain(args: Properties) {
 }
 
 fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
-    let mut prompt_order: Vec<Module<'a>> = Vec::new();
-
-    let (_formatter, modules) = load_formatter_and_modules(context);
-
-    for module in &modules {
-        // Manually add all modules if `$all` is encountered
-        if module == "all" {
-            for module in all_modules_uniq(&modules) {
-                let modules = handle_module(&module, context, &modules);
-                prompt_order.extend(modules);
-            }
-        } else {
-            let modules = handle_module(module, context, &modules);
-            prompt_order.extend(modules);
-        }
-    }
-
-    prompt_order
+    Plan::new(context, [Target::Main, Target::Right])
+        .modules
+        .iter()
+        .filter_map(|module| modules::handle(module, context))
+        .collect()
 }
 
-fn handle_module<'a>(
-    module: &str,
-    context: &'a Context,
-    module_list: &BTreeSet<String>,
-) -> Vec<Module<'a>> {
-    let mut modules: Vec<Module> = Vec::new();
-
-    if ALL_MODULES.contains(&module) {
+/// The modules a format variable shows, in order: none, one, or for `$all`,
+/// `$custom` and `$env_var`, every module they expand to.
+fn modules_named(variable: &str, context: &Context, module_list: &BTreeSet<String>) -> Vec<String> {
+    if variable == "all" {
+        // Make $all display all modules not explicitly referenced
+        all_modules_uniq(module_list)
+            .iter()
+            .flat_map(|module| modules_named(module, context, module_list))
+            .collect()
+    } else if ALL_MODULES.contains(&variable) {
         // Write out a module if it isn't disabled
-        if !context.is_module_disabled_in_config(module) {
-            modules.extend(modules::handle(module, context));
+        if context.is_module_disabled_in_config(variable) {
+            Vec::new()
+        } else {
+            vec![variable.to_owned()]
         }
-    } else if module.starts_with("custom.") || module.starts_with("env_var.") {
+    } else if variable.starts_with("custom.") || variable.starts_with("env_var.") {
         // custom.<name> and env_var.<name> are special cases and handle disabled modules themselves
-        modules.extend(modules::handle(module, context));
-    } else if matches!(module, "custom" | "env_var") {
-        // env var is a spacial case and may contain a top-level module definition
-        if module == "env_var" {
-            modules.extend(modules::handle(module, context));
-        }
+        vec![variable.to_owned()]
+    } else if matches!(variable, "custom" | "env_var") {
+        // env var is a special case and may contain a top-level module definition
+        let base = (variable == "env_var" && !context.is_module_disabled_in_config(variable))
+            .then(|| variable.to_owned());
 
         // Write out all custom modules, except for those that are explicitly set
-        modules.extend(
-            context
-                .config
-                .get_config(&[module])
-                .and_then(|config| config.as_table().map(toml::map::Map::iter))
-                .into_iter()
-                .flatten()
-                .collect::<Vec<_>>()
-                .par_iter()
-                .filter_map(|(child, config)| {
-                    // Some env var keys may be part of a top-level module definition
-                    if module == "env_var" && !config.is_table() {
-                        None
-                    } else if should_add_implicit_module(module, child, config, module_list) {
-                        Some(modules::handle(&format!("{module}.{child}"), context))
-                    } else {
-                        None
-                    }
-                })
-                .flatten()
-                .collect::<Vec<Module>>(),
-        );
+        let children = context
+            .config
+            .get_config(&[variable])
+            .and_then(toml::Value::as_table)
+            .into_iter()
+            .flatten()
+            .filter(|(child, config)| {
+                // Some env var keys may be part of a top-level module definition
+                !(variable == "env_var" && !config.is_table())
+                    && should_add_implicit_module(variable, child, config, module_list)
+            })
+            .map(|(child, _)| format!("{variable}.{child}"));
+
+        base.into_iter().chain(children).collect()
     } else {
         log::debug!(
-            "Expected top level format to contain value from {ALL_MODULES:?}. Instead received {module}",
+            "Expected top level format to contain value from {ALL_MODULES:?}. Instead received {variable}",
         );
+        Vec::new()
     }
-
-    modules
 }
 
 fn should_add_implicit_module(
@@ -437,12 +571,15 @@ fn all_modules_uniq(module_list: &BTreeSet<String>) -> Vec<String> {
     prompt_order
 }
 
-/// Load the correct formatter for the context (ie left prompt or right prompt)
+/// Load the correct formatter for the target (ie left prompt or right prompt)
 /// and the list of all modules used in a format string
-fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>, BTreeSet<String>) {
+fn load_formatter_and_modules<'a>(
+    context: &'a Context,
+    target: &Target,
+) -> (StringFormatter<'a>, BTreeSet<String>) {
     let config = &context.root_config;
 
-    if context.target == Target::Continuation {
+    if *target == Target::Continuation {
         let cf = &config.continuation_prompt;
         let formatter = StringFormatter::new(cf);
         return match formatter {
@@ -457,9 +594,9 @@ fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>,
         };
     }
 
-    let (left_format_str, right_format_str): (&str, &str) = match context.target {
+    let (left_format_str, right_format_str): (&str, &str) = match target {
         Target::Main | Target::Right => (&config.format, &config.right_format),
-        Target::Profile(ref name) => {
+        Target::Profile(name) => {
             if let Some(lf) = config
                 .user_profiles
                 .get(name)
@@ -478,7 +615,7 @@ fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>,
     let rf = StringFormatter::new(right_format_str);
 
     if let Err(ref e) = lf {
-        let name = if let Target::Profile(ref profile_name) = context.target {
+        let name = if let Target::Profile(profile_name) = target {
             format!("profile.{profile_name}")
         } else {
             "format".to_string()
@@ -496,7 +633,7 @@ fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>,
         .flat_map(VariableHolder::get_variables)
         .collect();
 
-    let main_formatter = match context.target {
+    let main_formatter = match target {
         Target::Main | Target::Profile(_) => lf,
         Target::Right => rf,
         Target::Continuation => unreachable!("Continuation prompt should have been handled above"),
@@ -631,6 +768,20 @@ mod test {
     }
 
     #[test]
+    fn a_fill_measures_text_as_displayed_rather_than_as_escaped() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "100%$fill|"
+            [fill]
+            style = ""
+        });
+        context.shell = Shell::Zsh;
+        context.width = 10;
+
+        assert_eq!("100%%.....|", get_prompt(&context));
+    }
+
+    #[test]
     fn custom_prompt() {
         let mut context = default_context().set_config(toml::toml! {
             add_newline = false
@@ -750,6 +901,23 @@ mod test {
     }
 
     #[test]
+    fn standalone_modules_keep_literal_text_for_every_shell() {
+        let literal = "$HOME `hostname` \\n 50%";
+        for shell in [Shell::Bash, Shell::Zsh, Shell::Fish, Shell::PowerShell] {
+            let actual = crate::test::ModuleRenderer::new("env_var")
+                .config(toml::toml! {
+                    [env_var]
+                    variable = "VALUE"
+                    format = "$env_value"
+                })
+                .env("VALUE", literal)
+                .shell(shell)
+                .collect();
+            assert_eq!(Some(literal.to_owned()), actual);
+        }
+    }
+
+    #[test]
     fn env_expands() {
         let mut context = default_context().set_config(toml::toml! {
                 format="$env_var"
@@ -866,5 +1034,106 @@ mod test {
         let expected = "user profile";
         let actual = get_prompt(&context);
         assert_eq!(expected, actual);
+    }
+
+    fn planned_modules(configuration: toml::Table) -> Vec<String> {
+        let context = default_context().set_config(configuration);
+        Plan::new(&context, [Target::Main, Target::Right])
+            .modules
+            .into_iter()
+            .collect()
+    }
+
+    #[test]
+    fn a_fan_out_runs_every_job_once_however_its_tree_is_shaped() {
+        use std::sync::atomic::{AtomicUsize, Ordering};
+        for count in [0, 1, 2, 3, 6, 7, 8, 63, 64, 65, 200] {
+            let runs: Vec<AtomicUsize> = (0..count).map(|_| AtomicUsize::new(0)).collect();
+            let job = |index: usize| {
+                runs[index].fetch_add(1, Ordering::Relaxed);
+            };
+            thread::scope(|scope| fan_out(scope, count, job));
+            let runs: Vec<usize> = runs.into_iter().map(AtomicUsize::into_inner).collect();
+            assert_eq!(vec![1; count], runs, "{count} jobs");
+        }
+    }
+
+    #[test]
+    fn shared_modules_have_one_plan_position() {
+        let modules = planned_modules(toml::toml! {
+            format = "$character$status$character"
+            right_format = "$status$jobs"
+        });
+
+        assert_eq!(["character", "status", "jobs"], modules.as_slice());
+    }
+
+    #[test]
+    fn disabled_modules_are_absent_from_the_plan() {
+        let modules = planned_modules(toml::toml! {
+            format = "$character$status"
+            [character]
+            disabled = true
+        });
+
+        assert_eq!(["status"], modules.as_slice());
+    }
+
+    #[test]
+    fn disabled_env_var_base_preserves_enabled_children() {
+        for format in ["$env_var", "$all"] {
+            let mut configuration = toml::toml! {
+                format = format
+                right_format = format
+                add_newline = false
+                [env_var]
+                disabled = true
+                default = "BASE"
+                [env_var.ENABLED]
+                disabled = false
+                default = "CHILD"
+                format = "$env_value"
+                [env_var.DISABLED]
+                disabled = true
+                default = "HIDDEN"
+            };
+            // Isolate $all from filesystem, command, and platform modules.
+            for module in ALL_MODULES.iter().filter(|module| **module != "env_var") {
+                configuration.insert((*module).to_owned(), toml::toml! { disabled = true }.into());
+            }
+
+            let context = default_context().set_config(configuration);
+            let plan = Plan::new(&context, [Target::Main, Target::Right]);
+            assert_eq!(
+                ["env_var.ENABLED"],
+                plan.modules
+                    .iter()
+                    .map(String::as_str)
+                    .collect::<Vec<_>>()
+                    .as_slice()
+            );
+
+            let rendered = plan.render(&context);
+            assert_eq!(
+                ["CHILD", "CHILD"],
+                plan.prompts(&|position| &rendered[position], &context),
+            );
+        }
+    }
+
+    #[test]
+    fn all_expands_to_every_module_neither_prompt_names() {
+        let modules = planned_modules(toml::toml! {
+            format = "$all"
+            right_format = "$directory"
+        });
+
+        let expected: Vec<_> = PROMPT_ORDER
+            .iter()
+            .copied()
+            .filter(|module| !matches!(*module, "directory" | "custom"))
+            .chain(["directory"])
+            .collect();
+        assert_eq!(expected, modules);
     }
 }

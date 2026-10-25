@@ -1,178 +1,151 @@
-use crate::{
-    config::Style,
-    print::{Grapheme, UnicodeWidthGraphemes},
-};
+use crate::{config::Style, print::UnicodeWidthGraphemes};
 use nu_ansi_term::{AnsiString, Style as AnsiStyle};
-use unicode_segmentation::UnicodeSegmentation;
 
-/// Type that holds text with an associated style
-#[derive(Clone)]
-pub struct TextSegment {
-    /// The segment's style. If None, will inherit the style of the module containing it.
-    style: Option<Style>,
-
-    /// The string value of the current segment.
-    value: String,
-}
-
-impl TextSegment {
-    // Returns the AnsiString of the segment value
-    fn ansi_string(&self, prev: Option<&AnsiStyle>) -> AnsiString<'_> {
-        match self.style {
-            Some(style) => style.to_ansi_style(prev).paint(&self.value),
-            None => AnsiString::from(&self.value),
-        }
-    }
-}
-
-/// Type that holds fill text with an associated style
-#[derive(Clone)]
-pub struct FillSegment {
-    /// The segment's style. If None, will inherit the style of the module containing it.
-    style: Option<Style>,
-
-    /// The string value of the current segment.
-    value: String,
-}
-
-impl FillSegment {
-    // Returns the AnsiString of the segment value, not including its prefix and suffix
-    pub fn ansi_string(&self, width: Option<usize>, prev: Option<&AnsiStyle>) -> AnsiString<'_> {
-        let s = match width {
-            Some(w) => self
-                .value
-                .graphemes(true)
-                .cycle()
-                .scan(0usize, |len, g| {
-                    *len += Grapheme(g).width();
-                    if *len <= w { Some(g) } else { None }
-                })
-                .collect::<String>(),
-            None => String::from(&self.value),
-        };
-        match self.style {
-            Some(style) => style.to_ansi_style(prev).paint(s),
-            None => AnsiString::from(s),
-        }
-    }
-}
-
-#[cfg(test)]
-mod fill_seg_tests {
-    use super::FillSegment;
-    use nu_ansi_term::Color;
-
-    #[test]
-    fn ansi_string_width() {
-        let width: usize = 10;
-        let style = Color::Blue.bold();
-
-        let inputs = vec![
-            (".", ".........."),
-            (".:", ".:.:.:.:.:"),
-            ("-:-", "-:--:--:--"),
-            ("🟦", "🟦🟦🟦🟦🟦"),
-            ("🟢🔵🟡", "🟢🔵🟡🟢🔵"),
-        ];
-
-        for (text, expected) in &inputs {
-            let f = FillSegment {
-                value: String::from(*text),
-                style: Some(style.into()),
-            };
-            let actual = f.ansi_string(Some(width), None);
-            assert_eq!(style.paint(*expected), actual);
-        }
-    }
-}
-
-/// A segment is a styled text chunk ready for printing.
-#[derive(Clone)]
+/// A piece of a prompt: text in a style, or the end of a line.
+///
+/// Text is stored as the terminal should show it. Escaping it for a shell's
+/// prompt variable happens only when a painted prompt is written out.
+#[derive(Clone, Debug, PartialEq)]
 pub enum Segment {
-    Text(TextSegment),
-    Fill(FillSegment),
-    LineTerm,
+    Styled {
+        kind: Kind,
+        /// If none, the style of the module showing it.
+        style: Option<Style>,
+        value: String,
+    },
+    LineBreak,
+}
+
+/// What the text of a styled segment is, which decides how it is painted and
+/// how a shell receives it.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Kind {
+    /// Shown as written.
+    Text,
+    /// Handed to a shell exactly as written, so that the shell may expand it:
+    /// the output of a custom module with `unsafe_no_escape`.
+    Verbatim,
+    /// Repeated across whatever width the rest of its line leaves.
+    Fill,
 }
 
 impl Segment {
-    /// Creates new segments from a text with a style; breaking out `LineTerminators`.
-    pub fn from_text<T>(style: Option<Style>, value: T) -> Vec<Self>
-    where
-        T: Into<String>,
-    {
-        let mut segs: Vec<Self> = Vec::new();
-        value.into().split(LINE_TERMINATOR).for_each(|s| {
-            if !segs.is_empty() {
-                segs.push(Self::LineTerm);
-            }
-            segs.push(Self::Text(TextSegment {
-                value: String::from(s),
-                style,
-            }));
-        });
-        segs
+    /// Segments showing `value` in `style`, with a line break wherever it
+    /// holds one.
+    pub fn from_text(style: Option<Style>, value: impl Into<String>) -> Vec<Self> {
+        Self::lines(Kind::Text, style, value.into())
     }
 
-    /// Creates a new fill segment
-    pub fn fill<T>(style: Option<Style>, value: T) -> Self
-    where
-        T: Into<String>,
-    {
-        Self::Fill(FillSegment {
+    /// Segments a shell receives unescaped; see [`Kind::Verbatim`].
+    pub fn verbatim(style: Option<Style>, value: impl Into<String>) -> Vec<Self> {
+        Self::lines(Kind::Verbatim, style, value.into())
+    }
+
+    /// A segment repeating `value` across the width its line leaves.
+    pub fn fill(style: Option<Style>, value: impl Into<String>) -> Self {
+        Self::Styled {
+            kind: Kind::Fill,
             style,
             value: value.into(),
-        })
+        }
+    }
+
+    fn lines(kind: Kind, style: Option<Style>, value: String) -> Vec<Self> {
+        let styled = |value| Self::Styled { kind, style, value };
+        if !value.contains('\n') {
+            return vec![styled(value)];
+        }
+        let mut segments = Vec::new();
+        for line in value.split('\n') {
+            if !segments.is_empty() {
+                segments.push(Self::LineBreak);
+            }
+            segments.push(styled(line.to_owned()));
+        }
+        segments
     }
 
     pub fn style(&self) -> Option<AnsiStyle> {
         match self {
-            Self::Fill(fs) => fs.style.map(|cs| cs.to_ansi_style(None)),
-            Self::Text(ts) => ts.style.map(|cs| cs.to_ansi_style(None)),
-            Self::LineTerm => None,
+            Self::Styled { style, .. } => style.map(|style| style.to_ansi_style(None)),
+            Self::LineBreak => None,
         }
     }
 
     pub fn set_style_if_empty(&mut self, style: Option<Style>) {
-        match self {
-            Self::Fill(fs) => {
-                if fs.style.is_none() {
-                    fs.style = style;
-                }
-            }
-            Self::Text(ts) => {
-                if ts.style.is_none() {
-                    ts.style = style;
-                }
-            }
-            Self::LineTerm => {}
+        if let Self::Styled { style: own, .. } = self {
+            *own = own.or(style);
         }
     }
 
     pub fn value(&self) -> &str {
         match self {
-            Self::Fill(fs) => &fs.value,
-            Self::Text(ts) => &ts.value,
-            Self::LineTerm => LINE_TERMINATOR_STRING,
+            Self::Styled { value, .. } => value,
+            Self::LineBreak => "\n",
         }
     }
 
-    // Returns the AnsiString of the segment value, not including its prefix and suffix
-    pub fn ansi_string(&self, prev: Option<&AnsiStyle>) -> AnsiString<'_> {
+    /// The value in its style, resolved against `previous`: what the segment
+    /// paints as, unstretched.
+    pub fn ansi_string(&self, previous: Option<&AnsiStyle>) -> AnsiString<'_> {
         match self {
-            Self::Fill(fs) => fs.ansi_string(None, prev),
-            Self::Text(ts) => ts.ansi_string(prev),
-            Self::LineTerm => AnsiString::from(LINE_TERMINATOR_STRING),
+            Self::Styled {
+                style: Some(style),
+                value,
+                ..
+            } => style.to_ansi_style(previous).paint(value),
+            segment => AnsiString::from(segment.value()),
         }
     }
 
     pub fn width_graphemes(&self) -> usize {
         match self {
-            Self::Fill(fs) => fs.value.width_graphemes(),
-            Self::Text(ts) => ts.value.width_graphemes(),
-            Self::LineTerm => 0,
+            Self::Styled { value, .. } => value.width_graphemes(),
+            Self::LineBreak => 0,
         }
     }
 }
 
-const LINE_TERMINATOR: char = '\n';
-const LINE_TERMINATOR_STRING: &str = "\n";
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn text_breaks_into_lines() {
+        assert_eq!(
+            vec![
+                Segment::Styled {
+                    kind: Kind::Verbatim,
+                    style: None,
+                    value: "a".to_owned()
+                },
+                Segment::LineBreak,
+                Segment::Styled {
+                    kind: Kind::Verbatim,
+                    style: None,
+                    value: String::new()
+                },
+            ],
+            Segment::verbatim(None, "a\n")
+        );
+    }
+
+    #[test]
+    fn a_style_given_later_fills_in_only_a_missing_one() {
+        let red = Some(nu_ansi_term::Color::Red.into());
+        let blue = Some(nu_ansi_term::Color::Blue.into());
+        let mut unstyled = Segment::from_text(None, "a").remove(0);
+        let mut styled = Segment::from_text(red, "b").remove(0);
+        unstyled.set_style_if_empty(blue);
+        styled.set_style_if_empty(blue);
+
+        assert_eq!(
+            blue.map(|style: Style| style.to_ansi_style(None)),
+            unstyled.style()
+        );
+        assert_eq!(
+            red.map(|style: Style| style.to_ansi_style(None)),
+            styled.style()
+        );
+    }
+}

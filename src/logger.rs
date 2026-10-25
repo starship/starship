@@ -47,7 +47,8 @@ pub fn cleanup_log_files<P: AsRef<Path>>(path: P) {
             continue;
         };
 
-        // Avoid deleting files that don't look like log files.
+        // Avoid deleting files that don't look like log files, or the
+        // timings a session keeps beside them.
         if !file
             .path()
             .file_name()
@@ -55,7 +56,12 @@ pub fn cleanup_log_files<P: AsRef<Path>>(path: P) {
             .to_str()
             .unwrap_or_default()
             .starts_with("session_")
-            || file.path().extension() != Some("log".as_ref())
+            || !matches!(
+                file.path()
+                    .extension()
+                    .and_then(|extension| extension.to_str()),
+                Some("log" | "timings")
+            )
         {
             continue;
         }
@@ -218,8 +224,9 @@ impl log::Log for StarshipLogger {
             record.args()
         );
 
-        // Add to duplicate detection set
-        if let Ok(mut c) = self.log_file_content.write() {
+        // Add to duplicate detection set, which only looks up warnings and
+        // errors: a long-lived stream logs ever new debug messages.
+        if !is_debug && let Ok(mut c) = self.log_file_content.write() {
             c.insert(to_print);
         }
     }
@@ -367,12 +374,14 @@ mod test {
 
         // Should be deleted
         let old_file = log_dir.path().join("session_old.log");
+        let old_timings = log_dir.path().join("session_old.timings");
 
         for file in &[
             &non_matching_file,
             &non_matching_file2,
             &new_file,
             &old_file,
+            &old_timings,
         ] {
             File::create(file)?;
         }
@@ -387,6 +396,7 @@ mod test {
             &non_matching_file,
             &non_matching_file2,
             &old_file,
+            &old_timings,
             &directory,
         ] {
             let Ok(f) = File::open(file) else {
@@ -416,6 +426,10 @@ mod test {
         }
 
         assert!(!old_file.exists(), "File {old_file:?} should not exist");
+        assert!(
+            !old_timings.exists(),
+            "File {old_timings:?} should not exist"
+        );
 
         log_dir.close()
     }

@@ -74,6 +74,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 )
                 .ok()?,
         );
+        crate::init_global_threadpool();
         let diff = status
             .changes
             .par_iter()
