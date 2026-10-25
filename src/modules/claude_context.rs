@@ -99,6 +99,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                             .cache_read_input_tokens,
                     ))),
                     "total_tokens" => Some(Ok(humanize_int(total_tokens))),
+                    "session_id" => claude_data.session_id.as_ref().map(|id| Ok(id.clone())),
                     _ => None,
                 })
                 .parse(None, Some(context))
@@ -167,6 +168,55 @@ mod tests {
     }
 
     #[test]
+    fn test_session_id() {
+        let mut data = get_test_claude_data(0.0);
+        data.session_id = Some("9218cba7-871e-4bd8-9687-e9b902346cb3".to_string());
+
+        let actual = ModuleRenderer::new("claude_context")
+            .config(toml::toml! {
+                [claude_context]
+                format = "[$session_id]($style) "
+                [[claude_context.display]]
+                threshold = 0
+                style = "bold green"
+            })
+            .claude_code_data(data)
+            .collect();
+
+        assert_eq!(
+            actual,
+            Some(format!(
+                "{} ",
+                Color::Green
+                    .bold()
+                    .paint("9218cba7-871e-4bd8-9687-e9b902346cb3")
+            )),
+        );
+    }
+
+    #[test]
+    fn test_session_id_absent() {
+        let data = get_test_claude_data(0.0);
+
+        let actual = ModuleRenderer::new("claude_context")
+            .config(toml::toml! {
+                [claude_context]
+                format = "[$percentage $session_id]($style) "
+                [[claude_context.display]]
+                threshold = 0
+                style = "bold green"
+            })
+            .claude_code_data(data)
+            .collect();
+
+        assert_eq!(
+            actual,
+            Some(format!("{} ", Color::Green.bold().paint("0% "))),
+            "a missing session id should render as empty"
+        );
+    }
+
+    #[test]
     fn test_zero_total_tokens() {
         let mut data = get_test_claude_data(0.0);
         data.context_window.context_window_size = 0;
@@ -190,6 +240,7 @@ mod tests {
 
     fn get_test_claude_data(used_percentage: f32) -> crate::context::ClaudeCodeData {
         crate::context::ClaudeCodeData {
+            session_id: None,
             cwd: None,
             model: crate::context::ModelInfo {
                 id: "claude-3-5-sonnet".to_string(),
