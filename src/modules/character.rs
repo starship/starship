@@ -6,9 +6,9 @@ use crate::formatter::StringFormatter;
 ///
 /// The character segment prints an arrow character in a color dependent on the
 /// exit-code of the last executed command:
-/// - If the exit-code was "0", it will be formatted with `success_symbol`
-///   (green arrow by default)
-/// - If the exit-code was anything else, it will be formatted with
+/// - If the exit-code is listed in `success_exit_codes`, it will be formatted
+///   with `success_symbol` (green arrow by default)
+/// - If the exit-code is anything else, it will be formatted with
 ///   `error_symbol` (red arrow by default)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     enum ShellEditMode {
@@ -27,7 +27,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let props = &context.properties;
     let exit_code = props.status_code.as_deref().unwrap_or("0");
     let keymap = props.keymap.as_str();
-    let exit_success = exit_code == "0";
+    let exit_success = exit_code
+        .parse::<i64>()
+        .is_ok_and(|code| config.success_exit_codes.contains(&code));
 
     // Match shell "keymap" names to normalized vi modes
     // NOTE: in vi mode, fish reports normal mode as "default".
@@ -139,6 +141,54 @@ mod test {
             .status(0)
             .collect();
         assert_eq!(expected_success, actual);
+    }
+
+    #[test]
+    fn custom_success_exit_codes() {
+        let expected_success = Some(format!("{} ", Color::Green.bold().paint("❯")));
+        let expected_failure = Some(format!("{} ", Color::Red.bold().paint("❯")));
+
+        let render = |status: i64| {
+            ModuleRenderer::new("character")
+                .config(toml::toml! {
+                    [character]
+                    success_exit_codes = [0, 130, 148]
+                })
+                .status(status)
+                .collect()
+        };
+
+        // 130 is SIGINT, 148 is SIGTSTP
+        for status in [0, 130, 148] {
+            assert_eq!(expected_success, render(status));
+        }
+
+        for status in [1, 143, 54321] {
+            assert_eq!(expected_failure, render(status));
+        }
+
+        // Exit codes may use the full unsigned 32-bit range, e.g. on Windows
+        let windows_code: i64 = 3221225477;
+        let actual = ModuleRenderer::new("character")
+            .config(
+                toml::from_str(&format!(
+                    "[character]\nsuccess_exit_codes = [{windows_code}]"
+                ))
+                .unwrap(),
+            )
+            .status(windows_code)
+            .collect();
+        assert_eq!(expected_success, actual);
+
+        // The list replaces the default rather than extending it
+        let actual = ModuleRenderer::new("character")
+            .config(toml::toml! {
+                [character]
+                success_exit_codes = [130]
+            })
+            .status(0)
+            .collect();
+        assert_eq!(expected_failure, actual);
     }
 
     #[test]
