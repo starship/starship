@@ -27,6 +27,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let display_elapsed = if config.show_milliseconds {
+        elapsed
+    } else {
+        elapsed.saturating_add(500)
+    };
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
@@ -34,7 +40,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "duration" => Some(Ok(render_time(elapsed, config.show_milliseconds))),
+                "duration" => Some(Ok(render_time(display_elapsed, config.show_milliseconds))),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -135,6 +141,40 @@ mod tests {
             .collect();
 
         let expected = Some(format!("took {} ", Color::Yellow.bold().paint("5s")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_blank_duration_rounds_down_under_half_second() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .cmd_duration(12_499)
+            .collect();
+
+        let expected = Some(format!("took {} ", Color::Yellow.bold().paint("12s")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_blank_duration_rounds_up_from_half_second() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .cmd_duration(12_807)
+            .collect();
+
+        let expected = Some(format!("took {} ", Color::Yellow.bold().paint("13s")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_show_milliseconds_preserves_millis() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                show_milliseconds = true
+            })
+            .cmd_duration(12_807)
+            .collect();
+
+        let expected = Some(format!("took {} ", Color::Yellow.bold().paint("12s807ms")));
         assert_eq!(expected, actual);
     }
 
