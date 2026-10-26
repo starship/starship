@@ -41,12 +41,13 @@ clap_complete_nushell = "4.6.2"
 dirs = "7.0.0"
 dunce = "1.0.5"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
-gix = { version = "0.89.0", default-features = false, features = [
-  "max-performance-safe",
+gix = { version = "0.90.0", default-features = false, features = [
+  "max-performance",
   "revision",
   "status",
   "sha1",
   "sha256",
+  "zlib-sirocco",
 ] }
 guess_host_triple = "0.1.5"
 home = "0.5.12"
