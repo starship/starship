@@ -423,19 +423,21 @@ The `claude_model` module displays the current Claude model being used in the se
 | `symbol`        | `'🤖 '`                      | The symbol shown before the model name.                                                   |
 | `style`         | `'bold blue'`                | The style for the module.                                                                 |
 | `model_aliases` | `{}`                         | Map of model IDs or display names to shorter aliases. Checks ID first, then display name. |
+| `effort_styles` | `{}`                         | Map of effort levels to the style used for `$effort_style`.                               |
 | `disabled`      | `false`                      | Disables the `claude_model` module.                                                       |
 
 #### Variables
 
-| Variable | Example             | Description                             |
-| -------- | ------------------- | --------------------------------------- |
-| model    | `Claude 3.5 Sonnet` | The display name of the current model   |
-| model_id | `claude-3-5-sonnet` | The model ID                            |
-| effort   | `high`              | The reasoning effort level, if reported |
-| symbol   |                     | Mirrors the value of option `symbol`    |
-| style\*  |                     | Mirrors the value of option `style`     |
+| Variable       | Example             | Description                                                                          |
+| -------------- | ------------------- | ------------------------------------------------------------------------------------ |
+| model          | `Claude 3.5 Sonnet` | The display name of the current model                                                |
+| model_id       | `claude-3-5-sonnet` | The model ID                                                                         |
+| effort         | `high`              | The reasoning effort level, if reported                                              |
+| symbol         |                     | Mirrors the value of option `symbol`                                                 |
+| style\*        |                     | Mirrors the value of option `style`                                                  |
+| effort_style\* |                     | The style in `effort_styles` for the current effort level, or `style` if it has none |
 
-\*: This variable can only be used as a part of a style string
+\*: These variables can only be used as a part of a style string
 
 #### Examples
 
@@ -455,6 +457,19 @@ style = "bold cyan"
 "global.anthropic.claude-sonnet-4-5-20250929-v1:0" = "Sonnet 4.5"
 # Alias by display name
 "Claude Sonnet 4.5 (Vendor Proxy)" = "Sonnet"
+```
+
+```toml
+# ~/.config/starship.toml
+
+# Highlight the effort level as it goes up
+[claude_model]
+format = "[$symbol$model]($style)( [⚡ $effort]($effort_style)) "
+
+[claude_model.effort_styles]
+high = "yellow"
+xhigh = "bold yellow"
+max = "bold red"
 ```
 
 ### Claude Context
