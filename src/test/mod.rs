@@ -1,4 +1,4 @@
-use crate::context::{Context, Env, Properties, Shell, Target};
+use crate::context::{Context, Env, JJRepo, Properties, Shell, Target};
 use crate::logger::StarshipLogger;
 use crate::{
     config::StarshipConfig,
@@ -12,6 +12,9 @@ use std::process::Command;
 use std::sync::LazyLock;
 use std::sync::Once;
 use tempfile::TempDir;
+
+mod jj_tester;
+pub(crate) use jj_tester::JJTester;
 
 static FIXTURE_DIR: LazyLock<PathBuf> =
     LazyLock::new(|| PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("src/test/fixtures/"));
@@ -107,11 +110,27 @@ impl<'a> ModuleRenderer<'a> {
         self.context.root_dir.path()
     }
 
+    /// Set Starship's command trust policy after configuring the repository path.
+    pub fn git_trust(mut self, trust: gix::sec::Trust) -> Self {
+        self.context.set_git_trust(trust);
+        self
+    }
+
     pub fn logical_path<T>(mut self, path: T) -> Self
     where
         T: Into<PathBuf>,
     {
         self.context.logical_dir = path.into();
+        self
+    }
+
+    /// Init at `JJRepo` with a mocked path, allowing to test JJ modules in several situations:
+    /// valid repo, invalid repo, no repo at all.
+    pub fn jj_repo<T>(mut self, path: T) -> Self
+    where
+        T: Into<PathBuf>,
+    {
+        self.context.set_jj_repo(JJRepo::with_root(path.into()));
         self
     }
 
@@ -212,6 +231,7 @@ pub enum FixtureProvider {
     Fossil,
     Git { reftable: bool, bare: bool },
     Hg,
+    Jujutsu,
     Pijul,
 }
 
@@ -319,6 +339,11 @@ pub fn fixture_repo_with_hash(provider: FixtureProvider, sha256: bool) -> io::Re
                 .arg(path.path())
                 .output()?;
 
+            Ok(path)
+        }
+        FixtureProvider::Jujutsu => {
+            let path = tempfile::tempdir()?;
+            fs::create_dir(path.path().join(".jj"))?;
             Ok(path)
         }
         FixtureProvider::Pijul => {

@@ -6,6 +6,7 @@ use std::time::Duration;
 use gix::{Repository, ThreadSafeRepository, state as git_state};
 
 use crate::utils::{CommandOutput, create_command, exec_timeout};
+use gix::sec::Trust as TrustLevel;
 
 use super::Context;
 
@@ -33,6 +34,9 @@ pub struct GitRepo {
     /// Contains `true` if the value of `core.fsmonitor` is set to `true`.
     /// If not `true`, `fsmonitor` is explicitly disabled in git commands.
     pub(crate) fs_monitor_value_is_true: bool,
+
+    /// The trust level of the repository's `.git` directory.
+    pub trust: TrustLevel,
 }
 
 /// Remote repository
@@ -47,15 +51,59 @@ impl GitRepo {
         self.repo.to_thread_local()
     }
 
+    pub(crate) fn uses_reftables(&self) -> bool {
+        self.open()
+            .config_snapshot()
+            .string("extensions.refstorage")
+            .is_some_and(|kind| kind == "reftable")
+    }
+
+    /// Select the Git executable for status and metrics only in fully trusted repositories.
+    pub(crate) fn use_git_executable(&self, enabled: bool) -> Option<bool> {
+        // TODO: remove the sparse-index fallback once gitoxide supports tree-index comparisons.
+        let use_git = enabled
+            || self.fs_monitor_value_is_true
+            || self.uses_reftables()
+            || self.open().index_or_empty().ok()?.is_sparse();
+        if use_git && self.trust != TrustLevel::Full {
+            log::info!(
+                "Not using the Git executable for status or metrics because repository trust is reduced."
+            );
+            return Some(false);
+        }
+        Some(use_git)
+    }
+
     /// Wrapper to execute external git commands.
     /// Handles adding the appropriate `--git-dir` and `--work-tree` flags to the command.
     /// Also handles additional features required for security, such as disabling `fsmonitor`.
+    /// Requires full repository trust.
     /// At this time, mocking is not supported.
     pub fn exec_git<T: AsRef<OsStr> + Debug>(
         &self,
         context: &Context,
         git_args: impl IntoIterator<Item = T>,
     ) -> Option<CommandOutput> {
+        self.exec_git_with_required_trust(context, TrustLevel::Full, git_args)
+    }
+
+    /// Execute a Git command only if the repository meets the required trust level.
+    /// Callers allowing reduced trust must ensure the command and its arguments cannot
+    /// execute repository-configured external commands (such as filters or hooks).
+    pub fn exec_git_with_required_trust<T: AsRef<OsStr> + Debug>(
+        &self,
+        context: &Context,
+        minimum_trust: TrustLevel,
+        git_args: impl IntoIterator<Item = T>,
+    ) -> Option<CommandOutput> {
+        let repo_trust = self.trust;
+        if minimum_trust > repo_trust {
+            log::warn!(
+                "Not executing git command because the minimum trust level {minimum_trust:?} is greater than the repository trust level {repo_trust:?}."
+            );
+            return None;
+        }
+
         let mut command = create_command("git").ok()?;
 
         // A value of `true` should not execute external commands.
