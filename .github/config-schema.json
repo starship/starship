@@ -176,8 +176,11 @@
       "default": {
         "format": "$symbol ",
         "success_symbol": "[❯](bold green)",
+        "cancel_symbol": "[❯](bold yellow)",
         "error_symbol": "[❯](bold red)",
-        "vimcmd_symbol": "[❮](bold green)",
+        "vimcmd_success_symbol": "[❮](bold green)",
+        "vimcmd_cancel_symbol": "[❮](bold yellow)",
+        "vimcmd_error_symbol": "[❮](bold red)",
         "vimcmd_visual_symbol": "[❮](bold yellow)",
         "vimcmd_replace_symbol": "[❮](bold purple)",
         "vimcmd_replace_one_symbol": "[❮](bold purple)",
@@ -2340,13 +2343,25 @@
           "type": "string",
           "default": "[❯](bold green)"
         },
+        "cancel_symbol": {
+          "type": "string",
+          "default": "[❯](bold yellow)"
+        },
         "error_symbol": {
           "type": "string",
           "default": "[❯](bold red)"
         },
-        "vimcmd_symbol": {
+        "vimcmd_success_symbol": {
           "type": "string",
           "default": "[❮](bold green)"
+        },
+        "vimcmd_cancel_symbol": {
+          "type": "string",
+          "default": "[❮](bold yellow)"
+        },
+        "vimcmd_error_symbol": {
+          "type": "string",
+          "default": "[❮](bold red)"
         },
         "vimcmd_visual_symbol": {
           "type": "string",
@@ -2363,6 +2378,16 @@
         "disabled": {
           "type": "boolean",
           "default": false
+        },
+        "vimcmd_symbol": {
+          "description": "Deprecated alias of `vimcmd_success_symbol`.",
+          "type": "string",
+          "deprecated": true
+        },
+        "vicmd_symbol": {
+          "description": "Deprecated alias of `vimcmd_success_symbol`.",
+          "type": "string",
+          "deprecated": true
         }
       },
       "additionalProperties": false
