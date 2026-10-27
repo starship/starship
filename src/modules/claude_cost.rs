@@ -180,6 +180,7 @@ mod tests {
             }),
             workspace: None,
             effort: None,
+            rate_limits: None,
         }
     }
 
