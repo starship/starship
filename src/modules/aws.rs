@@ -158,6 +158,7 @@ fn classify_expiration(
 
 fn get_sso_cache_expiration(
     sso_cred_json: &json::Value,
+    refresh_supported: bool,
     now_seconds: i64,
 ) -> Option<CredentialExpiration> {
     let expiration_date = sso_cred_json
@@ -165,10 +166,22 @@ fn get_sso_cache_expiration(
         .as_str()?
         .parse::<Timestamp>()
         .ok()?;
-    let refreshable = sso_cred_json
-        .get("refreshToken")
-        .and_then(json::Value::as_str)
-        .is_some_and(|token| !token.trim().is_empty());
+    // Match the cached prerequisites used by botocore's SSOTokenProvider.
+    // A refresh token alone is insufficient after the client registration expires.
+    let refreshable = refresh_supported
+        && ["refreshToken", "clientId", "clientSecret"]
+            .iter()
+            .all(|key| {
+                sso_cred_json
+                    .get(key)
+                    .and_then(json::Value::as_str)
+                    .is_some_and(|value| !value.trim().is_empty())
+            })
+        && sso_cred_json
+            .get("registrationExpiresAt")
+            .and_then(json::Value::as_str)
+            .and_then(|value| value.parse::<Timestamp>().ok())
+            .is_some_and(|expiration| expiration.as_second() > now_seconds);
 
     Some(classify_expiration(
         expiration_date,
@@ -221,7 +234,10 @@ fn get_credentials_expiration(
     let sso_cred_json: json::Value =
         json::from_str(&crate::utils::read_file(&sso_cred_path).ok()?).ok()?;
 
-    get_sso_cache_expiration(&sso_cred_json, now_seconds)
+    let refresh_supported = section
+        .get("sso_session")
+        .is_some_and(|session| !session.trim().is_empty());
+    get_sso_cache_expiration(&sso_cred_json, refresh_supported, now_seconds)
 }
 
 fn alias_name(name: Option<String>, aliases: &HashMap<String, &str>) -> Option<String> {
@@ -1087,17 +1103,23 @@ credential_process = /opt/bin/awscreds-for-tests
         dir.close()
     }
 
-    #[test]
-    fn expired_sso_access_token_with_refresh_token_is_refreshable() {
-        let expires_at = Timestamp::from_second(100).unwrap();
-        let cache = json::json!({
-            "expiresAt": expires_at.to_string(),
+    fn refreshable_sso_cache(expires_at: i64, registration_expires_at: i64) -> json::Value {
+        json::json!({
+            "expiresAt": Timestamp::from_second(expires_at).unwrap().to_string(),
             "refreshToken": "refresh-token",
-        });
+            "clientId": "client-id",
+            "clientSecret": "client-secret",
+            "registrationExpiresAt": Timestamp::from_second(registration_expires_at).unwrap().to_string(),
+        })
+    }
+
+    #[test]
+    fn expired_sso_access_token_with_valid_refresh_credentials_is_refreshable() {
+        let cache = refreshable_sso_cache(100, 200);
 
         assert_eq!(
             Some(CredentialExpiration::Refreshable),
-            get_sso_cache_expiration(&cache, 101)
+            get_sso_cache_expiration(&cache, true, 101)
         );
     }
 
@@ -1108,35 +1130,86 @@ credential_process = /opt/bin/awscreds-for-tests
 
         assert_eq!(
             Some(CredentialExpiration::ExpiresIn(-1)),
-            get_sso_cache_expiration(&cache, 101)
+            get_sso_cache_expiration(&cache, true, 101)
         );
     }
 
     #[test]
     fn valid_sso_access_token_keeps_countdown_when_refreshable() {
-        let expires_at = Timestamp::from_second(160).unwrap();
-        let cache = json::json!({
-            "expiresAt": expires_at.to_string(),
-            "refreshToken": "refresh-token",
-        });
+        let cache = refreshable_sso_cache(160, 200);
 
         assert_eq!(
             Some(CredentialExpiration::ExpiresIn(60)),
-            get_sso_cache_expiration(&cache, 100)
+            get_sso_cache_expiration(&cache, true, 100)
         );
     }
 
     #[test]
     fn empty_refresh_token_does_not_mark_session_refreshable() {
-        let expires_at = Timestamp::from_second(100).unwrap();
-        let cache = json::json!({
-            "expiresAt": expires_at.to_string(),
-            "refreshToken": "   ",
-        });
+        let mut cache = refreshable_sso_cache(100, 200);
+        cache["refreshToken"] = json::json!("   ");
 
         assert_eq!(
             Some(CredentialExpiration::ExpiresIn(-1)),
-            get_sso_cache_expiration(&cache, 101)
+            get_sso_cache_expiration(&cache, true, 101)
+        );
+    }
+
+    #[test]
+    fn incomplete_refresh_credentials_do_not_hide_expired_sso_sessions() {
+        for key in [
+            "refreshToken",
+            "clientId",
+            "clientSecret",
+            "registrationExpiresAt",
+        ] {
+            let mut cache = refreshable_sso_cache(100, 200);
+            cache.as_object_mut().unwrap().remove(key);
+            assert_eq!(
+                Some(CredentialExpiration::ExpiresIn(-1)),
+                get_sso_cache_expiration(&cache, true, 101),
+                "missing {key}"
+            );
+            for invalid in [json::Value::Null, json::json!(42), json::json!(" ")] {
+                cache[key] = invalid;
+                assert_eq!(
+                    Some(CredentialExpiration::ExpiresIn(-1)),
+                    get_sso_cache_expiration(&cache, true, 101),
+                    "invalid {key}"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn expired_or_invalid_registration_does_not_allow_refresh() {
+        for expires_at in [100, 101] {
+            assert_eq!(
+                Some(CredentialExpiration::ExpiresIn(-1)),
+                get_sso_cache_expiration(&refreshable_sso_cache(100, expires_at), true, 101)
+            );
+        }
+        let mut cache = refreshable_sso_cache(100, 200);
+        cache["registrationExpiresAt"] = json::json!("invalid-date");
+        assert_eq!(
+            Some(CredentialExpiration::ExpiresIn(-1)),
+            get_sso_cache_expiration(&cache, true, 101)
+        );
+    }
+
+    #[test]
+    fn legacy_sso_configuration_does_not_refresh_cached_tokens() {
+        assert_eq!(
+            Some(CredentialExpiration::ExpiresIn(-1)),
+            get_sso_cache_expiration(&refreshable_sso_cache(100, 200), false, 101)
+        );
+    }
+
+    #[test]
+    fn valid_access_token_keeps_countdown_after_registration_expires() {
+        assert_eq!(
+            Some(CredentialExpiration::ExpiresIn(60)),
+            get_sso_cache_expiration(&refreshable_sso_cache(160, 90), true, 100)
         );
     }
 
@@ -1161,14 +1234,14 @@ sso_start_url = https://starship.rs/sso
         )?;
         config.sync_all()?;
 
-        let one_second_ago =
-            Timestamp::from_second(Zoned::now().timestamp().as_second() - 1).unwrap();
+        let now_seconds = Zoned::now().timestamp().as_second();
         let mut cache_file = File::create(
             dir.path()
                 .join(".aws/sso/cache/7505d64a54e061b7acd54ccd58b49dc43500b635.json"),
         )?;
         cache_file.write_all(
-            format!(r#"{{"expiresAt": "{one_second_ago}", "refreshToken": "refresh-token"}}"#)
+            refreshable_sso_cache(now_seconds - 1, now_seconds + 3600)
+                .to_string()
                 .as_bytes(),
         )?;
         cache_file.sync_all()?;

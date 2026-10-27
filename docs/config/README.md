@@ -408,9 +408,13 @@ is read from the `AWS_SSO_PROFILE` env var.
 | `profile_aliases`   | `{}`                                                              | Table of profile aliases to display in addition to the AWS name.                                            |
 | `style`             | `'bold yellow'`                                                   | The style for the module.                                                                                   |
 | `expiration_symbol` | `'X'`                                                             | The symbol displayed when the temporary credentials have expired.                                           |
-| `refresh_symbol`    | `↻`                                                               | The symbol displayed when an expired SSO access token can be refreshed silently                             |
+| `refresh_symbol`    | `↻`                                                               | The symbol displayed when an expired SSO access token has unexpired cached refresh credentials.             |
 | `disabled`          | `false`                                                           | Disables the `AWS` module.                                                                                  |
 | `force_display`     | `false`                                                           | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
+
+Refreshability is inferred from `sso_session` configuration and complete cached refresh credentials
+with an unexpired client registration. Starship does not contact AWS or refresh tokens, so the refresh
+symbol does not guarantee that AWS will accept a refresh request.
 
 ### Variables
 

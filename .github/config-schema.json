@@ -1984,7 +1984,7 @@
           "default": "X"
         },
         "refresh_symbol": {
-          "description": "The symbol displayed when an expired SSO access token can be refreshed silently.",
+          "description": "The symbol displayed when an expired SSO access token has unexpired cached refresh credentials.",
           "type": "string",
           "default": "↻"
         },
