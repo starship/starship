@@ -323,21 +323,30 @@ pub fn get_static_repo_status(
 
 /// The mode used for untracked files in the repo, if any.
 fn untracked_files_mode(git_config: &gix::config::Snapshot) -> Option<UntrackedFiles> {
+    // The bash key is used by both the official bash hook and fish,
+    // and takes precedence over the more general status key.
+    const BASH_KEY: &str = "bash.showUntrackedFiles";
     let status_key = &gix::config::tree::Status::SHOW_UNTRACKED_FILES;
-    let value = git_config.string(status_key)?;
+    let value = git_config
+        .string(BASH_KEY)
+        .or_else(|| git_config.string(status_key))?;
+    // Re-use the Gitoxide parser
     status_key
         .try_into_show_untracked_files(value)
         .ok()
         .or_else(|| {
             // Gix parser doesn't handle booleans yet.
             // https://github.com/GitoxideLabs/gitoxide/issues/3128
-            git_config.boolean(status_key).map(|b| {
-                if b {
-                    UntrackedFiles::Collapsed
-                } else {
-                    UntrackedFiles::None
-                }
-            })
+            git_config
+                .boolean(BASH_KEY)
+                .or_else(|| git_config.boolean(status_key))
+                .map(|b| {
+                    if b {
+                        UntrackedFiles::Collapsed
+                    } else {
+                        UntrackedFiles::None
+                    }
+                })
         })
 }
 
@@ -1224,6 +1233,34 @@ pub mod tests {
                 .args(["config", "status.showUntrackedFiles", "no"])
                 .current_dir(repo_dir.path())
                 .output()?;
+
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
+            let expected = None;
+
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn doesnt_show_untracked_file_if_disabled_for_prompt() -> io::Result<()> {
+        for &mode in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(mode)?;
+
+            create_untracked(repo_dir.path())?;
+
+            for (key, value) in [
+                ("status.showUntrackedFiles", "true"),
+                ("bash.showUntrackedFiles", "no"),
+            ] {
+                create_command("git")?
+                    .args(["config", key, value])
+                    .current_dir(repo_dir.path())
+                    .output()?;
+            }
 
             let actual = ModuleRenderer::new("git_status")
                 .path(repo_dir.path())
