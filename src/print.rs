@@ -37,14 +37,15 @@ impl<T> UnicodeWidthGraphemes for T
 where
     T: AsRef<str>,
 {
-    /// As wide as Unicode says a terminal draws the printable text, measured
-    /// whole, so that controls within a grapheme cannot split it.
+    /// Columns a terminal draws the text in, measured whole so that controls
+    /// cannot split a grapheme.
     fn width_graphemes(&self) -> usize {
         printable(self.as_ref()).width()
     }
 }
 
-/// What a terminal draws of `text`: all of it but its controls.
+/// What a terminal draws of `text`: all of it but its controls. Text without
+/// controls is borrowed, not copied.
 pub fn printable(text: &str) -> Cow<'_, str> {
     let mut chunks = anstream::adapter::strip_str(text);
     let mut printable = Cow::Borrowed(chunks.next().unwrap_or_default());
@@ -68,6 +69,13 @@ fn test_grapheme_aware_width() {
         "\x1b]8;;https://x\x1b\\link\x1b]8;;\x1b\\\x1b]0;title\x07\x1b[38:2::1:2:3m"
             .width_graphemes()
     );
+}
+
+#[test]
+fn text_without_controls_is_printed_as_it_is() {
+    assert!(matches!(printable("plain"), Cow::Borrowed("plain")));
+    assert!(matches!(printable(""), Cow::Borrowed("")));
+    assert_eq!("ab", printable("a\x1b[31mb"));
 }
 
 #[test]

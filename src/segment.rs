@@ -3,9 +3,8 @@ use nu_ansi_term::{AnsiString, Style as AnsiStyle};
 
 /// A piece of a prompt: text in a style, or the end of a line.
 ///
-/// Text retains any shell escaping applied by the formatter. The renderer
-/// resolves styles and fills; shell-specific ANSI wrappers are added when the
-/// prompt is written out.
+/// Text keeps any shell escaping the formatter applied. Shell wrappers for ANSI
+/// sequences are added when the prompt is written out.
 #[derive(Clone, Debug, PartialEq)]
 pub enum Segment {
     Styled {
@@ -17,19 +16,17 @@ pub enum Segment {
     LineBreak,
 }
 
-/// What the text of a styled segment is, which decides how it is painted and
-/// how a shell receives it.
+/// How a styled segment is painted.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Kind {
     /// Shown as written.
     Text,
-    /// Repeated across whatever width the rest of its line leaves.
+    /// Repeated across the width the rest of its line leaves.
     Fill,
 }
 
 impl Segment {
-    /// Segments showing `value` in `style`, with a line break wherever it
-    /// holds one.
+    /// Segments showing `value` in `style`, split at its line breaks.
     pub fn from_text(style: Option<Style>, value: impl Into<String>) -> Vec<Self> {
         Self::lines(Kind::Text, style, value.into())
     }
@@ -78,8 +75,7 @@ impl Segment {
         }
     }
 
-    /// The value in its style, resolved against `previous`: what the segment
-    /// paints as, unstretched.
+    /// The value in its style, resolved against `previous` and unstretched.
     pub fn ansi_string(&self, previous: Option<&AnsiStyle>) -> AnsiString<'_> {
         match self {
             Self::Styled {
