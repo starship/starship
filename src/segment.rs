@@ -63,10 +63,10 @@ impl Segment {
     }
 
     pub const fn set_style_if_empty(&mut self, style: Option<Style>) {
-        if let Self::Styled { style: own, .. } = self {
-            if own.is_none() {
-                *own = style;
-            }
+        if let Self::Styled { style: own, .. } = self
+            && own.is_none()
+        {
+            *own = style;
         }
     }
 
