@@ -2549,12 +2549,12 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable | Example | Description                          |
-| -------- | ------- | ------------------------------------ |
-| version  | `v14`   | The version of `java`                |
-| local_version | `v21` | The project-declared Java toolchain version (no commands run) |
-| symbol   |         | Mirrors the value of option `symbol` |
-| style\*  |         | Mirrors the value of option `style`  |
+| Variable      | Example | Description                                                   |
+| ------------- | ------- | ------------------------------------------------------------- |
+| version       | `v14`   | The version of `java`                                         |
+| local_version | `v21`   | The project-declared Java toolchain version (no commands run) |
+| symbol        |         | Mirrors the value of option `symbol`                          |
+| style\*       |         | Mirrors the value of option `style`                           |
 
 *: This variable can only be used as a part of a style string
 
@@ -2960,12 +2960,12 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable | Example   | Description                          |
-| -------- | --------- | ------------------------------------ |
-| version  | `v1.4.21` | The version of `kotlin`              |
+| Variable      | Example   | Description                                                    |
+| ------------- | --------- | -------------------------------------------------------------- |
+| version       | `v1.4.21` | The version of `kotlin`                                        |
 | local_version | `v2.1.20` | The project-declared Kotlin compiler version (no commands run) |
-| symbol   |           | Mirrors the value of option `symbol` |
-| style\*  |           | Mirrors the value of option `style`  |
+| symbol        |           | Mirrors the value of option `symbol`                           |
+| style\*       |           | Mirrors the value of option `style`                            |
 
 *: This variable can only be used as a part of a style string
 
