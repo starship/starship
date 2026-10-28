@@ -717,8 +717,7 @@ pub fn wrap_colorseq_for_shell(ansi: String, shell: Shell) -> String {
     let mut drawn = 0;
     // Each printable run after the controls before it, and the controls left.
     for (mut start, mut printable) in printables.chain([(ansi.len(), "")]) {
-        // Escaping doubled the backslash of a string terminator for Bash,
-        // which decodes the two back into the one the terminal reads.
+        // Bash escaping doubled a terminator's backslash; both belong to it.
         if shell == Shell::Bash
             && ansi[drawn..start].ends_with("\x1b\\")
             && let Some(rest) = printable.strip_prefix('\\')

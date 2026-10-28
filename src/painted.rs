@@ -6,11 +6,11 @@ use std::fmt;
 use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
 use unicode_segmentation::UnicodeSegmentation;
 
+use crate::config::Style;
 use crate::print::{UnicodeWidthGraphemes, printable};
 use crate::segment::{Kind, Segment};
 
-/// Text drawn in a single style, borrowed from the segment it was painted
-/// from unless it is a stretched fill.
+/// Text in one style, borrowed from its segment unless it is a stretched fill.
 #[derive(Clone, Debug, PartialEq, Eq)]
 struct Run<'a> {
     style: AnsiStyle,
@@ -20,6 +20,8 @@ struct Run<'a> {
 /// Resolved styles and stretched fills, preserving line breaks.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Painted<'a> {
+    /// The runs of each line. Lines stay apart because a run inherits its
+    /// style, and a fill takes its width, from its own line only.
     lines: Vec<Vec<Run<'a>>>,
 }
 
@@ -39,7 +41,8 @@ impl<'a> Painted<'a> {
         &'s self,
         text: impl Fn(&'s Run<'a>) -> Cow<'s, str>,
     ) -> Vec<AnsiString<'s>> {
-        let mut strings = Vec::new();
+        let runs: usize = self.lines.iter().map(Vec::len).sum();
+        let mut strings = Vec::with_capacity(runs + self.lines.len().saturating_sub(1));
         for (index, line) in self.lines.iter().enumerate() {
             if index > 0 {
                 strings.push(AnsiString::from("\n"));
@@ -54,18 +57,22 @@ impl<'a> Painted<'a> {
 /// remainder columns going to the first fills. Without a width, or without
 /// room for each fill, they keep their natural width.
 ///
-/// A fill draws the text of its pattern, without its controls, in its own
-/// style. A run inherits from its left neighbor on the same line, except that
+/// A run inherits from its left neighbor on the same line, except that
 /// nothing inherits across a fill: the fill resolves against the run before
 /// it, and the run after it starts afresh.
 fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
-    let styled = || {
-        segments.iter().filter_map(|segment| match segment {
-            Segment::Styled { kind, style, value } => Some((*kind, *style, value.as_str())),
-            Segment::LineBreak => None,
+    let fills = segments
+        .iter()
+        .filter(|segment| {
+            matches!(
+                segment,
+                Segment::Styled {
+                    kind: Kind::Fill,
+                    ..
+                }
+            )
         })
-    };
-    let fills = styled().filter(|&(kind, ..)| kind == Kind::Fill).count();
+        .count();
     // How wide each fill is in turn, if each gets a column or more of what
     // the rest of the line leaves. Measuring text takes a pass over every
     // grapheme, which only a fill needs.
@@ -77,36 +84,56 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
     });
 
     let mut previous = None;
-    styled()
-        .map(|(kind, style, value)| {
-            let resolve = |inherited: Option<AnsiStyle>| {
-                style.map_or_else(AnsiStyle::default, |style| {
-                    style.to_ansi_style(inherited.as_ref())
-                })
-            };
-            let (style, text) = match kind {
-                Kind::Fill => {
-                    let pattern = printable(value);
-                    let text = match widths.as_mut().and_then(Iterator::next) {
-                        Some(width) => stretch(pattern, width),
-                        None => pattern,
-                    };
-                    (resolve(previous.take()), text)
-                }
-                Kind::Text => {
-                    let style = resolve(previous);
-                    previous = Some(style);
-                    (style, Cow::Borrowed(value))
-                }
-            };
-            Run { style, text }
-        })
-        .collect()
+    let mut runs = Vec::with_capacity(segments.len());
+    for segment in segments {
+        let Segment::Styled { kind, style, value } = segment else {
+            continue;
+        };
+        match kind {
+            Kind::Text => {
+                let style = resolve(*style, previous.as_ref());
+                previous = Some(style);
+                runs.push(Run {
+                    style,
+                    text: Cow::Borrowed(value),
+                });
+            }
+            Kind::Fill => {
+                let pattern = printable(value);
+                let text = match widths.as_mut().and_then(Iterator::next) {
+                    Some(width) => stretch(pattern, width),
+                    None => pattern,
+                };
+                paint_fill(&mut runs, *style, previous.take(), text);
+            }
+        }
+    }
+    runs
 }
 
-/// Adjacent text runs can belong to one grapheme despite their different
-/// styles. A fill separates them; its neighbors cannot join through it.
+/// `style` resolved against the style `inherited` from the run before it.
+fn resolve(style: Option<Style>, inherited: Option<&AnsiStyle>) -> AnsiStyle {
+    style.map_or_else(AnsiStyle::default, |style| style.to_ansi_style(inherited))
+}
+
+/// Adds the run of a fill drawing `text`.
+fn paint_fill<'a>(
+    runs: &mut Vec<Run<'a>>,
+    style: Option<Style>,
+    inherited: Option<AnsiStyle>,
+    text: Cow<'a, str>,
+) {
+    runs.push(Run {
+        style: resolve(style, inherited.as_ref()),
+        text,
+    });
+}
+
+/// The width of the text of `segments` between fills. Adjacent text runs can
+/// belong to one grapheme despite their different styles, which a fill
+/// separates.
 fn text_width(segments: &[Segment]) -> usize {
+    let mut group = String::new();
     segments
         .split(|segment| {
             matches!(
@@ -117,12 +144,10 @@ fn text_width(segments: &[Segment]) -> usize {
                 }
             )
         })
-        .map(|group| {
-            group
-                .iter()
-                .map(Segment::value)
-                .collect::<String>()
-                .width_graphemes()
+        .map(|between| {
+            group.clear();
+            group.extend(between.iter().map(Segment::value));
+            group.width_graphemes()
         })
         .sum()
 }
