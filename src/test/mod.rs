@@ -26,6 +26,18 @@ static HG_FIXTURE: LazyLock<PathBuf> = LazyLock::new(|| FIXTURE_DIR.join("hg-rep
 
 static LOGGER: Once = Once::new();
 
+/// The battery a test sees unless it mocks one: none, so that no test depends
+/// on the charge of the machine running it.
+#[cfg(feature = "battery")]
+struct NoBattery;
+
+#[cfg(feature = "battery")]
+impl crate::modules::BatteryInfoProvider for NoBattery {
+    fn get_battery_info(&self) -> Option<crate::modules::BatteryInfo> {
+        None
+    }
+}
+
 static TEST_GIT_CONFIG: &[(&str, &str)] = &[
     // Dummy user
     ("user.email", "starship@example.com"),
@@ -67,6 +79,10 @@ pub fn default_context() -> Context<'static> {
         Env::default(),
     );
     context.config = StarshipConfig { config: None };
+    #[cfg(feature = "battery")]
+    {
+        context.battery_info_provider = &NoBattery;
+    }
     context
 }
 
