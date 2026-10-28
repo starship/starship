@@ -41,7 +41,9 @@ impl Inputs {
     }
 
     fn read(&mut self, path: PathBuf) -> Option<String> {
-        if self.expired() {
+        // A failed decode may already have consumed the remaining byte allowance.
+        // Stop before another read rather than accounting only for decoded strings.
+        if self.failed || self.expired() {
             return None;
         }
         if let Some(contents) = self.files.get(&path) {
@@ -565,7 +567,7 @@ fn maven(pom: &str, directories: &[&Path], inputs: &mut Inputs) -> Option<Versio
     // Use the nearest declaration for each plugin, retaining conflicts in that declaration.
     let mut kotlin_seen = false;
     let mut java_seen = false;
-    for project in &projects {
+    for (project_index, project) in projects.iter().enumerate() {
         let Some(plugins) = project.at(&["build", "plugins"]) else {
             continue;
         };
@@ -576,20 +578,27 @@ fn maven(pom: &str, directories: &[&Path], inputs: &mut Inputs) -> Option<Versio
             .iter()
             .filter(|plugin| plugin.name == "plugin")
         {
+            let applies = project_index == 0 || plugin.text(&["inherited"]) != Some("false");
+            // Keep a suppressed declaration as unresolved so a more distant ancestor
+            // cannot resurrect a plugin excluded by the nearer parent's model.
             match (plugin.text(&["groupId"]), plugin.text(&["artifactId"])) {
                 (Some("org.jetbrains.kotlin"), Some("kotlin-maven-plugin")) => {
-                    kotlin.push(
+                    kotlin.push(if applies {
                         plugin
                             .text(&["version"])
-                            .and_then(|value| property(value, &properties)),
-                    );
+                            .and_then(|value| property(value, &properties))
+                    } else {
+                        None
+                    });
                 }
                 (None | Some("org.apache.maven.plugins"), Some("maven-compiler-plugin")) => {
-                    java.push(
+                    java.push(if applies {
                         plugin
                             .text(&["configuration", "jdkToolchain", "version"])
-                            .and_then(|value| property(value, &properties)),
-                    );
+                            .and_then(|value| property(value, &properties))
+                    } else {
+                        None
+                    });
                 }
                 _ => (),
             }
@@ -804,6 +813,107 @@ mod tests {
             "app",
         )?;
         assert!(versions.kotlin.is_none());
+        Ok(())
+    }
+
+    #[test]
+    fn non_inherited_maven_plugins_apply_only_in_the_declaring_project() -> io::Result<()> {
+        let parent = r#"<project><groupId>example</groupId><artifactId>parent</artifactId><version>1</version><build><plugins>
+            <plugin><groupId>org.jetbrains.kotlin</groupId><artifactId>kotlin-maven-plugin</artifactId><version>2.1.20</version><inherited>false</inherited></plugin>
+            <plugin><artifactId>maven-compiler-plugin</artifactId><inherited>false</inherited><configuration><jdkToolchain><version>21</version></jdkToolchain></configuration></plugin>
+            </plugins></build></project>"#;
+        let child = "<project><parent><groupId>example</groupId><artifactId>parent</artifactId><version>1</version></parent></project>";
+        let files = [(".git", ""), ("pom.xml", parent), ("app/pom.xml", child)];
+        let versions = fixture(&files, "app")?;
+        assert!(versions.kotlin.is_none(), "Kotlin plugin is not inherited");
+        assert!(
+            versions.java.is_none(),
+            "Java plugin configuration is not inherited"
+        );
+        let versions = fixture(&files, "")?;
+        assert_eq!(versions.kotlin.as_deref(), Some("2.1.20"));
+        assert_eq!(versions.java.as_deref(), Some("21"));
+        Ok(())
+    }
+
+    #[test]
+    fn failed_reads_stop_further_input_work() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let invalid = dir.path().join("gradle.properties");
+        let mut file = std::fs::File::create(&invalid)?;
+        file.write_all(&vec![0xff; FILE_LIMIT as usize])?;
+        file.sync_all()?;
+        let valid = dir.path().join("build.gradle.kts");
+        let mut file = std::fs::File::create(&valid)?;
+        file.write_all(b"plugins { kotlin(\"jvm\") version \"2.1.20\" }")?;
+        file.sync_all()?;
+        let mut inputs = Inputs::new(Duration::from_secs(1));
+        assert!(inputs.read(invalid).is_none());
+        assert!(inputs.failed);
+        assert!(
+            inputs.read(valid).is_none(),
+            "A fatal read error must prevent additional reads"
+        );
+        dir.close()
+    }
+
+    #[test]
+    fn invalid_utf8_cannot_repeat_reads_across_the_aggregate_budget() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        std::fs::File::create(dir.path().join(".git"))?.sync_all()?;
+        let mut module = dir.path().to_path_buf();
+        for level in 0..MAX_DEPTH {
+            std::fs::create_dir_all(&module)?;
+            let mut file = std::fs::File::create(module.join("gradle.properties"))?;
+            file.write_all(&vec![0xff; FILE_LIMIT as usize])?;
+            file.sync_all()?;
+            if level + 1 < MAX_DEPTH {
+                module.push("app");
+            }
+        }
+        let mut file = std::fs::File::create(module.join("build.gradle.kts"))?;
+        file.write_all(b"plugins { kotlin(\"jvm\") version \"2.1.20\" }")?;
+        file.sync_all()?;
+        let mut inputs = Inputs::new(Duration::from_secs(1));
+        let _ = discover(&module, &mut inputs);
+        assert!(inputs.failed);
+        let attempted_properties = inputs
+            .files
+            .keys()
+            .filter(|path| {
+                path.file_name()
+                    .is_some_and(|name| name == "gradle.properties")
+            })
+            .count();
+        assert_eq!(
+            attempted_properties, 1,
+            "Do not consume eight invalid files after the first fatal decode"
+        );
+        dir.close()
+    }
+
+    #[test]
+    fn non_inherited_maven_plugins_do_not_resurface_from_grandparents() -> io::Result<()> {
+        let grandparent = r#"<project><groupId>example</groupId><artifactId>root</artifactId><version>1</version><build><plugins>
+            <plugin><groupId>org.jetbrains.kotlin</groupId><artifactId>kotlin-maven-plugin</artifactId><version>2.2.0</version></plugin>
+            <plugin><artifactId>maven-compiler-plugin</artifactId><configuration><jdkToolchain><version>25</version></jdkToolchain></configuration></plugin>
+            </plugins></build></project>"#;
+        let parent = r#"<project><parent><groupId>example</groupId><artifactId>root</artifactId><version>1</version></parent><artifactId>parent</artifactId><build><plugins>
+            <plugin><groupId>org.jetbrains.kotlin</groupId><artifactId>kotlin-maven-plugin</artifactId><version>2.1.20</version><inherited>false</inherited></plugin>
+            <plugin><artifactId>maven-compiler-plugin</artifactId><inherited>false</inherited><configuration><jdkToolchain><version>21</version></jdkToolchain></configuration></plugin>
+            </plugins></build></project>"#;
+        let child = "<project><parent><groupId>example</groupId><artifactId>parent</artifactId><version>1</version></parent></project>";
+        let versions = fixture(
+            &[
+                (".git", ""),
+                ("pom.xml", grandparent),
+                ("app/pom.xml", parent),
+                ("app/child/pom.xml", child),
+            ],
+            "app/child",
+        )?;
+        assert!(versions.kotlin.is_none());
+        assert!(versions.java.is_none());
         Ok(())
     }
 
