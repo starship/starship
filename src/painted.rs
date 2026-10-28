@@ -116,17 +116,31 @@ fn resolve(style: Option<Style>, inherited: Option<&AnsiStyle>) -> AnsiStyle {
     style.map_or_else(AnsiStyle::default, |style| style.to_ansi_style(inherited))
 }
 
-/// Adds the run of a fill drawing `text`.
+/// Adds the runs of a fill drawing `text`. A style that refers to the previous
+/// colors is resolved for each grapheme against the one before it, so that
+/// `fg:prev_bg bg:prev_fg` alternates colors in stripes.
 fn paint_fill<'a>(
     runs: &mut Vec<Run<'a>>,
     style: Option<Style>,
     inherited: Option<AnsiStyle>,
     text: Cow<'a, str>,
 ) {
-    runs.push(Run {
-        style: resolve(style, inherited.as_ref()),
-        text,
-    });
+    if !style.is_some_and(|style| style.references_previous()) {
+        runs.push(Run {
+            style: resolve(style, inherited.as_ref()),
+            text,
+        });
+        return;
+    }
+    let mut previous = inherited;
+    for grapheme in text.graphemes(true) {
+        let style = resolve(style, previous.as_ref());
+        previous = Some(style);
+        runs.push(Run {
+            style,
+            text: Cow::Owned(grapheme.to_owned()),
+        });
+    }
 }
 
 /// The width of the text of `segments` between fills. Adjacent text runs can
@@ -210,7 +224,7 @@ mod tests {
             Segment::LineBreak,
             text("fg:prev_fg", "e"),
         ];
-        let painted = Painted::new(&segments, Some(8));
+        let painted = Painted::new(&segments, Some(5));
         let styles: Vec<_> = painted
             .lines
             .iter()
@@ -278,6 +292,56 @@ mod tests {
                 Painted::new(&segments, width).to_string()
             );
         }
+    }
+
+    #[test]
+    fn a_fill_referring_to_previous_colors_draws_stripes() {
+        let segments = [
+            text("fg:red bg:blue", "a"),
+            Segment::fill(parse_style_string("fg:prev_bg bg:prev_fg", None), ".:"),
+            text("fg:prev_fg", "b"),
+        ];
+
+        for (width, expected) in [(None, 2), (Some(8), 6)] {
+            let painted = Painted::new(&segments, width);
+            let stripes: Vec<_> = painted.lines[0][1..=expected]
+                .iter()
+                .map(|run| (run.text.as_ref(), run.style))
+                .collect();
+
+            let swapped = Color::Blue.on(Color::Red);
+            let original = Color::Red.on(Color::Blue);
+            assert_eq!(
+                [
+                    (".", swapped),
+                    (":", original),
+                    (".", swapped),
+                    (":", original),
+                    (".", swapped),
+                    (":", original),
+                ][..expected],
+                stripes[..],
+                "each symbol swaps the colors of the one before it"
+            );
+            assert_eq!(
+                AnsiStyle::default(),
+                painted.lines[0][expected + 1].style,
+                "nothing inherits across a fill"
+            );
+        }
+    }
+
+    #[test]
+    fn a_fill_without_references_is_one_run() {
+        let segments = [
+            text("red", "a"),
+            Segment::fill(parse_style_string("green", None), ".:"),
+        ];
+        let painted = Painted::new(&segments, Some(5));
+
+        assert_eq!(2, painted.lines[0].len());
+        assert_eq!(".:.:", painted.lines[0][1].text);
+        assert_eq!(Color::Green.normal(), painted.lines[0][1].style);
     }
 
     #[test]
