@@ -2595,7 +2595,7 @@ plugins, and task-specific compiler overrides are not evaluated. Conflicting or
 unsupported version declarations are omitted rather than guessed.
 
 Reads are limited to 64 KiB per file and 512 KiB per resolution. Discovery checks a
-10 ms elapsed-time budget between operations; this is not a hard deadline for
+`scan_timeout` elapsed-time budget (30 ms by default) between operations; this is not a hard deadline for
 filesystem calls or OS scheduling. Java and Kotlin share the result within a prompt
 render, but nothing is cached between prompts, so edits are read on the next render.
 The default format and project detection are unchanged unless `$local_version` is used.
@@ -3014,7 +3014,7 @@ plugins, and task-specific compiler overrides are not evaluated. Conflicting or
 unsupported version declarations are omitted rather than guessed.
 
 Reads are limited to 64 KiB per file and 512 KiB per resolution. Discovery checks a
-10 ms elapsed-time budget between operations; this is not a hard deadline for
+`scan_timeout` elapsed-time budget (30 ms by default) between operations; this is not a hard deadline for
 filesystem calls or OS scheduling. Java and Kotlin share the result within a prompt
 render, but nothing is cached between prompts, so edits are read on the next render.
 The default format and project detection are unchanged unless `$local_version` is used.

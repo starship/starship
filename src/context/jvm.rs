@@ -19,15 +19,17 @@ pub(crate) struct Versions {
 
 struct Inputs {
     start: Instant,
+    budget: Duration,
     remaining: u64,
     files: BTreeMap<PathBuf, Option<String>>,
     failed: bool,
 }
 
 impl Inputs {
-    fn new() -> Self {
+    fn new(budget: Duration) -> Self {
         Self {
             start: Instant::now(),
+            budget,
             remaining: TOTAL_LIMIT,
             files: BTreeMap::new(),
             failed: false,
@@ -35,7 +37,7 @@ impl Inputs {
     }
 
     fn expired(&self) -> bool {
-        self.start.elapsed() >= Duration::from_millis(10)
+        self.start.elapsed() >= self.budget
     }
 
     fn read(&mut self, path: PathBuf) -> Option<String> {
@@ -60,8 +62,8 @@ impl Inputs {
     }
 }
 
-pub(super) fn resolve(directory: &Path) -> Versions {
-    let mut inputs = Inputs::new();
+pub(super) fn resolve(directory: &Path, budget: Duration) -> Versions {
+    let mut inputs = Inputs::new(budget);
     let versions = discover(directory, &mut inputs).unwrap_or_default();
     // Never publish a partially resolved result after exhausting the cooperative budget.
     if inputs.expired() || inputs.failed {
@@ -620,7 +622,7 @@ mod tests {
         }
         let cwd = dir.path().join(cwd);
         std::fs::create_dir_all(&cwd)?;
-        let versions = resolve(&cwd);
+        let versions = resolve(&cwd, Duration::from_millis(30));
         dir.close()?;
         Ok(versions)
     }
@@ -905,10 +907,19 @@ mod tests {
             let mut file = std::fs::File::create(&build)?;
             write!(file, "plugins {{ kotlin(\"jvm\") version \"{version}\" }}")?;
             file.sync_all()?;
-            assert_eq!(resolve(dir.path()).kotlin.as_deref(), Some(version));
+            assert_eq!(
+                resolve(dir.path(), Duration::from_millis(30))
+                    .kotlin
+                    .as_deref(),
+                Some(version)
+            );
         }
         std::fs::remove_file(build)?;
-        assert!(resolve(dir.path()).kotlin.is_none());
+        assert!(
+            resolve(dir.path(), Duration::from_millis(30))
+                .kotlin
+                .is_none()
+        );
         dir.close()
     }
 
@@ -921,13 +932,17 @@ mod tests {
             &dir.path().join("build.gradle.kts"),
             Mode::S_IRUSR | Mode::S_IWUSR,
         )?;
-        assert!(resolve(dir.path()).kotlin.is_none());
+        assert!(
+            resolve(dir.path(), Duration::from_millis(30))
+                .kotlin
+                .is_none()
+        );
         dir.close()
     }
 
     #[test]
     fn budget_exhaustion_and_property_cycles_are_unresolved() {
-        let mut inputs = Inputs::new();
+        let mut inputs = Inputs::new(Duration::from_millis(30));
         inputs.start = Instant::now() - Duration::from_secs(1);
         assert!(discover(Path::new("."), &mut inputs).is_none());
         let properties = BTreeMap::from([("a".into(), "${b}".into()), ("b".into(), "${a}".into())]);

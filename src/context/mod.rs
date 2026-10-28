@@ -434,8 +434,12 @@ impl<'a> Context<'a> {
 
     /// Project declarations shared by Java and Kotlin, only when explicitly requested.
     pub(crate) fn jvm_versions(&self) -> &jvm::Versions {
-        self.jvm_versions
-            .get_or_init(|| jvm::resolve(&self.current_dir))
+        self.jvm_versions.get_or_init(|| {
+            jvm::resolve(
+                &self.current_dir,
+                Duration::from_millis(self.root_config.scan_timeout),
+            )
+        })
     }
 
     pub fn dir_contents(&self) -> Result<&DirContents, &std::io::Error> {
