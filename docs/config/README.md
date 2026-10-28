@@ -2552,6 +2552,7 @@ By default the module will be shown if any of the following conditions are met:
 | Variable | Example | Description                          |
 | -------- | ------- | ------------------------------------ |
 | version  | `v14`   | The version of `java`                |
+| local_version | `v21` | The project-declared Java toolchain version (no commands run) |
 | symbol   |         | Mirrors the value of option `symbol` |
 | style\*  |         | Mirrors the value of option `style`  |
 
@@ -2565,6 +2566,39 @@ By default the module will be shown if any of the following conditions are met:
 [java]
 symbol = '🌟 '
 ```
+
+### Project-declared version
+
+Use `$local_version` in your format to read the project's build files without
+starting Java, Kotlin, Gradle, or Maven. `$version` keeps reporting the installed
+version; including both variables still runs the installed-version command.
+The local version is a declaration, not verification of the compiler used by a build.
+Unresolved declarations produce no value, with no installed-version fallback.
+
+Supported declarations are Gradle's `java { toolchain { languageVersion =
+JavaLanguageVersion.of(21) } }`, Kotlin's `kotlin { jvmToolchain(21) }`, and Maven's
+`maven-compiler-plugin` configuration `<jdkToolchain><version>21</version></jdkToolchain>`.
+Only exact versions are shown. Compatibility settings (`release`, `sourceCompatibility`,
+`targetCompatibility`, and `jvmTarget`) are not compiler versions and are ignored.
+
+```toml
+[java]
+format = 'via [$symbol($local_version )]($style)'
+```
+
+When `$local_version` is requested, discovery also works from source subdirectories.
+It examines at most eight directory levels, stopping at a Git or Gradle settings
+boundary. The nearest build file takes precedence; Gradle plugin defaults can come
+from root build/settings files. Maven supports local parents at `../pom.xml`.
+Remote parents, active-profile evaluation, arbitrary Gradle expressions, convention
+plugins, and task-specific compiler overrides are not evaluated. Conflicting or
+unsupported version declarations are omitted rather than guessed.
+
+Reads are limited to 64 KiB per file and 512 KiB per resolution. Discovery checks a
+10 ms elapsed-time budget between operations; this is not a hard deadline for
+filesystem calls or OS scheduling. Java and Kotlin share the result within a prompt
+render, but nothing is cached between prompts, so edits are read on the next render.
+The default format and project detection are unchanged unless `$local_version` is used.
 
 ## JJ Bookmark
 
@@ -2929,6 +2963,7 @@ By default the module will be shown if any of the following conditions are met:
 | Variable | Example   | Description                          |
 | -------- | --------- | ------------------------------------ |
 | version  | `v1.4.21` | The version of `kotlin`              |
+| local_version | `v2.1.20` | The project-declared Kotlin compiler version (no commands run) |
 | symbol   |           | Mirrors the value of option `symbol` |
 | style\*  |           | Mirrors the value of option `style`  |
 
@@ -2950,6 +2985,39 @@ symbol = '🅺 '
 # Uses the Kotlin Compiler binary to get the installed version
 kotlin_binary = 'kotlinc'
 ```
+
+### Project-declared version
+
+Use `$local_version` in your format to read the project's build files without
+starting Java, Kotlin, Gradle, or Maven. `$version` keeps reporting the installed
+version; including both variables still runs the installed-version command.
+The local version is a declaration, not verification of the compiler used by a build.
+Unresolved declarations produce no value, with no installed-version fallback.
+
+Supported declarations are literal Kotlin plugin versions in Gradle's `plugins`
+block (`kotlin("jvm") version "2.1.20"` or `id("org.jetbrains.kotlin.jvm") version
+"2.1.20"`), default `libs.plugins` version-catalog aliases, and Maven's
+`org.jetbrains.kotlin:kotlin-maven-plugin` version. Simple property references
+are supported through `gradle.properties` and Maven `<properties>`.
+
+```toml
+[kotlin]
+format = 'via [$symbol($local_version )]($style)'
+```
+
+When `$local_version` is requested, discovery also works from source subdirectories.
+It examines at most eight directory levels, stopping at a Git or Gradle settings
+boundary. The nearest build file takes precedence; Gradle plugin defaults can come
+from root build/settings files. Maven supports local parents at `../pom.xml`.
+Remote parents, active-profile evaluation, arbitrary Gradle expressions, convention
+plugins, and task-specific compiler overrides are not evaluated. Conflicting or
+unsupported version declarations are omitted rather than guessed.
+
+Reads are limited to 64 KiB per file and 512 KiB per resolution. Discovery checks a
+10 ms elapsed-time budget between operations; this is not a hard deadline for
+filesystem calls or OS scheduling. Java and Kotlin share the result within a prompt
+render, but nothing is cached between prompts, so edits are read on the next render.
+The default format and project detection are unchanged unless `$local_version` is used.
 
 ## Kubernetes
 

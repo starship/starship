@@ -1,4 +1,5 @@
 use super::{Context, Module, ModuleConfig};
+use crate::formatter::VariableHolder;
 
 use crate::configs::kotlin::KotlinConfig;
 use crate::formatter::StringFormatter;
@@ -13,18 +14,25 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("kotlin");
     let config = KotlinConfig::try_load(module.config);
 
-    let is_kotlin_project = context
-        .try_begin_scan()?
-        .set_files(&config.detect_files)
-        .set_extensions(&config.detect_extensions)
-        .set_folders(&config.detect_folders)
-        .is_match();
+    let formatter = StringFormatter::new(config.format);
+    let wants_local = formatter
+        .as_ref()
+        .is_ok_and(|formatter| formatter.get_variables().contains("local_version"));
+    let local_project = wants_local && context.jvm_versions().kotlin.is_some();
+
+    let is_kotlin_project = local_project
+        || context
+            .try_begin_scan()?
+            .set_files(&config.detect_files)
+            .set_extensions(&config.detect_extensions)
+            .set_folders(&config.detect_folders)
+            .is_match();
 
     if !is_kotlin_project {
         return None;
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+    let parsed = formatter.and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
@@ -40,6 +48,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     VersionFormatter::format_module_version(
                         module.get_name(),
                         &kotlin_version,
+                        config.version_format,
+                    )
+                    .map(Ok)
+                }
+                "local_version" => {
+                    let kotlin_version = context.jvm_versions().kotlin.as_deref()?;
+                    VersionFormatter::format_module_version(
+                        module.get_name(),
+                        kotlin_version,
                         config.version_format,
                     )
                     .map(Ok)
@@ -85,6 +102,52 @@ mod tests {
     use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
+
+    #[test]
+    fn local_and_installed_versions_remain_distinct() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let build = dir.path().join("build.gradle.kts");
+        std::fs::write(&build, r#"plugins { kotlin("jvm") version "2.1.20" }"#)?;
+        File::open(&build)?.sync_all()?;
+        let actual = ModuleRenderer::new("kotlin")
+            .path(dir.path())
+            .config(toml::toml! { [kotlin] format = "${local_version}|${version}" })
+            .collect();
+        assert_eq!(actual.as_deref(), Some("v2.1.20|v1.4.21"));
+        dir.close()
+    }
+
+    #[test]
+    fn unresolved_local_version_does_not_fall_back_to_installed() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let build = dir.path().join("build.gradle.kts");
+        std::fs::write(&build, "// No declared compiler version")?;
+        File::open(&build)?.sync_all()?;
+        let actual = ModuleRenderer::new("kotlin")
+            .path(dir.path())
+            .config(toml::toml! { [kotlin] format = "$local_version" })
+            .collect();
+        assert_eq!(actual, None);
+        dir.close()
+    }
+
+    #[test]
+    fn local_version_uses_project_declaration_without_installed_compiler() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        std::fs::write(
+            dir.path().join("build.gradle.kts"),
+            r#"plugins { kotlin("jvm") version "2.1.20" }"#,
+        )?;
+        File::open(dir.path().join("build.gradle.kts"))?.sync_all()?;
+        let actual = ModuleRenderer::new("kotlin")
+            .path(dir.path())
+            .config(toml::toml! { [kotlin] format = "$local_version" })
+            .cmd("kotlin -version", None)
+            .cmd("java -Xinternalversion", None)
+            .collect();
+        assert_eq!(actual.as_deref(), Some("v2.1.20"));
+        dir.close()
+    }
 
     #[test]
     fn folder_without_kotlin_files() -> io::Result<()> {

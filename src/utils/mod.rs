@@ -45,6 +45,15 @@ const MAX_FILE_SIZE: u64 = 100 * 1024 * 1024;
 
 /// Return the string contents of a file
 pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
+    read_file_with_limit(file_name, MAX_FILE_SIZE)
+}
+
+/// Read a regular text file with a caller-supplied byte limit.
+pub(crate) fn read_file_with_limit<P: AsRef<Path> + Debug>(
+    file_name: P,
+    limit: u64,
+) -> Result<String> {
+    let limit = limit.min(MAX_FILE_SIZE);
     log::trace!("Trying to read from {file_name:?}");
 
     // `O_NONBLOCK` so that the open itself cannot hang
@@ -69,7 +78,7 @@ pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
             format!("{file_name:?} is not a file"),
         ));
     }
-    if stat.len() > MAX_FILE_SIZE {
+    if stat.len() > limit {
         return Err(Error::new(
             ErrorKind::InvalidData,
             format!("{file_name:?} is too large"),
@@ -81,10 +90,10 @@ pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
     let mut out = String::new();
     #[allow(clippy::disallowed_methods)]
     let result = file
-        .take(MAX_FILE_SIZE + 1)
+        .take(limit + 1)
         .read_to_string(&mut out)
         .and_then(|read| {
-            if read as u64 > MAX_FILE_SIZE {
+            if read as u64 > limit {
                 Err(Error::new(
                     ErrorKind::InvalidData,
                     format!("{file_name:?} is too large"),

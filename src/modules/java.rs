@@ -1,5 +1,6 @@
 use super::{Context, Module, ModuleConfig};
 use crate::configs::java::JavaConfig;
+use crate::formatter::VariableHolder;
 use crate::formatter::{StringFormatter, VersionFormatter};
 use crate::utils::get_command_string_output;
 use std::path::PathBuf;
@@ -13,18 +14,25 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("java");
     let config: JavaConfig = JavaConfig::try_load(module.config);
 
-    let is_java_project = context
-        .try_begin_scan()?
-        .set_files(&config.detect_files)
-        .set_extensions(&config.detect_extensions)
-        .set_folders(&config.detect_folders)
-        .is_match();
+    let formatter = StringFormatter::new(config.format);
+    let wants_local = formatter
+        .as_ref()
+        .is_ok_and(|formatter| formatter.get_variables().contains("local_version"));
+    let local_project = wants_local && context.jvm_versions().java.is_some();
+
+    let is_java_project = local_project
+        || context
+            .try_begin_scan()?
+            .set_files(&config.detect_files)
+            .set_extensions(&config.detect_extensions)
+            .set_folders(&config.detect_folders)
+            .is_match();
 
     if !is_java_project {
         return None;
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+    let parsed = formatter.and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
@@ -44,6 +52,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     )
                     .map(Ok)
                 }
+                "local_version" => VersionFormatter::format_module_version(
+                    module.get_name(),
+                    context.jvm_versions().java.as_deref()?,
+                    config.version_format,
+                )
+                .map(Ok),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -94,6 +108,55 @@ mod tests {
     use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
+
+    #[test]
+    fn local_and_installed_versions_remain_distinct() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let build = dir.path().join("build.gradle.kts");
+        std::fs::write(
+            &build,
+            r#"java { toolchain { languageVersion = JavaLanguageVersion.of(21) } }"#,
+        )?;
+        File::open(&build)?.sync_all()?;
+        let actual = ModuleRenderer::new("java")
+            .path(dir.path())
+            .config(toml::toml! { [java] format = "${local_version}|${version}" })
+            .collect();
+        assert_eq!(actual.as_deref(), Some("v21|v13.0.2"));
+        dir.close()
+    }
+
+    #[test]
+    fn unresolved_local_version_does_not_fall_back_to_installed() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let build = dir.path().join("build.gradle.kts");
+        std::fs::write(&build, "// No declared compiler version")?;
+        File::open(&build)?.sync_all()?;
+        let actual = ModuleRenderer::new("java")
+            .path(dir.path())
+            .config(toml::toml! { [java] format = "$local_version" })
+            .collect();
+        assert_eq!(actual, None);
+        dir.close()
+    }
+
+    #[test]
+    fn local_version_uses_project_declaration_without_installed_compiler() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        std::fs::write(
+            dir.path().join("build.gradle.kts"),
+            r#"java { toolchain { languageVersion = JavaLanguageVersion.of(21) } }"#,
+        )?;
+        File::open(dir.path().join("build.gradle.kts"))?.sync_all()?;
+        let actual = ModuleRenderer::new("java")
+            .path(dir.path())
+            .config(toml::toml! { [java] format = "$local_version" })
+            .cmd("kotlin -version", None)
+            .cmd("java -Xinternalversion", None)
+            .collect();
+        assert_eq!(actual.as_deref(), Some("v21"));
+        dir.close()
+    }
 
     #[test]
     fn test_parse_java_version_openjdk() {

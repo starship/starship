@@ -1,3 +1,5 @@
+mod jvm;
+
 use crate::config::{ModuleConfig, StarshipConfig};
 use crate::configs::StarshipRootConfig;
 use crate::module::Module;
@@ -54,6 +56,9 @@ pub struct Context<'a> {
     /// though may appear different.
     /// E.g. when navigating to a `PSDrive` in `PowerShell`, or a path without symlinks resolved.
     pub logical_dir: PathBuf,
+
+    /// File-only JVM project declarations shared within one rendering.
+    jvm_versions: OnceLock<jvm::Versions>,
 
     /// A struct containing directory contents in a lookup-optimized format.
     dir_contents: OnceLock<Result<DirContents, std::io::Error>>,
@@ -184,6 +189,7 @@ impl<'a> Context<'a> {
             properties,
             current_dir,
             logical_dir,
+            jvm_versions: OnceLock::new(),
             dir_contents: OnceLock::new(),
             git_repo: OnceLock::new(),
             jj_repo: OnceLock::new(),
@@ -424,6 +430,12 @@ impl<'a> Context<'a> {
     #[cfg(test)]
     pub fn set_jj_repo(&mut self, repo: JJRepo) {
         self.jj_repo = OnceLock::from(Some(repo));
+    }
+
+    /// Project declarations shared by Java and Kotlin, only when explicitly requested.
+    pub(crate) fn jvm_versions(&self) -> &jvm::Versions {
+        self.jvm_versions
+            .get_or_init(|| jvm::resolve(&self.current_dir))
     }
 
     pub fn dir_contents(&self) -> Result<&DirContents, &std::io::Error> {
