@@ -321,12 +321,6 @@ pub fn get_static_repo_status(
     status.as_ref().map(|(status, _)| Arc::clone(status))
 }
 
-pub fn uses_reftables(repo: &gix::Repository) -> bool {
-    repo.config_snapshot()
-        .string("extensions.refstorage")
-        .is_some_and(|kind| kind == "reftable")
-}
-
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
 fn get_repo_status(
     context: &Context,
@@ -337,14 +331,9 @@ fn get_repo_status(
 
     let mut repo_status = RepoStatus::default();
     let gix_repo = repo.open();
-    // TODO: remove this special case once `gitoxide` can handle sparse indices for tree-index comparisons.
     let has_untracked = !config.untracked.is_empty();
     let git_config = gix_repo.config_snapshot();
-    if config.use_git_executable
-        || repo.fs_monitor_value_is_true
-        || uses_reftables(&repo.repo.to_thread_local())
-        || gix_repo.index_or_empty().ok()?.is_sparse()
-    {
+    if repo.use_git_executable(config.use_git_executable)? {
         let mut args = vec!["status", "--porcelain=2"];
 
         // for performance reasons, only pass flags if necessary...
@@ -454,8 +443,9 @@ fn get_repo_status(
                     .ok()
             })
         {
-            let output = repo.exec_git(
+            let output = repo.exec_git_with_required_trust(
                 context,
+                gix::sec::Trust::Reduced,
                 ["for-each-ref", "--format", "%(upstream) %(upstream:track)"]
                     .into_iter()
                     .map(ToOwned::to_owned)
@@ -892,6 +882,32 @@ pub mod tests {
 
         assert_eq!(expected, actual);
         repo_dir.close()
+    }
+
+    #[test]
+    fn reduced_trust_falls_back_to_gix_with_upstream_tracking() -> io::Result<()> {
+        for use_git_executable in [false, true] {
+            // The shared status cache is keyed by path, so each config needs its own repo.
+            let repo_dir = fixture_repo(COMMON_GIT_PROVIDERS[0])?;
+            behind(repo_dir.path())?;
+            fs::write(repo_dir.path().join("untracked-file"), "untracked\n")?;
+
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = "$ahead_behind$untracked"
+                    behind = "behind:$count "
+                    untracked = "untracked:$count"
+                    use_git_executable = use_git_executable
+                })
+                .path(repo_dir.path())
+                .git_trust(gix::sec::Trust::Reduced)
+                .collect();
+
+            assert_eq!(actual.as_deref(), Some("behind:1 untracked:1"));
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]

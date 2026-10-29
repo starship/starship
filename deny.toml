@@ -5,6 +5,9 @@ version = 2
 # output a note when they are encountered.
 ignore = [
   # { id = "RUSTSEC-0000-0000",  reason = "" },
+  { id = "RUSTSEC-2026-0370", reason = "via older notify-rust zbus dep" },
+  { id = "RUSTSEC-2026-0371", reason = "via older notify-rust zbus dep" },
+  { id = "RUSTSEC-2026-0372", reason = "via older notify-rust zbus dep" },
 ]
 
 [licenses]

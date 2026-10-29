@@ -403,7 +403,7 @@ is read from the `AWS_SSO_PROFILE` env var.
 | Option              | Default                                                           | Description                                                                                                 |
 | ------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | The format for the module.                                                                                  |
-| `symbol`            | `'☁️ '`                                                           | The symbol used before displaying the current AWS profile.                                                  |
+| `symbol`            | `'☁️  '`                                                          | The symbol used before displaying the current AWS profile.                                                  |
 | `region_aliases`    | `{}`                                                              | Table of region aliases to display in addition to the AWS name.                                             |
 | `profile_aliases`   | `{}`                                                              | Table of profile aliases to display in addition to the AWS name.                                            |
 | `style`             | `'bold yellow'`                                                   | The style for the module.                                                                                   |
@@ -3226,7 +3226,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 | ----------- | ----------------------------------------- | -------------------------------------------------------- |
 | `threshold` | `75`                                      | Hide the memory usage unless it exceeds this percentage. |
 | `format`    | `'via $symbol[$ram( \| $swap)]($style) '` | The format for the module.                               |
-| `symbol`    | `'🐏'`                                    | The symbol used before displaying the memory usage.      |
+| `symbol`    | `'🐏 '`                                   | The symbol used before displaying the memory usage.      |
 | `style`     | `'bold dimmed white'`                     | The style for the module.                                |
 | `disabled`  | `true`                                    | Disables the `memory_usage` module.                      |
 
@@ -3563,7 +3563,7 @@ The module will be shown when inside a nix-shell environment.
 | Option        | Default                                        | Description                                                           |
 | ------------- | ---------------------------------------------- | --------------------------------------------------------------------- |
 | `format`      | `'via [$symbol($state )(\($name\) )]($style)'` | The format for the module.                                            |
-| `symbol`      | `'❄️ '`                                        | A format string representing the symbol of nix-shell.                 |
+| `symbol`      | `'❄️  '`                                       | A format string representing the symbol of nix-shell.                 |
 | `style`       | `'bold blue'`                                  | The style for the module.                                             |
 | `impure_msg`  | `''`                                           | A format string shown when the shell is impure.                       |
 | `pure_msg`    | `'pure'`                                       | A format string shown when the shell is pure.                         |
@@ -3778,7 +3778,7 @@ to fetch the current project in use.
 | Option     | Default                                       | Description                                                    |
 | ---------- | --------------------------------------------- | -------------------------------------------------------------- |
 | `format`   | `'on [$symbol$cloud(\($project\))]($style) '` | The format for the module.                                     |
-| `symbol`   | `'☁️ '`                                       | The symbol used before displaying the current OpenStack cloud. |
+| `symbol`   | `'☁️  '`                                      | The symbol used before displaying the current OpenStack cloud. |
 | `style`    | `'bold yellow'`                               | The style for the module.                                      |
 | `disabled` | `false`                                       | Disables the `openstack` module.                               |
 
@@ -3929,7 +3929,7 @@ Arch = "Arch is the best! "
 
 The `package` module is shown when the current directory is the repository for a
 package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`,
-`poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `galaxy`, `daml` and `dart` packages.
+`poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `galaxy`, `daml`, `dart` and `zig` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present
   in the current directory
@@ -3953,6 +3953,7 @@ package, and shows its current version. The module currently supports `npm`, `ni
 - [**SBT**](https://scala-sbt.org) - The `sbt` package version is extracted from the `build.sbt` present in the current directory
 - [**Daml**](https://www.digitalasset.com/developers) - The `daml` package version is extracted from the `daml.yaml` present in the current directory
 - [**Dart**](https://pub.dev/) - The `dart` package version is extracted from the `pubspec.yaml` present in the current directory
+- [**Zig**](https://ziglang.org) - The `zig` package version is extracted from the `build.zig.zon` present in the current directory
 
 > ⚠️ The version being shown is that of the package whose source code is in your
 > current directory, not your package manager.
@@ -4247,7 +4248,7 @@ By default, the module will be shown if any of the following conditions are met:
 - The current directory contains a `tox.ini` file
 - The current directory contains a file with the `.py` extension.
 - The current directory contains a file with the `.ipynb` extension.
-- A virtual environment is currently activated
+- The `VIRTUAL_ENV` environment variable is set
 
 ### Options
 
@@ -4263,6 +4264,7 @@ By default, the module will be shown if any of the following conditions are met:
 | `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Which extensions should trigger this module                                           |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Which filenames should trigger this module                                            |
 | `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                              |
+| `detect_env_vars`    | `['VIRTUAL_ENV']`                                                                                            | Which environment variable(s) should trigger this module                              |
 | `generic_venv_names` | `[]`                                                                                                         | Which venv names should be replaced with the parent directory name.                   |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                         |
 
@@ -4809,7 +4811,7 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 | Option              | Default                                | Description                                                                                                                                    |
 | ------------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `'🅢  '`                                | The symbol used before the environment name.                                                                                                   |
+| `symbol`            | `'🅢 '`                                 | The symbol used before the environment name.                                                                                                   |
 | `style`             | `'bold blue'`                          | The style for the module.                                                                                                                      |
 | `format`            | `'via [$symbol$environment]($style) '` | The format for the module.                                                                                                                     |
 | `disabled`          | `false`                                | Disables the `spack` module.                                                                                                                   |
@@ -4997,7 +4999,7 @@ It supports both Hashicorp Terraform and OpenTofu for version detection.
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.terraform` folder
-- Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
+- Current directory contains a file with the `.tf`, `.tofu`, `.tfplan` or `.tfstate` extensions
 
 ### Options
 
@@ -5005,8 +5007,8 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol$workspace]($style) '`                    | The format string for the module.                                         |
 | `version_format`    | `'v${raw}'`                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'💠'`                                                  | A format string shown before the terraform workspace.                     |
-| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`                           | Which extensions should trigger this module.                              |
+| `symbol`            | `'💠 '`                                                 | A format string shown before the terraform workspace.                     |
+| `detect_extensions` | `['tf', 'tofu', 'tfplan', 'tfstate']`                   | Which extensions should trigger this module.                              |
 | `detect_files`      | `[]`                                                    | Which filenames should trigger this module.                               |
 | `detect_folders`    | `['.terraform']`                                        | Which folders should trigger this module.                                 |
 | `style`             | `'bold 105'`                                            | The style for the module.                                                 |
@@ -5351,7 +5353,7 @@ the module will be activated if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'△ '`                               | The symbol used before the version of cmake.                              |
+| `symbol`            | `'△ '`                               | The symbol used before the version of xmake.                              |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module                               |
 | `detect_files`      | `['xmake.lua']`                      | Which filenames should trigger this module                                |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module                                  |
@@ -5452,7 +5454,7 @@ These modules will be shown if any of the following conditions are met:
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the `shell` returns a `0` status code from executing it.                                                        |
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `description`       | `'<custom module>'`             | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `'<custom config>'`             | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                                                                                                                                                                 |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |

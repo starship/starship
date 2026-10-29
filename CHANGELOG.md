@@ -1,5 +1,45 @@
 # Changelog
 
+## [1.27.0](https://github.com/starship/starship/compare/v1.26.0...v1.27.0) (2026-10-17)
+
+
+### Features
+
+* Add `jj_bookmark` module ([#7643](https://github.com/starship/starship/issues/7643)) ([6f33dce](https://github.com/starship/starship/commit/6f33dcec91b758ccbae4ed850eaa6feabff798f9))
+* add `jj_change` module ([#7691](https://github.com/starship/starship/issues/7691)) ([70c705e](https://github.com/starship/starship/commit/70c705ed20c0cadfaf1ae14824ebc85f0d5cdda7))
+* add `jj_metrics` module ([#7720](https://github.com/starship/starship/issues/7720)) ([471858d](https://github.com/starship/starship/commit/471858d98097fff4e35c113582e52458b29a440e))
+* add `jj_status` module ([#7729](https://github.com/starship/starship/issues/7729)) ([3ead2a0](https://github.com/starship/starship/commit/3ead2a0cbffd31cb778b3d595027b1e5e2c50be4))
+* Add Jujutsu support to the `vcs` module ([#7612](https://github.com/starship/starship/issues/7612)) ([131bf95](https://github.com/starship/starship/commit/131bf9552d7e927607e155ea3a9b8c8a170a0356))
+* **bash:** Support right prompt in Bash via Flyline ([#7673](https://github.com/starship/starship/issues/7673)) ([85b8a61](https://github.com/starship/starship/commit/85b8a61bbbe38a2725baebfc80d9e459f5d2a94f))
+* **claude_model:** add effort variable ([#7614](https://github.com/starship/starship/issues/7614)) ([ea4098c](https://github.com/starship/starship/commit/ea4098cbc2ce0cdb2bd44e259aa8125496ab7839))
+* **git_branch:** add `ignore_remotes` option ([#7671](https://github.com/starship/starship/issues/7671)) ([0f9da35](https://github.com/starship/starship/commit/0f9da35ea379c4bb0e66c5a1b3d1ab3e8c297a9c))
+* **jj:** Better bookmark discovery and improving JJ output parsing ([#7761](https://github.com/starship/starship/issues/7761)) ([013bef4](https://github.com/starship/starship/commit/013bef47ef3b156b1e61471bd63321bd6b05f0c6))
+* **package:** detect zig package version from build.zig.zon ([#7753](https://github.com/starship/starship/issues/7753)) ([0584026](https://github.com/starship/starship/commit/0584026a5898575693cb8ef43b9879bb4248ae26))
+* **terraform:** detect OpenTofu's `.tofu` files ([#7783](https://github.com/starship/starship/issues/7783)) ([d77931d](https://github.com/starship/starship/commit/d77931d6e5310dcd440a4c4701fb0065e7ccaace))
+
+
+### Bug Fixes
+
+* **bash:** avoid duplicating PS0 preexec hook ([#7587](https://github.com/starship/starship/issues/7587)) ([8f28dfc](https://github.com/starship/starship/commit/8f28dfcb1ca3242fba00a3cf98c10ee24605c3ed))
+* **directory:** render symlinks pointing into a repo subdirectory ([#7715](https://github.com/starship/starship/issues/7715)) ([2bc6acf](https://github.com/starship/starship/commit/2bc6acf64085a1bf6ee54af8f8d1770bc56263f0))
+* **git:** avoid running sensitive git commands in untrusted environments ([db847dd](https://github.com/starship/starship/commit/db847dd5915bd8804eee96af30c2fd851a238ca8))
+* **hostname:** check SSH_CLIENT and SSH_TTY in addition to SSH_CONNECTION ([#7611](https://github.com/starship/starship/issues/7611)) ([d1f5271](https://github.com/starship/starship/commit/d1f5271d619b95f10d8c8fe335b273c3d859b745))
+* **jj_status:** count file changes across the whole repository ([#7780](https://github.com/starship/starship/issues/7780)) ([2d8741e](https://github.com/starship/starship/commit/2d8741e4830273ff2bec1fe45e1e7fe6aa979cf4))
+* **nim:** use detect_folders for folder detection ([#7757](https://github.com/starship/starship/issues/7757)) ([ba04cfb](https://github.com/starship/starship/commit/ba04cfb6a425ea42826cb32804df8e88fa06d3db))
+* **openstack:** resolve clouds.yaml from context current directory ([#7655](https://github.com/starship/starship/issues/7655)) ([6d88346](https://github.com/starship/starship/commit/6d883464cd06c9c5b2bafd6a47f09f738f5745d0))
+* **package:** support build.gradle.kts in gradle version detection ([#7627](https://github.com/starship/starship/issues/7627)) ([0461483](https://github.com/starship/starship/commit/04614837ddab699783211627a7d7929bffaed82c))
+* **preset:** Pad OS icon instead of username so it is not clipped when hidden ([#7598](https://github.com/starship/starship/issues/7598)) ([91086e8](https://github.com/starship/starship/commit/91086e827b7ca977aeae54deaceb4d0724e023f6))
+* **pulumi:** read the per-backend stack selection ([#7724](https://github.com/starship/starship/issues/7724)) ([69c1a57](https://github.com/starship/starship/commit/69c1a5714abeb0ee8acf29e95a34de6ef5a5cc27))
+* **sudo:** Avoid creating system error logs on every unsuccessful invocation ([#7530](https://github.com/starship/starship/issues/7530)) ([564a471](https://github.com/starship/starship/commit/564a471b5af63da3fec5f914b6d0e325f8787fad))
+* **sudo:** sudo module pollutes journalctl with error logs ([564a471](https://github.com/starship/starship/commit/564a471b5af63da3fec5f914b6d0e325f8787fad))
+* **utils:** Avoid unbounded file reads ([187e183](https://github.com/starship/starship/commit/187e183ab6441abfb88f46349f03a504b7f64ee6))
+* **utils:** fix humanize_int rounding across unit boundaries ([#7770](https://github.com/starship/starship/issues/7770)) ([084cdf2](https://github.com/starship/starship/commit/084cdf2b9366adc4df8c2217cbe5f6371e882ece))
+
+
+### Performance Improvements
+
+* **swift:** prefer swift-frontend for version detection ([#7775](https://github.com/starship/starship/issues/7775)) ([bbde871](https://github.com/starship/starship/commit/bbde871aff4b4e42bb14f71119664e7e52369838))
+
 ## [1.26.0](https://github.com/starship/starship/compare/v1.25.1...v1.26.0) (2026-06-28)
 
 

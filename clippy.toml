@@ -1,8 +1,13 @@
 disallowed-methods = [
   # std::process::Command::new may inadvertly run executables from the current working directory
-  "std::process::Command::new",
+  { path = "std::process::Command::new", reason = "Use crate::utils::create_command instead" },
   # Setting environment variables can cause issues with non-rust code
-  "std::env::set_var",
+  { path = "std::env::set_var", reason = "Setting environment variables can cause issues with non-rust code" },
   # use `dunce` to avoid UNC/verbatim paths, where possible
-  "std::fs::canonicalize",
+  { path = "std::fs::canonicalize", reason = "use `dunce` to avoid UNC/verbatim paths, where possible" },
+  # Unbounded whole-file reads can exhaust memory on repository-controlled files
+  { path = "std::fs::read", reason = "add and use a bounded binary-file helper based on crate::utils::read_file instead" },
+  { path = "std::fs::read_to_string", reason = "use crate::utils::read_file instead" },
+  { path = "std::io::Read::read_to_end", reason = "add and use a bounded binary-file helper based on crate::utils::read_file instead" },
+  { path = "std::io::Read::read_to_string", reason = "use crate::utils::read_file for files; otherwise bound the reader and add a local allow" },
 ]
