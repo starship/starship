@@ -322,6 +322,20 @@ format = '([▴$added]($added_style))([▿$deleted]($deleted_style))'
 added_style = 'italic dimmed green'
 deleted_style = 'italic dimmed red'
 
+[jj_status]
+format = "([⎪$all⎥]($style))"
+style = "bold italic bright-blue"
+conflicted = "[◪◦](italic bright-magenta)"
+description_empty = "[◌◦](italic bright-magenta)"
+description_present = "[◦](italic bright-magenta)"
+hidden = "[󰘓◦](italic bright-magenta)"
+immutable = "[◦](italic bright-magenta)"
+added = "[▪](italic bright-cyan)"
+copied = "[◃◈](italic white)"
+deleted = "[✕](italic red)"
+modified = "[●◦](italic yellow)"
+renamed = "[◎◦](italic bright-blue)"
+
 [julia]
 symbol = "◎ "
 format = " jl [$symbol($version )]($style)"

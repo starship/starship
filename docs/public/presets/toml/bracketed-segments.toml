@@ -135,6 +135,9 @@ format = '\[[\($change\)]($style)\]'
 [jj_metrics]
 format = '(\[[+$added]($added_style)\])(\[[-$deleted]($deleted_style)\])'
 
+[jj_status]
+format = '([\[$all\]]($style))'
+
 [jobs]
 format = '\[[$symbol$number]($style)\]'
 

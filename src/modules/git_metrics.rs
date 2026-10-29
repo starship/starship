@@ -8,7 +8,6 @@ use regex::Regex;
 
 use super::Context;
 use crate::configs::git_status::GitStatusConfig;
-use crate::modules::git_status::uses_reftables;
 use crate::{
     config::ModuleConfig, configs::git_metrics::GitMetricsConfig, formatter::StringFormatter,
     formatter::string_formatter::StringFormatterError, module::Module,
@@ -31,12 +30,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     gix_repo.workdir()?;
     let status_module = context.new_module("git_status");
     let status_config = GitStatusConfig::try_load(status_module.config);
-    // TODO: remove this special case once `gitoxide` can handle sparse indices for tree-index comparisons.
-    let stats = if repo.fs_monitor_value_is_true
-        || status_config.use_git_executable
-        || uses_reftables(&repo.repo.to_thread_local())
-        || gix_repo.index_or_empty().ok()?.is_sparse()
-    {
+    let stats = if repo.use_git_executable(status_config.use_git_executable)? {
         let mut git_args = vec!["diff", "--shortstat"];
         if config.ignore_submodules {
             git_args.push("--ignore-submodules");
@@ -158,7 +152,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                 } => {
                                     if *copy {
                                         diff.added += count_lines(
-                                            location,
+                                            location.as_ref(),
                                             id.as_ref().into(),
                                             *entry_mode,
                                             tree_index_cache,
@@ -410,6 +404,34 @@ mod tests {
 
         assert_eq!(expected, actual);
         repo_dir.close()
+    }
+
+    #[test]
+    fn reduced_trust_falls_back_to_gix_for_metrics() -> io::Result<()> {
+        for use_git_executable in [false, true] {
+            let repo_dir = create_repo_with_commit(COMMON_GIT_PROVIDERS[0])?;
+            write_file(
+                repo_dir.path().join("the_file"),
+                "First Line\nSecond Line\nThird Line\nAdded line\n",
+            )?;
+
+            let actual = ModuleRenderer::new("git_metrics")
+                .config(toml::toml! {
+                    [git_metrics]
+                    disabled = false
+                    format = "+$added/-$deleted"
+                    only_nonzero_diffs = false
+                    [git_status]
+                    use_git_executable = use_git_executable
+                })
+                .path(repo_dir.path())
+                .git_trust(gix::sec::Trust::Reduced)
+                .collect();
+
+            assert_eq!(actual.as_deref(), Some("+1/-0"));
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]

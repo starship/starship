@@ -110,6 +110,12 @@ impl<'a> ModuleRenderer<'a> {
         self.context.root_dir.path()
     }
 
+    /// Set Starship's command trust policy after configuring the repository path.
+    pub fn git_trust(mut self, trust: gix::sec::Trust) -> Self {
+        self.context.set_git_trust(trust);
+        self
+    }
+
     pub fn logical_path<T>(mut self, path: T) -> Self
     where
         T: Into<PathBuf>,
@@ -225,6 +231,7 @@ pub enum FixtureProvider {
     Fossil,
     Git { reftable: bool, bare: bool },
     Hg,
+    Jujutsu,
     Pijul,
 }
 
@@ -332,6 +339,11 @@ pub fn fixture_repo_with_hash(provider: FixtureProvider, sha256: bool) -> io::Re
                 .arg(path.path())
                 .output()?;
 
+            Ok(path)
+        }
+        FixtureProvider::Jujutsu => {
+            let path = tempfile::tempdir()?;
+            fs::create_dir(path.path().join(".jj"))?;
             Ok(path)
         }
         FixtureProvider::Pijul => {
