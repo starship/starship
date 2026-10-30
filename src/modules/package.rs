@@ -315,12 +315,20 @@ fn get_cargo_version(context: &Context, config: &PackageConfig) -> Option<String
         let workspace_toml = if cargo_toml.contains_key("workspace") {
             &cargo_toml
         } else {
-            // Assume the workspace root is the first ancestor with a readable Cargo.toml.
-            let workspace_contents = context
-                .current_dir
-                .ancestors()
-                .skip(1)
-                .find_map(|path| read_file(path.join("Cargo.toml")).ok())?;
+            let workspace_contents = match cargo_toml
+                .get("package")
+                .and_then(|package| package.get("workspace"))
+                .and_then(toml::Value::as_str)
+            {
+                Some(workspace) => {
+                    read_file(context.current_dir.join(workspace).join("Cargo.toml")).ok()?
+                }
+                None => context
+                    .current_dir
+                    .ancestors()
+                    .skip(1)
+                    .find_map(|path| read_file(path.join("Cargo.toml")).ok())?,
+            };
             ancestor_cargo_toml = toml::from_str(&workspace_contents).ok()?;
             &ancestor_cargo_toml
         };
@@ -556,6 +564,58 @@ mod tests {
         let expected = Some(format!(
             "is {} ",
             Color::Fixed(208).bold().paint("📦 v0.1.0")
+        ));
+        assert_eq!(actual, expected);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_cargo_version_explicit_workspace() -> io::Result<()> {
+        let project_dir = create_project_dir()?;
+        for (path, contents) in [
+            (
+                "Cargo.toml",
+                r#"[workspace]
+members = ["outer/inner"]
+exclude = ["outer"]
+resolver = "2"
+[workspace.package]
+version = "1.2.3"
+"#,
+            ),
+            (
+                "outer/Cargo.toml",
+                r#"[workspace]
+members = []
+resolver = "2"
+[workspace.package]
+version = "9.8.7"
+[package]
+name = "outer"
+version = "0.2.0"
+edition = "2021"
+"#,
+            ),
+            (
+                "outer/inner/Cargo.toml",
+                r#"[package]
+name = "inner"
+version.workspace = true
+workspace = "../.."
+edition = "2021"
+"#,
+            ),
+            ("outer/src/lib.rs", ""),
+            ("outer/inner/src/lib.rs", ""),
+        ] {
+            fill_config(&project_dir, path, Some(contents))?;
+        }
+        let actual = ModuleRenderer::new("package")
+            .path(project_dir.path().join("outer/inner"))
+            .collect();
+        let expected = Some(format!(
+            "is {} ",
+            Color::Fixed(208).bold().paint("📦 v1.2.3")
         ));
         assert_eq!(actual, expected);
         project_dir.close()
