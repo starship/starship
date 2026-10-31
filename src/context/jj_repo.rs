@@ -1,3 +1,4 @@
+use std::borrow::Cow;
 use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
 
@@ -141,7 +142,7 @@ impl JJRepo {
                             concat("current.lines_added = ", diff.stat().total_added()),
                             concat("current.lines_removed = ", diff.stat().total_removed()),
                             concat("current.conflicted = ", conflict),
-                            concat("current.bookmarks = [", bookmarks.map(|bm| concat("\"", bm, "\"")).join(","), "]"),
+                            concat("current.bookmarks = [", bookmarks.map(|bm| json(stringify(bm))).join(","), "]"),
                             concat(
                                 "current.statuses = \"",
                                 self
@@ -160,7 +161,7 @@ impl JJRepo {
                             ),
                             if(
                                 bookmarks.len() > 0,
-                                concat("parents.bookmarks = [", bookmarks.map(|bm| concat("\"", bm, "\"")).join(","), "]\n"),
+                                concat("parents.bookmarks = [", bookmarks.map(|bm| json(stringify(bm))).join(","), "]\n"),
                             ),
                         ),
                     )"#.as_ref(),
@@ -190,8 +191,10 @@ impl JJRepo {
                     statuses: &'o str,
                     #[serde(default)]
                     conflicted: bool,
+                    // We need `Cow` here because it's possible to get escaped strings which do not
+                    // deserialize cleanly when using the zero-copy `&'o str`
                     #[serde(default, borrow)]
-                    bookmarks: Box<[&'o str]>,
+                    bookmarks: Box<[Cow<'o, str>]>,
                 }
 
                 #[derive(Default, Deserialize)]
@@ -199,7 +202,7 @@ impl JJRepo {
                     #[serde(default)]
                     conflicted: bool,
                     #[serde(default, borrow)]
-                    bookmarks: Box<[&'o str]>,
+                    bookmarks: Box<[Cow<'o, str>]>,
                 }
 
                 let RawOutput { current, parents } = toml::from_str(&res.stdout).ok()?;
@@ -221,7 +224,7 @@ impl JJRepo {
                         lines_added: current.lines_added,
                         lines_removed: current.lines_removed,
 
-                        bookmarks: current.bookmarks.iter().chain(parents.bookmarks.iter()).map(|&s| Bookmark(Box::from(s))).collect(),
+                        bookmarks: current.bookmarks.into_iter().chain(parents.bookmarks).map(|s| Bookmark(Box::from(s))).collect(),
 
                         status: {
                             let mut status = Status::default();
@@ -314,6 +317,7 @@ impl JJRepo {
 
     pub const BOOKMARKS_NONE: &str = "/jj/bookmarks/no-current-no-parent";
     pub const BOOKMARKS_IN_PARENT: &str = "/jj/bookmarks/in-parent";
+    pub const BOOKMARKS_WITH_ESCAPES: &str = "/jj/bookmarks/with-escapes";
 
     pub const CHANGE_DIVERGENT: &str = "/jj/change/divergent";
     pub const CHANGE_NOT_ASCII: &str = "/jj/change/not-ascii";
@@ -450,6 +454,12 @@ pub fn mock_jj_cmd(s: &str) -> Option<crate::utils::CommandOutput> {
             || output([
                 (CURRENT_BOOKMARKS, "current.bookmarks = []"),
                 (PARENT_BOOKMARKS, r#"parents.bookmarks = ["par_local", "par_tracked*", "par_modified@upstream*", "par_untracked@origin"]"#),
+            ]),
+        ),
+        (
+            JJRepo::BOOKMARKS_WITH_ESCAPES,
+            || output([
+                (CURRENT_BOOKMARKS, r#"current.bookmarks = ["\"my-branch-\"-with-quotes-\""]"#),
             ]),
         ),
         // Repos testing jj_change rendering
