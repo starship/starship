@@ -475,7 +475,17 @@ fn get_repo_status(
             }
         }
 
-        for change in status.filter_map(Result::ok) {
+        let changes = status.collect::<Result<Vec<_>, _>>();
+        // An interrupted walk is partial, and publishing it could look like a clean repository.
+        if is_interrupted.load(std::sync::atomic::Ordering::Relaxed) {
+            log::warn!("Executing command \"gitoxide\" timed out.");
+            log::warn!(
+                "You can set command_timeout in your config to a higher value to allow longer-running commands to keep executing."
+            );
+            return None;
+        }
+
+        for change in changes.ok()? {
             use gix::status;
             match &change {
                 status::Item::TreeIndex(change) => {
@@ -568,14 +578,6 @@ fn get_repo_status(
             }
             // Keep it for potential reuse by `git_metrics`
             repo_status.changes.push(change);
-        }
-        // An interrupted walk is partial, and publishing it could look like a clean repository.
-        if is_interrupted.load(std::sync::atomic::Ordering::Relaxed) {
-            log::warn!("Executing command \"gitoxide\" timed out.");
-            log::warn!(
-                "You can set command_timeout in your config to a higher value to allow longer-running commands to keep executing."
-            );
-            return None;
         }
     }
 
