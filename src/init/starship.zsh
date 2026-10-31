@@ -19,6 +19,7 @@ else
     zmodload zsh/datetime
     zmodload zsh/mathfunc
     __starship_get_time() {
+        typeset -gi STARSHIP_CAPTURED_TIME
         (( STARSHIP_CAPTURED_TIME = int(rint(EPOCHREALTIME * 1000)) ))
     }
 fi
@@ -30,7 +31,7 @@ fi
 # Runs before each new command line.
 prompt_starship_precmd() {
     # Save the status, because subsequent commands in this function will change $?
-    STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=(${pipestatus[@]})
+    typeset -g STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=(${pipestatus[@]})
 
     # Calculate duration if a command was executed
     if (( ${+STARSHIP_START_TIME} )); then
@@ -41,7 +42,7 @@ prompt_starship_precmd() {
         # We therefore have to assign the result outside the expression (using 'STARSHIP_DURATION=$((...))'),
         # because unlike '(())', '$(())' gets a return status of 0 even if the expression evaluates to int 0
         # (but it still surfaces a potential error, normally status 2, as status 1).
-        __starship_get_time && STARSHIP_DURATION=$(( STARSHIP_CAPTURED_TIME - STARSHIP_START_TIME ))
+        __starship_get_time && typeset -g STARSHIP_DURATION=$(( STARSHIP_CAPTURED_TIME - STARSHIP_START_TIME ))
         unset STARSHIP_START_TIME
     # Drop status and duration otherwise
     else
@@ -50,13 +51,13 @@ prompt_starship_precmd() {
 
     # Use length of jobstates array as number of jobs. Expansion fails inside
     # quotes so we set it here and then use the value later on.
-    STARSHIP_JOBS_COUNT="${#jobstates[*]}"
+    typeset -g STARSHIP_JOBS_COUNT="${#jobstates[*]}"
 }
 
 # Runs after the user submits the command line, but before it is executed and
 # only if there's an actual command to run
 prompt_starship_preexec() {
-    __starship_get_time && STARSHIP_START_TIME=$STARSHIP_CAPTURED_TIME
+    __starship_get_time && typeset -g STARSHIP_START_TIME=$STARSHIP_CAPTURED_TIME
 }
 
 # Add hook functions
