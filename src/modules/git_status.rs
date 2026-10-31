@@ -485,9 +485,11 @@ fn get_repo_status(
             return None;
         }
 
-        for change in changes.ok()? {
+        // Keep them for potential reuse by `git_metrics`
+        repo_status.changes = changes.ok()?;
+        for change in &repo_status.changes {
             use gix::status;
-            match &change {
+            match change {
                 status::Item::TreeIndex(change) => {
                     use gix::diff::index::Change;
                     match change {
@@ -576,8 +578,6 @@ fn get_repo_status(
                     }
                 }
             }
-            // Keep it for potential reuse by `git_metrics`
-            repo_status.changes.push(change);
         }
     }
 
