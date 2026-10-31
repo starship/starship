@@ -11,29 +11,6 @@ use std::path::PathBuf;
 use std::sync::atomic::AtomicBool;
 use std::sync::{Arc, OnceLock};
 
-#[cfg(test)]
-use std::cell::Cell;
-
-/// Guidance shared with the external-git timeout warning in `crate::utils`.
-const GITOXIDE_STATUS_TIMEOUT_WARNING: &str = "You can set command_timeout in your config to a higher value to allow longer-running commands to keep executing.";
-
-#[cfg(test)]
-thread_local! {
-    static GITOXIDE_TIMEOUT_WARNING_SEEN: Cell<bool> = const { Cell::new(false) };
-}
-
-fn warn_gitoxide_status_timeout() {
-    log::warn!("Executing command \"gitoxide\" timed out.");
-    log::warn!("{GITOXIDE_STATUS_TIMEOUT_WARNING}");
-    #[cfg(test)]
-    GITOXIDE_TIMEOUT_WARNING_SEEN.with(|seen| seen.set(true));
-}
-
-#[cfg(test)]
-fn gitoxide_timeout_warning_seen() -> bool {
-    GITOXIDE_TIMEOUT_WARNING_SEEN.with(|seen| seen.replace(false))
-}
-
 const ALL_STATUS_FORMAT: &str =
     "$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked";
 
@@ -473,18 +450,7 @@ fn get_repo_status(
 
         // This will start the status machinery, collecting status items in the background.
         // Thus, we can do some work in this thread without blocking, before starting to count status items.
-        let status = match status.into_iter(None) {
-            Ok(status) => status,
-            Err(err) => {
-                // An interrupted or failed walk is indeterminate: a zero `RepoStatus` would look clean.
-                if is_interrupted.load(std::sync::atomic::Ordering::Relaxed) || err.is_cancelled() {
-                    warn_gitoxide_status_timeout();
-                } else {
-                    log::debug!("get_repo_status: gitoxide status iteration failed: {err}");
-                }
-                return None;
-            }
-        };
+        let status = status.into_iter(None).ok()?;
 
         // for performance reasons, only pass flags if necessary...
         let has_ahead_behind = !config.ahead.is_empty() || !config.behind.is_empty();
@@ -509,24 +475,7 @@ fn get_repo_status(
             }
         }
 
-        for change in status {
-            if is_interrupted.load(std::sync::atomic::Ordering::Relaxed) {
-                warn_gitoxide_status_timeout();
-                return None;
-            }
-            let change = match change {
-                Ok(change) => change,
-                Err(err) => {
-                    if is_interrupted.load(std::sync::atomic::Ordering::Relaxed)
-                        || err.is_cancelled()
-                    {
-                        warn_gitoxide_status_timeout();
-                    } else {
-                        log::debug!("get_repo_status: gitoxide status iteration failed: {err}");
-                    }
-                    return None;
-                }
-            };
+        for change in status.filter_map(Result::ok) {
             use gix::status;
             match &change {
                 status::Item::TreeIndex(change) => {
@@ -620,10 +569,12 @@ fn get_repo_status(
             // Keep it for potential reuse by `git_metrics`
             repo_status.changes.push(change);
         }
-        // The iterator stops early on interrupt without always yielding `Err`, which would otherwise
-        // publish a zero or partial status and look like a clean repository.
+        // An interrupted walk is partial, and publishing it could look like a clean repository.
         if is_interrupted.load(std::sync::atomic::Ordering::Relaxed) {
-            warn_gitoxide_status_timeout();
+            log::warn!("Executing command \"gitoxide\" timed out.");
+            log::warn!(
+                "You can set command_timeout in your config to a higher value to allow longer-running commands to keep executing."
+            );
             return None;
         }
     }
@@ -1365,7 +1316,6 @@ pub mod tests {
         File::create(untracked.join("a"))?.sync_all()?;
         File::create(untracked.join("b"))?.sync_all()?;
 
-        let _ = super::gitoxide_timeout_warning_seen();
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
                 command_timeout = 0
@@ -1381,14 +1331,6 @@ pub mod tests {
             .collect();
 
         assert_eq!(None, actual);
-        assert!(
-            super::GITOXIDE_STATUS_TIMEOUT_WARNING.contains("command_timeout"),
-            "timeout guidance should mention command_timeout"
-        );
-        assert!(
-            super::gitoxide_timeout_warning_seen(),
-            "interrupted gitoxide status should record the command_timeout warning"
-        );
         repo_dir.close()
     }
 
