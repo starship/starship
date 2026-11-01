@@ -444,18 +444,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
 
   publish_docs:
-    name: Trigger docs deployment
-    runs-on: ubuntu-latest
+    name: Publish docs
     needs: merge_crowdin_pr
     permissions:
-      actions: write
       contents: read
-    steps:
-      - name: Setup | Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - name: Trigger workflow dispatch
-        run: gh workflow run publish-docs.yml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    uses: $/.github/workflows/publish-docs.yml
+    secrets:
+      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
