@@ -341,10 +341,16 @@ impl<'a> Context<'a> {
                 let mut git_open_opts_map =
                     git_sec::trust::Mapping::<gix::open::Options>::default();
 
+                // Locating the installation config otherwise spawns `git` on every prompt.
+                let installation_config = git_repo::installation_config(self);
+
                 // Load all the configuration as it affects aspects of the
                 // `git_status` and `git_metrics` modules.
                 let config = gix::open::permissions::Config {
-                    git_binary: true,
+                    git_binary: !matches!(
+                        installation_config,
+                        git_repo::InstallationConfig::Known(None)
+                    ),
                     system: true,
                     git: true,
                     user: true,
@@ -364,6 +370,13 @@ impl<'a> Context<'a> {
                         config,
                         ..gix::open::Permissions::default_for_level(git_sec::Trust::Full)
                     });
+                if let git_repo::InstallationConfig::Known(Some(path)) = installation_config {
+                    git_open_opts_map.reduced = git_open_opts_map
+                        .reduced
+                        .git_installation_config_path(path.clone());
+                    git_open_opts_map.full =
+                        git_open_opts_map.full.git_installation_config_path(path);
+                }
 
                 let shared_repo =
                     match ThreadSafeRepository::discover_with_environment_overrides_opts(

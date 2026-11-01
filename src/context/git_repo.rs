@@ -1,11 +1,12 @@
 use std::ffi::OsStr;
-use std::fmt::Debug;
-use std::path::PathBuf;
-use std::time::Duration;
+use std::fmt::{Debug, Write as _};
+use std::fs;
+use std::path::{Path, PathBuf};
+use std::time::{Duration, UNIX_EPOCH};
 
 use gix::{Repository, ThreadSafeRepository, state as git_state};
 
-use crate::utils::{CommandOutput, create_command, exec_timeout};
+use crate::utils::{self, CommandOutput, create_command, exec_timeout};
 use gix::sec::Trust as TrustLevel;
 
 use super::Context;
@@ -134,5 +135,177 @@ impl GitRepo {
             &mut command,
             Duration::from_millis(context.root_config.command_timeout),
         )
+    }
+}
+
+/// Location of Git's installation-level config (e.g. `/opt/homebrew/etc/gitconfig`).
+pub(crate) enum InstallationConfig {
+    /// Unknown, let gix discover it by running `git config` (adds a process spawn per prompt).
+    Discover,
+    /// Known location, or `None` if Git reports no installation config.
+    Known(Option<PathBuf>),
+}
+
+const INSTALLATION_CONFIG_CACHE: &str = "git-installation-config";
+
+/// Resolve Git's installation config path without spawning `git` on every prompt.
+///
+/// gix finds this file by running `git config --show-origin`, which costs 15-30ms per prompt.
+/// The result only changes when the `git` binary does, so it is cached on disk keyed by the
+/// path and modification time of the `git` found in `PATH`.
+pub(crate) fn installation_config(context: &Context) -> InstallationConfig {
+    // These change which file gix picks, so leave discovery to gix.
+    if ["GIT_CONFIG_SYSTEM", "GIT_CONFIG_NOSYSTEM", "DEVELOPER_DIR"]
+        .iter()
+        .any(|var| context.get_env_os(var).is_some())
+    {
+        return InstallationConfig::Discover;
+    }
+    let (Some(cache_file), Some(key)) = (installation_config_cache_file(context), git_binary_key())
+    else {
+        return InstallationConfig::Discover;
+    };
+
+    if let Ok(content) = utils::read_file(&cache_file)
+        && let Some(path) = parse_installation_config_cache(&content, &key)
+    {
+        log::trace!("Using cached git installation config {path:?}");
+        return InstallationConfig::Known(path);
+    }
+
+    let path = gix::path::env::installation_config().map(Path::to_path_buf);
+    log::debug!("Discovered git installation config {path:?}, caching it in {cache_file:?}");
+    if let Err(e) = write_installation_config_cache(&cache_file, &key, path.as_deref()) {
+        log::debug!("Unable to cache git installation config: {e}");
+    }
+    InstallationConfig::Known(path)
+}
+
+fn installation_config_cache_file(context: &Context) -> Option<PathBuf> {
+    let dir = match context.get_env_os("STARSHIP_CACHE") {
+        Some(dir) => PathBuf::from(dir),
+        // Never write to the real home directory from tests
+        None if cfg!(test) => return None,
+        None => context.get_home()?.join(".cache").join("starship"),
+    };
+    Some(dir.join(INSTALLATION_CONFIG_CACHE))
+}
+
+/// Identify the `git` binary gix would run: its path, plus the modification time of the
+/// binary it resolves to (and on macOS of the active developer dir, which `/usr/bin/git` forwards to).
+fn git_binary_key() -> Option<String> {
+    fn mtime(path: &Path, follow_symlinks: bool) -> Option<u128> {
+        let meta = if follow_symlinks {
+            fs::metadata(path)
+        } else {
+            fs::symlink_metadata(path)
+        };
+        Some(
+            meta.ok()?
+                .modified()
+                .ok()?
+                .duration_since(UNIX_EPOCH)
+                .ok()?
+                .as_nanos(),
+        )
+    }
+
+    let git = which::which("git").ok()?;
+    let mut key = format!("{}\t{}", git.to_str()?, mtime(&git, true)?);
+    if cfg!(target_os = "macos")
+        && let Some(xcode) = mtime(Path::new("/var/db/xcode_select_link"), false)
+    {
+        let _ = write!(key, "\t{xcode}");
+    }
+    Some(key)
+}
+
+/// Cache format: the git binary key on the first line, the config path (or nothing) on the second.
+/// Returns `None` if the cache is stale or invalid.
+fn parse_installation_config_cache(content: &str, key: &str) -> Option<Option<PathBuf>> {
+    let (cached_key, path) = content.split_once('\n')?;
+    if cached_key != key {
+        return None;
+    }
+    let path = path.strip_suffix('\n')?;
+    if path.is_empty() {
+        return Some(None);
+    }
+    let path = PathBuf::from(path);
+    (path.is_absolute() && path.is_file()).then_some(Some(path))
+}
+
+fn write_installation_config_cache(
+    cache_file: &Path,
+    key: &str,
+    path: Option<&Path>,
+) -> std::io::Result<()> {
+    let path = match path {
+        Some(path) => path
+            .to_str()
+            .filter(|path| !path.contains('\n'))
+            .ok_or_else(|| {
+                std::io::Error::other("path is not valid UTF-8 or contains a newline")
+            })?,
+        None => "",
+    };
+    let dir = cache_file
+        .parent()
+        .ok_or_else(|| std::io::Error::other("cache file has no parent directory"))?;
+    fs::create_dir_all(dir)?;
+    // Write to a temporary file first, so concurrent prompts never read a partial cache
+    let tmp = dir.join(format!(
+        "{INSTALLATION_CONFIG_CACHE}.{}",
+        std::process::id()
+    ));
+    fs::write(&tmp, format!("{key}\n{path}\n"))?;
+    fs::rename(&tmp, cache_file).inspect_err(|_| {
+        let _ = fs::remove_file(&tmp);
+    })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn installation_config_cache_roundtrip() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let cache_file = dir.path().join(INSTALLATION_CONFIG_CACHE);
+        let config = dir.path().join("gitconfig");
+        fs::write(&config, "")?;
+
+        write_installation_config_cache(&cache_file, "git\t1", Some(&config))?;
+        let content = utils::read_file(&cache_file)?;
+        assert_eq!(
+            parse_installation_config_cache(&content, "git\t1"),
+            Some(Some(config.clone()))
+        );
+        // Different git binary
+        assert_eq!(parse_installation_config_cache(&content, "git\t2"), None);
+
+        // Config file removed since it was cached
+        fs::remove_file(&config)?;
+        assert_eq!(parse_installation_config_cache(&content, "git\t1"), None);
+
+        write_installation_config_cache(&cache_file, "git\t1", None)?;
+        let content = utils::read_file(&cache_file)?;
+        assert_eq!(
+            parse_installation_config_cache(&content, "git\t1"),
+            Some(None)
+        );
+        dir.close()
+    }
+
+    #[test]
+    fn installation_config_cache_rejects_invalid_content() {
+        for content in [
+            "",
+            "git\t1",
+            "git\t1\nrelative/gitconfig\n",
+            "git\t1\n/no-newline",
+        ] {
+            assert_eq!(parse_installation_config_cache(content, "git\t1"), None);
+        }
     }
 }
