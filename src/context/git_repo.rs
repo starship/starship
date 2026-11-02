@@ -147,6 +147,8 @@ pub(crate) enum InstallationConfig {
 }
 
 const INSTALLATION_CONFIG_CACHE: &str = "git-installation-config";
+/// How long to trust a cached "no installation config" result.
+const NEGATIVE_CACHE_TTL: Duration = Duration::from_secs(60 * 60);
 
 /// Resolve Git's installation config path without spawning `git` on every prompt.
 ///
@@ -155,8 +157,10 @@ const INSTALLATION_CONFIG_CACHE: &str = "git-installation-config";
 /// path and modification time of the `git` found in `PATH`.
 pub(crate) fn installation_config(context: &Context) -> InstallationConfig {
     // These change which file gix picks, so leave discovery to gix.
+    // With `EXEPATH` (Git for Windows), gix derives the path without spawning `git` anyway.
     if ["GIT_CONFIG_SYSTEM", "GIT_CONFIG_NOSYSTEM", "DEVELOPER_DIR"]
         .iter()
+        .chain(cfg!(windows).then_some(&"EXEPATH"))
         .any(|var| context.get_env_os(var).is_some())
     {
         return InstallationConfig::Discover;
@@ -168,6 +172,8 @@ pub(crate) fn installation_config(context: &Context) -> InstallationConfig {
 
     if let Ok(content) = utils::read_file(&cache_file)
         && let Some(path) = parse_installation_config_cache(&content, &key)
+        // A config file can be created without the git binary changing, so recheck its absence periodically
+        && (path.is_some() || modified_within(&cache_file, NEGATIVE_CACHE_TTL))
     {
         log::trace!("Using cached git installation config {path:?}");
         return InstallationConfig::Known(path);
@@ -179,6 +185,14 @@ pub(crate) fn installation_config(context: &Context) -> InstallationConfig {
         log::debug!("Unable to cache git installation config: {e}");
     }
     InstallationConfig::Known(path)
+}
+
+fn modified_within(path: &Path, ttl: Duration) -> bool {
+    fs::metadata(path)
+        .and_then(|meta| meta.modified())
+        .ok()
+        .and_then(|modified| modified.elapsed().ok())
+        .is_some_and(|age| age < ttl)
 }
 
 fn installation_config_cache_file(context: &Context) -> Option<PathBuf> {
@@ -294,6 +308,22 @@ mod tests {
             parse_installation_config_cache(&content, "git\t1"),
             Some(None)
         );
+        dir.close()
+    }
+
+    #[test]
+    fn negative_cache_entries_expire() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let cache_file = dir.path().join(INSTALLATION_CONFIG_CACHE);
+        write_installation_config_cache(&cache_file, "git\t1", None)?;
+        assert!(modified_within(&cache_file, NEGATIVE_CACHE_TTL));
+
+        let expired = std::time::SystemTime::now() - NEGATIVE_CACHE_TTL - Duration::from_secs(1);
+        fs::File::options()
+            .write(true)
+            .open(&cache_file)?
+            .set_modified(expired)?;
+        assert!(!modified_within(&cache_file, NEGATIVE_CACHE_TTL));
         dir.close()
     }
 
