@@ -83,3 +83,9 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
 
 [![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)
+
+## [Catppuccin Worm](./catppuccin-worm.md)
+
+This preset is a minimally modified version of [Catppuccin Powerline](./catppuccin-powerline.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
+
+[![Screenshot of Catppuccin Worm preset](/presets/img/catppuccin-worm.png "Click to view Catppuccin Worm preset")](./catppuccin-worm)
