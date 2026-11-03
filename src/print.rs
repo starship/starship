@@ -2,7 +2,7 @@ use clap::{ValueEnum, builder::PossibleValue};
 use nu_ansi_term::AnsiStrings;
 use rayon::prelude::*;
 use regex::Regex;
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet, HashMap};
 use std::fmt::{Debug, Write as FmtWrite};
 use std::io::{self, Write};
 use std::path::PathBuf;
@@ -110,47 +110,17 @@ pub fn get_prompt(context: &Context) -> String {
     }
 
     let (formatter, modules) = load_formatter_and_modules(context);
+    let module_plan = create_module_plan(&formatter, context, &modules);
+    let module_cache = compute_module_cache(&module_plan, context);
+    let rendered_prompt = render_responsive_prompt(formatter, &module_plan, &module_cache, context);
 
-    let formatter = formatter.map_variables_to_segments(|module| {
-        // Make $all display all modules not explicitly referenced
-        if module == "all" {
-            Some(Ok(all_modules_uniq(&modules)
-                .par_iter()
-                .flat_map(|module| {
-                    handle_module(module, context, &modules)
-                        .into_iter()
-                        .flat_map(|module| module.segments)
-                        .collect::<Vec<Segment>>()
-                })
-                .collect::<Vec<_>>()))
-        } else if context.is_module_disabled_in_config(module) {
-            None
-        } else {
-            // Get segments from module
-            Some(Ok(handle_module(module, context, &modules)
-                .into_iter()
-                .flat_map(|module| module.segments)
-                .collect::<Vec<Segment>>()))
-        }
-    });
-
-    // Creates a root module and prints it.
-    let mut root_module = Module::new("Starship Root", "The root module", None);
-    root_module.set_segments(
-        formatter
-            .parse(None, Some(context))
-            .expect("Unexpected error returned in root format variables"),
-    );
-
-    let module_strings = root_module.ansi_strings_for_width(Some(context.width));
     if config.add_newline && context.target != Target::Continuation {
         // continuation prompts normally do not include newlines, but they can
         writeln!(buf).unwrap();
     }
-    // AnsiStrings strips redundant ANSI color sequences, so apply it before modifying the ANSI
-    // color sequences for this specific shell
-    let shell_wrapped_output =
-        wrap_colorseq_for_shell(AnsiStrings(&module_strings).to_string(), context.shell);
+    // The rendered prompt has already passed through AnsiStrings, so shell wrapping happens after
+    // redundant ANSI color sequences are stripped.
+    let shell_wrapped_output = wrap_colorseq_for_shell(rendered_prompt, context.shell);
     write!(buf, "{shell_wrapped_output}").unwrap();
 
     if context.target == Target::Right {
@@ -323,31 +293,244 @@ fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
     let mut prompt_order: Vec<Module<'a>> = Vec::new();
 
     let (_formatter, modules) = load_formatter_and_modules(context);
+    let module_plan = create_module_plan_from_variables(modules.iter().cloned(), context, &modules);
 
-    for module in &modules {
-        // Manually add all modules if `$all` is encountered
-        if module == "all" {
-            for module in all_modules_uniq(&modules) {
-                let modules = handle_module(&module, context, &modules);
-                prompt_order.extend(modules);
-            }
-        } else {
-            let modules = handle_module(module, context, &modules);
-            prompt_order.extend(modules);
-        }
+    for module in concrete_module_names(&module_plan) {
+        prompt_order.extend(handle_module(&module, context));
     }
 
     prompt_order
 }
 
-fn handle_module<'a>(
-    module: &str,
-    context: &'a Context,
+type ModulePlan = BTreeMap<String, Vec<String>>;
+type ModuleCache = HashMap<String, Vec<Segment>>;
+
+fn create_module_plan(
+    formatter: &StringFormatter<'_>,
+    context: &Context,
     module_list: &BTreeSet<String>,
-) -> Vec<Module<'a>> {
+) -> ModulePlan {
+    create_module_plan_from_variables(formatter.get_variables(), context, module_list)
+}
+
+fn create_module_plan_from_variables(
+    variables: impl IntoIterator<Item = String>,
+    context: &Context,
+    module_list: &BTreeSet<String>,
+) -> ModulePlan {
+    variables
+        .into_iter()
+        .map(|variable| {
+            let modules = expand_module_variable(&variable, context, module_list);
+            (variable, modules)
+        })
+        .collect()
+}
+
+fn expand_module_variable(
+    module: &str,
+    context: &Context,
+    module_list: &BTreeSet<String>,
+) -> Vec<String> {
+    if module == "all" {
+        all_modules_uniq(module_list)
+            .into_iter()
+            .flat_map(|module| expand_module_variable(&module, context, module_list))
+            .collect()
+    } else if matches!(module, "custom" | "env_var") {
+        grouped_module_names(module, context, module_list)
+    } else {
+        vec![module.to_string()]
+    }
+}
+
+fn grouped_module_names(
+    module: &str,
+    context: &Context,
+    module_list: &BTreeSet<String>,
+) -> Vec<String> {
+    let mut modules = Vec::new();
+
+    if module == "env_var" {
+        modules.push(module.to_string());
+    }
+
+    modules.extend(
+        context
+            .config
+            .get_config(&[module])
+            .and_then(|config| config.as_table().map(toml::map::Map::iter))
+            .into_iter()
+            .flatten()
+            .filter_map(|(child, config)| {
+                if module == "env_var" && !config.is_table() {
+                    None
+                } else if should_add_implicit_module(module, child, config, module_list) {
+                    Some(format!("{module}.{child}"))
+                } else {
+                    None
+                }
+            }),
+    );
+
+    modules
+}
+
+fn concrete_module_names(module_plan: &ModulePlan) -> Vec<String> {
+    let mut seen = BTreeSet::new();
+
+    module_plan
+        .values()
+        .flatten()
+        .filter(|module| seen.insert((*module).clone()))
+        .cloned()
+        .collect()
+}
+
+fn compute_module_cache(module_plan: &ModulePlan, context: &Context) -> ModuleCache {
+    concrete_module_names(module_plan)
+        .par_iter()
+        .map(|module| {
+            let segments = handle_module(module, context)
+                .into_iter()
+                .flat_map(|module| module.segments)
+                .collect();
+            (module.clone(), segments)
+        })
+        .collect()
+}
+
+fn map_cached_modules<'a>(
+    formatter: StringFormatter<'a>,
+    module_plan: &ModulePlan,
+    module_cache: &ModuleCache,
+    hidden_modules: &BTreeSet<String>,
+) -> StringFormatter<'a> {
+    formatter.map_variables_to_segments(|variable| {
+        let modules = module_plan.get(variable)?;
+
+        if modules.iter().all(|module| hidden_modules.contains(module)) {
+            return None;
+        }
+
+        Some(Ok(modules
+            .iter()
+            .filter(|module| !hidden_modules.contains(*module))
+            .filter_map(|module| module_cache.get(module))
+            .flatten()
+            .cloned()
+            .collect()))
+    })
+}
+
+fn render_responsive_prompt<'a>(
+    formatter: StringFormatter<'a>,
+    module_plan: &ModulePlan,
+    module_cache: &ModuleCache,
+    context: &'a Context,
+) -> String {
+    let mut hidden_modules = BTreeSet::new();
+    let mut rendered = render_prompt(
+        formatter,
+        module_plan,
+        module_cache,
+        &hidden_modules,
+        context,
+    );
+
+    if context.width == 0
+        || context.target == Target::Continuation
+        || context.root_config.responsive.drop_order.is_empty()
+        || prompt_fits(&rendered, context)
+    {
+        return rendered;
+    }
+
+    let Some(format) = selected_format(context) else {
+        return rendered;
+    };
+
+    for module in &context.root_config.responsive.drop_order {
+        if matches!(module.as_str(), "character" | "line_break" | "fill")
+            || !cached_module_has_output(module_cache, module)
+            || !hidden_modules.insert(module.clone())
+        {
+            continue;
+        }
+
+        let formatter = StringFormatter::new(format)
+            .expect("responsive format was successfully parsed before rendering");
+        rendered = render_prompt(
+            formatter,
+            module_plan,
+            module_cache,
+            &hidden_modules,
+            context,
+        );
+
+        if prompt_fits(&rendered, context) {
+            break;
+        }
+    }
+
+    rendered
+}
+
+fn cached_module_has_output(module_cache: &ModuleCache, module: &str) -> bool {
+    module_cache
+        .get(module)
+        .is_some_and(|segments| !segments.is_empty())
+}
+
+fn render_prompt<'a>(
+    formatter: StringFormatter<'a>,
+    module_plan: &ModulePlan,
+    module_cache: &ModuleCache,
+    hidden_modules: &BTreeSet<String>,
+    context: &'a Context,
+) -> String {
+    let formatter = map_cached_modules(formatter, module_plan, module_cache, hidden_modules);
+    let mut root_module = Module::new("Starship Root", "The root module", None);
+    root_module.set_segments(
+        formatter
+            .parse(None, Some(context))
+            .expect("Unexpected error returned in root format variables"),
+    );
+
+    let module_strings = root_module.ansi_strings_for_width(Some(context.width));
+    AnsiStrings(&module_strings).to_string()
+}
+
+fn prompt_fits(rendered: &str, context: &Context) -> bool {
+    // Measure before shell wrappers are added. Module values have already passed through
+    // shell_prompt_escape, so escaped Zsh percent signs and Bash metacharacters may over-measure.
+    if context.target == Target::Right {
+        rendered.replace('\n', "").width_graphemes() <= context.width
+    } else {
+        rendered
+            .lines()
+            .all(|line| line.width_graphemes() <= context.width)
+    }
+}
+
+fn selected_format<'a>(context: &'a Context<'_>) -> Option<&'a str> {
+    match &context.target {
+        Target::Main => Some(&context.root_config.format),
+        Target::Right => Some(&context.root_config.right_format),
+        Target::Profile(name) => context
+            .root_config
+            .user_profiles
+            .get(name)
+            .or_else(|| context.root_config.internal_profiles.get(name))
+            .map(String::as_str),
+        Target::Continuation => Some(&context.root_config.continuation_prompt),
+    }
+}
+
+fn handle_module<'a>(module: &str, context: &'a Context) -> Vec<Module<'a>> {
     let mut modules: Vec<Module> = Vec::new();
 
-    if ALL_MODULES.contains(&module) {
+    if ALL_MODULES.contains(&module) || module == "env_var" {
         // Write out a module if it isn't disabled
         if !context.is_module_disabled_in_config(module) {
             modules.extend(modules::handle(module, context));
@@ -355,35 +538,6 @@ fn handle_module<'a>(
     } else if module.starts_with("custom.") || module.starts_with("env_var.") {
         // custom.<name> and env_var.<name> are special cases and handle disabled modules themselves
         modules.extend(modules::handle(module, context));
-    } else if matches!(module, "custom" | "env_var") {
-        // env var is a spacial case and may contain a top-level module definition
-        if module == "env_var" {
-            modules.extend(modules::handle(module, context));
-        }
-
-        // Write out all custom modules, except for those that are explicitly set
-        modules.extend(
-            context
-                .config
-                .get_config(&[module])
-                .and_then(|config| config.as_table().map(toml::map::Map::iter))
-                .into_iter()
-                .flatten()
-                .collect::<Vec<_>>()
-                .par_iter()
-                .filter_map(|(child, config)| {
-                    // Some env var keys may be part of a top-level module definition
-                    if module == "env_var" && !config.is_table() {
-                        None
-                    } else if should_add_implicit_module(module, child, config, module_list) {
-                        Some(modules::handle(&format!("{module}.{child}"), context))
-                    } else {
-                        None
-                    }
-                })
-                .flatten()
-                .collect::<Vec<Module>>(),
-        );
     } else {
         log::debug!(
             "Expected top level format to contain value from {ALL_MODULES:?}. Instead received {module}",
@@ -592,6 +746,394 @@ mod test {
     }
 
     #[test]
+    fn diagnostics_include_modules_only_in_right_format() {
+        let mut context = default_context().set_config(toml::toml! {
+            format = "$character"
+            right_format = "${env_var.right}"
+            [env_var.right]
+            variable = "right"
+            format = "$env_value"
+        });
+        context.env.insert("right", "value".to_string());
+
+        let modules = compute_modules(&context);
+
+        assert!(
+            modules
+                .iter()
+                .any(|module| module.get_name() == "env_var.right")
+        );
+    }
+
+    #[test]
+    fn responsive_prompt_drops_modules_in_configured_order() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "${env_var.first}${env_var.second}${env_var.essential}"
+            [responsive]
+            drop_order = ["env_var.first", "env_var.second"]
+            [env_var.first]
+            variable = "first"
+            format = "$env_value"
+            [env_var.second]
+            variable = "second"
+            format = "$env_value"
+            [env_var.essential]
+            variable = "essential"
+            format = "$env_value"
+        });
+        context.env.insert("first", "123".to_string());
+        context.env.insert("second", "45".to_string());
+        context.env.insert("essential", "ok".to_string());
+        context.width = 4;
+
+        assert_eq!(get_prompt(&context), "45ok");
+    }
+
+    #[test]
+    fn responsive_measurement_uses_visible_line_width() {
+        let mut context = default_context();
+        context.width = 2;
+
+        assert!(prompt_fits("\x1b[31mab\x1b[0m\n👩‍👩‍👦‍👦", &context));
+        assert!(!prompt_fits("abc", &context));
+    }
+
+    #[test]
+    fn responsive_absent_and_empty_config_preserve_output() {
+        let mut absent = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "${env_var.value}"
+            [env_var.value]
+            variable = "value"
+            format = "$env_value"
+        });
+        absent.env.insert("value", "long".to_string());
+        absent.width = 1;
+
+        let mut empty = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "${env_var.value}"
+            [responsive]
+            drop_order = []
+            [env_var.value]
+            variable = "value"
+            format = "$env_value"
+        });
+        empty.env.insert("value", "long".to_string());
+        empty.width = 1;
+
+        assert_eq!(get_prompt(&absent), "long");
+        assert_eq!(get_prompt(&empty), "long");
+    }
+
+    #[test]
+    fn responsive_exact_width_keeps_all_modules() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "${env_var.value}"
+            [responsive]
+            drop_order = ["env_var.value"]
+            [env_var.value]
+            variable = "value"
+            format = "$env_value"
+        });
+        context.env.insert("value", "fits".to_string());
+        context.width = 4;
+
+        assert_eq!(get_prompt(&context), "fits");
+    }
+
+    #[test]
+    fn responsive_exhaustion_keeps_remaining_content() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "literal${env_var.value}"
+            [responsive]
+            drop_order = ["env_var.value"]
+            [env_var.value]
+            variable = "value"
+            format = "$env_value"
+        });
+        context.env.insert("value", "drop".to_string());
+        context.width = 3;
+
+        assert_eq!(get_prompt(&context), "literal");
+    }
+
+    #[test]
+    fn responsive_hides_conditional_separators_but_not_literals() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "L( | ${env_var.value})R"
+            [responsive]
+            drop_order = ["env_var.value"]
+            [env_var.value]
+            variable = "value"
+            format = "$env_value"
+        });
+        context.env.insert("value", "long".to_string());
+        context.width = 2;
+
+        assert_eq!(get_prompt(&context), "LR");
+    }
+
+    #[test]
+    fn responsive_skips_missing_empty_disabled_and_repeated_entries() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "${env_var.disabled}${env_var.empty}${env_var.first}${env_var.second}"
+            [responsive]
+            drop_order = [
+                "missing",
+                "env_var.disabled",
+                "env_var.empty",
+                "env_var.first",
+                "env_var.first",
+                "env_var.second",
+            ]
+            [env_var.disabled]
+            disabled = true
+            variable = "disabled"
+            format = "$env_value"
+            [env_var.empty]
+            variable = "empty"
+            format = "$env_value"
+            [env_var.first]
+            variable = "first"
+            format = "$env_value"
+            [env_var.second]
+            variable = "second"
+            format = "$env_value"
+        });
+        context.env.insert("disabled", "ignored".to_string());
+        context.env.insert("first", "123".to_string());
+        context.env.insert("second", "45".to_string());
+        context.width = 2;
+
+        let (formatter, modules) = load_formatter_and_modules(&context);
+        let module_plan = create_module_plan(&formatter, &context, &modules);
+        let module_cache = compute_module_cache(&module_plan, &context);
+
+        assert!(!cached_module_has_output(&module_cache, "missing"));
+        assert!(!cached_module_has_output(&module_cache, "env_var.disabled"));
+        assert!(!cached_module_has_output(&module_cache, "env_var.empty"));
+        assert!(cached_module_has_output(&module_cache, "env_var.first"));
+
+        assert_eq!(get_prompt(&context), "45");
+    }
+
+    #[test]
+    fn responsive_measures_every_main_prompt_line() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "${env_var.short}\n${env_var.long}"
+            [responsive]
+            drop_order = ["env_var.long"]
+            [env_var.short]
+            variable = "short"
+            format = "$env_value"
+            [env_var.long]
+            variable = "long"
+            format = "$env_value"
+        });
+        context.env.insert("short", "ok".to_string());
+        context.env.insert("long", "overflow".to_string());
+        context.width = 2;
+
+        assert_eq!(get_prompt(&context), "ok\n");
+    }
+
+    #[test]
+    fn responsive_all_preserves_concrete_module_identity() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "$all"
+            right_format = "$directory"
+            [responsive]
+            drop_order = ["custom.extra"]
+            [custom.extra]
+            when = true
+            format = "xx"
+            [line_break]
+            disabled = true
+            [character]
+            format = ">"
+        });
+        context.env.insert("HOME", NULL_DEVICE.to_string());
+        context.current_dir = dir.path().to_path_buf();
+        context.width = 1;
+
+        assert_eq!(get_prompt(&context), ">");
+        dir.close()
+    }
+
+    #[test]
+    fn responsive_implicit_groups_preserve_child_identity() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "$custom$env_var$character"
+            [responsive]
+            drop_order = ["custom.extra", "env_var.extra"]
+            [custom.extra]
+            when = true
+            format = "aa"
+            [env_var.extra]
+            variable = "extra"
+            format = "$env_value"
+            [character]
+            format = ">"
+        });
+        context.env.insert("extra", "bb".to_string());
+        context.width = 3;
+
+        assert_eq!(get_prompt(&context), "bb>");
+    }
+
+    #[test]
+    fn responsive_right_prompt_measures_joined_lines() {
+        let mut context = default_context().set_config(toml::toml! {
+            right_format = "${env_var.first}\n${env_var.second}"
+            [responsive]
+            drop_order = ["env_var.first"]
+            [env_var.first]
+            variable = "first"
+            format = "$env_value"
+            [env_var.second]
+            variable = "second"
+            format = "$env_value"
+        });
+        context.env.insert("first", "ab".to_string());
+        context.env.insert("second", "cd".to_string());
+        context.target = Target::Right;
+        context.width = 3;
+
+        assert_eq!(get_prompt(&context), "cd");
+    }
+
+    #[test]
+    fn responsive_profile_prompt_drops_modules() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            [responsive]
+            drop_order = ["env_var.extra"]
+            [profiles]
+            test = "${env_var.extra}$character"
+            [env_var.extra]
+            variable = "extra"
+            format = "$env_value"
+            [character]
+            format = ">"
+        });
+        context.env.insert("extra", "long".to_string());
+        context.target = Target::Profile("test".to_string());
+        context.width = 1;
+
+        assert_eq!(get_prompt(&context), ">");
+    }
+
+    #[test]
+    fn responsive_bypasses_continuation_and_unknown_width() {
+        let mut continuation = default_context().set_config(toml::toml! {
+            continuation_prompt = "${env_var.value}"
+            [responsive]
+            drop_order = ["env_var.value"]
+            [env_var.value]
+            variable = "value"
+            format = "$env_value"
+        });
+        continuation.env.insert("value", "long".to_string());
+        continuation.target = Target::Continuation;
+        continuation.width = 1;
+
+        let mut unknown_width = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "${env_var.value}"
+            [responsive]
+            drop_order = ["env_var.value"]
+            [env_var.value]
+            variable = "value"
+            format = "$env_value"
+        });
+        unknown_width.env.insert("value", "long".to_string());
+        unknown_width.width = 0;
+
+        assert_eq!(get_prompt(&continuation), "long");
+        assert_eq!(get_prompt(&unknown_width), "long");
+    }
+
+    #[test]
+    fn responsive_protects_structural_modules_and_reflows_fill() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "$fill$line_break$character${env_var.value}"
+            [responsive]
+            drop_order = ["fill", "line_break", "character", "env_var.value"]
+            [fill]
+            symbol = "."
+            style = ""
+            [character]
+            format = ">"
+            [env_var.value]
+            variable = "value"
+            format = "$env_value"
+        });
+        context.env.insert("value", "long".to_string());
+        context.width = 1;
+
+        assert_eq!(get_prompt(&context), ".\n>");
+    }
+
+    #[test]
+    fn responsive_treats_vcs_as_an_atomic_module() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        std::fs::create_dir(dir.path().join(".hg"))?;
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "$vcs$character"
+            [responsive]
+            drop_order = ["custom.inner"]
+            [vcs]
+            order = ["hg"]
+            hg_modules = "${custom.inner}"
+            [custom.inner]
+            when = true
+            format = "inner"
+            [character]
+            format = ">"
+        });
+        context.current_dir = dir.path().to_path_buf();
+        context.width = 1;
+
+        assert_eq!(get_prompt(&context), "inner>");
+
+        context.root_config.responsive.drop_order = vec!["vcs".to_string()];
+        assert_eq!(get_prompt(&context), ">");
+        dir.close()
+    }
+
+    #[test]
+    fn responsive_zsh_escape_can_overmeasure_module_output() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "${env_var.value}"
+            [responsive]
+            drop_order = ["env_var.value"]
+            [env_var.value]
+            variable = "value"
+            format = "$env_value"
+        });
+        context.env.insert("value", "%".to_string());
+        context.shell = Shell::Zsh;
+        context.width = 1;
+
+        // Zsh consumes the doubled percent as one visible character, but responsive measurement
+        // sees the already escaped value and may conservatively drop it.
+        assert_eq!(get_prompt(&context), "");
+    }
+
+    #[test]
     fn prompt_with_all() -> io::Result<()> {
         let mut context = default_context().set_config(toml::toml! {
                 add_newline = false
@@ -794,6 +1336,25 @@ mod test {
     }
 
     #[test]
+    fn all_plan_preserves_implicit_custom_identity() {
+        let context = default_context().set_config(toml::toml! {
+                format="$all${custom.b}"
+                [custom.a]
+                when=true
+                format="a"
+                [custom.b]
+                when=true
+                format="b"
+        });
+        let (formatter, modules) = load_formatter_and_modules(&context);
+        let module_plan = create_module_plan(&formatter, &context, &modules);
+
+        assert!(module_plan["all"].contains(&"custom.a".to_string()));
+        assert!(!module_plan["all"].contains(&"custom.b".to_string()));
+        assert_eq!(module_plan["custom.b"], ["custom.b"]);
+    }
+
+    #[test]
     fn env_mixed() {
         let mut context = default_context().set_config(toml::toml! {
                 format="${env_var.c}$env_var${env_var.b}"
@@ -815,6 +1376,28 @@ mod test {
         let expected = String::from("\ncdab");
         let actual = get_prompt(&context);
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn env_plan_preserves_top_level_and_implicit_identity() {
+        let context = default_context().set_config(toml::toml! {
+                format="${env_var.c}$env_var${env_var.b}"
+                [env_var]
+                format="$env_value"
+                variable = "d"
+                [env_var.a]
+                format="$env_value"
+                [env_var.b]
+                format="$env_value"
+                [env_var.c]
+                format="$env_value"
+        });
+        let (formatter, modules) = load_formatter_and_modules(&context);
+        let module_plan = create_module_plan(&formatter, &context, &modules);
+
+        assert_eq!(module_plan["env_var"], ["env_var", "env_var.a"]);
+        assert_eq!(module_plan["env_var.b"], ["env_var.b"]);
+        assert_eq!(module_plan["env_var.c"], ["env_var.c"]);
     }
 
     #[test]
