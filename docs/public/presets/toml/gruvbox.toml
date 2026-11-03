@@ -1,0 +1,56 @@
+format = """
+[](#282828)\
+$username\
+[](bg:#458588 fg:#282828)\
+$directory\
+[](fg:#458588 bg:#98971a)\
+$python$conda\
+[](fg:#98971a bg:#d79921)\
+$git_branch$git_status\
+[](fg:#d79921 bg:#cc241d)\
+$time\
+[](fg:#cc241d)\
+$line_break$character
+"""
+
+[username]
+style_user = "bg:#282828 fg:#ebdbb2"
+format = '[  $user ]($style)'
+show_always = true
+
+[directory]
+style = "bg:#458588 fg:#ebdbb2"
+format = "[$path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[python]
+symbol = ""
+style = "bg:#98971a fg:#282828"
+format = '[ $symbol $virtualenv ]($style)'
+
+[conda]
+symbol = ""
+style = "bg:#98971a fg:#282828"
+format = '[ $symbol $environment ]($style)'
+ignore_base = false
+
+[git_branch]
+symbol = ""
+style = "bg:#d79921 fg:#282828"
+format = '[ $symbol $branch ]($style)'
+
+[git_status]
+style = "bg:#d79921 fg:#282828"
+format = '[$all_status ]($style)'
+
+[time]
+disabled = false
+time_format = "%H:%M"
+style = "bg:#cc241d fg:#ebdbb2"
+format = '[⏰ $time ]($style)'
+
+[character]
+success_symbol = "[❯](bold #b8bb26)"
+error_symbol = "[❯](bold #fb4934)"
+
