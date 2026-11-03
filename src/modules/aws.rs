@@ -92,7 +92,10 @@ fn get_aws_region_from_config(
     let config = get_config(context, aws_config)?;
     let section = get_profile_config(config, aws_profile.as_ref())?;
 
-    section.get("region").map(std::borrow::ToOwned::to_owned)
+    section
+        .get("region")
+        .or_else(|| section.get("granted_sso_region"))
+        .map(std::borrow::ToOwned::to_owned)
 }
 
 fn get_aws_profile_and_region(
@@ -106,7 +109,7 @@ fn get_aws_profile_and_region(
         "AWS_PROFILE",
         "AWS_SSO_PROFILE",
     ];
-    let region_env_vars = ["AWS_REGION", "AWS_DEFAULT_REGION"];
+    let region_env_vars = ["AWS_REGION", "AWS_DEFAULT_REGION", "GRANTED_SSO_REGION"];
     let profile = profile_env_vars
         .iter()
         .find_map(|env_var| context.get_env(env_var));
@@ -125,16 +128,56 @@ fn get_aws_profile_and_region(
 }
 
 // Get the SSO cache key input from a profile section, handling both direct sso_start_url
-// and sso_session (which references a separate [sso-session <name>] section).
+// and sso_session (which references a separate [sso-session <name>] section), as well as
+// Granted's granted_sso_session / granted_sso_start_url keys.
 fn get_sso_cache_key_input(profile_section: &ini::Properties) -> Option<String> {
-    profile_section
-        .get("sso_session")
-        .map(std::string::ToString::to_string)
+    [
+        "sso_session",
+        "sso_start_url",
+        "granted_sso_session",
+        "granted_sso_start_url",
+    ]
+    .into_iter()
+    .find_map(|key| profile_section.get(key))
+    .map(std::string::ToString::to_string)
+}
+
+fn get_sso_cache_expiration(context: &Context, section: &ini::Properties) -> Option<Timestamp> {
+    let cache_key_input = get_sso_cache_key_input(section)?;
+    // https://github.com/boto/botocore/blob/d7ff05fac5bf597246f9e9e3fac8f22d35b02e64/botocore/utils.py#L3350
+    let cache_key = crate::utils::encode_to_hex(&Sha1::digest(cache_key_input.as_bytes()));
+    // https://github.com/aws/aws-cli/blob/b3421dcdd443db95999364e94266c0337b45cc43/awscli/customizations/sso/utils.py#L89
+    let mut sso_cred_path = context.get_home()?;
+    sso_cred_path.push(format!(".aws/sso/cache/{cache_key}.json"));
+    let sso_cred_json: json::Value =
+        json::from_str(&crate::utils::read_file(&sso_cred_path).ok()?).ok()?;
+    let expires_at = sso_cred_json.get("expiresAt")?.as_str()?;
+    expires_at.parse::<Timestamp>().ok()
+}
+
+fn get_login_cache_expiration(context: &Context, section: &ini::Properties) -> Option<Timestamp> {
+    let login_session = section.get("login_session")?.trim();
+    let mut hasher = gix::hash::hasher(gix::hash::Kind::Sha256);
+    hasher.update(login_session.as_bytes());
+    let cache_key = hasher.try_finalize().ok()?.to_hex().to_string();
+
+    let mut login_cred_path = context
+        .get_env("AWS_LOGIN_CACHE_DIRECTORY")
+        .and_then(|path| PathBuf::from_str(&path).ok())
         .or_else(|| {
-            profile_section
-                .get("sso_start_url")
-                .map(std::string::ToString::to_string)
-        })
+            let mut home = context.get_home()?;
+            home.push(".aws/login/cache");
+            Some(home)
+        })?;
+    login_cred_path.push(format!("{cache_key}.json"));
+    let login_cred_json: json::Value =
+        json::from_str(&crate::utils::read_file(&login_cred_path).ok()?).ok()?;
+    let expires_at = login_cred_json
+        .get("accessToken")
+        .and_then(|token| token.get("expiresAt"))
+        .or_else(|| login_cred_json.get("expiresAt"))?
+        .as_str()?;
+    expires_at.parse::<Timestamp>().ok()
 }
 
 fn get_credentials_duration(
@@ -164,19 +207,11 @@ fn get_credentials_duration(
             .find_map(|expiration_key| section.get(expiration_key))
             .and_then(|expiration| expiration.parse::<Timestamp>().ok())
     } else {
-        // get expiration from cached SSO credentials
+        // get expiration from cached SSO or login_session credentials
         let config = get_config(context, aws_config)?;
         let section = get_profile_config(config, aws_profile)?;
-        let cache_key_input = get_sso_cache_key_input(section)?;
-        // https://github.com/boto/botocore/blob/d7ff05fac5bf597246f9e9e3fac8f22d35b02e64/botocore/utils.py#L3350
-        let cache_key = crate::utils::encode_to_hex(&Sha1::digest(cache_key_input.as_bytes()));
-        // https://github.com/aws/aws-cli/blob/b3421dcdd443db95999364e94266c0337b45cc43/awscli/customizations/sso/utils.py#L89
-        let mut sso_cred_path = context.get_home()?;
-        sso_cred_path.push(format!(".aws/sso/cache/{cache_key}.json"));
-        let sso_cred_json: json::Value =
-            json::from_str(&crate::utils::read_file(&sso_cred_path).ok()?).ok()?;
-        let expires_at = sso_cred_json.get("expiresAt")?.as_str();
-        expires_at?.parse::<Timestamp>().ok()
+        get_sso_cache_expiration(context, section)
+            .or_else(|| get_login_cache_expiration(context, section))
     }?;
 
     Some(expiration_date.as_second() - Zoned::now().timestamp().as_second())
@@ -187,6 +222,19 @@ fn alias_name(name: Option<String>, aliases: &HashMap<String, &str>) -> Option<S
         .and_then(|n| aliases.get(n))
         .map(|&a| a.to_string())
         .or(name)
+}
+
+fn has_section_credential_process_or_sso(section: &ini::Properties) -> bool {
+    [
+        "credential_process",
+        "sso_session",
+        "sso_start_url",
+        "granted_sso_session",
+        "granted_sso_start_url",
+        "login_session",
+    ]
+    .into_iter()
+    .any(|key| section.contains_key(key))
 }
 
 fn has_credential_process_or_sso(
@@ -210,11 +258,8 @@ fn has_credential_process_or_sso(
     };
 
     Some(
-        config_section.contains_key("credential_process")
-            || config_section.contains_key("sso_session")
-            || config_section.contains_key("sso_start_url")
-            || credential_section?.contains_key("credential_process")
-            || credential_section?.contains_key("sso_start_url"),
+        has_section_credential_process_or_sso(config_section)
+            || credential_section.is_some_and(has_section_credential_process_or_sso),
     )
 }
 
@@ -1263,6 +1308,96 @@ source_profile = starship
         let expected = Some(format!(
             "on {}",
             Color::Yellow.bold().paint("☁️  astronauts ")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn granted_profile_with_slash_name() -> io::Result<()> {
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        std::fs::create_dir_all(dir.path().join(".aws/sso/cache"))?;
+
+        let config_path = dir.path().join(".aws/config");
+        let mut config = File::create(&config_path)?;
+        config.write_all(
+            "[profile account1/role1]
+granted_sso_start_url = https://starship.rs/sso
+granted_sso_region = us-east-1
+granted_sso_account_id = 000000000001
+granted_sso_role_name = role1
+common_fate_generated_from = aws-sso
+credential_process = granted credential-process --profile account1/role1
+"
+            .as_bytes(),
+        )?;
+        config.sync_all()?;
+
+        // Ensure an existing credentials file without this profile does not break detection
+        let creds_path = dir.path().join(".aws/credentials");
+        let mut creds = File::create(&creds_path)?;
+        creds.write_all(b"[other]\naws_access_key_id = dummy\n")?;
+        creds.sync_all()?;
+
+        // SHA-1 of "https://starship.rs/sso" = a47a4e57aecc96b31b4f083543924bd6f828e65a
+        let mut cache_file = File::create(
+            dir.path()
+                .join(".aws/sso/cache/a47a4e57aecc96b31b4f083543924bd6f828e65a.json"),
+        )?;
+        let one_second_ago =
+            Timestamp::from_second(Zoned::now().timestamp().as_second() - 1).unwrap();
+        cache_file.write_all(format!(r#"{{"expiresAt": "{one_second_ago}"}}"#).as_bytes())?;
+        cache_file.sync_all()?;
+
+        let actual = module_renderer
+            .env("AWS_PROFILE", "account1/role1")
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow
+                .bold()
+                .paint("☁️  account1/role1 (us-east-1) [X] ")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn aws_login_session_set() -> io::Result<()> {
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        std::fs::create_dir_all(dir.path().join(".aws/login/cache"))?;
+
+        let config_path = dir.path().join(".aws/config");
+        let mut config = File::create(&config_path)?;
+        config.write_all(
+            "[profile signin]
+login_session = arn:aws:sts::012345678910:assumed-role/Admin/admin
+region = us-west-2
+"
+            .as_bytes(),
+        )?;
+        config.sync_all()?;
+
+        // SHA-256 of "arn:aws:sts::012345678910:assumed-role/Admin/admin"
+        // = 4b0ba8f99f075c0633e122fd73346ce203a3faf18ea0310eb2d29df1bab2e255
+        let mut cache_file = File::create(
+            dir.path().join(
+                ".aws/login/cache/4b0ba8f99f075c0633e122fd73346ce203a3faf18ea0310eb2d29df1bab2e255.json",
+            ),
+        )?;
+        let one_second_ago =
+            Timestamp::from_second(Zoned::now().timestamp().as_second() - 1).unwrap();
+        cache_file.write_all(
+            format!(r#"{{"accessToken": {{"expiresAt": "{one_second_ago}"}}}}"#).as_bytes(),
+        )?;
+        cache_file.sync_all()?;
+
+        let actual = module_renderer.env("AWS_PROFILE", "signin").collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  signin (us-west-2) [X] ")
         ));
 
         assert_eq!(expected, actual);
