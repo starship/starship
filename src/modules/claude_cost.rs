@@ -154,6 +154,7 @@ mod tests {
 
     fn get_test_claude_data(total_cost_usd: f64) -> crate::context::ClaudeCodeData {
         crate::context::ClaudeCodeData {
+            session_id: None,
             cwd: None,
             model: crate::context::ModelInfo {
                 id: "claude-3-5-sonnet".to_string(),
