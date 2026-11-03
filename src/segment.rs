@@ -57,6 +57,19 @@ impl FillSegment {
     }
 }
 
+#[derive(Clone)]
+pub struct ControlSegment {
+    /// The string value of the current segment.
+    value: String,
+}
+
+impl ControlSegment {
+    /// Returns the [`AnsiString`] of the segment value
+    pub fn ansi_string(&self) -> AnsiString<'_> {
+        AnsiString::from(&self.value)
+    }
+}
+
 #[cfg(test)]
 mod fill_seg_tests {
     use super::FillSegment;
@@ -91,6 +104,7 @@ mod fill_seg_tests {
 pub enum Segment {
     Text(TextSegment),
     Fill(FillSegment),
+    Control(ControlSegment),
     LineTerm,
 }
 
@@ -124,11 +138,21 @@ impl Segment {
         })
     }
 
+    /// Creates a new control segment
+    pub fn control<T>(value: T) -> Self
+    where
+        T: Into<String>,
+    {
+        Self::Control(ControlSegment {
+            value: value.into(),
+        })
+    }
+
     pub fn style(&self) -> Option<AnsiStyle> {
         match self {
             Self::Fill(fs) => fs.style.map(|cs| cs.to_ansi_style(None)),
             Self::Text(ts) => ts.style.map(|cs| cs.to_ansi_style(None)),
-            Self::LineTerm => None,
+            Self::Control(_) | Self::LineTerm => None,
         }
     }
 
@@ -144,7 +168,7 @@ impl Segment {
                     ts.style = style;
                 }
             }
-            Self::LineTerm => {}
+            Self::Control(_) | Self::LineTerm => {}
         }
     }
 
@@ -152,15 +176,17 @@ impl Segment {
         match self {
             Self::Fill(fs) => &fs.value,
             Self::Text(ts) => &ts.value,
+            Self::Control(cs) => &cs.value,
             Self::LineTerm => LINE_TERMINATOR_STRING,
         }
     }
 
-    // Returns the AnsiString of the segment value, not including its prefix and suffix
+    /// Returns the [`AnsiString`] of the segment value, not including its prefix and suffix
     pub fn ansi_string(&self, prev: Option<&AnsiStyle>) -> AnsiString<'_> {
         match self {
             Self::Fill(fs) => fs.ansi_string(None, prev),
             Self::Text(ts) => ts.ansi_string(prev),
+            Self::Control(cs) => cs.ansi_string(),
             Self::LineTerm => AnsiString::from(LINE_TERMINATOR_STRING),
         }
     }
@@ -169,7 +195,7 @@ impl Segment {
         match self {
             Self::Fill(fs) => fs.value.width_graphemes(),
             Self::Text(ts) => ts.value.width_graphemes(),
-            Self::LineTerm => 0,
+            Self::Control(_) | Self::LineTerm => 0,
         }
     }
 }
