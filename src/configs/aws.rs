@@ -47,6 +47,10 @@ pub struct AwsConfig<'a> {
     pub expiration_symbol: &'a str,
     /// If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup.
     pub force_display: bool,
+    /// Only show the AWS module when in supplied directories
+    pub detect_folders: Vec<&'a str>,
+    /// Only show the AWS module when with supplied files
+    pub detect_files: Vec<&'a str>,
 }
 
 impl Default for AwsConfig<'_> {
@@ -60,6 +64,8 @@ impl Default for AwsConfig<'_> {
             profile_aliases: HashMap::new(),
             expiration_symbol: "X",
             force_display: false,
+            detect_folders: vec![],
+            detect_files: vec![],
         }
     }
 }
