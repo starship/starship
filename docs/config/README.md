@@ -3562,7 +3562,7 @@ The module will be shown when inside a nix-shell environment.
 
 | Option        | Default                                        | Description                                                           |
 | ------------- | ---------------------------------------------- | --------------------------------------------------------------------- |
-| `format`      | `'via [$symbol($state )(\($name\) )]($style)'` | The format for the module.                                            |
+| `format`      | `'via [$symbol($state )(\($name\))]($style) '` | The format for the module.                                            |
 | `symbol`      | `'❄️  '`                                       | A format string representing the symbol of nix-shell.                 |
 | `style`       | `'bold blue'`                                  | The style for the module.                                             |
 | `impure_msg`  | `''`                                           | A format string shown when the shell is impure.                       |

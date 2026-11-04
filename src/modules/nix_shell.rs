@@ -156,7 +156,7 @@ mod tests {
         let actual = ModuleRenderer::new("nix_shell")
             .env("IN_NIX_SHELL", "pure")
             .collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("❄️  pure ")));
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  pure ")));
 
         assert_eq!(expected, actual);
     }
@@ -166,7 +166,21 @@ mod tests {
         let actual = ModuleRenderer::new("nix_shell")
             .env("IN_NIX_SHELL", "impure")
             .collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("❄️  ")));
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  ")));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn impure_shell_custom_symbol() {
+        let actual = ModuleRenderer::new("nix_shell")
+            .env("IN_NIX_SHELL", "impure")
+            .config(toml::toml! {
+                [nix_shell]
+                symbol = "NIX"
+            })
+            .collect();
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("NIX")));
 
         assert_eq!(expected, actual);
     }
@@ -180,7 +194,7 @@ mod tests {
                 impure_msg = "impure"
             })
             .collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("❄️  impure ")));
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  impure ")));
 
         assert_eq!(expected, actual);
     }
@@ -196,11 +210,11 @@ mod tests {
             })
             .collect();
         let expected = Some(format!(
-            "via {}",
+            "via {} ",
             AnsiStrings(&[
                 Color::Blue.bold().paint("❄️  "),
                 Color::Red.bold().dimmed().paint("⌽"),
-                Color::Blue.bold().paint(" (starship) "),
+                Color::Blue.bold().paint(" (starship)"),
             ])
         ));
 
@@ -229,8 +243,8 @@ mod tests {
             .env("name", "starship")
             .collect();
         let expected = Some(format!(
-            "via {}",
-            Color::Blue.bold().paint("❄️  pure (starship) ")
+            "via {} ",
+            Color::Blue.bold().paint("❄️  pure (starship)")
         ));
 
         assert_eq!(expected, actual);
@@ -243,8 +257,8 @@ mod tests {
             .env("name", "starship")
             .collect();
         let expected = Some(format!(
-            "via {}",
-            Color::Blue.bold().paint("❄️  (starship) ")
+            "via {} ",
+            Color::Blue.bold().paint("❄️  (starship)")
         ));
 
         assert_eq!(expected, actual);
@@ -262,7 +276,7 @@ mod tests {
                 heuristic = true
             })
             .collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("❄️  ")));
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  ")));
 
         assert_eq!(expected, actual);
     }
