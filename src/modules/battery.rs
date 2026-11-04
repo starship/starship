@@ -85,15 +85,18 @@ fn get_battery_status(context: &Context) -> Option<BatteryStatus> {
 
 /// the merge returns Charging if at least one is charging
 ///                   Discharging if at least one is Discharging
+///                   Paused if at least one is Paused
 ///                   Full if both are Full or one is Full and the other Unknown
 ///                   Empty if both are Empty or one is Empty and the other Unknown
 ///                   Unknown otherwise
 fn merge_battery_states(state1: battery::State, state2: battery::State) -> battery::State {
-    use battery::State::{Charging, Discharging, Unknown};
+    use battery::State::{Charging, Discharging, Paused, Unknown};
     if state1 == Charging || state2 == Charging {
         Charging
     } else if state1 == Discharging || state2 == Discharging {
         Discharging
+    } else if state1 == Paused || state2 == Paused {
+        Paused
     } else if state1 == state2 {
         state1
     } else if state1 == Unknown {
@@ -367,6 +370,17 @@ mod tests {
         let expected = Some(String::from("󱞜 80% "));
 
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn merge_battery_states_paused() {
+        use battery::State::{Charging, Discharging, Empty, Full, Paused, Unknown};
+        assert_eq!(merge_battery_states(Paused, Full), Paused);
+        assert_eq!(merge_battery_states(Full, Paused), Paused);
+        assert_eq!(merge_battery_states(Paused, Empty), Paused);
+        assert_eq!(merge_battery_states(Paused, Unknown), Paused);
+        assert_eq!(merge_battery_states(Paused, Charging), Charging);
+        assert_eq!(merge_battery_states(Paused, Discharging), Discharging);
     }
 
     #[test]
