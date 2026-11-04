@@ -54,7 +54,7 @@ home = "0.5.12"
 indexmap = { version = "2.14.2", features = ["serde"] }
 jiff = { version = "0.2.38", features = ["serde"] }
 jsonc-parser = { version = "0.34.0", features = ["serde"] }
-log = { version = "0.4.34", features = ["std"] }
+log = { version = "0.4.35", features = ["std"] }
 # notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
 # see: https://github.com/NixOS/nixpkgs/issues/160876
 notify-rust = { version = "4.18.2", optional = true }
