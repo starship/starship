@@ -97,7 +97,7 @@ download() {
 	fi
 
 	if has curl && ! curl_is_snap; then
-		cmd="curl --fail --silent --location --output $file $url"
+		cmd="curl --disable --fail --silent --location --output $file $url"
 	elif has wget; then
 		cmd="wget --quiet --output-document=$file $url"
 	elif has fetch; then
