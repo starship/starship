@@ -334,6 +334,7 @@ Note: Continuation prompts are only available in the following shells:
 - `bash`
 - `zsh`
 - `PowerShell`
+- `nushell`
 
 ### Example
 
