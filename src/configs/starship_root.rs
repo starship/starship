@@ -1,3 +1,4 @@
+use crate::config::VecOr;
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -26,6 +27,7 @@ pub struct StarshipRootConfig {
     pub command_timeout: u64,
     pub add_newline: bool,
     pub follow_symlinks: bool,
+    pub presets: VecOr<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub palette: Option<String>,
     pub palettes: HashMap<String, Palette>,
@@ -163,6 +165,7 @@ impl Default for StarshipRootConfig {
             command_timeout: 500,
             add_newline: true,
             follow_symlinks: true,
+            presets: VecOr::default(),
             palette: None,
             palettes: HashMap::default(),
         }
