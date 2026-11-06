@@ -89,7 +89,7 @@ terminal_size = "0.4.4"
 toml = { version = "1.1.8", features = ["preserve_order"] }
 toml_edit = "0.25.17"
 unicode-segmentation = "1.13.3"
-unicode-width = "0.2.2"
+unicode-width = "0.2.3"
 urlencoding = "2.1.3"
 versions = "8.0.1"
 which = "8.0.6"
