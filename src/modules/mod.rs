@@ -114,6 +114,8 @@ mod zig;
 mod battery;
 mod typst;
 
+#[cfg(all(test, feature = "battery"))]
+pub use self::battery::BatteryInfo;
 #[cfg(feature = "battery")]
 pub use self::battery::{BatteryInfoProvider, BatteryInfoProviderImpl};
 
