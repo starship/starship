@@ -1,0 +1,47 @@
+use serde::{Deserialize, Serialize};
+
+use crate::configs::claude_context::ClaudeDisplayConfig;
+
+#[derive(Clone, Deserialize, Serialize)]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
+#[serde(default)]
+pub struct ClaudeUsageConfig<'a> {
+    pub format: &'a str,
+    pub reset_time_format: &'a str,
+    pub reset_date_time_format: &'a str,
+    #[serde(borrow)]
+    pub display: Vec<ClaudeDisplayConfig<'a>>,
+    pub disabled: bool,
+}
+
+impl Default for ClaudeUsageConfig<'_> {
+    fn default() -> Self {
+        Self {
+            format: "([5h: $five_hour_percentage ↺ $five_hour_reset]($five_hour_style) )([7d: $seven_day_percentage ↺ $seven_day_reset]($seven_day_style) )",
+            reset_time_format: "%H:%M",
+            reset_date_time_format: "%a %H:%M",
+            display: vec![
+                ClaudeDisplayConfig {
+                    threshold: 0.0,
+                    hidden: true,
+                    ..Default::default()
+                },
+                ClaudeDisplayConfig {
+                    threshold: 70.0,
+                    style: "yellow",
+                    ..Default::default()
+                },
+                ClaudeDisplayConfig {
+                    threshold: 90.0,
+                    style: "red",
+                    ..Default::default()
+                },
+            ],
+            disabled: false,
+        }
+    }
+}
