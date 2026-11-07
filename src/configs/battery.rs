@@ -13,6 +13,7 @@ pub struct BatteryConfig<'a> {
     pub discharging_symbol: &'a str,
     pub unknown_symbol: &'a str,
     pub empty_symbol: &'a str,
+    pub paused_symbol: &'a str,
     #[serde(borrow)]
     pub display: Vec<BatteryDisplayConfig<'a>>,
     pub disabled: bool,
@@ -27,6 +28,7 @@ impl Default for BatteryConfig<'_> {
             discharging_symbol: "󰂃 ",
             unknown_symbol: "󰂑 ",
             empty_symbol: "󰂎 ",
+            paused_symbol: "󱞜 ",
             format: "[$symbol$percentage]($style) ",
             display: vec![BatteryDisplayConfig::default()],
             disabled: false,

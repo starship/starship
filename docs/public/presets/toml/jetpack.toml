@@ -161,6 +161,7 @@ charging_symbol = "[↑](italic bold green)"
 discharging_symbol = "↓"
 unknown_symbol = "░"
 empty_symbol = "▃"
+paused_symbol = "‖"
 
 [[battery.display]]
 threshold = 20
