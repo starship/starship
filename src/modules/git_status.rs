@@ -4,7 +4,6 @@ use crate::configs::git_status::GitStatusConfig;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
 use crate::{context, num_configured_starship_threads, num_rayon_threads};
-use gix::bstr::ByteVec;
 use gix::status::Submodule;
 use regex::Regex;
 use std::path::PathBuf;
@@ -437,23 +436,10 @@ fn get_repo_status(
         let has_up_to_date_or_diverged =
             !config.up_to_date.is_empty() || !config.diverged.is_empty();
         if (has_ahead_behind || has_up_to_date_or_diverged)
-            && let Some(branch_name) = gix_repo.head_name().ok().flatten().and_then(|ref_name| {
-                Vec::from(gix::bstr::BString::from(ref_name))
-                    .into_string()
-                    .ok()
-            })
+            && let Some((ahead, behind)) = get_ahead_behind(&gix_repo, &is_interrupted)
         {
-            let output = repo.exec_git_with_required_trust(
-                context,
-                gix::sec::Trust::Reduced,
-                ["for-each-ref", "--format", "%(upstream) %(upstream:track)"]
-                    .into_iter()
-                    .map(ToOwned::to_owned)
-                    .chain(Some(branch_name)),
-            )?;
-            if let Some(line) = output.stdout.lines().next() {
-                repo_status.set_ahead_behind_for_each_ref(line);
-            }
+            repo_status.ahead = Some(ahead);
+            repo_status.behind = Some(behind);
         }
 
         for change in status.filter_map(Result::ok) {
@@ -565,6 +551,49 @@ fn get_repo_status(
 fn sanitize_rename_tracking(mut config: gix::diff::Rewrites) -> gix::diff::Rewrites {
     config.limit = 100;
     config
+}
+
+/// Count commits `HEAD` is ahead of and behind its upstream, like `git for-each-ref %(upstream:track)`.
+/// Returns `None` if `HEAD` is detached, has no upstream, the upstream is gone, or the walk timed out.
+fn get_ahead_behind(repo: &gix::Repository, is_interrupted: &AtomicBool) -> Option<(usize, usize)> {
+    let branch = repo.head_name().ok()??;
+    let upstream = if repo
+        .branch_remote_name(branch.shorten(), gix::remote::Direction::Fetch)
+        .is_some_and(|name| name.as_bstr() == ".")
+    {
+        // `branch.<name>.remote = .` tracks a local branch directly
+        repo.branch_remote_ref_name(branch.as_ref(), gix::remote::Direction::Fetch)?
+            .ok()?
+    } else {
+        repo.branch_remote_tracking_ref_name(branch.as_ref(), gix::remote::Direction::Fetch)?
+            .ok()?
+    };
+    let local = repo
+        .find_reference(branch.as_ref())
+        .ok()?
+        .peel_to_id()
+        .ok()?
+        .detach();
+    let upstream = repo
+        .find_reference(upstream.as_ref())
+        .ok()?
+        .peel_to_id()
+        .ok()?
+        .detach();
+
+    let count = |tip: gix::ObjectId, hidden: gix::ObjectId| -> Option<usize> {
+        let mut count = 0;
+        for info in repo.rev_walk([tip]).with_hidden([hidden]).all().ok()? {
+            if is_interrupted.load(std::sync::atomic::Ordering::Relaxed) {
+                log::debug!("get_ahead_behind: timed out");
+                return None;
+            }
+            info.ok()?;
+            count += 1;
+        }
+        Some(count)
+    };
+    Some((count(local, upstream)?, count(upstream, local)?))
 }
 
 fn get_stashed_count(repo: &context::GitRepo) -> Option<usize> {
@@ -708,37 +737,6 @@ impl RepoStatus {
         if let Some(caps) = re.captures(s) {
             self.ahead = caps.get(1).unwrap().as_str().parse::<usize>().ok();
             self.behind = caps.get(2).unwrap().as_str().parse::<usize>().ok();
-        }
-    }
-
-    fn set_ahead_behind_for_each_ref(&mut self, mut s: &str) {
-        if s == " " || s.ends_with(" [gone]") {
-            self.ahead = None;
-            self.behind = None;
-            return;
-        }
-
-        s = s
-            .split_once(' ')
-            .unwrap()
-            .1
-            .trim_matches(|c| c == '[' || c == ']');
-
-        for pair in s.split(',') {
-            let mut tokens = pair.trim().splitn(2, ' ');
-            if let (Some(name), Some(number)) = (tokens.next(), tokens.next()) {
-                let storage = match name {
-                    "ahead" => &mut self.ahead,
-                    "behind" => &mut self.behind,
-                    _ => return,
-                };
-                *storage = number.parse().ok();
-            }
-        }
-        for field in [&mut self.ahead, &mut self.behind] {
-            if field.is_none() {
-                *field = Some(0);
-            }
         }
     }
 }
@@ -1089,6 +1087,38 @@ pub mod tests {
                 .path(repo_dir.path())
                 .collect();
             let expected = None;
+
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn shows_ahead_of_local_upstream() -> io::Result<()> {
+        for &mode in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(mode)?;
+
+            let current = create_command("git")?
+                .args(["symbolic-ref", "--short", "HEAD"])
+                .current_dir(repo_dir.path())
+                .output()?;
+            let current = String::from_utf8_lossy(&current.stdout).trim().to_string();
+            // `--track` with a local start point sets `branch.<name>.remote = .`
+            create_command("git")?
+                .args(["switch", "--track", "-c", "local-tracking", &current])
+                .current_dir(repo_dir.path())
+                .output()?;
+            ahead(repo_dir.path())?;
+
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    ahead="⇡$count"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("⇡1");
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
