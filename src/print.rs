@@ -34,8 +34,21 @@ impl Grapheme<'_> {
     }
 }
 
-pub trait UnicodeWidthGraphemes {
+pub trait UnicodeWidthGraphemes: AsRef<str> {
     fn width_graphemes(&self) -> usize;
+
+    fn width_graphemes_for_shell(&self, shell: Shell) -> usize {
+        let width = self.width_graphemes();
+        if shell == Shell::Tcsh {
+            width + self.as_ref().matches('!').count()
+        } else {
+            width
+        }
+    }
+
+    fn width_graphemes_shell(&self, shell: Shell) -> usize {
+        self.width_graphemes_for_shell(shell)
+    }
 }
 
 static ANSI_REGEX: OnceLock<Regex> = OnceLock::new();
@@ -142,7 +155,8 @@ pub fn get_prompt(context: &Context) -> String {
             .expect("Unexpected error returned in root format variables"),
     );
 
-    let module_strings = root_module.ansi_strings_for_width(Some(context.width));
+    let module_strings =
+        root_module.ansi_strings_for_width_and_shell(Some(context.width), context.shell);
     if config.add_newline && context.target != Target::Continuation {
         // continuation prompts normally do not include newlines, but they can
         writeln!(buf).unwrap();
@@ -160,6 +174,9 @@ pub fn get_prompt(context: &Context) -> String {
 
     // escape \n and ! characters for tcsh
     if context.shell == Shell::Tcsh {
+        // The width of each injected escape is already accounted for in the
+        // fill calculation (see Segment::width_graphemes_shell), so this
+        // cannot overflow the requested terminal width.
         buf = buf.replace('!', "\\!");
         // space is required before newline
         buf = buf.replace('\n', " \\n");
