@@ -3195,7 +3195,7 @@ If you use an alternate POM syntax (for example `pom.hocon`), add its filename t
 | `symbol`            | `'🅼 '`                               | A format string representing the symbol of Maven.                         |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
 | `detect_files`      | `['pom.xml']`                        | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_folders`    | `['.mvn']`                           | Which folders should trigger this module.                                 |
 | `style`             | `'bold bright-cyan'`                 | The style for the module.                                                 |
 | `disabled`          | `false`                              | Disables the `maven` module.                                              |
 | `recursive`         | `false`                              | Enables recursive finding for the `.mvn` directory.                       |

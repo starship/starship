@@ -12,19 +12,18 @@ use crate::{
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("maven");
     let config = MavenConfig::try_load(module.config);
-    let wrapper_properties = get_wrapper_properties_file(context, config.recursive);
-    let is_maven_project = wrapper_properties.is_some()
-        || context
-            .try_begin_scan()?
-            .set_files(&config.detect_files)
-            .set_extensions(&config.detect_extensions)
-            .set_folders(&config.detect_folders)
-            .is_match();
+    let is_maven_project = context
+        .try_begin_scan()?
+        .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
+        .is_match();
 
     if !is_maven_project {
         return None;
     }
 
+    let wrapper_properties = get_wrapper_properties_file(context, config.recursive);
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -125,15 +124,13 @@ mod tests {
     }
 
     #[test]
-    fn folder_with_maven_config_does_not_trigger_module() -> io::Result<()> {
+    fn folder_with_mvn_directory_triggers_module() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let maven_config = dir.path().join(".mvn").join("maven.config");
-        fs::create_dir_all(maven_config.parent().unwrap())?;
-        File::create(maven_config)?.sync_all()?;
+        fs::create_dir_all(dir.path().join(".mvn"))?;
 
         let actual = ModuleRenderer::new("maven").path(dir.path()).collect();
 
-        let expected = None;
+        let expected = Some(format!("via {}", Color::LightCyan.bold().paint("🅼 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -147,6 +144,7 @@ mod tests {
             .join("wrapper")
             .join("maven-wrapper.properties");
         fs::create_dir_all(properties.parent().unwrap())?;
+        File::create(dir.path().join("pom.xml"))?.sync_all()?;
         let mut file = File::create(properties)?;
         file.write_all(
             b"\
