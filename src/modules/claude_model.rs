@@ -25,6 +25,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .copied()
         .unwrap_or(&claude_data.model.display_name);
 
+    // Style for the effort level, falling back to `style` for levels without one
+    let effort_style = claude_data
+        .effort
+        .as_ref()
+        .and_then(|e| config.effort_styles.get(&e.level))
+        .copied()
+        .unwrap_or(config.style);
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
@@ -33,6 +41,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map_style(|variable| match variable {
                 "style" => Some(Ok(config.style)),
+                "effort_style" => Some(Ok(effort_style)),
                 _ => None,
             })
             .map(|variable| match variable {
@@ -173,6 +182,42 @@ mod tests {
 
         let expected = Some(format!("{}", Color::Blue.bold().paint("Opus 4.8 high")));
         assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn test_effort_styles() {
+        let data = |level: &str| crate::context::ClaudeCodeData {
+            effort: Some(crate::utils::statusline::EffortInfo {
+                level: level.to_string(),
+            }),
+            ..Default::default()
+        };
+        let render = |level| {
+            ModuleRenderer::new("claude_model")
+                .config(toml::toml! {
+                    [claude_model]
+                    format = "[$effort]($effort_style)"
+                    [claude_model.effort_styles]
+                    high = "yellow"
+                    max = "bold red"
+                })
+                .claude_code_data(data(level))
+                .collect()
+        };
+
+        assert_eq!(
+            render("high"),
+            Some(Color::Yellow.paint("high").to_string())
+        );
+        assert_eq!(
+            render("max"),
+            Some(Color::Red.bold().paint("max").to_string())
+        );
+        // Levels without an entry fall back to `style`
+        assert_eq!(
+            render("low"),
+            Some(Color::Blue.bold().paint("low").to_string())
+        );
     }
 
     #[test]
