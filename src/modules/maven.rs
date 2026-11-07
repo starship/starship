@@ -12,18 +12,19 @@ use crate::{
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("maven");
     let config = MavenConfig::try_load(module.config);
-    let is_maven_project = context
-        .try_begin_scan()?
-        .set_files(&config.detect_files)
-        .set_extensions(&config.detect_extensions)
-        .set_folders(&config.detect_folders)
-        .is_match();
+    let wrapper_properties = get_wrapper_properties_file(context, config.recursive);
+    let is_maven_project = wrapper_properties.is_some()
+        || context
+            .try_begin_scan()?
+            .set_files(&config.detect_files)
+            .set_extensions(&config.detect_extensions)
+            .set_folders(&config.detect_folders)
+            .is_match();
 
     if !is_maven_project {
         return None;
     }
 
-    let wrapper_properties = get_wrapper_properties_file(context, config.recursive);
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -144,7 +145,6 @@ mod tests {
             .join("wrapper")
             .join("maven-wrapper.properties");
         fs::create_dir_all(properties.parent().unwrap())?;
-        File::create(dir.path().join("pom.xml"))?.sync_all()?;
         let mut file = File::create(properties)?;
         file.write_all(
             b"\
