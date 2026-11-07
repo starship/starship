@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - main
+
+permissions:
+  contents: read
+
 env:
   CARGO_INCREMENTAL: 0
   CARGO_NET_RETRY: 10
@@ -16,9 +20,14 @@ jobs:
     name: Release Please
     runs-on: ubuntu-latest
     if: github.repository == 'starship/starship'
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
+      sha: ${{ steps.release.outputs.sha }}
     steps:
       - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
         id: release
@@ -94,6 +103,9 @@ jobs:
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          ref: ${{ needs.release_please.outputs.sha }}
 
       - name: Setup | Rust
         run: rustup toolchain install stable --profile minimal --target ${{ matrix.target }} --no-self-update
@@ -221,6 +233,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           # Required to include the recently merged Crowdin PR
           ref: main
 
@@ -305,6 +318,8 @@ jobs:
     name: Add Build Artifacts to Release
     needs: [release_please, github_build, notarize_and_pkgbuild]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Setup | Artifacts
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
@@ -313,26 +328,33 @@ jobs:
         run: for file in starship-*/starship-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
 
       - name: Setup | Publish Release
-        run: gh release edit ${{ needs.release_please.outputs.tag_name }} --draft=false --repo=starship/starship
+        run: gh release edit "$RELEASE_TAG" --draft=false --repo=starship/starship
         env:
+          RELEASE_TAG: ${{ needs.release_please.outputs.tag_name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build | Add Artifacts to Release
-        run: gh release upload ${{ needs.release_please.outputs.tag_name }} starship-*/starship-* --repo starship/starship
+        run: gh release upload "$RELEASE_TAG" starship-*/starship-* --repo starship/starship
         env:
+          RELEASE_TAG: ${{ needs.release_please.outputs.tag_name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # Publish starship to Crates.io
   cargo_publish:
     name: Publish Cargo Package
     runs-on: ubuntu-latest
+    environment: crates-io
     needs: [release_please, upload_artifacts]
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     permissions:
+      contents: read
       id-token: write
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          ref: ${{ needs.release_please.outputs.sha }}
 
       - name: Setup | Rust
         run: rustup toolchain install stable --profile minimal --no-self-update
@@ -342,7 +364,9 @@ jobs:
         id: auth
 
       - name: Build | Publish
-        run: cargo publish --token ${{ steps.auth.outputs.token }}
+        run: cargo publish --locked
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}
 
   update_brew_formula:
     name: Update Brew Formula
@@ -366,6 +390,7 @@ jobs:
     needs: [release_please, github_build, upload_artifacts]
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     env:
+      RELEASE_TAG: ${{ needs.release_please.outputs.tag_name }}
       URL_64: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-x86_64-pc-windows-msvc
       URL_32: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-i686-pc-windows-msvc
       URL_ARM: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-aarch64-pc-windows-msvc
@@ -375,13 +400,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
       - run: |
-          $version = '${{ needs.release_please.outputs.tag_name }}'.replace('v', '')
+          $version = $env:RELEASE_TAG.replace('v', '')
           iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
           ./wingetcreate.exe update Starship.Starship -s -v $version `
-            -u ${{ env.URL_64 }}.msi  ${{ env.URL_64 }}.zip `
-               ${{ env.URL_32 }}.msi  ${{ env.URL_32 }}.zip `
-               ${{ env.URL_ARM }}.msi ${{ env.URL_ARM }}.zip `
-            -t ${{ secrets.GH_PAT }}
+            -u "$($env:URL_64).msi" "$($env:URL_64).zip" `
+               "$($env:URL_32).msi" "$($env:URL_32).zip" `
+               "$($env:URL_ARM).msi" "$($env:URL_ARM).zip" `
+            -t $env:GH_PAT
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
 
   choco_update:
     name: Update Chocolatey Package
@@ -391,6 +418,8 @@ jobs:
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Setup | Artifacts
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
       - run: pwsh ./install/windows/choco/update.ps1
@@ -407,19 +436,19 @@ jobs:
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Merge | Merge Crowdin PR
         run: gh pr merge l10n_main --squash --repo=starship/starship
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
 
   publish_docs:
-    name: Trigger docs deployment
-    runs-on: ubuntu-latest
+    name: Publish docs
     needs: merge_crowdin_pr
-    steps:
-      - name: Setup | Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Trigger workflow dispatch
-        run: gh workflow run publish-docs.yml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: read
+    uses: $/.github/workflows/publish-docs.yml
+    secrets:
+      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}

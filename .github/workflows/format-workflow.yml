@@ -5,6 +5,9 @@ on:
   pull_request:
     paths: ["docs/**", "**.md", "**.toml", "**.js", "**.json", "**.ts"]
 
+permissions:
+  contents: read
+
 jobs:
   # Run the dprint code formatter for documentation
   dprint:
@@ -13,6 +16,8 @@ jobs:
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Docs | Format
         uses: dprint/check@7dc032d8874778fc024f6f9b4a7e6d896782c330 # v2.5
 
@@ -23,6 +28,8 @@ jobs:
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Install | Taplo
         uses: taiki-e/install-action@b20dedce73af6905cdc30d6611090c9b67557c8d # v2.85.12
         with:
@@ -39,6 +46,7 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
       - name: Prevent File Change
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
@@ -65,6 +73,8 @@ jobs:
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup | Node
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
