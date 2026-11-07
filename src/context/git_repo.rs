@@ -327,6 +327,92 @@ mod tests {
         dir.close()
     }
 
+    fn context_with_cache(cache_dir: &Path) -> Context<'static> {
+        let mut context = crate::test::default_context();
+        context
+            .env
+            .insert("STARSHIP_CACHE", cache_dir.to_string_lossy().into_owned());
+        context
+    }
+
+    #[test]
+    fn installation_config_is_cached() -> std::io::Result<()> {
+        let Some(key) = git_binary_key() else {
+            // No git in PATH, nothing to cache
+            return Ok(());
+        };
+        let dir = tempfile::tempdir()?;
+        let context = context_with_cache(dir.path());
+        let cache_file = dir.path().join(INSTALLATION_CONFIG_CACHE);
+
+        // First prompt discovers the config and caches it
+        let InstallationConfig::Known(discovered) = installation_config(&context) else {
+            panic!("expected the installation config to be resolved");
+        };
+        let content = utils::read_file(&cache_file)?;
+        assert_eq!(
+            parse_installation_config_cache(&content, &key),
+            Some(discovered)
+        );
+
+        // Later prompts read the cache instead of asking git
+        let cached = dir.path().join("gitconfig");
+        fs::write(&cached, "")?;
+        write_installation_config_cache(&cache_file, &key, Some(&cached))?;
+        assert!(matches!(
+            installation_config(&context),
+            InstallationConfig::Known(Some(path)) if path == cached
+        ));
+        dir.close()
+    }
+
+    #[test]
+    fn installation_config_defers_to_gix_on_env_overrides() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut context = context_with_cache(dir.path());
+        context.env.insert("GIT_CONFIG_NOSYSTEM", "1".to_string());
+        assert!(matches!(
+            installation_config(&context),
+            InstallationConfig::Discover
+        ));
+        assert!(!dir.path().join(INSTALLATION_CONFIG_CACHE).exists());
+        dir.close()
+    }
+
+    #[test]
+    fn cached_installation_config_is_loaded() -> std::io::Result<()> {
+        let Some(key) = git_binary_key() else {
+            return Ok(());
+        };
+        let repo_dir = crate::test::fixture_repo(crate::test::FixtureProvider::Git {
+            reftable: false,
+            bare: false,
+        })?;
+        let cache_dir = tempfile::tempdir()?;
+        let config = cache_dir.path().join("gitconfig");
+        fs::write(&config, "[starship]\n\tinstalled = yes\n")?;
+        write_installation_config_cache(
+            &cache_dir.path().join(INSTALLATION_CONFIG_CACHE),
+            &key,
+            Some(&config),
+        )?;
+
+        let mut context = context_with_cache(cache_dir.path());
+        context.current_dir = repo_dir.path().to_path_buf();
+        let repo = context
+            .get_git_repo()
+            .expect("fixture is a git repo")
+            .open();
+        assert_eq!(
+            repo.config_snapshot()
+                .string("starship.installed")
+                .map(|value| value.to_string()),
+            Some("yes".to_string())
+        );
+        repo_dir.close()?;
+        cache_dir.close()
+    }
+
     #[test]
     fn installation_config_cache_rejects_invalid_content() {
         for content in [
