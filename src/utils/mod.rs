@@ -539,7 +539,7 @@ WebAssembly: unavailable
             stdout: String::from("5.26.1"),
             stderr: String::default(),
         }),
-        "php -nr echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;" => {
+        "php -nr echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION;" => {
             Some(CommandOutput {
                 stdout: String::from("7.3.8"),
                 stderr: String::default(),
