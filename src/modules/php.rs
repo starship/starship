@@ -4,6 +4,12 @@ use crate::configs::php::PhpConfig;
 use crate::formatter::StringFormatter;
 use crate::formatter::VersionFormatter;
 
+// Keep double quotes out of this code. On Windows `php` is often a batch file shim
+// (e.g. Laravel Herd's `php.bat`), and a `"` passed through one reaches php.exe mangled,
+// so PHP fails with a parse error instead of printing its version.
+const PHP_VERSION_CODE: &str =
+    "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION;";
+
 /// Creates a module with the current PHP version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("php");
@@ -31,14 +37,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let php_version = context.exec_cmd(
-                        "php",
-                        &[
-                            "-nr",
-                            "echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;",
-                        ],
-                    )?.stdout;
-                    VersionFormatter::format_module_version(module.get_name(), &php_version, config.version_format).map(Ok)
+                    let php_version = context.exec_cmd("php", &["-nr", PHP_VERSION_CODE])?.stdout;
+                    VersionFormatter::format_module_version(
+                        module.get_name(),
+                        &php_version,
+                        config.version_format,
+                    )
+                    .map(Ok)
                 }
                 _ => None,
             })
@@ -58,6 +63,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
+    use super::PHP_VERSION_CODE;
     use crate::test::ModuleRenderer;
     use nu_ansi_term::Color;
     use std::fs::File;
@@ -117,5 +123,10 @@ mod tests {
         ));
         assert_eq!(expected, actual);
         dir.close()
+    }
+
+    #[test]
+    fn version_code_survives_batch_file_shims() {
+        assert!(!PHP_VERSION_CODE.contains('"'));
     }
 }
