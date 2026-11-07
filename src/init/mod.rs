@@ -46,9 +46,20 @@ impl StarshipPath {
 
     /// `PowerShell` specific path escaping
     fn sprint_pwsh(&self) -> io::Result<String> {
-        self.str_path()
-            .map(|s| s.replace('\'', "''"))
-            .map(|s| format!("'{s}'"))
+        // PowerShell also treats the typographic quotes U+2018-U+201B as single
+        // quotes, so each of them must be doubled too.
+        self.str_path().map(|s| {
+            let mut quoted = String::with_capacity(s.len() + 2);
+            quoted.push('\'');
+            for c in s.chars() {
+                if matches!(c, '\'' | '\u{2018}' | '\u{2019}' | '\u{201A}' | '\u{201B}') {
+                    quoted.push(c);
+                }
+                quoted.push(c);
+            }
+            quoted.push('\'');
+            quoted
+        })
     }
 
     /// `Elvish` specific path escaping
@@ -297,6 +308,20 @@ mod tests {
             native_path: PathBuf::from(r"C:\'starship.exe"),
         };
         assert_eq!(starship_path.sprint_pwsh()?, r"'C:\''starship.exe'");
+        Ok(())
+    }
+
+    #[test]
+    fn escape_typographic_quotes_pwsh() -> io::Result<()> {
+        let starship_path = StarshipPath {
+            native_path: PathBuf::from(
+                "C:\\Users\\O\u{2019}Brien\\\u{2018}\u{201A}\u{201B}\\starship.exe",
+            ),
+        };
+        assert_eq!(
+            starship_path.sprint_pwsh()?,
+            "'C:\\Users\\O\u{2019}\u{2019}Brien\\\u{2018}\u{2018}\u{201A}\u{201A}\u{201B}\u{201B}\\starship.exe'"
+        );
         Ok(())
     }
 
