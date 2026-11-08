@@ -9,6 +9,9 @@ on:
       - "docs/**"
       - "**.md"
 
+permissions:
+  contents: read
+
 env:
   CARGO_INCREMENTAL: 0
   CARGO_NET_RETRY: 10
@@ -25,6 +28,8 @@ jobs:
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup | Rust
         run: rustup toolchain install stable --profile minimal --component rustfmt --no-self-update
@@ -42,12 +47,14 @@ jobs:
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup | Rust
         run: rustup toolchain install stable --profile minimal --component clippy --no-self-update
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
 
       - name: Build | Lint
         run: cargo clippy --workspace --locked -- -D warnings
@@ -59,12 +66,14 @@ jobs:
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup | Rust
         run: rustup toolchain install stable --profile minimal --no-self-update
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
 
       - name: Build | Check
         run: cargo check --workspace --locked
@@ -77,12 +86,14 @@ jobs:
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup | Rust
         run: rustup toolchain install stable --profile minimal --no-self-update
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
 
       - name: Build | Check
         run: cargo check --workspace --locked --no-default-features
@@ -95,12 +106,14 @@ jobs:
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup | Rust
         run: rustup toolchain install stable --profile minimal --no-self-update
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
 
       - name: Build | Check
         run: cargo check --workspace --locked --all-features
@@ -115,12 +128,14 @@ jobs:
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup | Rust
         run: rustup toolchain install stable --profile minimal --no-self-update
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
 
       - name: Run | Generate Schema
         run: cargo run --locked --features config-schema -- config-schema > .github/config-schema.json
@@ -151,6 +166,8 @@ jobs:
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       # Install all the required dependencies for testing
       - name: Setup | Rust
@@ -159,7 +176,7 @@ jobs:
           rustup default ${{ matrix.rust }}
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
 
       - name: Install cargo-llvm-cov
         uses: taiki-e/install-action@b20dedce73af6905cdc30d6611090c9b67557c8d # v2.85.12
@@ -176,7 +193,11 @@ jobs:
           # cargo-wix does not require static crt
           RUSTFLAGS: ""
 
-      # Install Mercurial (pre-installed on Linux)
+      # Install Mercurial
+      - name: Setup | Mercurial (linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install --yes --no-install-recommends mercurial
+
       - name: Setup | Mercurial (macos)
         if: matrix.os == 'macOS-latest'
         run: brew install mercurial
@@ -184,7 +205,12 @@ jobs:
       - name: Setup | Mercurial (windows)
         if: matrix.os == 'windows-latest'
         run: |
-          winget install --id Mercurial.Mercurial --silent --exact --disable-interactivity --accept-source-agreements
+          # TODO: add --no-progress once winget on CI-environment supports it
+          winget install --id Mercurial.Mercurial --exact `
+            --silent `
+            --disable-interactivity `
+            --accept-package-agreements `
+            --accept-source-agreements
           Add-Content -Path $env:GITHUB_PATH -Value "C:\Program Files\Mercurial" -Encoding utf8
 
       # Run the ignored tests that expect the above setup

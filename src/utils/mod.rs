@@ -55,6 +55,11 @@ pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
         use std::os::unix::fs::OpenOptionsExt;
         options.custom_flags(nix::fcntl::OFlag::O_NONBLOCK.bits());
     }
+    #[cfg(windows)]
+    {
+        use std::os::windows::fs::OpenOptionsExt;
+        options.custom_flags(windows::Win32::Storage::FileSystem::FILE_FLAG_BACKUP_SEMANTICS.0);
+    }
     let file = options.open(file_name.as_ref())?;
 
     let stat = file.metadata()?;
