@@ -210,7 +210,7 @@ jobs:
   notarize_and_pkgbuild:
     runs-on: macos-latest
     continue-on-error: true
-    needs: [github_build, merge_crowdin_pr]
+    needs: [release_please, github_build, merge_crowdin_pr]
     strategy:
       fail-fast: false
       matrix:
