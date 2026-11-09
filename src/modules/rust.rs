@@ -1,3 +1,4 @@
+#[cfg(test)]
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Output;
@@ -9,7 +10,7 @@ use super::{Context, Module, ModuleConfig};
 
 use crate::configs::rust::RustConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
-use crate::utils::create_command;
+use crate::utils::{create_command, read_file};
 use home::rustup_home;
 
 use std::sync::OnceLock;
@@ -316,7 +317,7 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
     }
 
     fn read_channel(path: &Path, only_toml: bool) -> Option<String> {
-        let contents = fs::read_to_string(path).ok()?;
+        let contents = read_file(path).ok()?;
 
         match contents.lines().count() {
             0 => None,
@@ -462,7 +463,7 @@ fn strip_dos_path(path: PathBuf) -> PathBuf {
 impl RustupSettings {
     fn load(_context: &Context) -> Option<Self> {
         let path = rustup_home().ok()?.join("settings.toml");
-        Self::from_toml_str(&fs::read_to_string(path).ok()?)
+        Self::from_toml_str(&read_file(path).ok()?)
     }
 
     fn from_toml_str(toml_str: &str) -> Option<Self> {

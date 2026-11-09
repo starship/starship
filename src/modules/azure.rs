@@ -1,11 +1,11 @@
 use serde::{Deserialize, Serialize};
-use std::fs;
 use std::path::PathBuf;
 
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::azure::AzureConfig;
 use crate::formatter::StringFormatter;
+use crate::utils::read_file;
 
 #[derive(Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -90,7 +90,7 @@ fn get_azure_profile_info(context: &Context) -> Option<Subscription> {
 }
 
 fn load_azure_profile(config_path: &PathBuf) -> Option<AzureProfile> {
-    let json_data = fs::read_to_string(config_path).ok()?;
+    let json_data = read_file(config_path).ok()?;
     let sanitized_json_data = json_data.strip_prefix('\u{feff}').unwrap_or(&json_data);
     if let Ok(azure_profile) = serde_json::from_str::<AzureProfile>(sanitized_json_data) {
         Some(azure_profile)

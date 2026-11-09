@@ -179,6 +179,7 @@ mod tests {
                 total_lines_removed: 500,
             }),
             workspace: None,
+            effort: None,
         }
     }
 

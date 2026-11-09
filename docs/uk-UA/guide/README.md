@@ -45,106 +45,106 @@
   <a href="https://starship.rs/config/">Налаштування</a>
 </p>
 
-<p align="center"><a href="https://github.com/starship/starship/blob/main/README.md"
+<p align="center"><a href="https://github.com/starship/starship/blob/master/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-us.png"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-us.png"
       alt="English"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/main/docs/de-DE/guide/README.md"
+    href="https://github.com/starship/starship/blob/master/docs/de-DE/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-de.png"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png"
       alt="Deutsch"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/main/docs/es-ES/guide/README.md"
+    href="https://github.com/starship/starship/blob/master/docs/es-ES/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-es.png"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-es.png"
       alt="Español"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/main/docs/fr-FR/guide/README.md"
+    href="https://github.com/starship/starship/blob/master/docs/fr-FR/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-fr.png"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png"
       alt="Français"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/main/docs/id-ID/guide/README.md"
+    href="https://github.com/starship/starship/blob/master/docs/id-ID/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-id.png"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-id.png"
       alt="Bahasa Indonesia"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/main/docs/it-IT/guide/README.md"
+    href="https://github.com/starship/starship/blob/master/docs/it-IT/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-it.png"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-it.png"
       alt="Italiano"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/main/docs/ja-JP/guide/README.md"
+    href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-jp.png"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png"
       alt="日本語"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/main/docs/pt-BR/guide/README.md"
+    href="https://github.com/starship/starship/blob/master/docs/pt-BR/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-br.png"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-br.png"
       alt="Português do Brasil"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/main/docs/ru-RU/guide/README.md"
+    href="https://github.com/starship/starship/blob/master/docs/ru-RU/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-ru.png"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
       alt="Русский"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/main/docs/uk-UA/guide/README.md"
+    href="https://github.com/starship/starship/blob/master/docs/uk-UA/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-ua.png"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
       alt="Українська"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/main/docs/vi-VN/guide/README.md"
+    href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-vn.png"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
       alt="Tiếng Việt"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/main/docs/zh-CN/guide/README.md"
+    href="https://github.com/starship/starship/blob/master/docs/zh-CN/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-cn.png"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
       alt="简体中文"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/main/docs/zh-TW/guide/README.md"
+    href="https://github.com/starship/starship/blob/master/docs/zh-TW/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-tw.png"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
       alt="繁體中文"
  /></a>
 </p>
@@ -152,8 +152,7 @@
 <h1></h1>
 
 > [!WARNING]
-> **The default branch has been renamed from `master` to `main`.**
-> If you have a local clone, update it by running:
+> **Стандартна гілка була перейменована з `master` на `main`.** Якщо у вас є локальний клон, оновіть його, виконавши наступну команду:
 >
 > ```sh
 > git branch -m master main
@@ -169,17 +168,16 @@ width="50%"
 align="right"
 />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**Простий, супер швидкий та безмежно адаптивний командний рядок для будь-якої оболонки!**
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **Швидкий:** він швидкий — _дійсно_ швидкий! 🚀
+- **Адаптивний:** налаштуйте кожен елемент вашого командного рядка.
+- **Універсальний:** працює у всіх оболонках, в будь-якій операційній системі.
+- **Інформативний:** одразу показує потрібну інформацію.
+- **Багато функцій:** підтримує всі ваші улюблені інструменти.
+- **Простий:** швидке встановлення дозволяє почати роботу за лічені хвилини.
 
-<p align="center"><a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
-</p>
+<p align="center"><a href="https://starship.rs/config/"><strong>Ознайомтесь з документацією Starship &nbsp;&nbsp;▶</strong></a></p>
 
 <a name="🚀-installation"></a>
 
@@ -187,7 +185,7 @@ align="right"
 
 ### Передумови
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Шрифт [Nerd Font](https://www.nerdfonts.com/), встановлений та увімкнений у вашому терміналі (наприклад, спробуйте [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Крок 1. Встановіть Starship
 
@@ -207,11 +205,11 @@ align="right"
 
 Встановіть Starship використовуючи будь-який з наступних менеджерів пакунків:
 
-| Дистрибутив | Репозиторій     | Команда для встановлення          |
-| ----------- | --------------- | --------------------------------- |
-| **_Any_**   | **[crates.io]** | `cargo install starship --locked` |
-| FreeBSD     | [FreshPorts]    | `pkg install starship`            |
-| NetBSD      | [pkgsrc]        | `pkgin install starship`          |
+| Дистрибутив                         | Репозиторій     | Команда для встановлення          |
+| ----------------------------------- | --------------- | --------------------------------- |
+| **_Будь-який** | **[crates.io]** | `cargo install starship --locked` |
+| FreeBSD                             | [FreshPorts]    | `pkg install starship`            |
+| NetBSD                              | [pkgsrc]        | `pkgin install starship`          |
 
 </details>
 
@@ -225,22 +223,22 @@ curl -sS https://starship.rs/install.sh | sh
 
 Як варіант, можете встановити Starship скориставшись будь-яким з наступних менеджерів пакунків:
 
-| Дистрибутив                        | Репозиторій             | Команда для встановлення                                      |
-| ---------------------------------- | ----------------------- | ------------------------------------------------------------- |
-| **_Any_**                          | **[crates.io]**         | `cargo install starship --locked`                             |
-| _Any_                              | [conda-forge]           | `conda install -c conda-forge starship`                       |
-| _Any_                              | [Linuxbrew]             | `brew install starship`                                       |
-| Alpine Linux 3.13+ | [Alpine Linux Packages] | `apk add starship`                                            |
-| Arch Linux                         | [Arch Linux Extra]      | `pacman -S starship`                                          |
-| CentOS 7+                          | [Copr]                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Debian 13+                         | [Debian Main]           | `apt install starship`                                        |
-| Fedora 40+                         | [Copr]                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Gentoo                             | [Gentoo Packages]       | `emerge app-shells/starship`                                  |
-| Manjaro                            |                         | `pacman -S starship`                                          |
-| NixOS                              | [nixpkgs]               | `nix-env -iA nixpkgs.starship`                                |
-| openSUSE                           | [OSS]                   | `zypper in starship`                                          |
-| Ubuntu 25.04+      | [Ubuntu Universe]       | `apt install starship`                                        |
-| Void Linux                         | [Void Linux Packages]   | `xbps-install -S starship`                                    |
+| Дистрибутив                         | Репозиторій             | Команда для встановлення                                      |
+| ----------------------------------- | ----------------------- | ------------------------------------------------------------- |
+| **_Будь-який** | **[crates.io]**         | `cargo install starship --locked`                             |
+| _Будь-який_                         | [conda-forge]           | `conda install -c conda-forge starship`                       |
+| _Будь-який_                         | [Linuxbrew]             | `brew install starship`                                       |
+| Alpine Linux 3.13+  | [Alpine Linux Packages] | `apk add starship`                                            |
+| Arch Linux                          | [Arch Linux Extra]      | `pacman -S starship`                                          |
+| CentOS 7+                           | [Copr]                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
+| Debian 13+                          | [Debian Main]           | `apt install starship`                                        |
+| Fedora 40+                          | [Copr]                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
+| Gentoo                              | [Gentoo Packages]       | `emerge app-shells/starship`                                  |
+| Manjaro                             |                         | `pacman -S starship`                                          |
+| NixOS                               | [nixpkgs]               | `nix-env -iA nixpkgs.starship`                                |
+| openSUSE                            | [OSS]                   | `zypper in starship`                                          |
+| Ubuntu 25.04+       | [Ubuntu Universe]       | `apt install starship`                                        |
+| Void Linux                          | [Void Linux Packages]   | `xbps-install -S starship`                                    |
 
 </details>
 
@@ -295,8 +293,8 @@ eval "$(starship init bash)"
 
 <details><summary>Cmd</summary>
 
-You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd.
-Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+Потрібно використовувати [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) з Cmd.
+Створіть файл `%LocalAppData%\clink\starship.lua` із наступним вмістом:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -351,7 +349,7 @@ starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.n
 
 <details><summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+Додайте наступний рядок наприкінці вашої конфігурації PowerShell (знайдіть її виконавши команду `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -396,31 +394,31 @@ eval "$(starship init zsh)"
 
 Якщо ви бажаєте додатково налаштувати Starship:
 
-- **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
+- **[Налаштування](https://starship.rs/config/)** — дізнайтесь як налаштувати Starship, щоб підлаштувати командний рядок під свої потреби
 
-- **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
+- **[Шаблони](https://starship.rs/presets/)** — черпайте натхнення з готових налаштувань інших користувачів
 
 ## 🤝 Участь
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/issues?q=state%3Aopen%20label%3A%22%F0%9F%8C%B1%20good%20first%20issue%22).
+Ми завжди раді вашому внеску, незалежно від **рівня вашого досвіду**! Якщо ви хочете поступово влитися в проєкт, спробуйте взятися за [задачу, для того щоб розпочати](https://github.com/starship/starship/issues?q=state%3Aopen%20label%3A%22%F0%9F%8C%B1%20good%20first%20issue%22).
 
-Якщо ви вільно володієте мовою відмінною від англійської, ми будемо дуже вдячні, якщо ви допоможете в перекладі документації та її підтримці в актуальному стані. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+Якщо ви вільно володієте мовою відмінною від англійської, ми будемо дуже вдячні, якщо ви допоможете в перекладі документації та її підтримці в актуальному стані. Якщо у вас є бажання, переклади можна робити за допомогою [Starship Crowdin](https://translate.starship.rs/).
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/main/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+Якщо ви бажаєте долучитися до розробки Starship, ознайомтеся, будь ласка, з нашим [Посібником для учасників](https://github.com/starship/starship/blob/main/CONTRIBUTING.md). Також не соромтеся завітати на наш [сервер Discord](https://discord.gg/8Jzqu3T) і привітатися. 👋
 
 ## 💭 Подяки
 
 Будь ласка, перегляньте роботи, які надихнули на створення starship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – Командний рядок ZSH для астронавтів.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Тема «robbyrussell» для різних оболонок, написана на JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** — Налаштовуваний командний рядок, схожий на PowerLine, з іконками, що працює у різних оболонках.
 
 ## ❤️ Спонсори
 
-Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Ваше імʼя або логотип показуватимуться тут з посиланням на ваш сайт.
+Підтримайте цей проєкт, [ставши спонсором](https://github.com/sponsors/starship). Ваше імʼя або логотип показуватимуться тут з посиланням на ваш сайт.
 
 ## 🔒 Політика Підпису коду
 
@@ -428,8 +426,8 @@ Support this project by [becoming a sponsor](https://github.com/sponsors/starshi
 
 Ролі:
 
-- Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
-- Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
+- Рецензенти: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
+- Особи, що затверджують, та автори: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
 
 Ця програма не передаватиме жодної інформації до інших мережевих систем, якщо користувач або особа, яка її встановлює чи експлуатує, не зробить на це спеціального запиту.
 
@@ -439,8 +437,8 @@ Support this project by [becoming a sponsor](https://github.com/sponsors/starshi
 
 ## 📝 Ліцензія
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br>
-This project is [ISC](https://github.com/starship/starship/blob/main/LICENSE) licensed.
+Авторське право ©️ 2019-сьогодення, [Учасники Starship](https://github.com/starship/starship/graphs/contributors).<br>
+Цей проєкт ліцензується на умовах Ліцензії [ISC](https://github.com/starship/starship/blob/main/LICENSE).
 
 [alpine linux packages]: https://pkgs.alpinelinux.org/packages?name=starship
 [arch linux extra]: https://archlinux.org/packages/extra/x86_64/starship

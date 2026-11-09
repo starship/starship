@@ -283,7 +283,7 @@ function Invoke-Starship-PreCommand {
 Invoke-Expression (&starship init powershell)
 ```
 
-## Enable Right Prompt
+## Enable Right Prompt {#enable-right-prompt}
 
 Some shells support a right prompt which renders on the same line as the input. Starship can
 set the content of the right prompt using the `right_format` option. Any module that can be used
@@ -295,7 +295,7 @@ the input line in a multi-line prompt, see the [`fill` module](../config/#fill).
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell, bash.
 
-Note: The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework v0.4 or higher should be installed in order to use right prompt in bash.
+Note: Either the [Ble.sh](https://github.com/akinomyoga/ble.sh) framework (v0.4 or higher) or [Flyline](https://github.com/HalFrgrd/Flyline) (v1.7.1 or higher) should be installed in order to use right prompt in bash.
 
 ### Example
 
@@ -334,6 +334,7 @@ Note: Continuation prompts are only available in the following shells:
 - `bash`
 - `zsh`
 - `PowerShell`
+- `nushell`
 
 ### Example
 
@@ -384,7 +385,7 @@ The default profile format is:
 claude-code = "$claude_model$git_branch$claude_context$claude_cost"
 ```
 
-### Configuration
+### Configuration {#configuration}
 
 You can customize the Claude Code statusline by modifying the `claude-code` profile and individual module configurations in your `~/.config/starship.toml`:
 
@@ -426,12 +427,13 @@ The `claude_model` module displays the current Claude model being used in the se
 
 #### Variables
 
-| Variable | Example             | Description                           |
-| -------- | ------------------- | ------------------------------------- |
-| model    | `Claude 3.5 Sonnet` | The display name of the current model |
-| model_id | `claude-3-5-sonnet` | The model ID                          |
-| symbol   |                     | Mirrors the value of option `symbol`  |
-| style\*  |                     | Mirrors the value of option `style`   |
+| Variable | Example             | Description                             |
+| -------- | ------------------- | --------------------------------------- |
+| model    | `Claude 3.5 Sonnet` | The display name of the current model   |
+| model_id | `claude-3-5-sonnet` | The model ID                            |
+| effort   | `high`              | The reasoning effort level, if reported |
+| symbol   |                     | Mirrors the value of option `symbol`    |
+| style\*  |                     | Mirrors the value of option `style`     |
 
 \*: This variable can only be used as a part of a style string
 
@@ -654,7 +656,7 @@ style = "bold red"
 format = "[$symbol$cost ($duration)]($style) "
 ```
 
-## Style Strings
+## Style Strings {#style-strings}
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 

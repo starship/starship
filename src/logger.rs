@@ -96,7 +96,7 @@ impl Default for StarshipLogger {
 
         Self {
             log_file_content: RwLock::new(
-                fs::read_to_string(&session_log_file)
+                utils::read_file(&session_log_file)
                     .unwrap_or_default()
                     .lines()
                     .map(std::string::ToString::to_string)
@@ -128,7 +128,7 @@ impl StarshipLogger {
     /// Override the log level path
     /// This won't change anything if a log file was already opened
     pub fn set_log_file_path(&mut self, path: PathBuf) {
-        let contents = fs::read_to_string(&path)
+        let contents = utils::read_file(&path)
             .unwrap_or_default()
             .lines()
             .map(std::string::ToString::to_string)

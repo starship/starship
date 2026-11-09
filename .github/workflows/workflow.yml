@@ -9,6 +9,9 @@ on:
       - "docs/**"
       - "**.md"
 
+permissions:
+  contents: read
+
 env:
   CARGO_INCREMENTAL: 0
   CARGO_NET_RETRY: 10
@@ -24,7 +27,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup | Rust
         run: rustup toolchain install stable --profile minimal --component rustfmt --no-self-update
@@ -41,13 +46,15 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup | Rust
         run: rustup toolchain install stable --profile minimal --component clippy --no-self-update
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
 
       - name: Build | Lint
         run: cargo clippy --workspace --locked -- -D warnings
@@ -58,13 +65,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup | Rust
         run: rustup toolchain install stable --profile minimal --no-self-update
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
 
       - name: Build | Check
         run: cargo check --workspace --locked
@@ -76,13 +85,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup | Rust
         run: rustup toolchain install stable --profile minimal --no-self-update
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
 
       - name: Build | Check
         run: cargo check --workspace --locked --no-default-features
@@ -94,13 +105,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup | Rust
         run: rustup toolchain install stable --profile minimal --no-self-update
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
 
       - name: Build | Check
         run: cargo check --workspace --locked --all-features
@@ -114,13 +127,15 @@ jobs:
       contents: read
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup | Rust
         run: rustup toolchain install stable --profile minimal --no-self-update
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
 
       - name: Run | Generate Schema
         run: cargo run --locked --features config-schema -- config-schema > .github/config-schema.json
@@ -150,7 +165,9 @@ jobs:
       RUSTFLAGS: ${{ matrix.rustflags || '' }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       # Install all the required dependencies for testing
       - name: Setup | Rust
@@ -159,24 +176,28 @@ jobs:
           rustup default ${{ matrix.rust }}
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
 
       - name: Install cargo-llvm-cov
-        uses: taiki-e/install-action@b8cecb83565409bcc297b2df6e77f030b2a468d5 # v2.82.0
+        uses: taiki-e/install-action@b20dedce73af6905cdc30d6611090c9b67557c8d # v2.85.12
         with:
-          tool: cargo-llvm-cov@0.8.5
+          tool: cargo-llvm-cov
 
       # For windows installer test
       # On stable rust & main repo pushes only
       - name: Install cargo-wix [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
-        run: cargo install --version 0.3.8 cargo-wix
+        run: cargo install --version 0.3.9 cargo-wix
         env:
           # cargo-wix does not require static crt
           RUSTFLAGS: ""
 
-      # Install Mercurial (pre-installed on Linux)
+      # Install Mercurial
+      - name: Setup | Mercurial (linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install --yes --no-install-recommends mercurial
+
       - name: Setup | Mercurial (macos)
         if: matrix.os == 'macOS-latest'
         run: brew install mercurial
@@ -184,7 +205,12 @@ jobs:
       - name: Setup | Mercurial (windows)
         if: matrix.os == 'windows-latest'
         run: |
-          winget install --id Mercurial.Mercurial --silent --exact --disable-interactivity --accept-source-agreements
+          # TODO: add --no-progress once winget on CI-environment supports it
+          winget install --id Mercurial.Mercurial --exact `
+            --silent `
+            --disable-interactivity `
+            --accept-package-agreements `
+            --accept-source-agreements
           Add-Content -Path $env:GITHUB_PATH -Value "C:\Program Files\Mercurial" -Encoding utf8
 
       # Run the ignored tests that expect the above setup
@@ -223,7 +249,7 @@ jobs:
           STARSHIP_VERSION: v1.2.3
 
       - name: Sign | Upload Executable [Windows]
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         continue-on-error: true
         id: unsigned-artifacts
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable' && github.event_name == 'push' && github.repository == 'starship/starship'
@@ -234,7 +260,7 @@ jobs:
             target/debug/starship-x86_64-pc-windows-msvc.msi
 
       - name: Sign | Sign [Windows]
-        uses: signpath/github-action-submit-signing-request@b9d91eadd323de506c0c81cf0c7fe7438f3360fd # v2.2
+        uses: signpath/github-action-submit-signing-request@f6d04783b4569d051e0c80105fe66e82819d0092 # v3.0
         continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable' && github.event_name == 'push' && github.repository == 'starship/starship'
         with:
@@ -247,7 +273,7 @@ jobs:
           output-artifact-directory: target/debug
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         if: github.repository == 'starship/starship'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

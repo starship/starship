@@ -7,7 +7,7 @@ hero:
   actions:
     - theme: brand
       text: Loslegen →
-      link: ./de-DE/guide/
+      link: ./guide/
 features:
   - title: Kompatibel
     details: Läuft mit den beliebtesten Shells auf den beliebtesten Betriebssystemen. Überall einsetzbar!
