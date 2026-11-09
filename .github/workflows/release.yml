@@ -126,7 +126,7 @@ jobs:
 
       - name: Setup | Install Zig [riscv64]
         if: matrix.use_zigbuild
-        run: pip install ziglang==0.17.0
+        run: pip install ziglang==0.17.1
 
       - name: Setup | Install cargo-zigbuild [riscv64]
         if: matrix.use_zigbuild
