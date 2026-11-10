@@ -941,6 +941,9 @@ pub struct Properties {
     /// The execution duration of the last command, in milliseconds
     #[clap(short = 'd', long)]
     pub cmd_duration: Option<String>,
+    /// The command line of the last command, as reported by the shell
+    #[clap(long, allow_hyphen_values = true)]
+    pub last_command: Option<String>,
     /// The keymap of fish/zsh/cmd
     #[clap(short = 'k', long, default_value = "viins")]
     pub keymap: String,
@@ -961,6 +964,7 @@ impl Default for Properties {
             path: None,
             logical_path: None,
             cmd_duration: None,
+            last_command: None,
             keymap: "viins".to_string(),
             jobs: 0,
             shlvl: None,

@@ -38,7 +38,7 @@ function fish_prompt
             printf "\e[1;32m❯\e[0m "
         end
     else
-        ::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+        ::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --last-command="$__starship_last_command" --jobs=$STARSHIP_JOBS
     end
 end
 
@@ -68,6 +68,11 @@ function fish_right_prompt
     else
         ::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
     end
+end
+
+# Remember the last command line, used by `cmd_duration.notify_ignore_commands`
+function __starship_record_last_command --on-event fish_postexec
+    set -g __starship_last_command $argv[1]
 end
 
 # Disable virtualenv prompt, it breaks starship

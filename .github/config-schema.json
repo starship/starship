@@ -278,7 +278,8 @@
         "show_milliseconds": false,
         "disabled": false,
         "show_notifications": false,
-        "min_time_to_notify": 45000
+        "min_time_to_notify": 45000,
+        "notify_ignore_commands": []
       }
     },
     "cobol": {
@@ -2603,6 +2604,13 @@
           "type": "integer",
           "format": "int64",
           "default": 45000
+        },
+        "notify_ignore_commands": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
         },
         "notification_timeout": {
           "type": [

@@ -45,7 +45,7 @@ prompt_starship_precmd() {
         unset STARSHIP_START_TIME
     # Drop status and duration otherwise
     else
-        unset STARSHIP_DURATION STARSHIP_CMD_STATUS STARSHIP_PIPE_STATUS
+        unset STARSHIP_DURATION STARSHIP_CMD_STATUS STARSHIP_PIPE_STATUS STARSHIP_LAST_CMD
     fi
 
     # Use length of jobstates array as number of jobs. Expansion fails inside
@@ -57,6 +57,8 @@ prompt_starship_precmd() {
 # only if there's an actual command to run
 prompt_starship_preexec() {
     __starship_get_time && STARSHIP_START_TIME=$STARSHIP_CAPTURED_TIME
+    # The command line as typed, used by `cmd_duration.notify_ignore_commands`
+    STARSHIP_LAST_CMD=$1
 }
 
 # Add hook functions
@@ -97,6 +99,6 @@ VIRTUAL_ENV_DISABLE_PROMPT=1
 
 setopt promptsubst
 
-PROMPT='$('::STARSHIP::' prompt --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
-RPROMPT='$('::STARSHIP::' prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
+PROMPT='$('::STARSHIP::' prompt --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --last-command="${STARSHIP_LAST_CMD:-}" --jobs="$STARSHIP_JOBS_COUNT")'
+RPROMPT='$('::STARSHIP::' prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --last-command="${STARSHIP_LAST_CMD:-}" --jobs="$STARSHIP_JOBS_COUNT")'
 PROMPT2="$(::STARSHIP:: prompt --continuation)"
