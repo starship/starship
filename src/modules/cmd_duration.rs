@@ -64,29 +64,69 @@ fn should_notify(config: &CmdDurationConfig, last_command: Option<&str>, elapsed
     }
 }
 
-/// Wrappers that are skipped when looking for the name of the command that was run.
-const COMMAND_PREFIXES: &[&str] = &[
-    "sudo", "doas", "command", "builtin", "exec", "nohup", "time",
+/// Wrappers that are skipped when looking for the name of the command that was run,
+/// each with its options that take a separate argument (as in `sudo -u root vim`).
+const COMMAND_PREFIXES: &[(&str, &[&str])] = &[
+    (
+        "sudo",
+        &[
+            "-u",
+            "--user",
+            "-g",
+            "--group",
+            "-h",
+            "--host",
+            "-p",
+            "--prompt",
+            "-C",
+            "--close-from",
+            "-D",
+            "--chdir",
+            "-r",
+            "--role",
+            "-t",
+            "--type",
+            "-U",
+            "--other-user",
+            "-T",
+            "--command-timeout",
+        ],
+    ),
+    ("doas", &["-u", "-C"]),
+    ("env", &["-u", "--unset", "-C", "--chdir"]),
+    ("command", &[]),
+    ("builtin", &[]),
+    ("exec", &["-a"]),
+    ("nohup", &[]),
+    ("time", &["-f", "--format", "-o", "--output"]),
 ];
 
 /// Checks whether the program run by `command` is listed in `ignored`.
 ///
 /// Leading environment variable assignments (`FOO=bar cmd`) and common wrappers
-/// such as `sudo` are skipped, and the program is compared by its file name, so
-/// `/usr/bin/vim` and `sudo vim` both match `vim`.
+/// such as `sudo` (with their options) are skipped, and the program is compared
+/// by its file name, so `/usr/bin/vim` and `sudo -u root vim` both match `vim`.
 fn is_ignored_command(command: &str, ignored: &[&str]) -> bool {
     if ignored.is_empty() {
         return false;
     }
 
-    let program = command.split_whitespace().find(|word| {
-        !(COMMAND_PREFIXES.contains(word)
-            || word.starts_with('-')
-            || (word.contains('=') && !word.starts_with('=')))
-    });
-
-    let Some(program) = program else {
-        return false;
+    let mut words = command.split_whitespace();
+    let mut options_with_argument: &[&str] = &[];
+    let program = loop {
+        let Some(word) = words.next() else {
+            return false;
+        };
+        let name = word.rsplit('/').next().unwrap_or(word);
+        if let Some((_, options)) = COMMAND_PREFIXES.iter().find(|(prefix, _)| *prefix == name) {
+            options_with_argument = options;
+        } else if word.starts_with('-') {
+            if options_with_argument.contains(&word) {
+                words.next();
+            }
+        } else if !(word.contains('=') && !word.starts_with('=')) {
+            break word;
+        }
     };
 
     let name = program.rsplit('/').next().unwrap_or(program);
@@ -185,6 +225,14 @@ mod tests {
         assert!(is_ignored_command("EDITOR=nano TERM=xterm vim", &ignored));
         assert!(is_ignored_command("/usr/bin/vim file", &ignored));
         assert!(!is_ignored_command("sudo make install", &ignored));
+        assert!(is_ignored_command("sudo -u root vim /etc/hosts", &ignored));
+        assert!(is_ignored_command("sudo --user root -E vim", &ignored));
+        assert!(is_ignored_command("doas -u admin vim", &ignored));
+        assert!(is_ignored_command("env EDITOR=nano vim", &ignored));
+        assert!(is_ignored_command("env -u TERM vim", &ignored));
+        assert!(is_ignored_command("/usr/bin/sudo vim", &ignored));
+        assert!(is_ignored_command("time -f %e vim", &ignored));
+        assert!(!is_ignored_command("sudo -u vim make", &ignored));
     }
 
     #[test]

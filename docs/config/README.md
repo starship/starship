@@ -924,7 +924,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 | `show_notifications`     | `false`                       | Show desktop notifications when command completes.                                                                                                                                           |
 | `min_time_to_notify`     | `45_000`                      | Shortest duration for notification (in milliseconds).                                                                                                                                        |
 | `notification_timeout`   |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option.                            |
-| `notify_ignore_commands` | `[]`                          | Commands that never trigger a notification, matched by program name (e.g. `['vim', 'ssh']`). `sudo`, `doas` and leading `VAR=value` assignments are skipped. Only supported in Zsh and Fish. |
+| `notify_ignore_commands` | `[]`                          | Commands that never trigger a notification, matched by program name (e.g. `['vim', 'ssh']`). Leading `VAR=value` assignments and the wrappers `sudo`, `doas`, `env`, `command`, `builtin`, `exec`, `nohup` and `time` (with their options) are skipped, and paths match by file name. Only supported in Zsh and Fish. |
 
 ### Variables
 
