@@ -5,7 +5,7 @@ use std::collections::HashMap;
 pub fn default_profiles() -> IndexMap<String, String> {
     IndexMap::from_iter([(
         "claude-code".to_string(),
-        "$claude_model$git_branch$claude_context$claude_cost".to_string(),
+        "$claude_model$git_branch$claude_context$claude_cost$claude_usage".to_string(),
     )])
 }
 
