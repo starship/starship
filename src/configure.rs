@@ -376,15 +376,21 @@ mod tests {
     }
 
     #[test]
-    fn no_panic_when_editor_unparsable() {
-        let outcome = edit_configuration(&Context::default(), Some("\"vim"));
+    fn no_panic_when_editor_unparsable() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let context = setup_config(&dir, false, StarshipConfigEnvScenario::NotSpecified)?;
+        let outcome = edit_configuration(&context, Some("\"vim"));
         assert!(outcome.is_err());
+        dir.close()
     }
 
     #[test]
-    fn no_panic_when_editor_not_found() {
-        let outcome = edit_configuration(&Context::default(), Some("this_editor_does_not_exist"));
+    fn no_panic_when_editor_not_found() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let context = setup_config(&dir, false, StarshipConfigEnvScenario::NotSpecified)?;
+        let outcome = edit_configuration(&context, Some("this_editor_does_not_exist"));
         assert!(outcome.is_err());
+        dir.close()
     }
 
     #[test]
