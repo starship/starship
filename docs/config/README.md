@@ -306,6 +306,7 @@ $helm\
 $java\
 $julia\
 $kotlin\
+$krypton\
 $lua\
 $maven\
 $mojo\
@@ -2949,6 +2950,50 @@ symbol = '🅺 '
 [kotlin]
 # Uses the Kotlin Compiler binary to get the installed version
 kotlin_binary = 'kotlinc'
+```
+
+## Krypton
+
+The `krypton` module shows the currently installed version of [Krypton](https://github.com/t3m3d/krypton).
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory, or one of its parent directories, contains a `.k` file, a `krypton.toml`, `Krypton.toml`, or `krypton.k` file
+- The `KRYPTON_ROOT` environment variable is set
+
+Detection is limited to a small fixed list of markers; there is no package manager to check, so the prompt hint reflects
+only whether this directory looks like a Krypton project.
+
+### Options
+
+| Option              | Default                                         | Description                                                               |
+| ------------------- | ----------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`            | The format for the module.                                                |
+| `version_format`    | `'v${raw}'`                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `['k']`                                         | Which extensions should trigger this module.                              |
+| `detect_files`      | `['krypton.toml', 'Krypton.toml', 'krypton.k']` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                            | Which folders should trigger this module.                                 |
+| `symbol`            | `' '` (`\u{E815}`)                             | A format string representing the symbol of Krypton.                       |
+| `style`             | `'bold yellow'`                                 | The style for the module.                                                 |
+| `disabled`          | `false`                                         | Disables the `krypton` module.                                            |
+
+### Variables
+
+| Variable | Example        | Description                          |
+| -------- | -------------- | ------------------------------------ |
+| version  | `v2.5.0-alpha` | The output of `kcc --version`        |
+| symbol   |                | Mirrors the value of option `symbol` |
+| style\*  |                | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[krypton]
+symbol = ' '
+style = 'bold purple'
 ```
 
 ## Kubernetes

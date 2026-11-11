@@ -23,6 +23,7 @@ $nodejs\
 $bun\
 $nim\
 $rust\
+$krypton\
 $scala\
 [](fg:#86BBD8 bg:#06969A)\
 $docker_context\

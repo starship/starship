@@ -60,6 +60,7 @@ pub mod jj_status;
 pub mod jobs;
 pub mod julia;
 pub mod kotlin;
+pub mod krypton;
 pub mod kubernetes;
 pub mod line_break;
 pub mod localip;
@@ -213,6 +214,7 @@ pub struct FullConfig<'a> {
     gleam: gleam::GleamConfig<'a>,
     #[serde(borrow)]
     golang: go::GoConfig<'a>,
+    krypton: krypton::KryptonConfig<'a>,
     #[serde(borrow)]
     gradle: gradle::GradleConfig<'a>,
     #[serde(borrow)]

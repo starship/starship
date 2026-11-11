@@ -114,6 +114,9 @@ format = '(via [$symbol($version )]($style))'
 [ruby]
 format = '(via [$symbol($version )]($style))'
 
+[krypton]
+format = '(via [$symbol($version )]($style))'
+
 [rust]
 format = '(via [$symbol($version )]($style))'
 

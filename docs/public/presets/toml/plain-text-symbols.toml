@@ -111,6 +111,9 @@ symbol = "gleam "
 [golang]
 symbol = "go "
 
+[krypton]
+symbol = "k "
+
 [gradle]
 symbol = "gradle "
 

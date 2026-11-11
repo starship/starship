@@ -57,6 +57,7 @@ mod jj_status;
 mod jobs;
 mod julia;
 mod kotlin;
+mod krypton;
 mod kubernetes;
 mod line_break;
 mod localip;
@@ -171,6 +172,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "git_status" => git_status::module(context),
             "gleam" => gleam::module(context),
             "golang" => golang::module(context),
+            "krypton" => krypton::module(context),
             "gradle" => gradle::module(context),
             "guix_shell" => guix_shell::module(context),
             "haskell" => haskell::module(context),
@@ -314,6 +316,7 @@ pub fn description(module: &str) -> &'static str {
         }
         "gleam" => "The currently installed version of Gleam",
         "golang" => "The currently installed version of Golang",
+        "krypton" => "The currently installed version of Krypton",
         "gradle" => "The currently installed version of Gradle",
         "guix_shell" => "The guix-shell environment",
         "haskell" => "The selected version of the Haskell toolchain",

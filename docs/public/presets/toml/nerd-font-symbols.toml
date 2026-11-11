@@ -91,6 +91,9 @@ tag_symbol = '  '
 [golang]
 symbol = " "
 
+[krypton]
+symbol = "\u{E815} "
+
 [gradle]
 symbol = " "
 
