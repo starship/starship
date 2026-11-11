@@ -92,7 +92,7 @@ tag_symbol = '  '
 symbol = " "
 
 [krypton]
-symbol = "\u{E815} "
+symbol = ' '
 
 [gradle]
 symbol = " "
