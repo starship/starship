@@ -57,6 +57,7 @@ starship_precmd() {
     # like z/autojump, which background certain jobs, do not cause spurious background jobs
     # to be displayed by starship. Also avoids forking to run `wc`, slightly improving perf.
     for job in $(jobs -p); do [[ $job ]] && ((NUM_JOBS++)); done
+    export STARSHIP_JOB_COUNT="${NUM_JOBS}"
 
     # Run the bash precmd function, if it's set. If not set, evaluates to no-op
     "${starship_precmd_user_func-:}"

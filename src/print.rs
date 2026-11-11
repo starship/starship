@@ -224,7 +224,12 @@ pub fn timings(args: Properties) {
     }
 }
 
-pub fn explain(args: Properties) {
+pub fn explain(mut args: Properties) {
+    if args.jobs == 0
+        && let Ok(val) = std::env::var("STARSHIP_JOB_COUNT")
+    {
+        args.jobs = val.parse().unwrap_or(0);
+    }
     let context = Context::new(args, Target::Main);
 
     struct ModuleInfo {
