@@ -1,16 +1,14 @@
 use clap::{ValueEnum, builder::PossibleValue};
-use nu_ansi_term::AnsiStrings;
 use rayon::prelude::*;
-use regex::Regex;
+use std::borrow::Cow;
 use std::collections::BTreeSet;
 use std::fmt::{Debug, Write as FmtWrite};
 use std::io::{self, Write};
 use std::path::PathBuf;
-use std::sync::OnceLock;
 use std::time::Duration;
 use terminal_size::terminal_size;
 use unicode_segmentation::UnicodeSegmentation;
-use unicode_width::UnicodeWidthChar;
+use unicode_width::UnicodeWidthStr;
 
 use crate::configs::PROMPT_ORDER;
 use crate::context::{Context, Properties, Shell, Target};
@@ -18,6 +16,7 @@ use crate::formatter::{StringFormatter, VariableHolder};
 use crate::module::ALL_MODULES;
 use crate::module::Module;
 use crate::modules;
+use crate::painted::Painted;
 use crate::segment::Segment;
 use crate::shadow;
 use crate::utils::wrap_colorseq_for_shell;
@@ -26,11 +25,7 @@ pub struct Grapheme<'a>(pub &'a str);
 
 impl Grapheme<'_> {
     pub fn width(&self) -> usize {
-        self.0
-            .chars()
-            .filter_map(UnicodeWidthChar::width)
-            .max()
-            .unwrap_or(0)
+        self.0.width_graphemes()
     }
 }
 
@@ -38,35 +33,96 @@ pub trait UnicodeWidthGraphemes {
     fn width_graphemes(&self) -> usize;
 }
 
-static ANSI_REGEX: OnceLock<Regex> = OnceLock::new();
-
-fn ansi_strip() -> &'static Regex {
-    ANSI_REGEX.get_or_init(|| Regex::new(r"\x1B\[[0-9;]*m").unwrap())
-}
-
 impl<T> UnicodeWidthGraphemes for T
 where
     T: AsRef<str>,
 {
+    /// Columns a terminal draws the text in, measured whole so that controls
+    /// cannot split a grapheme.
     fn width_graphemes(&self) -> usize {
-        ansi_strip()
-            .replace_all(self.as_ref(), "")
-            .into_owned()
-            .graphemes(true)
-            .map(Grapheme)
-            .map(|g| g.width())
-            .sum()
+        printable(self.as_ref()).width()
     }
+}
+
+/// What a terminal draws of `text`: all of it but its controls. Text without
+/// controls is borrowed, not copied.
+pub fn printable(text: &str) -> Cow<'_, str> {
+    let mut chunks = anstream::adapter::strip_str(text);
+    let mut printable = Cow::Borrowed(chunks.next().unwrap_or_default());
+    for chunk in chunks {
+        printable.to_mut().push_str(chunk);
+    }
+    printable
 }
 
 #[test]
 fn test_grapheme_aware_width() {
-    // UnicodeWidthStr::width would return 8
+    // A family of four, joined, is drawn as one.
     assert_eq!(2, "👩‍👩‍👦‍👦".width_graphemes());
     assert_eq!(1, "Ü".width_graphemes());
     assert_eq!(11, "normal text".width_graphemes());
     // Magenta string test
     assert_eq!(11, "\x1B[35;6mnormal text".width_graphemes());
+    // A hyperlink, a window title and a true color draw only their text.
+    assert_eq!(
+        4,
+        "\x1b]8;;https://x\x1b\\link\x1b]8;;\x1b\\\x1b]0;title\x07\x1b[38:2::1:2:3m"
+            .width_graphemes()
+    );
+}
+
+#[test]
+fn text_without_controls_is_printed_as_it_is() {
+    assert!(matches!(printable("plain"), Cow::Borrowed("plain")));
+    assert!(matches!(printable(""), Cow::Borrowed("")));
+    assert_eq!("ab", printable("a\x1b[31mb"));
+}
+
+#[test]
+fn a_grapheme_is_as_wide_as_a_terminal_draws_it() {
+    for (grapheme, width) in [
+        ("\u{2764}\u{fe0f}", 2),
+        ("1\u{fe0f}\u{20e3}", 2),
+        ("\u{1f1fa}\u{1f1f3}", 2),
+        ("\u{1f469}\u{200d}\u{1f469}\u{200d}\u{1f466}", 2),
+        ("U\u{308}", 1),
+        ("\u{ac01}", 2),
+    ] {
+        assert_eq!(width, Grapheme(grapheme).width(), "{grapheme:?}");
+        assert_eq!(
+            width * 3,
+            grapheme.repeat(3).width_graphemes(),
+            "{grapheme:?}"
+        );
+    }
+}
+
+#[test]
+fn controls_inside_a_grapheme_preserve_its_width() {
+    for plain in ["👩‍👩‍👦‍👦", "Ü", "🇺🇳", "각"] {
+        for control in [
+            "\x1b[31m",
+            "\x1b[38:2::1:2:3m",
+            "\x1b]8;;https://x\x1b\\",
+            "\x1b]0;title\x07",
+            "\x07",
+        ] {
+            let interleaved = plain
+                .chars()
+                .map(|character| format!("{character}{control}"))
+                .collect::<String>();
+            let inserted = plain.char_indices().map(|(boundary, _)| {
+                format!("{}{control}{}", &plain[..boundary], &plain[boundary..])
+            });
+            for controlled in inserted.chain([interleaved]) {
+                assert_eq!(
+                    plain.width_graphemes(),
+                    controlled.width_graphemes(),
+                    "{controlled:?}"
+                );
+            }
+        }
+    }
 }
 
 pub fn prompt(args: Properties, target: Target) {
@@ -134,23 +190,18 @@ pub fn get_prompt(context: &Context) -> String {
         }
     });
 
-    // Creates a root module and prints it.
-    let mut root_module = Module::new("Starship Root", "The root module", None);
-    root_module.set_segments(
-        formatter
-            .parse(None, Some(context))
-            .expect("Unexpected error returned in root format variables"),
-    );
+    let segments = formatter
+        .parse(None, Some(context))
+        .expect("Unexpected error returned in root format variables");
+    let painted = Painted::new(&segments, Some(context.width));
 
-    let module_strings = root_module.ansi_strings_for_width(Some(context.width));
     if config.add_newline && context.target != Target::Continuation {
         // continuation prompts normally do not include newlines, but they can
         writeln!(buf).unwrap();
     }
-    // AnsiStrings strips redundant ANSI color sequences, so apply it before modifying the ANSI
+    // Painting collapses redundant ANSI color sequences, so apply it before modifying the ANSI
     // color sequences for this specific shell
-    let shell_wrapped_output =
-        wrap_colorseq_for_shell(AnsiStrings(&module_strings).to_string(), context.shell);
+    let shell_wrapped_output = wrap_colorseq_for_shell(painted.to_string(), context.shell);
     write!(buf, "{shell_wrapped_output}").unwrap();
 
     if context.target == Target::Right {
@@ -195,9 +246,7 @@ pub fn timings(args: Properties) {
         .map(|module| ModuleTiming {
             name: String::from(module.get_name().as_str()),
             name_len: module.get_name().width_graphemes(),
-            value: nu_ansi_term::AnsiStrings(&module.ansi_strings())
-                .to_string()
-                .replace('\n', "\\n"),
+            value: module.to_string().replace('\n', "\\n"),
             duration: module.duration,
             duration_len: format_duration(&module.duration).width_graphemes(),
         })
@@ -244,7 +293,7 @@ pub fn explain(args: Properties) {
         .map(|module| {
             let value = module.get_segments().join("");
             ModuleInfo {
-                value: nu_ansi_term::AnsiStrings(&module.ansi_strings()).to_string(),
+                value: module.to_string(),
                 value_len: value.width_graphemes()
                     + format_duration(&module.duration).width_graphemes(),
                 desc: module.get_description().clone(),

@@ -5,7 +5,7 @@ use crate::segment::Segment;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("line_break");
 
-    module.set_segments(vec![Segment::LineTerm]);
+    module.set_segments(vec![Segment::LineBreak]);
 
     Some(module)
 }
