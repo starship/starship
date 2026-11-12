@@ -359,27 +359,32 @@ impl<'a> Context<'a> {
                             config,
                             ..gix::open::Permissions::default_for_level(git_sec::Trust::Reduced)
                         });
-                git_open_opts_map.full =
-                    git_open_opts_map.full.permissions(gix::open::Permissions {
-                        config,
-                        ..gix::open::Permissions::default_for_level(git_sec::Trust::Full)
-                    });
 
-                let shared_repo =
-                    match ThreadSafeRepository::discover_with_environment_overrides_opts(
+                // Avoid ownership checks; gix still validates paths and honors safe.directory.
+                let shared_repo = match if let Some(git_dir) = env::var_os("GIT_DIR") {
+                    ThreadSafeRepository::open_opts(
+                        PathBuf::from(git_dir),
+                        git_open_opts_map.reduced.open_path_as_is(true),
+                    )
+                } else {
+                    ThreadSafeRepository::discover_with_environment_overrides_opts(
                         &self.current_dir,
                         gix::discover::upwards::Options {
+                            trust: gix::discover::upwards::TrustPolicy::Assume(
+                                git_sec::Trust::Reduced,
+                            ),
                             match_ceiling_dir_or_error: false,
                             ..Default::default()
                         },
                         git_open_opts_map,
-                    ) {
-                        Ok(repo) => repo,
-                        Err(e) => {
-                            log::debug!("Failed to find git repo: {e}");
-                            return Err(e);
-                        }
-                    };
+                    )
+                } {
+                    Ok(repo) => repo,
+                    Err(e) => {
+                        log::debug!("Failed to find git repo: {e}");
+                        return Err(e);
+                    }
+                };
 
                 let repository = shared_repo.to_thread_local();
                 let trust = repository.git_dir_trust();
@@ -1014,6 +1019,203 @@ mod tests {
             assert!(Properties::try_parse_from(["starship", flag, "--jobs"]).is_err());
             assert!(Properties::try_parse_from(["starship", flag, "--not-a-number"]).is_err());
         }
+    }
+
+    #[test]
+    fn git_discovery_assumes_reduced_trust() -> io::Result<()> {
+        use crate::test::{FixtureProvider, fixture_repo_with_hash};
+        use gix::sec::Trust;
+
+        // gix reads the process environment, so exercise overrides in isolated test processes.
+        if env::var_os("STARSHIP_TEST_GIT_DISCOVERY").is_some() {
+            let mut context = default_context();
+            context.current_dir = env::current_dir()?;
+            let result = context.get_git_repo();
+            let original =
+                ThreadSafeRepository::discover_with_environment_overrides(&context.current_dir);
+            assert_eq!(result.is_err(), original.is_err());
+            assert_eq!(
+                result.is_err(),
+                env::var_os("STARSHIP_TEST_GIT_ERROR").is_some()
+            );
+            if result.is_err() {
+                return Ok(());
+            }
+            let original = original.unwrap().to_thread_local();
+            let repo = result.unwrap();
+            let full = env::var_os("STARSHIP_TEST_GIT_FULL").is_some();
+            let trust = if full { Trust::Full } else { Trust::Reduced };
+            assert_eq!(repo.trust, trust);
+            assert_eq!(repo.open().git_dir_trust(), trust);
+            assert_eq!(repo.open().head_name().ok(), original.head_name().ok());
+            assert_eq!(
+                repo.branch.is_some(),
+                env::var_os("GIT_NAMESPACE").is_none()
+            );
+            assert_eq!(repo.path, original.path());
+            assert_eq!(repo.workdir.as_deref(), original.workdir());
+            assert_eq!(repo.use_git_executable(true), Some(full));
+            let opened = repo.open();
+            assert_eq!(
+                opened
+                    .config_snapshot()
+                    .trusted_program("core.fsmonitor")
+                    .unwrap()
+                    .is_some(),
+                full,
+            );
+            if let Some(index) = env::var_os("GIT_INDEX_FILE") {
+                assert_eq!(opened.index_path(), PathBuf::from(index));
+            }
+            if let Some(shallow) = env::var_os("GIT_SHALLOW_FILE") {
+                assert_eq!(opened.shallow_file().unwrap(), PathBuf::from(shallow));
+            }
+            assert_eq!(
+                opened.namespace().is_some(),
+                env::var_os("GIT_NAMESPACE").is_some()
+            );
+            return Ok(());
+        }
+
+        let isolated = tempfile::tempdir()?;
+        for bare in [false, true] {
+            let repo_dir = fixture_repo_with_hash(
+                FixtureProvider::Git {
+                    reftable: false,
+                    bare,
+                },
+                false,
+            )?;
+            let git_dir = if bare {
+                repo_dir.path().to_owned()
+            } else {
+                repo_dir.path().join(".git")
+            };
+            let config_path = git_dir.join("config");
+            let config = read_file(&config_path)?;
+            fs::write(
+                config_path,
+                format!("{config}\n[core]\nfsmonitor = untrusted-monitor\n[safe]\ndirectory = *\n"),
+            )?;
+
+            let command = |cwd: &Path| -> io::Result<std::process::Command> {
+                let mut cmd = create_command(env::current_exe()?)?;
+                cmd.args([
+                    "--exact",
+                    "context::tests::git_discovery_assumes_reduced_trust",
+                    "--nocapture",
+                ])
+                .current_dir(cwd);
+                for (key, _) in env::vars_os() {
+                    if key.to_string_lossy().starts_with("GIT_") {
+                        cmd.env_remove(key);
+                    }
+                }
+                cmd.env("HOME", isolated.path())
+                    .env("USERPROFILE", isolated.path())
+                    .env("XDG_CONFIG_HOME", isolated.path())
+                    .env("GIT_CONFIG_NOSYSTEM", "1")
+                    .env("GIT_CONFIG_GLOBAL", isolated.path().join("missing-config"))
+                    .env("STARSHIP_TEST_GIT_DISCOVERY", "1");
+                Ok(cmd)
+            };
+            let run = |mut cmd: std::process::Command| -> io::Result<()> {
+                let output = cmd.output()?;
+                assert!(
+                    output.status.success(),
+                    "{cmd:?}\n{}\n{}",
+                    String::from_utf8_lossy(&output.stdout),
+                    String::from_utf8_lossy(&output.stderr),
+                );
+                Ok(())
+            };
+            run(command(repo_dir.path())?)?;
+            let mut cmd = command(repo_dir.path())?;
+            cmd.env("GIT_CONFIG_COUNT", "1")
+                .env("GIT_CONFIG_KEY_0", "safe.directory")
+                .env("GIT_CONFIG_VALUE_0", "*");
+            run(cmd)?;
+            for safe_dir in [OsStr::new("*"), repo_dir.path().as_os_str()] {
+                let safe_config = isolated.path().join("safe-config");
+                assert!(
+                    create_command("git")?
+                        .args([
+                            OsStr::new("config"),
+                            OsStr::new("--file"),
+                            safe_config.as_os_str(),
+                            OsStr::new("safe.directory"),
+                            safe_dir
+                        ])
+                        .output()?
+                        .status
+                        .success()
+                );
+                let mut cmd = command(repo_dir.path())?;
+                cmd.env("GIT_CONFIG_GLOBAL", safe_config)
+                    .env("STARSHIP_TEST_GIT_FULL", "1");
+                run(cmd)?;
+            }
+            for relative in [false, true] {
+                let mut cmd = command(repo_dir.path())?;
+                cmd.env(
+                    "GIT_DIR",
+                    if relative {
+                        Path::new(if bare { "." } else { ".git" })
+                    } else {
+                        &git_dir
+                    },
+                );
+                run(cmd)?;
+            }
+            let mut cmd = command(isolated.path())?;
+            cmd.env("GIT_DIR", &git_dir)
+                .env("GIT_WORK_TREE", isolated.path())
+                .env("GIT_INDEX_FILE", git_dir.join("alternate-index"))
+                .env("GIT_SHALLOW_FILE", git_dir.join("alternate-shallow"))
+                .env("GIT_NAMESPACE", "prompt");
+            run(cmd)?;
+            let mut cmd = command(repo_dir.path())?;
+            cmd.env("GIT_DIR", isolated.path())
+                .env("STARSHIP_TEST_GIT_ERROR", "1");
+            run(cmd)?;
+            if !bare {
+                let mut cmd = command(repo_dir.path())?;
+                cmd.env("GIT_DIR", repo_dir.path())
+                    .env("STARSHIP_TEST_GIT_ERROR", "1");
+                run(cmd)?;
+            }
+            let linked = tempfile::tempdir()?;
+            assert!(
+                create_command("git")?
+                    .current_dir(repo_dir.path())
+                    .args(["-c", "core.fsmonitor=", "worktree", "add", "-b", "linked"])
+                    .arg(linked.path())
+                    .output()?
+                    .status
+                    .success()
+            );
+            let gitfile = linked.path().join(".git");
+            let linked_git_dir = PathBuf::from(
+                read_file(&gitfile)?
+                    .trim()
+                    .strip_prefix("gitdir: ")
+                    .unwrap(),
+            );
+            for git_dir_override in [
+                None,
+                Some(gitfile.as_path()),
+                Some(linked_git_dir.as_path()),
+            ] {
+                let mut cmd = command(linked.path())?;
+                if let Some(git_dir_override) = git_dir_override {
+                    cmd.env("GIT_DIR", git_dir_override);
+                }
+                run(cmd)?;
+            }
+            linked.close()?;
+            repo_dir.close()?;
+        }
+        isolated.close()
     }
 
     #[test]

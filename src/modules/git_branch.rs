@@ -37,14 +37,24 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let (branch_name, remote_branch, remote_name) = if repo.uses_reftables() {
         // Use git executable for branch information
         if let Some((branch, remote_branch)) = get_branch_info_from_git(context, repo) {
+            // Remote names are display data, so include reduced-trust configuration too.
+            let remote_names = gix_repo
+                .config_snapshot()
+                .plumbing()
+                .sections_by_name("remote")
+                .map(|sections| {
+                    sections
+                        .filter_map(|section| {
+                            section.header().subsection_name().map(ToOwned::to_owned)
+                        })
+                        .collect()
+                })
+                .unwrap_or_default();
             // Successfully got branch name, parse upstream into remote_name and remote_branch
             let remote_name = remote_branch
                 .as_ref()
                 .map(|remote_branch| {
-                    find_longest_matching_remote_name(
-                        remote_branch.as_ref(),
-                        &gix_repo.remote_names(),
-                    )
+                    find_longest_matching_remote_name(remote_branch.as_ref(), &remote_names)
                 })
                 .unwrap_or_default();
             (
