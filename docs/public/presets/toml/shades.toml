@@ -1,0 +1,303 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+[](shade1)\
+$os\
+$username\
+[](bg:shade1 fg:text1)\
+$hostname\
+[](bg:shade2 fg:shade1)\
+$directory\
+[](bg:shade3 fg:shade2)\
+$git_branch\
+$git_status\
+[](fg:shade3 bg:shade4)\
+$c\
+$rust\
+$golang\
+$nodejs\
+$bun\
+$php\
+$java\
+$kotlin\
+$haskell\
+$python\
+[](fg:shade4 bg:shade5)\
+$conda\
+[](fg:shade5 bg:shade6)\
+$time\
+[ ](fg:shade6)\
+$cmd_duration\
+$line_break\
+$character"""
+
+palette = 'gray'
+
+[os]
+disabled = false
+style = "bg:shade1 fg:text1"
+
+[os.symbols]
+Windows = ""
+Ubuntu = "󰕈"
+SUSE = ""
+Raspbian = "󰐿"
+Mint = "󰣭"
+Macos = "󰀵"
+Manjaro = ""
+Linux = "󰌽"
+Gentoo = "󰣨"
+Fedora = "󰣛"
+Alpine = ""
+Amazon = ""
+Android = ""
+AOSC = ""
+Arch = "󰣇"
+Artix = "󰣇"
+CentOS = ""
+Debian = "󰣚"
+Redhat = "󱄛"
+RedHatEnterprise = "󱄛"
+
+[hostname]
+ssh_only = false
+style = "bg:shade1 fg:text1"
+format = '[$hostname]($style)'
+trim_at = '.'
+disabled = false
+
+[username]
+show_always = true
+style_user = "bg:shade1 fg:text1"
+style_root = "bg:shade1 fg:text1"
+format = '[ $user]($style)'
+
+[directory]
+style = "bg:shade2 fg:text2"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = "󰝚 "
+"Pictures" = " "
+"Developer" = "󰲋 "
+
+[git_branch]
+symbol = ""
+style = "bg:shade3"
+format = '[[ $symbol $branch ](fg:text3 bg:shade3)]($style)'
+
+[git_status]
+style = "bg:shade3"
+format = '[[($all_status$ahead_behind )](fg:text3 bg:shade3)]($style)'
+
+[nodejs]
+symbol = ""
+style = "bg:shade4"
+format = '[[ $symbol( $version) ](fg:text4 bg:shade4)]($style)'
+
+[bun]
+symbol = ""
+style = "bg:shade4"
+format = '[[ $symbol( $version) ](fg:text4 bg:shade4)]($style)'
+
+[c]
+symbol = " "
+style = "bg:shade4"
+format = '[[ $symbol( $version) ](fg:text4 bg:shade4)]($style)'
+
+[rust]
+symbol = ""
+style = "bg:shade4"
+format = '[[ $symbol( $version) ](fg:text4 bg:shade4)]($style)'
+
+[golang]
+symbol = ""
+style = "bg:shade4"
+format = '[[ $symbol( $version) ](fg:text4 bg:shade4)]($style)'
+
+[php]
+symbol = ""
+style = "bg:shade4"
+format = '[[ $symbol( $version) ](fg:text4 bg:shade4)]($style)'
+
+[java]
+symbol = " "
+style = "bg:shade4"
+format = '[[ $symbol( $version) ](fg:text4 bg:shade4)]($style)'
+
+[jj_bookmark]
+symbol = ""
+style = "bg:shade3"
+format = '[[ $symbol $bookmark(@$remote)$diverged( \\(+$overflow_count others\\)) ](fg:text3 bg:shade3)]($style)'
+
+[jj_status]
+style = "bg:shade3"
+format = '[[($all )](fg:text3 bg:shade3)]($style)'
+
+[kotlin]
+symbol = ""
+style = "bg:shade4"
+format = '[[ $symbol( $version) ](fg:text4 bg:shade4)]($style)'
+
+[haskell]
+symbol = ""
+style = "bg:shade4"
+format = '[[ $symbol( $version) ](fg:text4 bg:shade4)]($style)'
+
+[python]
+symbol = ""
+style = "bg:shade4"
+format = '[[ $symbol( $version)(\(#$virtualenv\)) ](fg:text4 bg:shade4)]($style)'
+
+[docker_context]
+symbol = ""
+style = "bg:shade5"
+format = '[[ $symbol( $context) ](fg:text5 bg:shade5)]($style)'
+
+[conda]
+symbol = "  "
+style = "fg:text5 bg:shade5"
+format = '[$symbol$environment ]($style)'
+ignore_base = false
+
+[time]
+disabled = false
+time_format = "%R"
+style = "bg:shade6"
+format = '[[  $time ](fg:text6 bg:shade6)]($style)'
+
+[line_break]
+disabled = false
+
+[character]
+disabled = false
+success_symbol = '[❯](bold fg:shade4)'
+error_symbol = '[❯](bold fg:shade1)'
+vimcmd_symbol = '[❮](bold fg:shade4)'
+vimcmd_replace_one_symbol = '[❮](bold fg:shade6)'
+vimcmd_replace_symbol = '[❮](bold fg:shade6)'
+vimcmd_visual_symbol = '[❮](bold fg:shade3)'
+
+[cmd_duration]
+show_milliseconds = true
+format = " in $duration "
+style = "bg:shade6"
+disabled = false
+show_notifications = true
+min_time_to_notify = 45000
+
+[palettes.gray]
+shade1 = "#e2e2e2"
+shade2 = "#c8c8c8"
+shade3 = "#aeaeae"
+shade4 = "#949494"
+shade5 = "#7a7a7a"
+shade6 = "#606060"
+text1 = "#1a1a1a"
+text2 = "#1a1a1a"
+text3 = "#1a1a1a"
+text4 = "#1a1a1a"
+text5 = "#1a1a1a"
+text6 = "#e5e5e5"
+
+[palettes.red]
+shade1 = "#ffb3b3"
+shade2 = "#ff8080"
+shade3 = "#e85c5c"
+shade4 = "#cc3333"
+shade5 = "#aa1f1f"
+shade6 = "#881010"
+text1 = "#1a1a1a"
+text2 = "#1a1a1a"
+text3 = "#1a1a1a"
+text4 = "#e5e5e5"
+text5 = "#e5e5e5"
+text6 = "#e5e5e5"
+
+[palettes.orange]
+shade1 = "#ffe0b3"
+shade2 = "#ffba66"
+shade3 = "#f09030"
+shade4 = "#d4701a"
+shade5 = "#ad530d"
+shade6 = "#843b04"
+text1 = "#1a1a1a"
+text2 = "#1a1a1a"
+text3 = "#1a1a1a"
+text4 = "#1a1a1a"
+text5 = "#e5e5e5"
+text6 = "#e5e5e5"
+
+[palettes.yellow]
+shade1 = "#fff0b3"
+shade2 = "#ffe066"
+shade3 = "#e6c233"
+shade4 = "#c4a01a"
+shade5 = "#9e7f0d"
+shade6 = "#7a6005"
+text1 = "#1a1a1a"
+text2 = "#1a1a1a"
+text3 = "#1a1a1a"
+text4 = "#1a1a1a"
+text5 = "#1a1a1a"
+text6 = "#e5e5e5"
+
+[palettes.green]
+shade1 = "#b3ffcc"
+shade2 = "#66e68a"
+shade3 = "#33cc66"
+shade4 = "#1faa4d"
+shade5 = "#138034"
+shade6 = "#0a5c22"
+text1 = "#1a1a1a"
+text2 = "#1a1a1a"
+text3 = "#1a1a1a"
+text4 = "#1a1a1a"
+text5 = "#e5e5e5"
+text6 = "#e5e5e5"
+
+[palettes.teal]
+shade1 = "#b3f5ee"
+shade2 = "#66e8da"
+shade3 = "#2ecfc0"
+shade4 = "#1aaa9d"
+shade5 = "#0d8076"
+shade6 = "#065a52"
+text1 = "#1a1a1a"
+text2 = "#1a1a1a"
+text3 = "#1a1a1a"
+text4 = "#1a1a1a"
+text5 = "#e5e5e5"
+text6 = "#e5e5e5"
+
+[palettes.blue]
+shade1 = "#b3d1ff"
+shade2 = "#80b3ff"
+shade3 = "#4d94ff"
+shade4 = "#2e78e6"
+shade5 = "#1a5ec4"
+shade6 = "#0d40a0"
+text1 = "#1a1a1a"
+text2 = "#1a1a1a"
+text3 = "#1a1a1a"
+text4 = "#1a1a1a"
+text5 = "#e5e5e5"
+text6 = "#e5e5e5"
+
+[palettes.purple]
+shade1 = "#e0b3ff"
+shade2 = "#cc80ff"
+shade3 = "#b34dff"
+shade4 = "#9933e6"
+shade5 = "#7326b3"
+shade6 = "#4f1a80"
+text1 = "#1a1a1a"
+text2 = "#1a1a1a"
+text3 = "#1a1a1a"
+text4 = "#e5e5e5"
+text5 = "#e5e5e5"
+text6 = "#e5e5e5"
