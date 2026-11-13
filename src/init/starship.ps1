@@ -176,7 +176,7 @@ $null = New-Module starship {
         # since every PowerShell command sets the $? variable.
         if ($global:? -ne $origDollarQuestion) {
             if ($origDollarQuestion) {
-                 # Simple command which will execute successfully and set $? = True without any other side affects.
+                 # Simple command which will execute successfully and set $? = True without any other side effects.
                 1+1
             } else {
                 # Write-Error will set $? to False.
