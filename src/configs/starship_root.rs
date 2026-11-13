@@ -1,3 +1,5 @@
+use crate::config::VecOr;
+
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -29,6 +31,8 @@ pub struct StarshipRootConfig {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub palette: Option<String>,
     pub palettes: HashMap<String, Palette>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_optional: Option<VecOr<String>>,
     #[serde(rename = "profiles")]
     #[cfg_attr(feature = "config-schema", schemars(default = "default_profiles"))]
     pub user_profiles: IndexMap<String, String>,
@@ -165,6 +169,7 @@ impl Default for StarshipRootConfig {
             follow_symlinks: true,
             palette: None,
             palettes: HashMap::default(),
+            include_optional: None,
         }
     }
 }
