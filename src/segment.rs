@@ -1,5 +1,6 @@
 use crate::{
     config::Style,
+    context::Shell,
     print::{Grapheme, UnicodeWidthGraphemes},
 };
 use nu_ansi_term::{AnsiString, Style as AnsiStyle};
@@ -169,6 +170,14 @@ impl Segment {
         match self {
             Self::Fill(fs) => fs.value.width_graphemes(),
             Self::Text(ts) => ts.value.width_graphemes(),
+            Self::LineTerm => 0,
+        }
+    }
+
+    pub fn width_graphemes_for_shell(&self, shell: Shell) -> usize {
+        match self {
+            Self::Fill(fs) => fs.value.width_graphemes_for_shell(shell),
+            Self::Text(ts) => ts.value.width_graphemes_for_shell(shell),
             Self::LineTerm => 0,
         }
     }
