@@ -210,20 +210,45 @@ This is the list of prompt-wide configuration options.
 
 ### Options
 
-| Option            | Default                        | Description                                                                                                                                                                        |
-| ----------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | [link](#default-prompt-format) | Configure the format of the prompt.                                                                                                                                                |
-| `right_format`    | `''`                           | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                 |
-| `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).                                                                                                                              |
-| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).                                                                                                                       |
-| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                                                                                                                                          |
-| `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                   |
-| `palettes`        | `{}`                           | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
-| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
+| Option             | Default                        | Description                                                                                                                                                                        |
+| ------------------ | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`           | [link](#default-prompt-format) | Configure the format of the prompt.                                                                                                                                                |
+| `right_format`     | `''`                           | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                 |
+| `scan_timeout`     | `30`                           | Timeout for starship to scan files (in milliseconds).                                                                                                                              |
+| `command_timeout`  | `500`                          | Timeout for commands executed by starship (in milliseconds).                                                                                                                       |
+| `add_newline`      | `true`                         | Inserts blank line between shell prompts.                                                                                                                                          |
+| `palette`          | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                   |
+| `palettes`         | `{}`                           | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
+| `follow_symlinks`  | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
+| `include_optional` | `[]`                           | Path or list of paths to additional config files to merge in. Missing files are skipped.                                                                                           |
 
 > [!TIP]
 > If you have symlinks to networked filesystems, consider setting
 > `follow_symlinks` to `false`.
+
+### Includes
+
+`include_optional` merges other config files into the configuration. It takes a
+path or a list of paths. Relative paths are resolved against the directory of
+the file that includes them, `~/` is expanded to the home directory.
+
+Files that don't exist are skipped, so a config can point at a file that is only
+present on some machines:
+
+```toml
+# ~/.config/starship.toml
+include_optional = '~/.cache/noctalia/starship-palette.toml'
+
+# Included values take precedence, so this palette can come from the included
+# file while the fallback below is used when that file is missing.
+palette = 'noctalia'
+
+[palettes.noctalia]
+blue = '#8caaee'
+```
+
+Included values override the values of the file that includes them, and later
+entries override earlier ones. Includes may be nested; cycles are ignored.
 
 ### Example
 
