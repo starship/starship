@@ -217,6 +217,7 @@ This is the list of prompt-wide configuration options.
 | `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).                                                                                                                              |
 | `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).                                                                                                                       |
 | `add_newline`     | `true`                         | Inserts blank line between shell prompts.                                                                                                                                          |
+| `presets`         | `[]`                           | Name or list of bundled [presets](../presets/) to use as the base config. Later presets override earlier ones, and your own settings override them all.                            |
 | `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                   |
 | `palettes`        | `{}`                           | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
 | `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
@@ -241,6 +242,9 @@ scan_timeout = 10
 
 # Disable the blank line at the start of the prompt
 add_newline = false
+
+# Start from the Nerd Font Symbols and No Runtime Versions presets (see `starship preset --list`)
+presets = ['nerd-font-symbols', 'no-runtime-versions']
 
 # Set 'foo' as custom color palette
 palette = 'foo'

@@ -78,7 +78,7 @@ pub enum Either<A, B> {
 
 /// A wrapper around `Vec<T>` that implements `ModuleConfig`, and either
 /// accepts a value of type `T` or a list of values of type `T`.
-#[derive(Clone, Default, Serialize)]
+#[derive(Clone, Debug, Default, Serialize)]
 pub struct VecOr<T>(pub Vec<T>);
 
 impl<'de, T> Deserialize<'de> for VecOr<T>
@@ -139,13 +139,38 @@ impl StarshipConfig {
         match toml::from_str(&toml_content) {
             Ok(parsed) => {
                 log::debug!("Config parsed: {parsed:?}");
-                Some(parsed)
+                Some(Self::apply_presets(parsed))
             }
             Err(error) => {
                 log::error!("Unable to parse the config file: {error}");
                 None
             }
         }
+    }
+
+    /// Use the bundled presets named by the `presets` key as the base, in order, with `config` on top
+    fn apply_presets(config: toml::Table) -> toml::Table {
+        let names: Vec<&str> = match config.get("presets") {
+            Some(Value::String(name)) => vec![name.as_str()],
+            Some(Value::Array(names)) => names.iter().filter_map(Value::as_str).collect(),
+            _ => return config,
+        };
+
+        let mut base = toml::Table::new();
+        for name in names {
+            // `get_preset_content` panics on unknown names
+            if !crate::shadow::get_preset_list().iter().any(|p| p.0 == name) {
+                log::error!("Unknown preset \"{name}\", see `starship preset --list`");
+                continue;
+            }
+
+            let preset_content = crate::shadow::get_preset_content(name);
+            let preset = toml::from_str(preset_content).expect("bundled presets are valid TOML");
+            merge_tables(&mut base, preset);
+        }
+
+        merge_tables(&mut base, config);
+        base
     }
 
     pub fn read_config_content_as_str(config_file_path: Option<&OsStr>) -> Option<String> {
@@ -246,6 +271,20 @@ impl StarshipConfig {
     /// Get the table of all the registered `env_var` modules, if any
     pub fn get_env_var_modules(&self) -> Option<&toml::value::Table> {
         self.get_config(&["env_var"])?.as_table()
+    }
+}
+
+/// Merge `overlay` into `base`, recursing into tables so `overlay` wins per key
+fn merge_tables(base: &mut toml::Table, overlay: toml::Table) {
+    for (key, value) in overlay {
+        match (base.get_mut(&key), value) {
+            (Some(Value::Table(base_table)), Value::Table(overlay_table)) => {
+                merge_tables(base_table, overlay_table);
+            }
+            (_, value) => {
+                base.insert(key, value);
+            }
+        }
     }
 }
 
@@ -1050,6 +1089,50 @@ mod tests {
             StarshipConfig::read_config_content_as_str(None),
             "if the platform doesn't have utils::home_dir(), it should return None"
         );
+    }
+
+    #[test]
+    fn apply_presets_user_config_overrides_preset() {
+        let config: toml::Table = toml::from_str(
+            r#"
+            presets = "nerd-font-symbols"
+            [aws]
+            symbol = "X"
+            "#,
+        )
+        .unwrap();
+        let merged = StarshipConfig::apply_presets(config);
+
+        assert_eq!(merged["aws"]["symbol"].as_str(), Some("X"));
+        assert_eq!(merged["azure"]["symbol"].as_str(), Some("\u{e754} "));
+        assert_eq!(merged["presets"].as_str(), Some("nerd-font-symbols"));
+    }
+
+    #[test]
+    fn apply_presets_list_later_presets_override_earlier() {
+        let config: toml::Table = toml::from_str(
+            r#"
+            presets = ["plain-text-symbols", "does-not-exist", "nerd-font-symbols", "no-runtime-versions"]
+            [aws]
+            symbol = "X"
+            "#,
+        )
+        .unwrap();
+        let merged = StarshipConfig::apply_presets(config);
+
+        assert_eq!(merged["aws"]["symbol"].as_str(), Some("X"));
+        assert_eq!(merged["azure"]["symbol"].as_str(), Some("\u{e754} "));
+        assert_eq!(
+            merged["bun"]["format"].as_str(),
+            Some("via [$symbol]($style)")
+        );
+    }
+
+    #[test]
+    fn apply_presets_unknown_name_leaves_config_unchanged() {
+        let config: toml::Table = toml::from_str(r#"presets = "does-not-exist""#).unwrap();
+
+        assert_eq!(StarshipConfig::apply_presets(config.clone()), config);
     }
 
     /// Guard against schemars `$defs` collisions by requiring distinct IDs for nested `VecOr` types.
