@@ -31,7 +31,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Install | Taplo
-        uses: taiki-e/install-action@b20dedce73af6905cdc30d6611090c9b67557c8d # v2.85.12
+        uses: taiki-e/install-action@cfdb7ed4ccc7c7dce37759eae89dc5674b469b39 # v2.90.3
         with:
           tool: taplo-cli
       - name: Presets | Validate with schema
