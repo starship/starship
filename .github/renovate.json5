@@ -15,6 +15,7 @@
         '📦 dependencies',
     ],
     minimumReleaseAge: '4 days',
+    minimumReleaseAgePackageManagerSync: true,
     semanticCommits: 'enabled',
     semanticCommitType: 'build',
     rangeStrategy: 'bump',

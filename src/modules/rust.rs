@@ -34,7 +34,7 @@ struct RustToolingEnvironmentInfo {
 }
 
 impl RustToolingEnvironmentInfo {
-    fn new() -> Self {
+    const fn new() -> Self {
         Self {
             rustup_settings: OnceLock::new(),
             env_toolchain_override: OnceLock::new(),
