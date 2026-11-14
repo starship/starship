@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.27.1](https://github.com/starship/starship/compare/v1.27.0...v1.27.1) (2026-11-14)
+
+
+### Bug Fixes
+
+* **cli:** accept negative status code arguments ([#7823](https://github.com/starship/starship/issues/7823)) ([c7d513c](https://github.com/starship/starship/commit/c7d513ce6ae6838249100f246e0d48be45a78294))
+* **git_commit:** return None on unborn HEAD when repo has no commits ([#7807](https://github.com/starship/starship/issues/7807)) ([a94a596](https://github.com/starship/starship/commit/a94a596c905ffcd55df7e2d043efd25bd1bbfc0c))
+* **jujutsu:** Support bookmark names JJ surrounds with `"` on printing ([#7824](https://github.com/starship/starship/issues/7824)) ([be4597d](https://github.com/starship/starship/commit/be4597d0bfac61091b97eabc699814af51490d8f))
+
 ## [1.27.0](https://github.com/starship/starship/compare/v1.26.0...v1.27.0) (2026-10-17)
 
 
