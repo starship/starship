@@ -261,6 +261,11 @@ format = " [aws](italic) [$symbol $profile $region]($style)"
 style = "bold blue"
 symbol = "▲ "
 
+[scaleway]
+format = " [scw](italic) [$symbol $profile $project $zone]($style)"
+style = "bold purple"
+symbol = "☁ "
+
 [buf]
 symbol = "■ "
 format = " [buf](italic) [$symbol $version $buf_version]($style)"

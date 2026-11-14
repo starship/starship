@@ -6,6 +6,9 @@ symbol = " "
 [azure]
 symbol = " "
 
+[scaleway]
+symbol = " "
+
 [battery]
 full_symbol = "󰁹 "
 charging_symbol = "󰂄 "

@@ -346,6 +346,7 @@ $aws\
 $gcloud\
 $openstack\
 $azure\
+$scaleway\
 $direnv\
 $env_var\
 $mise\
@@ -4621,6 +4622,68 @@ By default the module will be shown if any of the following conditions are met:
 
 [scala]
 symbol = '🌟 '
+```
+
+## Scaleway
+
+The `scaleway` module shows the current Scaleway configuration: active profile,
+organization, project, [zone](https://www.scaleway.com/en/docs/console/account/reference-content/regions-and-zones/), region and API URL.
+It follows the [scaleway SDK](https://github.com/scaleway/scaleway-sdk-go) config file resolution
+(`$SCW_CONFIG_PATH` then `$XDG_CONFIG_HOME/scw/config.yaml`, then `$HOME/.config/scw/config.yaml`),
+merging the active profile's settings over the root ones.
+
+The module will display when any of the following are set:
+
+- `SCW_ACCESS_KEY` and `SCW_SECRET_KEY` environment variables
+- `SCW_DEFAULT_ORGANIZATION_ID` environment variable
+- `SCW_DEFAULT_PROJECT_ID` environment variable
+- `SCW_DEFAULT_REGION` environment variable
+- `SCW_DEFAULT_ZONE` environment variable
+- `SCW_PROFILE` environment variable
+- `SCW_API_URL` environment variable
+- or when a Scaleway config file is present
+
+### Options
+
+| Option                 | Default                                                    | Description                                                       |
+| ---------------------- | ---------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`               | `"on [$symbol($profile )($project )(\($zone\) )]($style)"` | The format for the module.                                        |
+| `symbol`               | `'☁️  '`                                                   | The symbol used before displaying the Scaleway information.       |
+| `style`                | `'purple'`                                                 | The style for the module.                                         |
+| `organization_aliases` |                                                            | Table of aliases for organization IDs.                            |
+| `project_aliases`      |                                                            | Table of aliases for project IDs.                                 |
+| `region_aliases`       |                                                            | Table of aliases for regions.                                     |
+| `api_url_aliases`      |                                                            | Table of aliases for API URLs.                                    |
+| `force_display`        | `false`                                                    | If `true` displays info even if no Scaleway configuration is set. |
+| `disabled`             | `false`                                                    | Disables the `scaleway` module.                                   |
+
+### Variables
+
+| Variable     | Example                    | Description                                  |
+| ------------ | -------------------------- | -------------------------------------------- |
+| profile      | `production`               | The active Scaleway profile                  |
+| organization | `11111111-1111-1111-...`   | The organization ID, or its alias if defined |
+| project      | `11111111-1111-1111-...`   | The project ID, or its alias if defined      |
+| zone         | `fr-par-1`                 | The default zone                             |
+| region       | `fr-par`                   | The default region, or its alias if defined  |
+| api_url      | `https://api.scaleway.com` | The API URL, or its alias if defined         |
+| symbol       |                            | Mirrors the value of option `symbol`         |
+| style\*      |                            | Mirrors the value of option `style`          |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[scaleway]
+format = 'on [$symbol($profile )($project )(\[$zone\] )]($style) '
+style = 'violet bold'
+symbol = '☁️ '
+
+[scaleway.project_aliases]
+'11111111-1111-1111-1111-111111111111' = 'my-project'
 ```
 
 ## Shell

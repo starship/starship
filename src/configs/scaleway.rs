@@ -8,18 +8,21 @@ use std::collections::HashMap;
     schemars(deny_unknown_fields)
 )]
 #[serde(default)]
-/// The `scaleway` module shows the current Scaleway project, region, and profile.
+/// The `scaleway` module shows the current Scaleway configuration: active
+/// profile, organization, project, region, zone and API URL.
+///
 /// The module will display when any of the following environment variables are set:
-/// - `SCW_ACCESS_KEY`
-/// - `SCW_SECRET_KEY`
+/// - `SCW_ACCESS_KEY` and `SCW_SECRET_KEY`
+/// - `SCW_DEFAULT_ORGANIZATION_ID`
 /// - `SCW_DEFAULT_PROJECT_ID`
 /// - `SCW_DEFAULT_REGION`
 /// - `SCW_DEFAULT_ZONE`
 /// - `SCW_PROFILE`
 /// - `SCW_API_URL`
 ///
-/// When using temporary credentials or when `force_display` is set to `true`,
-/// the module will display even if no credentials are detected.
+/// or when one of these settings is present in a Scaleway config file, using
+/// the active profile's values (following the scaleway SDK precedence:
+/// `$SCW_CONFIG_PATH`, `$XDG_CONFIG_HOME`, then `$HOME/.config`).
 pub struct ScalewayConfig<'a> {
     /// The format for the module.
     pub format: &'a str,
@@ -27,22 +30,25 @@ pub struct ScalewayConfig<'a> {
     pub symbol: &'a str,
     /// The style for the module.
     pub style: &'a str,
-    /// Table of project aliases to display in addition to the project ID.
+    /// Table of aliases for organization IDs.
+    pub organization_aliases: HashMap<String, &'a str>,
+    /// Table of aliases for project IDs.
     pub project_aliases: HashMap<String, &'a str>,
-    /// Table of region aliases to display in addition to the region name.
+    /// Table of aliases for regions.
     pub region_aliases: HashMap<String, &'a str>,
-    /// Table of API URL aliases to display in addition to the API URL.
+    /// Table of aliases for API URLs.
     pub api_url_aliases: HashMap<String, &'a str>,
-    /// If true, displays info even if no Scaleway credentials are detected.
+    /// If true, displays info even if no Scaleway configuration is detected.
     pub force_display: bool,
 }
 
 impl Default for ScalewayConfig<'_> {
     fn default() -> Self {
         Self {
-            format: "on [$symbol$project($region)]($style)",
+            format: "on [$symbol($profile )($project )(\\($zone\\) )]($style)",
             symbol: "☁️ ",
-            style: "violet bold",
+            style: "purple",
+            organization_aliases: HashMap::new(),
             project_aliases: HashMap::new(),
             region_aliases: HashMap::new(),
             api_url_aliases: HashMap::new(),

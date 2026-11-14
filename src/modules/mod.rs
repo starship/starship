@@ -273,7 +273,6 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
 pub fn description(module: &str) -> &'static str {
     match module {
         "aws" => "The current AWS region and profile",
-        "scaleway" => "The current Scaleway project, region and profile",
         "azure" => "The current Azure subscription",
         "battery" => "The current charge of the device's battery and its current charging status",
         "buf" => "The currently installed version of the Buf CLI",
@@ -371,6 +370,7 @@ pub fn description(module: &str) -> &'static str {
         "ruby" => "The currently installed version of Ruby",
         "rust" => "The currently installed version of Rust",
         "scala" => "The currently installed version of Scala",
+        "scaleway" => "The current Scaleway profile, organization, project, zone and region",
         "shell" => "The currently used shell indicator",
         "shlvl" => "The current value of SHLVL",
         "singularity" => "The currently used Singularity image",
