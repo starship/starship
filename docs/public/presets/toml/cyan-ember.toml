@@ -1,0 +1,178 @@
+# Cyan Ember — connected Powerline, inspired by Gruvbox Rainbow.
+# Hide hostname with disabled = true in [hostname]; no separator edits needed.
+"$schema" = "https://starship.rs/config-schema.json"
+
+add_newline = true
+palette = "cyan_ember"
+
+format = """
+[](turquoise)\
+$os\
+$username\
+$hostname\
+[](fg:turquoise bg:brown)\
+$directory\
+[](fg:brown bg:green)\
+$git_branch\
+$git_status\
+[](fg:green bg:dark)\
+$nodejs\
+$bun\
+$python\
+$rust\
+$golang\
+$php\
+$package\
+[](fg:dark bg:brown)\
+$docker_context\
+[](fg:brown bg:background_alt)\
+$time\
+[ ](fg:background_alt)\
+$line_break\
+$character"""
+
+[palettes.cyan_ember]
+background = "#221A0F"
+turquoise = "#00AFC8"
+cyan = "#00D7FF"
+brown = "#7A5230"
+green = "#A3B95A"
+orange = "#F79A32"
+red = "#DC3958"
+foreground = "#F0E4D7"
+dark = "#352A1D"
+background_alt = "#2D2419"
+[os]
+disabled = false
+style = "bg:turquoise fg:background"
+format = "[ $symbol ]($style)"
+
+[os.symbols]
+Windows = "󰍲"
+Ubuntu = "󰕈"
+SUSE = ""
+Raspbian = "󰐿"
+Mint = "󰣭"
+Macos = "󰀵"
+Manjaro = ""
+Linux = "󰌽"
+Gentoo = "󰣨"
+Fedora = "󰣛"
+Alpine = ""
+Amazon = ""
+Android = ""
+AOSC = ""
+Arch = "󰣇"
+Artix = "󰣇"
+EndeavourOS = ""
+CentOS = ""
+Debian = "󰣚"
+Redhat = "󱄛"
+RedHatEnterprise = "󱄛"
+Pop = ""
+
+[username]
+show_always = true
+style_user = "bg:turquoise fg:background bold"
+style_root = "bg:turquoise fg:background bold underline"
+format = "[ $user ]($style)"
+
+[hostname]
+ssh_only = false
+trim_at = "."
+style = "bg:turquoise fg:background bold"
+format = "[ 󰒋 $hostname ]($style)"
+
+[directory]
+style = "fg:cyan bg:brown bold"
+format = "[  $path$read_only ]($style)"
+truncation_length = 4
+truncation_symbol = "…/"
+truncate_to_repo = false
+home_symbol = "~"
+read_only = " 󰌾"
+
+[directory.substitutions]
+"Documents" = "󰈙 Documents"
+"Downloads" = " Downloads"
+"Music" = " Music"
+"Pictures" = " Pictures"
+"Projects" = "󰲋 Projects"
+".config" = " .config"
+
+[git_branch]
+symbol = " "
+style = "fg:background bg:green bold"
+format = "[ $symbol$branch ]($style)"
+
+[git_status]
+style = "fg:background bg:green bold"
+format = "[($all_status$ahead_behind )]($style)"
+conflicted = "󰞇${count} "
+ahead = "⇡${count} "
+behind = "⇣${count} "
+diverged = "⇕⇡${ahead_count}⇣${behind_count} "
+untracked = "?${count} "
+stashed = "󰏗${count} "
+modified = "!${count} "
+staged = "+${count} "
+renamed = "»${count} "
+deleted = "✘${count} "
+
+[nodejs]
+symbol = " "
+style = "fg:green bg:dark"
+format = "[ $symbol$version ]($style)"
+
+[bun]
+symbol = " "
+style = "fg:foreground bg:dark"
+format = "[ $symbol$version ]($style)"
+
+[python]
+symbol = " "
+style = "fg:orange bg:dark"
+format = "[ $symbol$version( $virtualenv) ]($style)"
+
+[rust]
+symbol = " "
+style = "fg:orange bg:dark"
+format = "[ $symbol$version ]($style)"
+
+[golang]
+symbol = " "
+style = "fg:cyan bg:dark"
+format = "[ $symbol$version ]($style)"
+
+[php]
+symbol = " "
+style = "fg:orange bg:dark"
+format = "[ $symbol$version ]($style)"
+
+[package]
+symbol = "󰏗 "
+style = "fg:cyan bg:dark"
+format = "[ $symbol$version ]($style)"
+
+[docker_context]
+symbol = " "
+style = "fg:cyan bg:brown"
+format = "[ $symbol$context ]($style)"
+only_with_files = true
+
+[time]
+disabled = false
+time_format = "%H:%M"
+style = "fg:foreground bg:background_alt bold"
+format = "[  $time ]($style)"
+
+[character]
+success_symbol = "[❯](bold cyan)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold green)"
+vimcmd_replace_one_symbol = "[❮](bold turquoise)"
+vimcmd_replace_symbol = "[❮](bold turquoise)"
+vimcmd_visual_symbol = "[❮](bold orange)"
+
+[line_break]
+disabled = false
