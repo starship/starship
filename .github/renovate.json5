@@ -15,7 +15,8 @@
         '📦 dependencies',
     ],
     minimumReleaseAge: '4 days',
-    minimumReleaseAgePackageManagerSync: true,
+    // TODO: re-enable when hosted renovate gets updated
+    // minimumReleaseAgePackageManagerSync: true,
     semanticCommits: 'enabled',
     semanticCommitType: 'build',
     rangeStrategy: 'bump',
