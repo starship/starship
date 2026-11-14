@@ -1717,6 +1717,7 @@
         "organization_aliases": {},
         "project_aliases": {},
         "region_aliases": {},
+        "zone_aliases": {},
         "api_url_aliases": {},
         "force_display": false
       }
@@ -6644,6 +6645,14 @@
         },
         "region_aliases": {
           "description": "Table of aliases for regions.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {}
+        },
+        "zone_aliases": {
+          "description": "Table of aliases for zones.",
           "type": "object",
           "additionalProperties": {
             "type": "string"

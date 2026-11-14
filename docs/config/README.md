@@ -4653,6 +4653,7 @@ The module will display when any of the following are set:
 | `organization_aliases` |                                                            | Table of aliases for organization IDs.                            |
 | `project_aliases`      |                                                            | Table of aliases for project IDs.                                 |
 | `region_aliases`       |                                                            | Table of aliases for regions.                                     |
+| `zone_aliases`         |                                                            | Table of aliases for zones.                                       |
 | `api_url_aliases`      |                                                            | Table of aliases for API URLs.                                    |
 | `force_display`        | `false`                                                    | If `true` displays info even if no Scaleway configuration is set. |
 | `disabled`             | `false`                                                    | Disables the `scaleway` module.                                   |
@@ -4664,7 +4665,7 @@ The module will display when any of the following are set:
 | profile      | `production`               | The active Scaleway profile                  |
 | organization | `11111111-1111-1111-...`   | The organization ID, or its alias if defined |
 | project      | `11111111-1111-1111-...`   | The project ID, or its alias if defined      |
-| zone         | `fr-par-1`                 | The default zone                             |
+| zone         | `fr-par-1`                 | The default zone, or its alias if defined    |
 | region       | `fr-par`                   | The default region, or its alias if defined  |
 | api_url      | `https://api.scaleway.com` | The API URL, or its alias if defined         |
 | symbol       |                            | Mirrors the value of option `symbol`         |
@@ -4687,6 +4688,14 @@ symbol = '☁️ '
 
 [scaleway.project_aliases]
 '11111111-1111-1111-1111-111111111111' = 'my-project'
+
+[scaleway.region_aliases]
+'fr-par' = '🇫🇷'
+'nl-ams' = '🇳🇱'
+
+[scaleway.zone_aliases]
+'fr-par-1' = '🗼'
+'nl-ams-1' = '🌷'
 ```
 
 ## Shell

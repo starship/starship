@@ -36,6 +36,8 @@ pub struct ScalewayConfig<'a> {
     pub project_aliases: HashMap<String, &'a str>,
     /// Table of aliases for regions.
     pub region_aliases: HashMap<String, &'a str>,
+    /// Table of aliases for zones.
+    pub zone_aliases: HashMap<String, &'a str>,
     /// Table of aliases for API URLs.
     pub api_url_aliases: HashMap<String, &'a str>,
     /// If true, displays info even if no Scaleway configuration is detected.
@@ -51,6 +53,7 @@ impl Default for ScalewayConfig<'_> {
             organization_aliases: HashMap::new(),
             project_aliases: HashMap::new(),
             region_aliases: HashMap::new(),
+            zone_aliases: HashMap::new(),
             api_url_aliases: HashMap::new(),
             force_display: false,
         }

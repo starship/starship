@@ -145,7 +145,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    // Apply aliases so raw IDs and URLs can be shown as friendly names.
+    // Apply aliases so raw values can be shown as friendly names or emojis.
     let aliased = |value: String, aliases: &HashMap<String, &str>| {
         aliases
             .get(&value)
@@ -155,6 +155,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let organization = organization.map(|v| aliased(v, &config.organization_aliases));
     let project = project.map(|v| aliased(v, &config.project_aliases));
     let region = region.map(|v| aliased(v, &config.region_aliases));
+    let zone = zone.map(|v| aliased(v, &config.zone_aliases));
     let api_url = api_url.map(|v| aliased(v, &config.api_url_aliases));
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -243,6 +244,26 @@ mod tests {
             .env("SCW_SECRET_KEY", "dummy")
             .collect();
         let expected = Some(format!("on {}", Color::Purple.paint("☁️ (fr-par-1) ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn zone_and_region_emoji_aliases() -> io::Result<()> {
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("scaleway")?;
+        let actual = module_renderer
+            .env("SCW_DEFAULT_ZONE", "fr-par-1")
+            .env("SCW_DEFAULT_REGION", "fr-par")
+            .config(toml::toml! {
+                [scaleway]
+                format = "on [$symbol$region $zone]($style)"
+                [scaleway.region_aliases]
+                "fr-par" = "🇫🇷"
+                [scaleway.zone_aliases]
+                "fr-par-1" = "🗼"
+            })
+            .collect();
+        let expected = Some(format!("on {}", Color::Purple.paint("☁️ 🇫🇷 🗼")));
         assert_eq!(expected, actual);
         dir.close()
     }
