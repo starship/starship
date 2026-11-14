@@ -32,6 +32,7 @@ charging_symbol = "charging "
 discharging_symbol = "discharging "
 unknown_symbol = "unknown "
 empty_symbol = "empty "
+paused_symbol = "paused "
 
 [buf]
 symbol = "buf "
