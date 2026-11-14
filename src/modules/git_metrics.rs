@@ -274,7 +274,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn prevent_external_diff(mut cache: gix::diff::blob::Platform) -> gix::diff::blob::Platform {
+const fn prevent_external_diff(mut cache: gix::diff::blob::Platform) -> gix::diff::blob::Platform {
     cache.options.skip_internal_diff_if_external_is_configured = false;
     cache
 }

@@ -39,7 +39,7 @@ mod normalize {
     /// Normalise Verbatim and Non-Verbatim path prefixes into a comparable structure.
     /// NOTE: "Verbatim" paths are the rust std library's name for Windows extended-path prefixed paths.
     #[cfg(windows)]
-    fn normalize_prefix(prefix: Prefix) -> NormalizedPrefix {
+    const fn normalize_prefix(prefix: Prefix) -> NormalizedPrefix {
         match prefix {
             Prefix::Verbatim(segment) => NormalizedPrefix::Verbatim(segment),
             Prefix::VerbatimUNC(server, share) => NormalizedPrefix::UNC(server, share),
