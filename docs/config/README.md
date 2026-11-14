@@ -4629,7 +4629,7 @@ symbol = '🌟 '
 The `scaleway` module shows the current Scaleway configuration: active profile,
 organization, project, [zone](https://www.scaleway.com/en/docs/console/account/reference-content/regions-and-zones/), region and API URL.
 It follows the [scaleway SDK](https://github.com/scaleway/scaleway-sdk-go) config file resolution
-(`$SCW_CONFIG_PATH` then `$XDG_CONFIG_HOME/scw/config.yaml`, then `$HOME/.config/scw/config.yaml`),
+(`$SCW_CONFIG_PATH` then `$XDG_CONFIG_HOME/scw/config.{yaml,yml}`, then `$HOME/.config/scw/config.{yaml,yml}`),
 merging the active profile's settings over the root ones.
 
 The module will display when any of the following are set:
@@ -4641,7 +4641,7 @@ The module will display when any of the following are set:
 - `SCW_DEFAULT_ZONE` environment variable
 - `SCW_PROFILE` environment variable
 - `SCW_API_URL` environment variable
-- or when a Scaleway config file is present
+- or when a Scaleway config file contains relevant credentials or settings
 
 ### Options
 
