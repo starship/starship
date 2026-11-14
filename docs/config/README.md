@@ -4672,6 +4672,9 @@ The module will display when any of the following are set:
 
 *: This variable can only be used as a part of a style string
 
+`organization_name`, `project_name`, `default_zone`, `default_region` and
+`active_profile` are also accepted, mirroring the Scaleway config file keys.
+
 ### Example
 
 ```toml

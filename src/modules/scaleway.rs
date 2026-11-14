@@ -168,11 +168,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "organization" => organization.as_ref().map(Ok),
-                "project" => project.as_ref().map(Ok),
-                "zone" => zone.as_ref().map(Ok),
-                "region" => region.as_ref().map(Ok),
-                "profile" => profile.as_ref().map(Ok),
+                "organization" | "organization_name" => organization.as_ref().map(Ok),
+                "project" | "project_name" => project.as_ref().map(Ok),
+                "zone" | "default_zone" => zone.as_ref().map(Ok),
+                "region" | "default_region" => region.as_ref().map(Ok),
+                "profile" | "active_profile" => profile.as_ref().map(Ok),
                 "api_url" => api_url.as_ref().map(Ok),
                 _ => None,
             })
@@ -274,6 +274,33 @@ mod tests {
             "on {}",
             Color::Purple.paint("☁️ production/acme/prod/fr-par-1/paris/prod-api")
         ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn config_key_variable_names() -> io::Result<()> {
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("scaleway")?;
+        let actual = module_renderer
+            .env(
+                "SCW_DEFAULT_ORGANIZATION_ID",
+                "11111111-1111-1111-1111-111111111111",
+            )
+            .env(
+                "SCW_DEFAULT_PROJECT_ID",
+                "22222222-2222-2222-2222-222222222222",
+            )
+            .env("SCW_DEFAULT_ZONE", "fr-par-1")
+            .env("SCW_DEFAULT_REGION", "fr-par")
+            .config(toml::toml! {
+                [scaleway]
+                format = "$organization_name / $project_name | $default_zone | $default_region"
+            })
+            .collect();
+        let expected = Some(
+            "11111111-1111-1111-1111-111111111111 / 22222222-2222-2222-2222-222222222222 | fr-par-1 | fr-par"
+                .to_string(),
+        );
         assert_eq!(expected, actual);
         dir.close()
     }
