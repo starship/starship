@@ -23,6 +23,84 @@ else
     }
 fi
 
+__starship_get_terminal_position() {
+    emulate -L zsh
+    unset STARSHIP_TERMINAL_ROW STARSHIP_TERMINAL_COLUMN STARSHIP_CURSOR_REPORT_PENDING
+    if [[ ${STARSHIP_CURSOR_QUERY_DISABLED:-0} == 1 || ! -o interactive || ! -t 0 || ! -t 1 || -z ${TTY:-} || ${TERM:-dumb} == dumb ]]; then
+        return 0
+    fi
+    zmodload zsh/datetime zsh/system 2>/dev/null || return 0
+
+    local tty_state fd response='' chunk MATCH MBEGIN MEND
+    local -a match mbegin mend
+    local -F timeout=1 deadline
+    tty_state=$(command stty -g < "$TTY" 2>/dev/null) || return 0
+    exec {fd}<> "$TTY" || return 0
+    {
+        command stty -echo -icanon min 1 time 0 <&$fd || return 0
+        deadline=$(( EPOCHREALTIME + timeout ))
+        # Private CPR replies cannot be mistaken for modified function keys.
+        print -rn -- $'\e[?6n' >&$fd
+        STARSHIP_CURSOR_REPORT_PENDING=1
+        while (( EPOCHREALTIME < deadline )); do
+            sysread -i $fd -t "$(( deadline - EPOCHREALTIME ))" chunk || break
+            response+=$chunk
+            if [[ $response =~ $'\e\\[\\?([1-9][0-9]*);([1-9][0-9]*)(;[1-9][0-9]*)?R' ]]; then
+                STARSHIP_TERMINAL_ROW=$match[1]
+                STARSHIP_TERMINAL_COLUMN=$match[2]
+                unset STARSHIP_CURSOR_REPORT_PENDING
+                STARSHIP_PENDING_INPUT+="${response%%"$MATCH"*}${response#*"$MATCH"}"
+                return 0
+            fi
+        done
+
+        STARSHIP_PENDING_INPUT+=$response
+        STARSHIP_CURSOR_QUERY_DISABLED=1
+    } always {
+        command stty "$tty_state" <&$fd
+        exec {fd}<&-
+    }
+    return 0
+}
+
+starship_zle-line-init() {
+    if [[ -n ${STARSHIP_PENDING_INPUT:-} ]]; then
+        zle -U -- "$STARSHIP_PENDING_INPUT"
+        unset STARSHIP_PENDING_INPUT
+    fi
+}
+
+starship_zle-clear-screen() {
+    unset STARSHIP_CURSOR_REPORT_PENDING
+    STARSHIP_TERMINAL_ROW=1
+    STARSHIP_TERMINAL_COLUMN=1
+    zle starship-clear-screen-original "$@"
+}
+
+starship_zle-cursor-report() {
+    emulate -L zsh
+    local response=$KEYS char report
+    local -F timeout=1 deadline
+    deadline=$(( EPOCHREALTIME + timeout ))
+    while (( EPOCHREALTIME < deadline )); do
+        IFS= read -r -s -k 1 -t "$(( deadline - EPOCHREALTIME ))" char || break
+        response+=$char
+        [[ $char == R ]] && break
+    done
+    if [[ $response == $'\e[?'<1->\;<1->(\;<1->|)R ]]; then
+        STARSHIP_CURSOR_QUERY_DISABLED=0
+        if [[ ${STARSHIP_CURSOR_REPORT_PENDING:-0} == 1 ]]; then
+            report=${${response#$'\e[?'}%R}
+            STARSHIP_TERMINAL_ROW=${report%%;*}
+            STARSHIP_TERMINAL_COLUMN=${${report#*;}%%;*}
+            zle reset-prompt
+        fi
+        unset STARSHIP_CURSOR_REPORT_PENDING
+    else
+        zle -U -- "${response#$'\e[?'}"
+    fi
+}
+
 # The two functions below follow the naming convention `prompt_<theme>_<hook>`
 # for compatibility with Zsh's prompt system. See
 # https://github.com/zsh-users/zsh/blob/2876c25a28b8052d6683027998cc118fc9b50157/Functions/Prompts/promptinit#L155
@@ -51,6 +129,7 @@ prompt_starship_precmd() {
     # Use length of jobstates array as number of jobs. Expansion fails inside
     # quotes so we set it here and then use the value later on.
     STARSHIP_JOBS_COUNT="${#jobstates[*]}"
+    __starship_get_terminal_position
 }
 
 # Runs after the user submits the command line, but before it is executed and
@@ -63,6 +142,22 @@ prompt_starship_preexec() {
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd prompt_starship_precmd
 add-zsh-hook preexec prompt_starship_preexec
+
+if [[ -z ${widgets[starship-clear-screen-original]:-} ]]; then
+    zle -A clear-screen starship-clear-screen-original
+    zle -N clear-screen starship_zle-clear-screen
+fi
+
+autoload -Uz add-zle-hook-widget
+add-zle-hook-widget line-init starship_zle-line-init
+
+zle -N starship_zle-cursor-report
+for _starship_keymap in emacs viins vicmd; do
+    if [[ $(bindkey -M "$_starship_keymap" $'\e[?') == *' undefined-key' ]]; then
+        bindkey -M "$_starship_keymap" $'\e[?' starship_zle-cursor-report
+    fi
+done
+unset _starship_keymap
 
 # Set up a function to redraw the prompt if the user switches vi modes
 starship_zle-keymap-select() {
@@ -97,6 +192,6 @@ VIRTUAL_ENV_DISABLE_PROMPT=1
 
 setopt promptsubst
 
-PROMPT='$('::STARSHIP::' prompt --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
+PROMPT='$('::STARSHIP::' prompt ${STARSHIP_TERMINAL_ROW:+--terminal-row=$STARSHIP_TERMINAL_ROW} ${STARSHIP_TERMINAL_COLUMN:+--terminal-column=$STARSHIP_TERMINAL_COLUMN} --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
 RPROMPT='$('::STARSHIP::' prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
 PROMPT2="$(::STARSHIP:: prompt --continuation)"

@@ -143,7 +143,16 @@ pub fn get_prompt(context: &Context) -> String {
     );
 
     let module_strings = root_module.ansi_strings_for_width(Some(context.width));
-    if config.add_newline && context.target != Target::Continuation {
+    if config.add_newline
+        && context.target != Target::Continuation
+        && context.properties.terminal_row.is_none_or(|row| {
+            row.get() > 1
+                || context
+                    .properties
+                    .terminal_column
+                    .is_some_and(|column| column.get() > 1)
+        })
+    {
         // continuation prompts normally do not include newlines, but they can
         writeln!(buf).unwrap();
     }
@@ -586,6 +595,33 @@ mod test {
         let expected = String::from(">\n>");
         let actual = get_prompt(&context);
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn newline_depends_on_terminal_position() {
+        for (row, column, add_newline, expected) in [
+            (None, None, true, "\n>\n>"),
+            (Some(1), None, true, ">\n>"),
+            (Some(1), Some(1), true, ">\n>"),
+            (Some(1), Some(2), true, "\n>\n>"),
+            (Some(2), Some(1), true, "\n>\n>"),
+            (None, None, false, ">\n>"),
+            (Some(1), Some(1), false, ">\n>"),
+            (Some(2), Some(1), false, ">\n>"),
+        ] {
+            let mut context = default_context().set_config(toml::toml! {
+                add_newline = add_newline
+                format = ">\n>"
+            });
+            context.properties.terminal_row = row.and_then(std::num::NonZeroUsize::new);
+            context.properties.terminal_column = column.and_then(std::num::NonZeroUsize::new);
+
+            assert_eq!(
+                get_prompt(&context),
+                expected,
+                "row={row:?}, column={column:?}, add_newline={add_newline}"
+            );
+        }
     }
 
     #[test]
