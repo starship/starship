@@ -1,0 +1,2 @@
+[registry]
+global-min-publish-age = "4 days"
