@@ -87,6 +87,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("scaleway");
     let config: ScalewayConfig = ScalewayConfig::try_load(module.config);
 
+    if config.disabled {
+        return None;
+    }
+
     const SCW_ACCESS_KEY: &str = "SCW_ACCESS_KEY";
     const SCW_SECRET_KEY: &str = "SCW_SECRET_KEY";
     const SCW_DEFAULT_ORGANIZATION_ID: &str = "SCW_DEFAULT_ORGANIZATION_ID";
@@ -207,6 +211,20 @@ mod tests {
     fn no_configuration() -> io::Result<()> {
         let (module_renderer, dir) = ModuleRenderer::new_with_home("scaleway")?;
         assert_eq!(None, module_renderer.collect());
+        dir.close()
+    }
+
+    #[test]
+    fn disabled() -> io::Result<()> {
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("scaleway")?;
+        let actual = module_renderer
+            .env("SCW_PROFILE", "production")
+            .config(toml::toml! {
+                [scaleway]
+                disabled = true
+            })
+            .collect();
+        assert_eq!(None, actual);
         dir.close()
     }
 

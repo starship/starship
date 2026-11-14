@@ -86,6 +86,7 @@ $aws\
 $gcloud\
 $openstack\
 $azure\
+$scaleway\
 $crystal\
 $custom\
 $status\

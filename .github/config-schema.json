@@ -1719,7 +1719,8 @@
         "region_aliases": {},
         "zone_aliases": {},
         "api_url_aliases": {},
-        "force_display": false
+        "force_display": false,
+        "disabled": false
       }
     },
     "shell": {
@@ -6669,6 +6670,11 @@
         },
         "force_display": {
           "description": "If true, displays info even if no Scaleway configuration is detected.",
+          "type": "boolean",
+          "default": false
+        },
+        "disabled": {
+          "description": "Disables the `scaleway` module.",
           "type": "boolean",
           "default": false
         }

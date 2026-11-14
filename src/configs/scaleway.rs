@@ -42,6 +42,8 @@ pub struct ScalewayConfig<'a> {
     pub api_url_aliases: HashMap<String, &'a str>,
     /// If true, displays info even if no Scaleway configuration is detected.
     pub force_display: bool,
+    /// Disables the `scaleway` module.
+    pub disabled: bool,
 }
 
 impl Default for ScalewayConfig<'_> {
@@ -56,6 +58,7 @@ impl Default for ScalewayConfig<'_> {
             zone_aliases: HashMap::new(),
             api_url_aliases: HashMap::new(),
             force_display: false,
+            disabled: false,
         }
     }
 }
