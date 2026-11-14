@@ -14,7 +14,7 @@ use std::sync::Once;
 use tempfile::TempDir;
 
 mod jj_tester;
-pub(crate) use jj_tester::JJTester;
+pub use jj_tester::JJTester;
 
 static FIXTURE_DIR: LazyLock<PathBuf> =
     LazyLock::new(|| PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("src/test/fixtures/"));

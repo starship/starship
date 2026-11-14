@@ -67,7 +67,7 @@ struct Environment {
     starship_config: String,
 }
 
-fn get_pkg_branch_tag() -> &'static str {
+const fn get_pkg_branch_tag() -> &'static str {
     #[allow(clippy::const_is_empty)]
     if !shadow::TAG.is_empty() {
         return shadow::TAG;

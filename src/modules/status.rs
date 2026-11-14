@@ -196,7 +196,7 @@ fn format_exit_code<'a>(
     })
 }
 
-fn status_common_meaning(ex: ExitCode) -> Option<&'static str> {
+const fn status_common_meaning(ex: ExitCode) -> Option<&'static str> {
     // Over 128 are Signal exit code
     if ex > 128 {
         return None;
@@ -229,7 +229,7 @@ fn status_common_meaning(ex: ExitCode) -> Option<&'static str> {
     }
 }
 
-fn status_to_signal(ex: ExitCode) -> Option<SignalNumber> {
+const fn status_to_signal(ex: ExitCode) -> Option<SignalNumber> {
     if ex < 129 {
         return None;
     }
@@ -237,7 +237,7 @@ fn status_to_signal(ex: ExitCode) -> Option<SignalNumber> {
     Some(sn as u32)
 }
 
-fn status_signal_name(signal: SignalNumber) -> Option<&'static str> {
+const fn status_signal_name(signal: SignalNumber) -> Option<&'static str> {
     match signal {
         1 => Some("HUP"),     // 128 + 1
         2 => Some("INT"),     // 128 + 2
