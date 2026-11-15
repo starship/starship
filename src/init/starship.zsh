@@ -28,7 +28,9 @@ __starship_get_terminal_position() {
     setopt extendedglob
     local LC_ALL=C
     unset STARSHIP_TERMINAL_ROW STARSHIP_TERMINAL_COLUMN
-    if [[ ${STARSHIP_CURSOR_QUERY_DISABLED:-0} == 1 || ! -o interactive || ! -o zle || ! -t 0 || ! -t 1 || ${TERM:-dumb} == dumb ]]; then
+    # tmux and GNU screen never answer the private query, so asking would only cost the timeout.
+    if [[ ${STARSHIP_CURSOR_QUERY_DISABLED:-0} == 1 || ! -o interactive || ! -o zle || ! -t 0 || ! -t 1 ||
+          ${TERM:-dumb} == (dumb|screen*|tmux*) || -n ${TMUX:-}${STY:-} ]]; then
         return 0
     fi
     (( ${KEYS_QUEUED_COUNT:-0} == 0 )) || return 0
@@ -37,18 +39,9 @@ __starship_get_terminal_position() {
     local -a line_init_hooks bindings match mbegin mend
     local keymap
     local -i offset
+    # Consumed input is replayed on line-init, so that hook has to run before any other.
     zstyle -a zle-line-init widgets line_init_hooks
-    [[ ${widgets[zle-line-init]:-} == user:azhw:zle-line-init && -n ${(M)line_init_hooks:#<->:starship_zle-line-init} ]] || return 0
-    bindings=("${(@f)$(for keymap in main viins vicmd; do bindkey -M $keymap $'\e'; bindkey -M $keymap $'\e['; bindkey -M $keymap $'\e[?'; bindkey -M $keymap -p $'\e[?'; done)}")
-    (( ${#bindings} == 9 )) || return 0
-    for keymap offset in main 0 viins 3 vicmd 6; do
-        [[ $bindings[offset+1] == *' '(undefined-key|vi-cmd-mode|beep) && $bindings[offset+2] == *' undefined-key' ]] || return 0
-        case $bindings[offset+3] in
-            *' starship_zle-cursor-report') ;;
-            *' undefined-key') bindkey -M $keymap $'\e[?' starship_zle-cursor-report ;;
-            *) return 0 ;;
-        esac
-    done
+    [[ ${widgets[zle-line-init]:-} == user:azhw:zle-line-init && ${${(@on)line_init_hooks}[1]} == <->:starship_zle-line-init ]] || return 0
     zmodload zsh/datetime 2>/dev/null || return 0
 
     local response='' char query=$'\e[?6n'
@@ -57,6 +50,16 @@ __starship_get_terminal_position() {
     if read -rs -k 1 -t 0 char; then
         response=$char
     else
+        bindings=("${(@f)$(for keymap in main viins vicmd; do bindkey -M $keymap $'\e'; bindkey -M $keymap $'\e['; bindkey -M $keymap $'\e[?'; bindkey -M $keymap -p $'\e[?'; done)}")
+        (( ${#bindings} == 9 )) || return 0
+        for keymap offset in main 0 viins 3 vicmd 6; do
+            [[ $bindings[offset+1] == *' '(undefined-key|vi-cmd-mode|beep) && $bindings[offset+2] == *' undefined-key' ]] || return 0
+            case $bindings[offset+3] in
+                *' starship_zle-cursor-report') ;;
+                *' undefined-key') bindkey -M $keymap $'\e[?' starship_zle-cursor-report ;;
+                *) return 0 ;;
+            esac
+        done
         deadline=$(( EPOCHREALTIME + initial_timeout ))
         # Private CPR replies cannot be mistaken for modified function keys.
         # read turns echo off before it prints its prompt, so the reply is never echoed.
@@ -173,7 +176,13 @@ prompt_starship_precmd() {
     # quotes so we set it here and then use the value later on.
     STARSHIP_JOBS_COUNT="${#jobstates[*]}"
     unset STARSHIP_RPROMPT
-    STARSHIP_NEEDS_CURSOR_POSITION=1
+    if [[ -n ${STARSHIP_PENDING_INPUT:-} ]]; then
+        # The line-init hook never replayed this input, so stop consuming any.
+        unset STARSHIP_PENDING_INPUT
+        STARSHIP_CURSOR_QUERY_DISABLED=1
+    fi
+    # A widget that reruns the precmd hooks redraws the prompt on the same line.
+    zle || STARSHIP_NEEDS_CURSOR_POSITION=1
 }
 
 # Runs after the user submits the command line, but before it is executed and
@@ -192,8 +201,17 @@ if [[ -z ${widgets[.starship-clear-screen-original]:-} ]]; then
     zle -N clear-screen starship_zle-clear-screen
 fi
 
+# List Starship's hook first: an earlier hook that fails or waits for input
+# would keep it from replaying what the cursor query consumed.
 autoload -Uz add-zle-hook-widget
-add-zle-hook-widget line-init starship_zle-line-init
+add-zle-hook-widget line-init starship_zle-line-init 2>/dev/null
+() {
+    emulate -L zsh
+    local -a hooks
+    zstyle -a zle-line-init widgets hooks
+    [[ -z ${(M)hooks:#<->:starship_zle-line-init} ]] ||
+        zstyle zle-line-init widgets 0:starship_zle-line-init "${(@)hooks:#<->:starship_zle-line-init}"
+}
 
 zle -N starship_zle-cursor-report
 
