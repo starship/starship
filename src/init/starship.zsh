@@ -33,7 +33,8 @@ __starship_get_terminal_position() {
           ${TERM:-dumb} == (dumb|screen*|tmux*) || -n ${TMUX:-}${STY:-} ]]; then
         return 0
     fi
-    (( ${KEYS_QUEUED_COUNT:-0} == 0 )) || return 0
+    # Inside ZLE the line-init hook has already run, so consumed input could not be replayed.
+    zle && return 0
     [[ ${STARSHIP_ADD_NEWLINE:-0} == 1 ]] || return 0
 
     local -a line_init_hooks bindings match mbegin mend
@@ -47,9 +48,8 @@ __starship_get_terminal_position() {
     local response='' char query=$'\e[?6n'
     local -F initial_timeout=0.2 report_timeout=1 deadline
     # Queued input belongs to ZLE: hand its first byte back instead of querying.
-    if read -rs -k 1 -t 0 char; then
-        response=$char
-    else
+    # The binding check takes long enough for a key to arrive, so look again after it.
+    if ! read -rs -k 1 -t 0 char; then
         bindings=("${(@f)$(for keymap in main viins vicmd; do bindkey -M $keymap $'\e'; bindkey -M $keymap $'\e['; bindkey -M $keymap $'\e[?'; bindkey -M $keymap -p $'\e[?'; done)}")
         (( ${#bindings} == 9 )) || return 0
         for keymap offset in main 0 viins 3 vicmd 6; do
@@ -60,6 +60,10 @@ __starship_get_terminal_position() {
                 *) return 0 ;;
             esac
         done
+    fi
+    if [[ -n $char ]] || read -rs -k 1 -t 0 char; then
+        response=$char
+    else
         deadline=$(( EPOCHREALTIME + initial_timeout ))
         # Private CPR replies cannot be mistaken for modified function keys.
         # read turns echo off before it prints its prompt, so the reply is never echoed.
