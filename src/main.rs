@@ -124,8 +124,6 @@ enum Commands {
     },
     /// Prints the full starship prompt
     Prompt {
-        #[clap(long, hide = true, conflicts_with_all = ["right", "profile", "continuation"])]
-        zsh: bool,
         /// Print the right prompt (instead of the standard left prompt)
         #[clap(long)]
         right: bool,
@@ -227,7 +225,6 @@ fn main() {
             }
         }
         Commands::Prompt {
-            zsh,
             properties,
             right,
             profile,
@@ -239,11 +236,7 @@ fn main() {
                 (_, _, true) => Target::Continuation,
                 (_, _, _) => Target::Main,
             };
-            if zsh {
-                print::zsh_prompt(properties);
-            } else {
-                print::prompt(properties, target);
-            }
+            print::prompt(properties, target);
         }
         Commands::Module {
             name,

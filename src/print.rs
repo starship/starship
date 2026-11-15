@@ -77,15 +77,6 @@ pub fn prompt(args: Properties, target: Target) {
     write!(handle, "{}", get_prompt(&context)).unwrap();
 }
 
-pub fn zsh_prompt(args: Properties) {
-    let context = Context::new(args, Target::Main);
-    print!(
-        "{}{}",
-        u8::from(context.root_config.add_newline),
-        get_prompt(&context)
-    )
-}
-
 pub fn prompt_with_claude_code(args: Properties, target: Target) {
     let claude_data = serde_json::from_reader(io::stdin())
         .inspect_err(|e| log::error!("Failed to read Claude Code JSON from stdin: {e}"))
