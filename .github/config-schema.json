@@ -1833,6 +1833,7 @@
         "disabled": false,
         "detect_extensions": [
           "tf",
+          "tofu",
           "tfplan",
           "tfstate"
         ],
@@ -6994,6 +6995,7 @@
           },
           "default": [
             "tf",
+            "tofu",
             "tfplan",
             "tfstate"
           ]

@@ -110,6 +110,12 @@ impl<'a> ModuleRenderer<'a> {
         self.context.root_dir.path()
     }
 
+    /// Set Starship's command trust policy after configuring the repository path.
+    pub fn git_trust(mut self, trust: gix::sec::Trust) -> Self {
+        self.context.set_git_trust(trust);
+        self
+    }
+
     pub fn logical_path<T>(mut self, path: T) -> Self
     where
         T: Into<PathBuf>,

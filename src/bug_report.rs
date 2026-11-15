@@ -2,7 +2,6 @@ use crate::shadow;
 use crate::utils::{self, DEFAULT_COMMAND_TIMEOUT_MS, exec_cmd};
 use nu_ansi_term::Style;
 
-use std::fs;
 use std::path::PathBuf;
 use std::time::Duration;
 
@@ -173,7 +172,7 @@ fn get_shell_info() -> ShellInfo {
     let version = get_shell_version(&shell);
 
     let config = get_config_path(&shell)
-        .and_then(|config_path| fs::read_to_string(config_path).ok())
+        .and_then(|config_path| utils::read_file(config_path).ok())
         .map_or_else(
             || UNKNOWN_CONFIG.to_string(),
             |config| config.trim().to_string(),
@@ -245,7 +244,7 @@ fn get_starship_config() -> String {
                 home_dir
             })
         })
-        .and_then(|config_path| fs::read_to_string(config_path).ok())
+        .and_then(|config_path| utils::read_file(config_path).ok())
         .unwrap_or_else(|| UNKNOWN_CONFIG.to_string())
 }
 

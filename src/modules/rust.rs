@@ -1158,17 +1158,16 @@ mod tests {
     #[test]
     fn test_compiler_spawn_failure_keeps_selected_toolchain_path() {
         let directory = Path::new("toolchains/stable-aarch64-unknown-linux-gnu");
-        let outcome =
-            run_rustc_from_toolchain("stable", Some(directory), None, |program, args| {
-                assert_eq!(
-                    program,
-                    directory
-                        .join("bin")
-                        .join(format!("rustc{}", std::env::consts::EXE_SUFFIX))
-                );
-                assert_eq!(args, ["--version"]);
-                Err(io::Error::from(io::ErrorKind::InvalidData))
-            });
+        let outcome = run_rustc_from_toolchain("stable", Some(directory), None, |program, args| {
+            assert_eq!(
+                program,
+                directory
+                    .join("bin")
+                    .join(format!("rustc{}", std::env::consts::EXE_SUFFIX))
+            );
+            assert_eq!(args, ["--version"]);
+            Err(io::Error::from(io::ErrorKind::InvalidData))
+        });
         assert_eq!(outcome, VersionDetection::Unavailable);
     }
 
