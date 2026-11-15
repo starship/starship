@@ -34,27 +34,87 @@ __starship_get_terminal_position() {
     (( ${KEYS_QUEUED_COUNT:-0} == 0 )) || return 0
     [[ ${STARSHIP_ADD_NEWLINE:-0} == 1 ]] || return 0
 
-    local -a line_init_hooks bindings match mbegin mend
+    local -a line_init_hooks bindings match mbegin mend reply
     zstyle -a zle-line-init widgets line_init_hooks
-    [[ ${widgets[zle-line-init]:-} == user:azhw:zle-line-init && ${#line_init_hooks} == 1 && $line_init_hooks[1] == *:starship_zle-line-init ]] || return 0
-    bindings=("${(@f)$(bindkey -M main $'\e'; bindkey -M main $'\e['; bindkey -M main $'\e[?'; bindkey -M main -p $'\e[?')}")
-    [[ ${#bindings} == 3 && $bindings[2] == *' undefined-key' && $bindings[3] == *' starship_zle-cursor-report' ]] || return 0
-    [[ $bindings[1] == *' undefined-key' || ( $bindings[1] == *' vi-cmd-mode' && ${widgets[vi-cmd-mode]:-} == builtin ) ]] || return 0
+    [[ ${widgets[zle-line-init]:-} == user:azhw:zle-line-init ]] || return 0
+    local hook keymap hook_function hook_body
+    local -i has_input_hook=0
+    for hook in "${line_init_hooks[@]}"; do
+        hook=${hook#<->:}
+        hook_function=${widgets[$hook]#user:}
+        if [[ $hook_function == starship_zle-line-init ]]; then
+            has_input_hook=1
+            continue
+        fi
+        if [[ $hook_function == _ghostty_zle_line_init ]]; then
+            local expected_hook original_call=''
+            hook_body=${functions[$hook_function]}
+            if [[ -n ${widgets[._ghostty_orig_zle-line-init]:-} ]]; then
+                if [[ ${widgets[._ghostty_orig_zle-line-init]} == user:* ]]; then
+                    original_call=$'\n builtin zle ._ghostty_orig_zle-line-init -N -- "$@"'
+                else
+                    original_call=$'\n builtin zle ._ghostty_orig_zle-line-init -Nw -- "$@"'
+                fi
+            fi
+            __starship_ghostty_reference() {
+                if [[ $PS1 != *$'%{\e]133;A'* ]]; then
+                    builtin print -nu $_ghostty_fd '\e]133;P;k=i\a\e]133;B\a'
+                fi
+                builtin local steady=0
+                [[ "$GHOSTTY_SHELL_FEATURES" == *"cursor:steady"* ]] && steady=1
+                case ${KEYMAP-} in
+                    vicmd|visual) builtin print -nu "$_ghostty_fd" "\e[$(( 1 + steady )) q" ;;
+                    *) builtin print -nu "$_ghostty_fd" "\e[$(( 5 + steady )) q" ;;
+                esac
+            }
+            functions[__starship_ghostty_reference]+=$original_call
+            expected_hook=${functions[__starship_ghostty_reference]}
+            unfunction __starship_ghostty_reference
+            if [[ $hook_body != "$expected_hook" ]]; then
+                __starship_ghostty_reference() {
+                    if [[ $PS1 != *$'%{\e]133;A'* ]]; then
+                        builtin print -nu $_ghostty_fd '\e]133;P;k=i\a\e]133;B\a'
+                    fi
+                    builtin true
+                }
+                functions[__starship_ghostty_reference]+=$original_call
+                expected_hook=${functions[__starship_ghostty_reference]}
+                unfunction __starship_ghostty_reference
+                [[ $hook_body == "$expected_hook" ]] || return 0
+            fi
+            hook_function=${widgets[._ghostty_orig_zle-line-init]:-}
+            [[ -n $hook_function ]] || continue
+            hook_function=${hook_function#user:}
+            [[ $hook_function != starship_zle-line-init ]] || continue
+        fi
+        hook_body=${functions[$hook_function]:-}
+        hook_body=${${hook_body##[[:space:]]#}%%[[:space:]]#}
+        [[ $hook_body == ':' || $hook_body == 'return 0' || $hook_body == 'echoti smkx' ]] || return 0
+    done
+    (( has_input_hook )) || return 0
+    for keymap in main viins vicmd; do
+        bindings=("${(@f)$(bindkey -M "$keymap" $'\e'; bindkey -M "$keymap" $'\e['; bindkey -M "$keymap" $'\e[?'; bindkey -M "$keymap" -p $'\e[?')}")
+        [[ ${#bindings} == 3 && $bindings[2] == *' undefined-key' && $bindings[3] == *' starship_zle-cursor-report' ]] || return 0
+        [[ $bindings[1] == *' undefined-key' ||
+           ( $bindings[1] == *' vi-cmd-mode' && ${widgets[vi-cmd-mode]:-} == builtin ) ||
+           ( $bindings[1] == *' beep' && ${widgets[beep]:-} == builtin ) ]] || return 0
+    done
     zmodload zsh/datetime zsh/system zsh/zselect 2>/dev/null || return 0
 
     local tty_state fd response='' char
-    local -F timeout=0.2 deadline
+    local -F initial_timeout=0.2 report_timeout=1 deadline
     tty_state=$(command stty -g < "$TTY" 2>/dev/null) || return 0
     exec {fd}<> "$TTY" || return 0
     {
         command stty -echo -icanon min 1 time 0 <&$fd || return 0
         zselect -t 0 -r $fd && return 0
-        deadline=$(( EPOCHREALTIME + timeout ))
+        deadline=$(( EPOCHREALTIME + initial_timeout ))
         # Private CPR replies cannot be mistaken for modified function keys.
         print -rn -- $'\e[?6n' >&$fd
         while (( EPOCHREALTIME < deadline )); do
             sysread -i $fd -s 1 -t "$(( deadline - EPOCHREALTIME ))" char || break
             response+=$char
+            [[ $response != $'\e[?'[1-9] ]] || deadline=$(( EPOCHREALTIME + report_timeout ))
             if [[ $response == (#b)$'\e[?'(<1->)\;(<1->)(\;<1->|)R ]]; then
                 STARSHIP_TERMINAL_ROW=$match[1]
                 STARSHIP_TERMINAL_COLUMN=$match[2]
@@ -66,8 +126,11 @@ __starship_get_terminal_position() {
             esac
         done
 
-        STARSHIP_PENDING_INPUT+=$response
-        STARSHIP_CURSOR_QUERY_DISABLED=1
+        if [[ $response != $'\e[?'[1-9][0-9\;]# ]]; then
+            [[ ${response%?} != $'\e[?'[1-9][0-9\;]# ]] || response=$char
+            STARSHIP_PENDING_INPUT+=$response
+        fi
+        [[ -n $response ]] || STARSHIP_CURSOR_QUERY_DISABLED=1
     } always {
         command stty "$tty_state" <&$fd
         exec {fd}<&-
@@ -76,13 +139,15 @@ __starship_get_terminal_position() {
 }
 
 __starship_update_prompt() {
+    emulate -L zsh -o extendedglob
     STARSHIP_PROMPT='' STARSHIP_ADD_NEWLINE=0
     unset STARSHIP_RPROMPT
     local output
     output=$(::STARSHIP:: prompt --zsh --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT") || return 0
     STARSHIP_ADD_NEWLINE=${output[1]}
     STARSHIP_PROMPT=${output[2,-1]}
-    if [[ $PROMPT == "$STARSHIP_PROMPT_TEMPLATE" && $RPROMPT == "$STARSHIP_RPROMPT_TEMPLATE" ]]; then
+    if [[ $PROMPT == (%\{[^%\$\`]#%\})#"$STARSHIP_PROMPT_TEMPLATE"(%\{[^%\$\`]#%\})# &&
+          $RPROMPT == (%\{[^%\$\`]#%\})#"$STARSHIP_RPROMPT_TEMPLATE"(%\{[^%\$\`]#%\})# ]]; then
         STARSHIP_RPROMPT=$(::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")
         if [[ ${STARSHIP_NEEDS_CURSOR_POSITION:-0} == 1 ]]; then
             unset STARSHIP_NEEDS_CURSOR_POSITION
@@ -115,14 +180,16 @@ starship_zle-cursor-report() {
     setopt extendedglob
     local LC_ALL=C
     local response=$KEYS char
-    local -F timeout=0.2 deadline
-    deadline=$(( EPOCHREALTIME + timeout ))
+    local -F initial_timeout=0.2 report_timeout=1 deadline
+    deadline=$(( EPOCHREALTIME + initial_timeout ))
     while (( EPOCHREALTIME < deadline )); do
         IFS= read -r -s -k 1 -t "$(( deadline - EPOCHREALTIME ))" char || break
         response+=$char
+        [[ $response != $'\e[?'[1-9] ]] || deadline=$(( EPOCHREALTIME + report_timeout ))
         [[ $char == [@-~] || $char != [[:print:]] ]] && break
     done
-    if [[ $response != $'\e[?'<1->\;<1->(\;<1->|)R ]]; then
+    if [[ $response != $'\e[?'<1->\;<1->(\;<1->|)R && $response != $'\e[?'[1-9][0-9\;]# ]]; then
+        [[ ${response%?} != $'\e[?'[1-9][0-9\;]# ]] || response=$char
         zle -U -- "${response#$'\e[?'}"
     fi
 }
@@ -221,7 +288,7 @@ setopt promptsubst
 
 functions -M __starship_update_prompt 0 0
 # Run in the parent after precmd hooks; redraws reuse the captured cursor position.
-STARSHIP_PROMPT_TEMPLATE='${${:-$(( __starship_update_prompt() ))}:#0}${STARSHIP_PROMPT}'
+STARSHIP_PROMPT_TEMPLATE='${${:-$(( __starship_update_prompt() ))}:#*}${STARSHIP_PROMPT}'
 STARSHIP_RPROMPT_TEMPLATE='${STARSHIP_RPROMPT-$('::STARSHIP::' prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")}'
 PROMPT=$STARSHIP_PROMPT_TEMPLATE
 RPROMPT=$STARSHIP_RPROMPT_TEMPLATE

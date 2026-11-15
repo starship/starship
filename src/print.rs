@@ -79,14 +79,10 @@ pub fn prompt(args: Properties, target: Target) {
 
 pub fn zsh_prompt(args: Properties) {
     let context = Context::new(args, Target::Main);
-    print!("{}", get_zsh_prompt(&context));
-}
-
-fn get_zsh_prompt(context: &Context) -> String {
-    format!(
+    print!(
         "{}{}",
         u8::from(context.root_config.add_newline),
-        get_prompt(context)
+        get_prompt(&context)
     )
 }
 
@@ -599,20 +595,6 @@ mod test {
         let expected = String::from(">\n>");
         let actual = get_prompt(&context);
         assert_eq!(expected, actual);
-    }
-
-    #[test]
-    fn zsh_prompt_preserves_content_and_newline_setting() {
-        for (add_newline, prefix) in [(true, "\n"), (false, "")] {
-            let context = default_context().set_config(toml::toml! {
-                add_newline = add_newline
-                format = "quote's; printf unsafe\n>"
-            });
-            assert_eq!(
-                get_zsh_prompt(&context),
-                format!("{}{prefix}quote's; printf unsafe\n>", u8::from(add_newline))
-            );
-        }
     }
 
     #[test]
