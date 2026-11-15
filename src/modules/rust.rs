@@ -104,7 +104,7 @@ impl RustToolchainInfo {
             .get_or_init(|| match rustc_source(context) {
                 RustcSource::Missing => CompilerInfo::new(VersionDetection::Unavailable, None),
                 RustcSource::RustupProxy(rustup) => {
-                    self.rustup_compiler_info(context, Some(&rustup))
+                    self.rustup_compiler_info(context, rustup.as_deref())
                 }
                 RustcSource::Toolchain {
                     program,
@@ -422,7 +422,7 @@ fn rust_command(
 #[derive(Debug, PartialEq, Eq)]
 enum RustcSource {
     Missing,
-    RustupProxy(PathBuf),
+    RustupProxy(Option<PathBuf>),
     Toolchain {
         program: PathBuf,
         directory: PathBuf,
@@ -440,12 +440,15 @@ fn rustc_source(context: &Context) -> RustcSource {
         return RustcSource::Missing;
     };
     let resolved = dunce::canonicalize(&rustc_path).unwrap_or_else(|_| rustc_path.clone());
-    if let Ok(compiler) = same_file::Handle::from_path(&rustc_path)
-        && let Some(rustup) = rustup_candidates(context, &rustc_path, &resolved).find(|rustup| {
+    if let Ok(compiler) = same_file::Handle::from_path(&rustc_path) {
+        if let Some(rustup) = rustup_candidates(context, &rustc_path, &resolved).find(|rustup| {
             same_file::Handle::from_path(rustup).is_ok_and(|manager| manager == compiler)
-        })
-    {
-        return RustcSource::RustupProxy(rustup);
+        }) {
+            return RustcSource::RustupProxy(Some(rustup));
+        }
+        if is_multicall_rustup_proxy(&rustc_path, &resolved, &compiler) {
+            return RustcSource::RustupProxy(find_rustup(context, &rustc_path));
+        }
     }
 
     if let Ok(home) = rustup_home(context) {
@@ -498,6 +501,37 @@ fn rustup_candidates(
 fn find_rustup(context: &Context, compiler: &Path) -> Option<PathBuf> {
     let resolved = dunce::canonicalize(compiler).unwrap_or_else(|_| compiler.to_path_buf());
     rustup_candidates(context, compiler, &resolved).find(|path| path.is_file())
+}
+
+/// Package-managed (`no-self-update`) or un-relinked `rustup-init` installations
+/// hardlink `rustc`, `cargo`, and `rustdoc` to the same multicall proxy binary in
+/// `$CARGO_HOME/bin` without a matching `rustup` inode alongside them.
+fn is_multicall_rustup_proxy(
+    compiler_path: &Path,
+    resolved: &Path,
+    compiler: &same_file::Handle,
+) -> bool {
+    let suffix = std::env::consts::EXE_SUFFIX;
+    let is_rust_binary = resolved
+        .file_name()
+        .and_then(|name| name.to_str())
+        .is_some_and(|name| {
+            ["rustc", "rustup", "rustup-init"]
+                .iter()
+                .any(|stem| name == format!("{stem}{suffix}"))
+        });
+    if !is_rust_binary {
+        return false;
+    }
+    ["cargo", "rustdoc"].iter().any(|tool| {
+        let name = format!("{tool}{suffix}");
+        [
+            resolved.with_file_name(&name),
+            compiler_path.with_file_name(&name),
+        ]
+        .iter()
+        .any(|sibling| same_file::Handle::from_path(sibling).is_ok_and(|h| &h == compiler))
+    })
 }
 
 /// Runs an installed toolchain's compiler, or uses `rustup run` when no
@@ -2187,8 +2221,18 @@ LLVM version: 9.0
         fs::remove_file(&rustup)?;
         fs::hard_link(&rustc, &rustup)?;
         assert!(
-            matches!(rustc_source(&context), RustcSource::RustupProxy(_)),
+            matches!(rustc_source(&context), RustcSource::RustupProxy(Some(_))),
             "should detect a rustup proxy in the mocked PATH"
+        );
+        fs::remove_file(&rustup)?;
+        let cargo = dir
+            .path()
+            .join(format!("cargo{}", std::env::consts::EXE_SUFFIX));
+        fs::hard_link(&rustc, &cargo)?;
+        assert_eq!(
+            rustc_source(&context),
+            RustcSource::RustupProxy(None),
+            "should detect a multicall rustup-init proxy hardlinked to cargo even without rustup"
         );
         dir.close()
     }
