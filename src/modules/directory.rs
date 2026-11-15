@@ -59,7 +59,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
     let dir_string = if config.truncate_to_repo {
         repo.and_then(|r| r.workdir.as_ref())
-            .filter(|&root| root != &home_dir)
+            .filter(|root| !root.normalised_equals(&home_dir))
             .and_then(|root| contract_repo_path(display_dir, root))
     } else {
         None
@@ -114,24 +114,39 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // highlight and the logical path actually lies under it. A symlink pointing
     // sideways into a subdirectory of the repo resolves into it without sharing
     // a prefix with it, so it has no contracted form and is not split.
+    // When the home directory is itself the repo root, the root is shown as the
+    // home symbol, because that is how the displayed path begins.
     let split_at_repo_root = repo
         .and_then(|r| r.workdir.as_ref())
         .filter(|_| config.repo_root_style.is_some())
-        .and_then(|repo_root| contract_repo_path(display_dir, repo_root))
+        .and_then(|repo_root| {
+            if repo_root.normalised_equals(&home_dir)
+                && display_dir.normalised_starts_with(&home_dir)
+            {
+                Some(contract_path(display_dir, &home_dir, config.home_symbol).into_owned())
+            } else {
+                contract_repo_path(display_dir, repo_root)
+            }
+        })
         .and_then(|contracted_path| {
             let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
             let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
             let num_segments_after_root = after_repo_root.split('/').count();
 
-            (config.truncation_length == 0
+            if !(config.truncation_length == 0
                 || ((num_segments_after_root - 1) as i64) < config.truncation_length)
-                .then(|| {
-                    [
-                        before_root_dir(&dir_string, &contracted_path).to_string(),
-                        repo_path_vec[0].to_string(),
-                        after_repo_root,
-                    ]
-                })
+            {
+                return None;
+            }
+            // If the repo path is not in the displayed path (for example, home is
+            // inside the repo, or a substitution changed it), splitting would
+            // show parts of the path twice.
+            let before_root = before_root_dir(&dir_string, &contracted_path)?;
+            Some([
+                before_root.to_string(),
+                repo_path_vec[0].to_string(),
+                after_repo_root,
+            ])
         });
 
     let path_vec = match split_at_repo_root {
@@ -380,11 +395,8 @@ fn convert_path_sep(path: &str) -> String {
 }
 
 /// Get the path before the git repo root by trim the most right repo name.
-fn before_root_dir<'a>(path: &'a str, repo: &'a str) -> &'a str {
-    match path.rsplit_once(repo) {
-        Some((a, _)) => a,
-        None => path,
-    }
+fn before_root_dir<'a>(path: &'a str, repo: &'a str) -> Option<&'a str> {
+    path.rsplit_once(repo).map(|(before, _)| before)
 }
 
 #[cfg(test)]
@@ -641,6 +653,114 @@ mod tests {
                 .env("HOME", tmp_dir.path().to_str().unwrap())
                 .collect();
             let expected = Some(format!("{} ", Color::Cyan.bold().paint("~/src/fuel-gauge")));
+
+            assert_eq!(expected, actual);
+
+            tmp_dir.close()
+        }
+
+        #[test]
+        fn git_repo_is_home_directory_highlight_repo_root() -> io::Result<()> {
+            let tmp_dir = TempDir::new()?;
+            let dir = tmp_dir.path().join("src/fuel-gauge");
+            fs::create_dir_all(&dir)?;
+            init_repo(tmp_dir.path())?;
+
+            let actual = ModuleRenderer::new("directory")
+                .config(toml::toml! {
+                    [directory]
+                    repo_root_style = "bold red"
+                })
+                .path(dir)
+                .env("HOME", tmp_dir.path().to_str().unwrap())
+                .collect();
+            let expected = Some(format!(
+                "{}{}~{} ",
+                Color::Cyan.bold().prefix(),
+                Color::Red.prefix(),
+                Color::Cyan.paint("/src/fuel-gauge")
+            ));
+
+            assert_eq!(expected, actual);
+
+            tmp_dir.close()
+        }
+
+        #[test]
+        fn git_repo_is_home_directory_at_home() -> io::Result<()> {
+            let tmp_dir = TempDir::new()?;
+            init_repo(tmp_dir.path())?;
+
+            let actual = ModuleRenderer::new("directory")
+                .config(toml::toml! {
+                    [directory]
+                    repo_root_style = "bold red"
+                })
+                .path(tmp_dir.path())
+                .env("HOME", tmp_dir.path().to_str().unwrap())
+                .collect();
+            let expected = Some(format!(
+                "{}{}~{} ",
+                Color::Cyan.bold().prefix(),
+                Color::Red.prefix(),
+                Color::Cyan.paint("")
+            ));
+
+            assert_eq!(expected, actual);
+
+            tmp_dir.close()
+        }
+
+        #[test]
+        fn git_repo_contains_home_directory() -> io::Result<()> {
+            let tmp_dir = TempDir::new()?;
+            init_repo(tmp_dir.path())?;
+            let home = tmp_dir.path().join("home");
+            let dir = home.join("src");
+            fs::create_dir_all(&dir)?;
+
+            let actual = ModuleRenderer::new("directory")
+                .config(toml::toml! {
+                    [directory]
+                    truncate_to_repo = false
+                    repo_root_style = "bold red"
+                })
+                .path(dir)
+                .env("HOME", home.to_str().unwrap())
+                .collect();
+            let expected = Some(format!("{} ", Color::Cyan.bold().paint("~/src")));
+
+            assert_eq!(expected, actual);
+
+            tmp_dir.close()
+        }
+
+        #[test]
+        fn git_repo_is_home_directory_reached_through_symlink() -> io::Result<()> {
+            let tmp_dir = TempDir::new()?;
+            let home = tmp_dir.path().join("real/home");
+            fs::create_dir_all(home.join("src"))?;
+            init_repo(&home)?;
+            symlink(tmp_dir.path().join("real"), tmp_dir.path().join("link"))?;
+            let logical_dir = tmp_dir.path().join("link/home/src");
+
+            let actual = ModuleRenderer::new("directory")
+                .config(toml::toml! {
+                    [directory]
+                    truncation_length = 0
+                    repo_root_style = "bold red"
+                })
+                .path(home.join("src"))
+                .logical_path(&logical_dir)
+                .env("HOME", home.to_str().unwrap())
+                .collect();
+            let expected = Some(format!(
+                "{}{}{}home{} ",
+                Color::Cyan.bold().prefix(),
+                tmp_dir.path().join("link/").to_str().unwrap(),
+                Color::Red.prefix(),
+                Color::Cyan.paint("/src")
+            ));
 
             assert_eq!(expected, actual);
 
@@ -1864,6 +1984,31 @@ mod tests {
         tmp_dir.close()
     }
 
+    #[test]
+    fn highlight_git_root_dir_substitution_changes_repo_path() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("repo");
+        let dir = repo_dir.join("src/sub");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                repo_root_style = "bold red"
+                [directory.substitutions]
+                "src" = "S"
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint(convert_path_sep("repo/S/sub"))
+        ));
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
     // sample for invalid unicode from https://doc.rust-lang.org/std/ffi/struct.OsStr.html#method.to_string_lossy
     #[cfg(any(unix, target_os = "redox"))]
     fn invalid_path() -> PathBuf {
@@ -1933,17 +2078,14 @@ mod tests {
     fn parent_and_sub_git_repo_are_in_same_name_folder() {
         assert_eq!(
             before_root_dir("~/user/gitrepo/gitrepo", "gitrepo"),
-            "~/user/gitrepo/".to_string()
+            Some("~/user/gitrepo/")
         );
 
         assert_eq!(
             before_root_dir("~/user/gitrepo-diff/gitrepo", "gitrepo"),
-            "~/user/gitrepo-diff/".to_string()
+            Some("~/user/gitrepo-diff/")
         );
 
-        assert_eq!(
-            before_root_dir("~/user/gitrepo-diff/gitrepo", "aaa"),
-            "~/user/gitrepo-diff/gitrepo".to_string()
-        );
+        assert_eq!(before_root_dir("~/user/gitrepo-diff/gitrepo", "aaa"), None);
     }
 }
