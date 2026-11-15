@@ -159,12 +159,12 @@ impl<'a> Module<'a> {
     }
 
     /// Get module's name
-    pub fn get_name(&self) -> &String {
+    pub const fn get_name(&self) -> &String {
         &self.name
     }
 
     /// Get module's description
-    pub fn get_description(&self) -> &String {
+    pub const fn get_description(&self) -> &String {
         &self.description
     }
 

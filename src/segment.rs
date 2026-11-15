@@ -57,35 +57,6 @@ impl FillSegment {
     }
 }
 
-#[cfg(test)]
-mod fill_seg_tests {
-    use super::FillSegment;
-    use nu_ansi_term::Color;
-
-    #[test]
-    fn ansi_string_width() {
-        let width: usize = 10;
-        let style = Color::Blue.bold();
-
-        let inputs = vec![
-            (".", ".........."),
-            (".:", ".:.:.:.:.:"),
-            ("-:-", "-:--:--:--"),
-            ("🟦", "🟦🟦🟦🟦🟦"),
-            ("🟢🔵🟡", "🟢🔵🟡🟢🔵"),
-        ];
-
-        for (text, expected) in &inputs {
-            let f = FillSegment {
-                value: String::from(*text),
-                style: Some(style.into()),
-            };
-            let actual = f.ansi_string(Some(width), None);
-            assert_eq!(style.paint(*expected), actual);
-        }
-    }
-}
-
 /// A segment is a styled text chunk ready for printing.
 #[derive(Clone)]
 pub enum Segment {
@@ -132,7 +103,7 @@ impl Segment {
         }
     }
 
-    pub fn set_style_if_empty(&mut self, style: Option<Style>) {
+    pub const fn set_style_if_empty(&mut self, style: Option<Style>) {
         match self {
             Self::Fill(fs) => {
                 if fs.style.is_none() {
@@ -176,3 +147,32 @@ impl Segment {
 
 const LINE_TERMINATOR: char = '\n';
 const LINE_TERMINATOR_STRING: &str = "\n";
+
+#[cfg(test)]
+mod fill_seg_tests {
+    use super::FillSegment;
+    use nu_ansi_term::Color;
+
+    #[test]
+    fn ansi_string_width() {
+        let width: usize = 10;
+        let style = Color::Blue.bold();
+
+        let inputs = vec![
+            (".", ".........."),
+            (".:", ".:.:.:.:.:"),
+            ("-:-", "-:--:--:--"),
+            ("🟦", "🟦🟦🟦🟦🟦"),
+            ("🟢🔵🟡", "🟢🔵🟡🟢🔵"),
+        ];
+
+        for (text, expected) in &inputs {
+            let f = FillSegment {
+                value: String::from(*text),
+                style: Some(style.into()),
+            };
+            let actual = f.ansi_string(Some(width), None);
+            assert_eq!(style.paint(*expected), actual);
+        }
+    }
+}

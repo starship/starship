@@ -94,7 +94,7 @@ pub fn get_prompt(context: &Context) -> String {
     let config = &context.root_config;
     let mut buf = String::new();
 
-    match std::env::var_os("TERM") {
+    match context.get_env("TERM") {
         Some(term) if term == "dumb" => {
             log::error!("Under a 'dumb' terminal (TERM=dumb).");
             buf.push_str("Starship disabled due to TERM=dumb > ");
@@ -561,6 +561,17 @@ mod test {
     use crate::utils;
 
     const NULL_DEVICE: &str = if cfg!(windows) { "NUL" } else { "/dev/null" };
+
+    #[test]
+    fn a_dumb_terminal_gets_the_standard_fallback() {
+        let mut context = default_context();
+        context.env.insert("TERM", "dumb".to_owned());
+
+        assert_eq!(
+            "Starship disabled due to TERM=dumb > ",
+            get_prompt(&context)
+        );
+    }
 
     #[test]
     fn main_prompt() {

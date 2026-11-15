@@ -52,12 +52,12 @@ gix = { version = "0.90.0", default-features = false, features = [
 guess_host_triple = "0.1.5"
 home = "0.5.12"
 indexmap = { version = "2.14.2", features = ["serde"] }
-jiff = { version = "0.2.39", features = ["serde"] }
+jiff = { version = "0.2.42", features = ["serde"] }
 jsonc-parser = { version = "0.34.0", features = ["serde"] }
 log = { version = "0.4.35", features = ["std"] }
 # notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
 # see: https://github.com/NixOS/nixpkgs/issues/160876
-notify-rust = { version = "4.18.2", optional = true }
+notify-rust = { version = "4.19.0", optional = true }
 nu-ansi-term = "0.50.3"
 open = "5.4.5"
 # update os module config and tests when upgrading os_info
@@ -65,8 +65,8 @@ os_info = { version = "3.15.0", features = ["schemars"] }
 # for efficient shared state between `git_status` and `git_metrics`, allowing parallel printing. This is for poison-free locks.
 parking_lot = "0.13.0"
 path-slash = "0.2.1"
-pest = "2.9.5"
-pest_derive = "2.9.5"
+pest = "2.9.6"
+pest_derive = "2.9.6"
 process_control = "5.2.0"
 quick-xml = "0.42.0"
 rand = "0.10.3"
@@ -81,13 +81,13 @@ shadow-rs = { version = "2.0.0", default-features = false, features = ["build"] 
 shell-words = "1.1.1"
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
-starship-battery = { version = "0.11.1", optional = true }
+starship-battery = { version = "0.12.0", optional = true }
 strsim = "0.11.1"
 systemstat = "=0.2.7"
 tempfile = "3.27.0"
 terminal_size = "0.4.4"
-toml = { version = "1.1.8", features = ["preserve_order"] }
-toml_edit = "0.25.17"
+toml = { version = "1.2.1", features = ["preserve_order"] }
+toml_edit = "0.25.19"
 unicode-segmentation = "1.13.3"
 unicode-width = "0.2.3"
 urlencoding = "2.1.3"

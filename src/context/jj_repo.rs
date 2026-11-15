@@ -78,7 +78,7 @@ impl JJRepo {
             .map(Self::with_root)
     }
 
-    pub fn with_root(root: PathBuf) -> Self {
+    pub const fn with_root(root: PathBuf) -> Self {
         // NOTE: we don't compute anything by default, gating everything behind `OnceLock`s
         //       to avoid running `jj` commands for nothing if the information is never asked for.
         Self {
@@ -268,22 +268,22 @@ impl CurrentChange {
     const IMMUTABLE: u8 = 1 << 3;
 
     /// True if any mutable change up to the current one is conflicted
-    pub fn conflicted(&self) -> bool {
+    pub const fn conflicted(&self) -> bool {
         self.status.flags & Self::CONFLICTED == Self::CONFLICTED
     }
 
     /// True if the current change has a non-empty description
-    pub fn description(&self) -> bool {
+    pub const fn description(&self) -> bool {
         self.status.flags & Self::DESCRIPTION == Self::DESCRIPTION
     }
 
     /// True if the current change is hidden
-    pub fn hidden(&self) -> bool {
+    pub const fn hidden(&self) -> bool {
         self.status.flags & Self::HIDDEN == Self::HIDDEN
     }
 
     /// True if the current change is immutable
-    pub fn immutable(&self) -> bool {
+    pub const fn immutable(&self) -> bool {
         self.status.flags & Self::IMMUTABLE == Self::IMMUTABLE
     }
 }

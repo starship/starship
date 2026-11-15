@@ -9,6 +9,7 @@ charging_symbol = "⇡ "
 discharging_symbol = "⇣ "
 unknown_symbol = "❓ "
 empty_symbol = "❗ "
+paused_symbol = "⏸ "
 
 [erlang]
 symbol = "ⓔ "
