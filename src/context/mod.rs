@@ -18,7 +18,7 @@ use std::ffi::{OsStr, OsString};
 use std::fmt::Debug;
 use std::fs;
 use std::marker::PhantomData;
-use std::num::{NonZeroUsize, ParseIntError};
+use std::num::ParseIntError;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use std::string::String;
@@ -931,12 +931,6 @@ pub struct Properties {
     /// The width of the current interactive terminal.
     #[clap(short = 'w', long, default_value_t=default_width(), value_parser=parse_width)]
     terminal_width: usize,
-    /// The one-based cursor row in the current interactive terminal.
-    #[clap(long)]
-    pub terminal_row: Option<NonZeroUsize>,
-    /// The one-based cursor column in the current interactive terminal.
-    #[clap(long)]
-    pub terminal_column: Option<NonZeroUsize>,
     /// The path that the prompt should render for.
     #[clap(short, long)]
     path: Option<PathBuf>,
@@ -964,8 +958,6 @@ impl Default for Properties {
             status_code: None,
             pipestatus: None,
             terminal_width: default_width(),
-            terminal_row: None,
-            terminal_column: None,
             path: None,
             logical_path: None,
             cmd_duration: None,
@@ -1002,30 +994,6 @@ mod tests {
     use super::*;
     use crate::test::default_context;
     use std::io;
-
-    #[test]
-    fn properties_accept_terminal_position() {
-        let properties = Properties::try_parse_from([
-            "starship",
-            "--terminal-row",
-            "1",
-            "--terminal-column",
-            "2",
-        ])
-        .unwrap();
-        assert_eq!(properties.terminal_row.unwrap().get(), 1);
-        assert_eq!(properties.terminal_column.unwrap().get(), 2);
-        for flag in ["--terminal-row", "--terminal-column"] {
-            assert!(Properties::try_parse_from(["starship", flag, "0"]).is_err());
-            assert!(Properties::try_parse_from(["starship", flag, "invalid"]).is_err());
-        }
-        assert!(
-            Properties::try_parse_from(["starship"])
-                .unwrap()
-                .terminal_row
-                .is_none()
-        );
-    }
 
     #[test]
     fn properties_accept_signed_and_unsigned_status_codes() {

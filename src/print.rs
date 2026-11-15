@@ -77,6 +77,19 @@ pub fn prompt(args: Properties, target: Target) {
     write!(handle, "{}", get_prompt(&context)).unwrap();
 }
 
+pub fn zsh_prompt(args: Properties) {
+    let context = Context::new(args, Target::Main);
+    print!("{}", get_zsh_prompt(&context));
+}
+
+fn get_zsh_prompt(context: &Context) -> String {
+    format!(
+        "{}{}",
+        u8::from(context.root_config.add_newline),
+        get_prompt(context)
+    )
+}
+
 pub fn prompt_with_claude_code(args: Properties, target: Target) {
     let claude_data = serde_json::from_reader(io::stdin())
         .inspect_err(|e| log::error!("Failed to read Claude Code JSON from stdin: {e}"))
@@ -143,16 +156,7 @@ pub fn get_prompt(context: &Context) -> String {
     );
 
     let module_strings = root_module.ansi_strings_for_width(Some(context.width));
-    if config.add_newline
-        && context.target != Target::Continuation
-        && context.properties.terminal_row.is_none_or(|row| {
-            row.get() > 1
-                || context
-                    .properties
-                    .terminal_column
-                    .is_some_and(|column| column.get() > 1)
-        })
-    {
+    if config.add_newline && context.target != Target::Continuation {
         // continuation prompts normally do not include newlines, but they can
         writeln!(buf).unwrap();
     }
@@ -598,28 +602,15 @@ mod test {
     }
 
     #[test]
-    fn newline_depends_on_terminal_position() {
-        for (row, column, add_newline, expected) in [
-            (None, None, true, "\n>\n>"),
-            (Some(1), None, true, ">\n>"),
-            (Some(1), Some(1), true, ">\n>"),
-            (Some(1), Some(2), true, "\n>\n>"),
-            (Some(2), Some(1), true, "\n>\n>"),
-            (None, None, false, ">\n>"),
-            (Some(1), Some(1), false, ">\n>"),
-            (Some(2), Some(1), false, ">\n>"),
-        ] {
-            let mut context = default_context().set_config(toml::toml! {
+    fn zsh_prompt_preserves_content_and_newline_setting() {
+        for (add_newline, prefix) in [(true, "\n"), (false, "")] {
+            let context = default_context().set_config(toml::toml! {
                 add_newline = add_newline
-                format = ">\n>"
+                format = "quote's; printf unsafe\n>"
             });
-            context.properties.terminal_row = row.and_then(std::num::NonZeroUsize::new);
-            context.properties.terminal_column = column.and_then(std::num::NonZeroUsize::new);
-
             assert_eq!(
-                get_prompt(&context),
-                expected,
-                "row={row:?}, column={column:?}, add_newline={add_newline}"
+                get_zsh_prompt(&context),
+                format!("{}{prefix}quote's; printf unsafe\n>", u8::from(add_newline))
             );
         }
     }
