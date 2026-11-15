@@ -28,91 +28,40 @@ __starship_get_terminal_position() {
     setopt extendedglob
     local LC_ALL=C
     unset STARSHIP_TERMINAL_ROW STARSHIP_TERMINAL_COLUMN
-    if [[ ${STARSHIP_CURSOR_QUERY_DISABLED:-0} == 1 || ! -o interactive || ! -t 0 || ! -t 1 || -z ${TTY:-} || ${TERM:-dumb} == dumb ]]; then
+    if [[ ${STARSHIP_CURSOR_QUERY_DISABLED:-0} == 1 || ! -o interactive || ! -o zle || ! -t 0 || ! -t 1 || ${TERM:-dumb} == dumb ]]; then
         return 0
     fi
     (( ${KEYS_QUEUED_COUNT:-0} == 0 )) || return 0
     [[ ${STARSHIP_ADD_NEWLINE:-0} == 1 ]] || return 0
 
-    local -a line_init_hooks bindings match mbegin mend reply
+    local -a line_init_hooks bindings match mbegin mend
+    local keymap
+    local -i offset
     zstyle -a zle-line-init widgets line_init_hooks
-    [[ ${widgets[zle-line-init]:-} == user:azhw:zle-line-init ]] || return 0
-    local hook keymap hook_function hook_body
-    local -i has_input_hook=0
-    for hook in "${line_init_hooks[@]}"; do
-        hook=${hook#<->:}
-        hook_function=${widgets[$hook]#user:}
-        if [[ $hook_function == starship_zle-line-init ]]; then
-            has_input_hook=1
-            continue
-        fi
-        if [[ $hook_function == _ghostty_zle_line_init ]]; then
-            local expected_hook original_call=''
-            hook_body=${functions[$hook_function]}
-            if [[ -n ${widgets[._ghostty_orig_zle-line-init]:-} ]]; then
-                if [[ ${widgets[._ghostty_orig_zle-line-init]} == user:* ]]; then
-                    original_call=$'\n builtin zle ._ghostty_orig_zle-line-init -N -- "$@"'
-                else
-                    original_call=$'\n builtin zle ._ghostty_orig_zle-line-init -Nw -- "$@"'
-                fi
-            fi
-            __starship_ghostty_reference() {
-                if [[ $PS1 != *$'%{\e]133;A'* ]]; then
-                    builtin print -nu $_ghostty_fd '\e]133;P;k=i\a\e]133;B\a'
-                fi
-                builtin local steady=0
-                [[ "$GHOSTTY_SHELL_FEATURES" == *"cursor:steady"* ]] && steady=1
-                case ${KEYMAP-} in
-                    vicmd|visual) builtin print -nu "$_ghostty_fd" "\e[$(( 1 + steady )) q" ;;
-                    *) builtin print -nu "$_ghostty_fd" "\e[$(( 5 + steady )) q" ;;
-                esac
-            }
-            functions[__starship_ghostty_reference]+=$original_call
-            expected_hook=${functions[__starship_ghostty_reference]}
-            unfunction __starship_ghostty_reference
-            if [[ $hook_body != "$expected_hook" ]]; then
-                __starship_ghostty_reference() {
-                    if [[ $PS1 != *$'%{\e]133;A'* ]]; then
-                        builtin print -nu $_ghostty_fd '\e]133;P;k=i\a\e]133;B\a'
-                    fi
-                    builtin true
-                }
-                functions[__starship_ghostty_reference]+=$original_call
-                expected_hook=${functions[__starship_ghostty_reference]}
-                unfunction __starship_ghostty_reference
-                [[ $hook_body == "$expected_hook" ]] || return 0
-            fi
-            hook_function=${widgets[._ghostty_orig_zle-line-init]:-}
-            [[ -n $hook_function ]] || continue
-            hook_function=${hook_function#user:}
-            [[ $hook_function != starship_zle-line-init ]] || continue
-        fi
-        hook_body=${functions[$hook_function]:-}
-        hook_body=${${hook_body##[[:space:]]#}%%[[:space:]]#}
-        [[ $hook_body == ':' || $hook_body == 'return 0' || $hook_body == 'echoti smkx' ]] || return 0
+    [[ ${widgets[zle-line-init]:-} == user:azhw:zle-line-init && -n ${(M)line_init_hooks:#<->:starship_zle-line-init} ]] || return 0
+    bindings=("${(@f)$(for keymap in main viins vicmd; do bindkey -M $keymap $'\e'; bindkey -M $keymap $'\e['; bindkey -M $keymap $'\e[?'; bindkey -M $keymap -p $'\e[?'; done)}")
+    (( ${#bindings} == 9 )) || return 0
+    for keymap offset in main 0 viins 3 vicmd 6; do
+        [[ $bindings[offset+1] == *' '(undefined-key|vi-cmd-mode|beep) && $bindings[offset+2] == *' undefined-key' ]] || return 0
+        case $bindings[offset+3] in
+            *' starship_zle-cursor-report') ;;
+            *' undefined-key') bindkey -M $keymap $'\e[?' starship_zle-cursor-report ;;
+            *) return 0 ;;
+        esac
     done
-    (( has_input_hook )) || return 0
-    for keymap in main viins vicmd; do
-        bindings=("${(@f)$(bindkey -M "$keymap" $'\e'; bindkey -M "$keymap" $'\e['; bindkey -M "$keymap" $'\e[?'; bindkey -M "$keymap" -p $'\e[?')}")
-        [[ ${#bindings} == 3 && $bindings[2] == *' undefined-key' && $bindings[3] == *' starship_zle-cursor-report' ]] || return 0
-        [[ $bindings[1] == *' undefined-key' ||
-           ( $bindings[1] == *' vi-cmd-mode' && ${widgets[vi-cmd-mode]:-} == builtin ) ||
-           ( $bindings[1] == *' beep' && ${widgets[beep]:-} == builtin ) ]] || return 0
-    done
-    zmodload zsh/datetime zsh/system zsh/zselect 2>/dev/null || return 0
+    zmodload zsh/datetime 2>/dev/null || return 0
 
-    local tty_state fd response='' char
+    local response='' char query=$'\e[?6n'
     local -F initial_timeout=0.2 report_timeout=1 deadline
-    tty_state=$(command stty -g < "$TTY" 2>/dev/null) || return 0
-    exec {fd}<> "$TTY" || return 0
-    {
-        command stty -echo -icanon min 1 time 0 <&$fd || return 0
-        zselect -t 0 -r $fd && return 0
+    # Queued input belongs to ZLE: hand its first byte back instead of querying.
+    if read -rs -k 1 -t 0 char; then
+        response=$char
+    else
         deadline=$(( EPOCHREALTIME + initial_timeout ))
         # Private CPR replies cannot be mistaken for modified function keys.
-        print -rn -- $'\e[?6n' >&$fd
-        while (( EPOCHREALTIME < deadline )); do
-            sysread -i $fd -s 1 -t "$(( deadline - EPOCHREALTIME ))" char || break
+        # read turns echo off before it prints its prompt, so the reply is never echoed.
+        while (( EPOCHREALTIME < deadline )) && read -rs -k 1 -t $(( deadline - EPOCHREALTIME )) "char?$query"; do
+            query=''
             response+=$char
             [[ $response != $'\e[?'[1-9] ]] || deadline=$(( EPOCHREALTIME + report_timeout ))
             if [[ $response == (#b)$'\e[?'(<1->)\;(<1->)(\;<1->|)R ]]; then
@@ -125,16 +74,17 @@ __starship_get_terminal_position() {
                 *) break ;;
             esac
         done
-
-        if [[ $response != $'\e[?'[1-9][0-9\;]# ]]; then
-            [[ ${response%?} != $'\e[?'[1-9][0-9\;]# ]] || response=$char
-            STARSHIP_PENDING_INPUT+=$response
+        if [[ -z $response ]]; then
+            STARSHIP_CURSOR_QUERY_DISABLED=1
+            return 0
         fi
-        [[ -n $response ]] || STARSHIP_CURSOR_QUERY_DISABLED=1
-    } always {
-        command stty "$tty_state" <&$fd
-        exec {fd}<&-
-    }
+    fi
+
+    if [[ $response != $'\e[?'[1-9][0-9\;]# ]]; then
+        [[ ${response%?} != $'\e[?'[1-9][0-9\;]# ]] || response=$char
+        # ZLE undoes the terminal's CR-to-NL translation only for bytes it reads itself.
+        STARSHIP_PENDING_INPUT+=${response//$'\n'/$'\r'}
+    fi
     return 0
 }
 
@@ -172,7 +122,7 @@ starship_zle-line-init() {
 starship_zle-clear-screen() {
     STARSHIP_TERMINAL_ROW=1
     STARSHIP_TERMINAL_COLUMN=1
-    zle starship-clear-screen-original "$@"
+    zle .starship-clear-screen-original "$@"
 }
 
 starship_zle-cursor-report() {
@@ -237,8 +187,8 @@ autoload -Uz add-zsh-hook
 add-zsh-hook precmd prompt_starship_precmd
 add-zsh-hook preexec prompt_starship_preexec
 
-if [[ -z ${widgets[starship-clear-screen-original]:-} ]]; then
-    zle -A clear-screen starship-clear-screen-original
+if [[ -z ${widgets[.starship-clear-screen-original]:-} ]]; then
+    zle -A clear-screen .starship-clear-screen-original
     zle -N clear-screen starship_zle-clear-screen
 fi
 
@@ -246,12 +196,6 @@ autoload -Uz add-zle-hook-widget
 add-zle-hook-widget line-init starship_zle-line-init
 
 zle -N starship_zle-cursor-report
-for _starship_keymap in emacs viins vicmd; do
-    if [[ $(bindkey -M "$_starship_keymap" $'\e[?') == *' undefined-key' ]]; then
-        bindkey -M "$_starship_keymap" $'\e[?' starship_zle-cursor-report
-    fi
-done
-unset _starship_keymap
 
 # Set up a function to redraw the prompt if the user switches vi modes
 starship_zle-keymap-select() {
