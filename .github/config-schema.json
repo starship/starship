@@ -95,6 +95,7 @@
         "discharging_symbol": "󰂃 ",
         "unknown_symbol": "󰂑 ",
         "empty_symbol": "󰂎 ",
+        "paused_symbol": "󱞜 ",
         "display": [
           {
             "threshold": 10,
@@ -2099,6 +2100,10 @@
         "empty_symbol": {
           "type": "string",
           "default": "󰂎 "
+        },
+        "paused_symbol": {
+          "type": "string",
+          "default": "󱞜 "
         },
         "display": {
           "type": "array",

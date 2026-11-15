@@ -535,6 +535,7 @@ The module is only visible when the device's battery is below 10%.
 | `discharging_symbol` | `'󰂃 '`                            | The symbol shown when the battery is discharging.   |
 | `unknown_symbol`     | `'󰂑 '`                            | The symbol shown when the battery state is unknown. |
 | `empty_symbol`       | `'󰂎 '`                            | The symbol shown when the battery state is empty.   |
+| `paused_symbol`      | `'󱞜 '`                            | The symbol shown when charging is paused.           |
 | `format`             | `'[$symbol$percentage]($style) '` | The format for the module.                          |
 | `display`            | [link](#battery-display)          | Display threshold and style for the module.         |
 | `disabled`           | `false`                           | Disables the `battery` module.                      |
