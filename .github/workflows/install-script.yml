@@ -7,6 +7,9 @@ on:
     paths:
       - "install/**"
 
+permissions:
+  contents: read
+
 jobs:
   shellcheck:
     name: Shellcheck [Linter]
@@ -14,6 +17,8 @@ jobs:
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Lint | Run shellcheck
         run: shellcheck --severity=warning install/**/*.sh
@@ -24,6 +29,8 @@ jobs:
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup | Install shfmt
         run: |
@@ -43,6 +50,8 @@ jobs:
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Test | Piped execution with curl
         run: |

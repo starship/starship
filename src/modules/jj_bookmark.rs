@@ -229,6 +229,7 @@ pub mod tests {
             .expected("upstream")
             .render();
     }
+
     #[test]
     fn test_render_remote_truncated() {
         tester(JJRepo::BASE)
@@ -239,6 +240,14 @@ pub mod tests {
                 truncation_symbol = "#"
             })
             .expected("ups#")
+            .render();
+    }
+
+    #[test]
+    fn test_render_bookmark_with_escape() {
+        tester(JJRepo::BOOKMARKS_WITH_ESCAPES)
+            .options(toml! { format = "$bookmark(@$remote)$diverged" })
+            .expected(r#""my-branch-"-with-quotes-""#)
             .render();
     }
 }

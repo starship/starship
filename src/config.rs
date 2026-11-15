@@ -274,7 +274,7 @@ pub struct Style {
 }
 
 impl Style {
-    pub fn to_ansi_style(&self, prev: Option<&nu_ansi_term::Style>) -> nu_ansi_term::Style {
+    pub const fn to_ansi_style(&self, prev: Option<&nu_ansi_term::Style>) -> nu_ansi_term::Style {
         let Some(prev_style) = prev else {
             return self.style;
         };
@@ -308,14 +308,14 @@ impl Style {
         }
     }
 
-    fn fg(&self, prev_color: PrevColor) -> Self {
+    const fn fg(&self, prev_color: PrevColor) -> Self {
         Self {
             fg: Some(prev_color),
             ..*self
         }
     }
 
-    fn bg(&self, prev_color: PrevColor) -> Self {
+    const fn bg(&self, prev_color: PrevColor) -> Self {
         Self {
             bg: Some(prev_color),
             ..*self

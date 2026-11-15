@@ -38,7 +38,7 @@ impl CompilerInfo {
 }
 
 impl RustToolchainInfo {
-    fn new() -> Self {
+    const fn new() -> Self {
         Self {
             rustup_settings: OnceLock::new(),
             compiler_info: OnceLock::new(),
@@ -46,10 +46,10 @@ impl RustToolchainInfo {
     }
 
     fn default_host_triple(&self, context: &Context) -> Option<&str> {
-        match self.rustup_settings(context).default_host_triple() {
-            Some(triple) => Some(triple),
-            None => guess_host_triple(),
+        if let Some(triple) = self.rustup_settings(context).default_host_triple() {
+            return Some(triple);
         }
+        guess_host_triple()
     }
 
     fn rustup_settings(&self, context: &Context) -> &RustupSettings {
@@ -712,7 +712,7 @@ fn strip_dos_path(path: PathBuf) -> PathBuf {
 
 #[inline]
 #[cfg(not(windows))]
-fn strip_dos_path(path: PathBuf) -> PathBuf {
+const fn strip_dos_path(path: PathBuf) -> PathBuf {
     path
 }
 
@@ -1132,9 +1132,7 @@ mod tests {
             );
             let info = RustToolchainInfo::new();
             let overrides = if directory_override {
-                [(context.current_dir.clone(), "from-directory".into())]
-                    .into_iter()
-                    .collect()
+                HashMap::from([(context.current_dir.clone(), "from-directory".into())])
             } else {
                 HashMap::new()
             };
