@@ -3384,6 +3384,7 @@ dependencies = [
  "rayon",
  "regex",
  "rust-ini",
+ "same-file",
  "schemars",
  "semver 1.0.28",
  "serde",
