@@ -36,6 +36,7 @@ mod fossil_metrics;
 mod gcloud;
 mod git_branch;
 mod git_commit;
+mod git_host;
 mod git_metrics;
 mod git_state;
 pub mod git_status;
@@ -166,6 +167,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "gcloud" => gcloud::module(context),
             "git_branch" => git_branch::module(context),
             "git_commit" => git_commit::module(context),
+            "git_host" => git_host::module(context),
             "git_metrics" => git_metrics::module(context),
             "git_state" => git_state::module(context),
             "git_status" => git_status::module(context),
