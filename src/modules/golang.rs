@@ -96,6 +96,10 @@ fn parse_go_version(go_stdout: &str) -> Option<String> {
         // return "1.12.4"
         .next()?;
 
+    let version = version
+        .split_once("-X:")
+        .map_or(version, |(version, _)| version);
+
     Some(version.to_string())
 }
 
@@ -129,6 +133,7 @@ fn check_go_version(go_version: Option<&str>, mod_version: Option<&str>) -> bool
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
+    use crate::utils::CommandOutput;
     use nu_ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
@@ -252,8 +257,53 @@ mod tests {
 
     #[test]
     fn test_format_go_version() {
-        let input = "go version go1.12 darwin/amd64";
-        assert_eq!(parse_go_version(input), Some("1.12".to_string()));
+        for (input, expected) in [
+            ("go version go1.12 darwin/amd64", Some("1.12")),
+            ("go version go1.27.3 linux/arm64", Some("1.27.3")),
+            ("go version go1.27.3-X:nodwarf5 linux/arm64", Some("1.27.3")),
+            ("go version go1.25.3 X:nodwarf5 linux/amd64", Some("1.25.3")),
+            (
+                "go version go1.24rc1-X:boringcrypto linux/amd64",
+                Some("1.24rc1"),
+            ),
+            (
+                "go version go1.27.3-custom linux/arm64",
+                Some("1.27.3-custom"),
+            ),
+            ("", None),
+            ("unrelated output", None),
+        ] {
+            assert_eq!(parse_go_version(input).as_deref(), expected, "{input}");
+        }
+    }
+
+    #[test]
+    fn experiment_version_respects_module_requirement() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut file = File::create(dir.path().join("go.mod"))?;
+        file.write_all(b"module example.com/test\n\ngo 1.28\n")?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("golang")
+            .path(dir.path())
+            .config(toml::toml! {
+                [golang]
+                format = "[$version $mod_version]($style)"
+            })
+            .cmd(
+                "go version",
+                Some(CommandOutput {
+                    stdout: "go version go1.27.3-X:nodwarf5 linux/arm64".to_string(),
+                    stderr: String::new(),
+                }),
+            )
+            .collect();
+
+        assert_eq!(
+            actual,
+            Some(Color::Red.bold().paint("v1.27.3 1.28").to_string())
+        );
+        dir.close()
     }
 
     #[test]
