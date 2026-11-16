@@ -88,11 +88,12 @@ fn default_remote<'r>(repo: &'r gix::Repository) -> Option<gix::Remote<'r>> {
 #[cfg(test)]
 mod tests {
     use nu_ansi_term::Color;
+    use std::ffi::OsStr;
     use std::io;
+    use std::path::Path;
+    use std::process::Stdio;
 
-    use crate::test::{
-        COMMON_GIT_PROVIDERS, ModuleRenderer, fixture_repo, fixture_repo_with_hash,
-    };
+    use crate::test::{COMMON_GIT_PROVIDERS, ModuleRenderer, fixture_repo, fixture_repo_with_hash};
     use crate::utils::create_command;
 
     #[test]
@@ -100,15 +101,15 @@ mod tests {
         for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
-            create_command("git")?
-                .args([
+            run_git_cmd(
+                [
                     "remote",
                     "set-url",
                     "origin",
                     "https://github.com/user/repo.git",
-                ])
-                .current_dir(repo_dir.path())
-                .output()?;
+                ],
+                repo_dir.path(),
+            )?;
 
             let actual = ModuleRenderer::new("git_host")
                 .path(repo_dir.path())
@@ -144,10 +145,7 @@ mod tests {
         for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
-            create_command("git")?
-                .args(["remote", "remove", "origin"])
-                .current_dir(repo_dir.path())
-                .output()?;
+            run_git_cmd(["remote", "remove", "origin"], repo_dir.path())?;
 
             let actual = ModuleRenderer::new("git_host")
                 .path(repo_dir.path())
@@ -169,40 +167,37 @@ mod tests {
         for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
-            create_command("git")?
-                .args([
+            run_git_cmd(
+                [
                     "remote",
                     "set-url",
                     "origin",
                     "https://github.com/user/repo.git",
-                ])
-                .current_dir(repo_dir.path())
-                .output()?;
+                ],
+                repo_dir.path(),
+            )?;
 
-            create_command("git")?
-                .args([
+            run_git_cmd(
+                [
                     "remote",
                     "add",
                     "upstream",
-                    "https://gitlab.com/org/repo.git",
-                ])
-                .current_dir(repo_dir.path())
-                .output()?;
+                    "https://gitlab.com/user/repo.git",
+                ],
+                repo_dir.path(),
+            )?;
 
-            create_command("git")?
-                .args(["update-ref", "refs/remotes/upstream/main", "HEAD"])
-                .current_dir(repo_dir.path())
-                .output()?;
+            run_git_cmd(
+                ["update-ref", "refs/remotes/upstream/main", "HEAD"],
+                repo_dir.path(),
+            )?;
 
-            create_command("git")?
-                .args(["checkout", "-b", "feature"])
-                .current_dir(repo_dir.path())
-                .output()?;
+            run_git_cmd(["checkout", "-b", "feature"], repo_dir.path())?;
 
-            create_command("git")?
-                .args(["branch", "--set-upstream-to=upstream/main"])
-                .current_dir(repo_dir.path())
-                .output()?;
+            run_git_cmd(
+                ["branch", "--set-upstream-to=upstream/main"],
+                repo_dir.path(),
+            )?;
 
             let actual = ModuleRenderer::new("git_host")
                 .path(repo_dir.path())
@@ -226,20 +221,17 @@ mod tests {
         for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
-            create_command("git")?
-                .args(["remote", "rename", "origin", "backup"])
-                .current_dir(repo_dir.path())
-                .output()?;
+            run_git_cmd(["remote", "rename", "origin", "backup"], repo_dir.path())?;
 
-            create_command("git")?
-                .args([
+            run_git_cmd(
+                [
                     "remote",
                     "set-url",
                     "backup",
                     "https://github.com/user/repo.git",
-                ])
-                .current_dir(repo_dir.path())
-                .output()?;
+                ],
+                repo_dir.path(),
+            )?;
 
             let actual = ModuleRenderer::new("git_host")
                 .path(repo_dir.path())
@@ -264,21 +256,22 @@ mod tests {
             let remote_dir = fixture_repo_with_hash(mode, sha256)?;
             let repo_dir = fixture_repo_with_hash(mode, sha256)?;
 
-            create_command("git")?
-                .args(["checkout", "-b", "test_branch"])
-                .current_dir(repo_dir.path())
-                .output()?;
+            let remote_path = remote_dir
+                .path()
+                .to_str()
+                .expect("temp path is not valid UTF-8");
 
-            create_command("git")?
-                .args(["remote", "add", "--fetch", "remote_repo"])
-                .arg(remote_dir.path())
-                .current_dir(repo_dir.path())
-                .output()?;
+            run_git_cmd(["checkout", "-b", "test_branch"], repo_dir.path())?;
 
-            create_command("git")?
-                .args(["branch", "--set-upstream-to", "remote_repo/master"])
-                .current_dir(repo_dir.path())
-                .output()?;
+            run_git_cmd(
+                ["remote", "add", "--fetch", "remote_repo", remote_path],
+                repo_dir.path(),
+            )?;
+
+            run_git_cmd(
+                ["branch", "--set-upstream-to", "remote_repo/master"],
+                repo_dir.path(),
+            )?;
 
             let actual = ModuleRenderer::new("git_host")
                 .path(repo_dir.path())
@@ -301,20 +294,19 @@ mod tests {
         for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
-            create_command("git")?
-                .args(["remote", "set-url", "origin", "https://github.com/user/repo.git"])
-                .current_dir(repo_dir.path())
-                .output()?;
+            run_git_cmd(
+                [
+                    "remote",
+                    "set-url",
+                    "origin",
+                    "https://github.com/user/repo.git",
+                ],
+                repo_dir.path(),
+            )?;
 
-            create_command("git")?
-                .args(["checkout", "-b", "feature"])
-                .current_dir(repo_dir.path())
-                .output()?;
+            run_git_cmd(["checkout", "-b", "feature"], repo_dir.path())?;
 
-            create_command("git")?
-                .args(["branch", "--set-upstream-to=master"])
-                .current_dir(repo_dir.path())
-                .output()?;
+            run_git_cmd(["branch", "--set-upstream-to=master"], repo_dir.path())?;
 
             let actual = ModuleRenderer::new("git_host")
                 .path(repo_dir.path())
@@ -337,40 +329,37 @@ mod tests {
         for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
-            create_command("git")?
-                .args([
+            run_git_cmd(
+                [
                     "remote",
                     "set-url",
                     "origin",
                     "https://github.com/user/repo.git",
-                ])
-                .current_dir(repo_dir.path())
-                .output()?;
+                ],
+                repo_dir.path(),
+            )?;
 
-            create_command("git")?
-                .args([
+            run_git_cmd(
+                [
                     "remote",
                     "add",
                     "upstream",
                     "https://gitlab.com/org/repo.git",
-                ])
-                .current_dir(repo_dir.path())
-                .output()?;
+                ],
+                repo_dir.path(),
+            )?;
 
-            create_command("git")?
-                .args(["update-ref", "refs/remotes/upstream/main", "HEAD"])
-                .current_dir(repo_dir.path())
-                .output()?;
+            run_git_cmd(
+                ["update-ref", "refs/remotes/upstream/main", "HEAD"],
+                repo_dir.path(),
+            )?;
 
-            create_command("git")?
-                .args(["branch", "--set-upstream-to=upstream/main"])
-                .current_dir(repo_dir.path())
-                .output()?;
+            run_git_cmd(
+                ["branch", "--set-upstream-to=upstream/main"],
+                repo_dir.path(),
+            )?;
 
-            create_command("git")?
-                .args(["checkout", "--detach"])
-                .current_dir(repo_dir.path())
-                .output()?;
+            run_git_cmd(["checkout", "--detach"], repo_dir.path())?;
 
             let actual = ModuleRenderer::new("git_host")
                 .path(repo_dir.path())
@@ -433,15 +422,15 @@ mod tests {
         for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
-            create_command("git")?
-                .args([
+            run_git_cmd(
+                [
                     "remote",
                     "set-url",
                     "origin",
                     "ssh://git@git.example.com:2222/user/repo.git",
-                ])
-                .current_dir(repo_dir.path())
-                .output()?;
+                ],
+                repo_dir.path(),
+            )?;
 
             let actual = ModuleRenderer::new("git_host")
                 .path(repo_dir.path())
@@ -465,15 +454,15 @@ mod tests {
         for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
-            create_command("git")?
-                .args([
+            run_git_cmd(
+                [
                     "remote",
                     "set-url",
                     "origin",
                     "https://git.example.com/user/repo.git",
-                ])
-                .current_dir(repo_dir.path())
-                .output()?;
+                ],
+                repo_dir.path(),
+            )?;
 
             let actual = ModuleRenderer::new("git_host")
                 .path(repo_dir.path())
@@ -495,10 +484,7 @@ mod tests {
         for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
-            create_command("git")?
-                .args(["remote", "set-url", "origin", ""])
-                .current_dir(repo_dir.path())
-                .output()?;
+            run_git_cmd(["remote", "set-url", "origin", ""], repo_dir.path())?;
 
             let actual = ModuleRenderer::new("git_host")
                 .path(repo_dir.path())
@@ -520,11 +506,7 @@ mod tests {
         for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
-            create_command("git")?
-                .args(["remote", "set-url", "origin"])
-                .arg(url)
-                .current_dir(repo_dir.path())
-                .output()?;
+            run_git_cmd(["remote", "set-url", "origin", url], repo_dir.path())?;
 
             let actual = ModuleRenderer::new("git_host")
                 .path(repo_dir.path())
@@ -541,5 +523,27 @@ mod tests {
             repo_dir.close()?;
         }
         Ok(())
+    }
+
+    fn run_git_cmd<A, S>(args: A, dir: &Path) -> io::Result<()>
+    where
+        A: IntoIterator<Item = S>,
+        S: AsRef<OsStr>,
+    {
+        let mut cmd = create_command("git")?;
+        cmd.args(args).current_dir(dir).stdin(Stdio::null());
+
+        let output = cmd.output()?;
+
+        if output.status.success() {
+            Ok(())
+        } else {
+            let stderr = String::from_utf8_lossy(&output.stderr);
+            Err(io::Error::other(format!(
+                "{cmd:?} failed ({}): {}",
+                output.status,
+                stderr.trim().replace('\n', " | ")
+            )))
+        }
     }
 }
