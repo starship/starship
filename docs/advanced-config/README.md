@@ -650,6 +650,10 @@ style = "bold yellow"
 [[claude_cost.display]]
 threshold = 2.0
 style = "bold red"
+```
+
+```toml
+# ~/.config/starship.toml
 
 # Show duration information
 [claude_cost]
