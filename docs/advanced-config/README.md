@@ -372,17 +372,18 @@ To use Starship as your Claude Code statusline:
 
 When invoked with `starship statusline claude-code`, Starship receives Claude Code session data via stdin and renders a statusline using a dedicated profile named `claude-code`.
 
-The profile includes three specialized modules:
+The profile includes some specialized modules:
 
 - `claude_model`: Displays the current Claude model being used
 - `claude_context`: Shows context window usage with a visual gauge
 - `claude_cost`: Displays session cost and statistics
+- `claude_usage`: Shows 5-hour and 7-day rate limit usage
 
 The default profile format is:
 
 ```toml
 [profiles]
-claude-code = "$claude_model$git_branch$claude_context$claude_cost"
+claude-code = "$claude_model$git_branch$claude_context$claude_cost$claude_usage"
 ```
 
 ### Configuration {#configuration}
@@ -656,6 +657,100 @@ style = "bold red"
 format = "[$symbol$cost ($duration)]($style) "
 ```
 
+### Claude Usage
+
+The `claude_usage` module displays Claude Code's 5-hour and 7-day rate limit usage. Each window is styled independently based on its own usage percentage.
+
+> [!TIP]
+> Claude Code only reports rate limits for claude.ai Pro and Max subscriptions, and only after the first API response of a session. With API-key billing the module is never shown. Windows that are missing or have already reset are omitted. Gateway `spend_limit` data is not supported.
+
+#### Options
+
+| Option                   | Default                                                                                                                                    | Description                                                                         |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
+| `format`                 | `'([5h: $five_hour_percentage ↺ $five_hour_reset]($five_hour_style) )([7d: $seven_day_percentage ↺ $seven_day_reset]($seven_day_style) )'` | The format for the module.                                                          |
+| `reset_time_format`      | `'%H:%M'`                                                                                                                                  | The [strftime][strftime] format for `$*_reset_at` when the reset is today.          |
+| `reset_date_time_format` | `'%a %H:%M'`                                                                                                                               | The [strftime][strftime] format for `$*_reset_at` when the reset is on a later day. |
+| `display`                | [see below](#display-2)                                                                                                                    | Threshold and style configurations.                                                 |
+| `disabled`               | `false`                                                                                                                                    | Disables the `claude_usage` module.                                                 |
+
+##### Display
+
+The `display` option is an array of objects that define usage percentage thresholds and styles. Each window uses the style from its highest matching threshold, and is omitted when that threshold has `hidden = true`. The module is hidden when both windows are omitted.
+
+| Option      | Default      | Description                                                         |
+| ----------- | ------------ | ------------------------------------------------------------------- |
+| `threshold` | `0.0`        | The minimum rate limit usage percentage to match this configuration |
+| `style`     | `bold green` | The value of `style` if this display configuration is matched       |
+| `hidden`    | `false`      | Hide the window if this configuration is matched                    |
+
+**Default configuration:**
+
+```toml
+[[claude_usage.display]]
+threshold = 0.0
+hidden = true
+
+[[claude_usage.display]]
+threshold = 70.0
+style = "yellow"
+
+[[claude_usage.display]]
+threshold = 90.0
+style = "red"
+```
+
+#### Variables
+
+| Variable             | Example     | Description                                         |
+| -------------------- | ----------- | --------------------------------------------------- |
+| five_hour_percentage | `65%`       | Percentage of 5-hour window used                    |
+| five_hour_reset      | `1h23m`     | Time until 5-hour window resets (two units at most) |
+| five_hour_reset_at   | `19:42`     | Local time at which the 5-hour window resets        |
+| seven_day_percentage | `7%`        | Percentage of 7-day window used                     |
+| seven_day_reset      | `2d14h`     | Time until 7-day window resets                      |
+| seven_day_reset_at   | `Mon 09:00` | Local time at which the 7-day window resets         |
+| five_hour_style\*    |             | Style matching the 5-hour window's usage            |
+| seven_day_style\*    |             | Style matching the 7-day window's usage             |
+| style\*              |             | Style of the most severe visible window             |
+
+\*: This variable can only be used as a part of a style string
+
+The `_reset_at` variables are unset when the format is invalid.
+
+#### Examples
+
+```toml
+# ~/.config/starship.toml
+
+# Show the local reset time instead of the time left, e.g. `5h: 75% ↺ 7:42 PM`
+[claude_usage]
+format = '([5h: $five_hour_percentage ↺ $five_hour_reset_at]($five_hour_style) )([7d: $seven_day_percentage ↺ $seven_day_reset_at]($seven_day_style) )'
+reset_time_format = "%-I:%M %p"
+reset_date_time_format = "%a %-I:%M %p"
+```
+
+```toml
+# ~/.config/starship.toml
+
+# Show only the 5-hour window
+[claude_usage]
+format = '[5h: $five_hour_percentage ↺ $five_hour_reset]($five_hour_style) '
+
+# Custom thresholds
+[[claude_usage.display]]
+threshold = 0.0
+hidden = true
+
+[[claude_usage.display]]
+threshold = 50.0
+style = "bold yellow"
+
+[[claude_usage.display]]
+threshold = 85.0
+style = "bold red"
+```
+
 ## Style Strings {#style-strings}
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
@@ -695,3 +790,5 @@ Not every style string will be displayed correctly by every terminal. In particu
 - Many terminals disable support for `blink` by default.
 - `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
 - `strikethrough` is not supported by the default macOS Terminal.app.
+
+[strftime]: https://docs.rs/jiff/latest/jiff/fmt/strtime/index.html#conversion-specifications
