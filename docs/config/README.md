@@ -3280,7 +3280,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 | ----------- | ----------------------------------------- | -------------------------------------------------------------- |
 | `threshold` | `75`                                      | Hide the memory usage unless it exceeds this percentage.       |
 | `format`    | `'via $symbol[$ram( \| $swap)]($style) '` | The format for the module.                                     |
-| `symbol`    | `'🐏 '`                                    | The symbol used before displaying the memory usage.            |
+| `symbol`    | `'🐏 '`                                   | The symbol used before displaying the memory usage.            |
 | `style`     | `'bold dimmed white'`                     | The style for the module.                                      |
 | `disabled`  | `true`                                    | Disables the `memory_usage` module.                            |
 | `refresh`   | `true`                                    | Redraw the usage every five seconds while the prompt is shown. |
