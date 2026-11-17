@@ -52,6 +52,12 @@ pub struct KubernetesContextConfig<'a> {
     pub user_pattern: Option<&'a str>,
     pub symbol: Option<&'a str>,
     pub style: Option<&'a str>,
+    pub format: Option<&'a str>,
     pub context_alias: Option<&'a str>,
     pub user_alias: Option<&'a str>,
+    pub disabled: Option<bool>,
+    pub detect_extensions: Option<Vec<&'a str>>,
+    pub detect_files: Option<Vec<&'a str>>,
+    pub detect_folders: Option<Vec<&'a str>>,
+    pub detect_env_vars: Option<Vec<&'a str>>,
 }
