@@ -204,10 +204,13 @@ mod tests {
                 .config(toml::toml! {
                     [git_host]
                     disabled = false
+
+                    [git_host.symbols]
+                    "gitlab.com" = ""
                 })
                 .collect();
 
-            let expected = Some(format!("{} ", Color::Purple.bold().paint("\u{f296}")));
+            let expected = Some(format!("{} ", Color::Purple.bold().paint("")));
 
             assert_eq!(actual, expected);
 
@@ -238,6 +241,9 @@ mod tests {
                 .config(toml::toml! {
                     [git_host]
                     disabled = false
+
+                    [git_host.symbols]
+                    "github.com" = ""
                 })
                 .collect();
 
@@ -313,6 +319,9 @@ mod tests {
                 .config(toml::toml! {
                     [git_host]
                     disabled = false
+
+                    [git_host.symbols]
+                    "github.com" = ""
                 })
                 .collect();
             let expected = Some(format!("{} ", Color::Purple.bold().paint("\u{f408}")));
@@ -366,6 +375,9 @@ mod tests {
                 .config(toml::toml! {
                     [git_host]
                     disabled = false
+
+                    [git_host.symbols]
+                    "github.com" = ""
                 })
                 .collect();
 
@@ -379,42 +391,42 @@ mod tests {
 
     #[test]
     fn show_github_icon_with_uppercase_host() -> io::Result<()> {
-        test_with_remote_provider_url("https://GitHub.com/user/repo.git", "\u{f408}")
+        test_with_remote_provider_url("https://GitHub.com/user/repo.git", "")
     }
 
     #[test]
     fn show_github_icon_using_https() -> io::Result<()> {
-        test_with_remote_provider_url("https://github.com/user/repo.git", "\u{f408}")
+        test_with_remote_provider_url("https://github.com/user/repo.git", "")
     }
 
     #[test]
     fn show_github_icon_using_ssh() -> io::Result<()> {
-        test_with_remote_provider_url("ssh://git@github.com/user/repo.git", "\u{f408}")
+        test_with_remote_provider_url("ssh://git@github.com/user/repo.git", "")
     }
 
     #[test]
     fn show_github_icon_using_scp() -> io::Result<()> {
-        test_with_remote_provider_url("git@github.com:user/repo.git", "\u{f408}")
+        test_with_remote_provider_url("git@github.com:user/repo.git", "")
     }
 
     #[test]
     fn show_gitlab_icon_using_https() -> io::Result<()> {
-        test_with_remote_provider_url("https://gitlab.com/user/repo.git", "\u{f296}")
+        test_with_remote_provider_url("https://gitlab.com/user/repo.git", "")
     }
 
     #[test]
     fn show_gitlab_icon_using_ssh() -> io::Result<()> {
-        test_with_remote_provider_url("ssh://git@gitlab.com/user/repo.git", "\u{f296}")
+        test_with_remote_provider_url("ssh://git@gitlab.com/user/repo.git", "")
     }
 
     #[test]
     fn show_gitlab_icon_using_ssh_with_port() -> io::Result<()> {
-        test_with_remote_provider_url("ssh://git@gitlab.com:2222/user/repo.git", "\u{f296}")
+        test_with_remote_provider_url("ssh://git@gitlab.com:2222/user/repo.git", "")
     }
 
     #[test]
     fn show_gitlab_icon_using_scp() -> io::Result<()> {
-        test_with_remote_provider_url("git@gitlab.com:user/repo.git", "\u{f296}")
+        test_with_remote_provider_url("git@gitlab.com:user/repo.git", "")
     }
 
     #[test]
@@ -513,6 +525,10 @@ mod tests {
                 .config(toml::toml! {
                     [git_host]
                     disabled = false
+
+                    [git_host.symbols]
+                    "github.com" = ""
+                    "gitlab.com" = ""
                 })
                 .collect();
 
