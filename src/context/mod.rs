@@ -85,7 +85,7 @@ pub struct Context<'a> {
 
     /// a mock of the root directory
     #[cfg(test)]
-    pub root_dir: tempfile::TempDir,
+    pub root_dir: Arc<tempfile::TempDir>,
 
     #[cfg(feature = "battery")]
     pub battery_info_provider: &'a (dyn crate::modules::BatteryInfoProvider + Send + Sync),
@@ -192,13 +192,41 @@ impl<'a> Context<'a> {
             width,
             env,
             #[cfg(test)]
-            root_dir: tempfile::TempDir::new().unwrap(),
+            root_dir: Arc::new(tempfile::TempDir::new().unwrap()),
             #[cfg(test)]
             cmd: HashMap::new(),
             #[cfg(feature = "battery")]
             battery_info_provider: &crate::modules::BatteryInfoProviderImpl,
             root_config,
             claude_code_data: None,
+            _marker: PhantomData,
+        }
+    }
+
+    /// This context as a module rendering again sees it: the same
+    /// configuration and properties, but nothing of what was observed of the
+    /// filesystem and repositories, which may have changed since.
+    pub fn renewed(&self) -> Self {
+        Self {
+            config: self.config.clone(),
+            current_dir: self.current_dir.clone(),
+            logical_dir: self.logical_dir.clone(),
+            dir_contents: OnceLock::new(),
+            properties: self.properties.clone(),
+            git_repo: OnceLock::new(),
+            jj_repo: OnceLock::new(),
+            shell: self.shell,
+            target: self.target.clone(),
+            width: self.width,
+            env: self.env.clone(),
+            #[cfg(test)]
+            cmd: self.cmd.clone(),
+            #[cfg(test)]
+            root_dir: Arc::clone(&self.root_dir),
+            #[cfg(feature = "battery")]
+            battery_info_provider: self.battery_info_provider,
+            root_config: self.root_config.clone(),
+            claude_code_data: self.claude_code_data.clone(),
             _marker: PhantomData,
         }
     }
@@ -337,49 +365,15 @@ impl<'a> Context<'a> {
     pub fn get_git_repo(&self) -> Result<&GitRepo, &gix::Error> {
         self.git_repo
             .get_or_init(|| -> Result<GitRepo, gix::Error> {
-                // custom open options
-                let mut git_open_opts_map =
-                    git_sec::trust::Mapping::<gix::open::Options>::default();
-
                 // Load all the configuration as it affects aspects of the
                 // `git_status` and `git_metrics` modules.
                 let config = gix::open::permissions::Config {
                     git_binary: true,
-                    system: true,
-                    git: true,
-                    user: true,
-                    env: true,
-                    includes: true,
+                    ..gix::open::permissions::Config::all()
                 };
-                // change options for config permissions without touching anything else
-                git_open_opts_map.reduced =
-                    git_open_opts_map
-                        .reduced
-                        .permissions(gix::open::Permissions {
-                            config,
-                            ..gix::open::Permissions::default_for_level(git_sec::Trust::Reduced)
-                        });
-                git_open_opts_map.full =
-                    git_open_opts_map.full.permissions(gix::open::Permissions {
-                        config,
-                        ..gix::open::Permissions::default_for_level(git_sec::Trust::Full)
-                    });
-
-                let shared_repo =
-                    match ThreadSafeRepository::discover_with_environment_overrides_opts(
-                        &self.current_dir,
-                        gix::discover::upwards::Options {
-                            match_ceiling_dir_or_error: false,
-                            ..Default::default()
-                        },
-                        git_open_opts_map,
-                    ) {
-                        Ok(repo) => repo,
-                        Err(e) => {
-                            log::debug!("Failed to find git repo: {e}");
-                            return Err(e);
-                        }
-                    };
+                let shared_repo = self
+                    .discover_git_repo(config)
+                    .inspect_err(|e| log::debug!("Failed to find git repo: {e}"))?;
 
                 let repository = shared_repo.to_thread_local();
                 let trust = repository.git_dir_trust();
@@ -409,9 +403,54 @@ impl<'a> Context<'a> {
             .as_ref()
     }
 
+    /// Finds the work tree of the Git repository, for a module that needs no
+    /// more, as the repository is found, but loading only the configuration
+    /// that can move it rather than running git to find the rest.
+    pub fn find_git_work_tree(&self) -> Option<PathBuf> {
+        let config = gix::open::permissions::Config {
+            env: true,
+            includes: true,
+            ..gix::open::permissions::Config::isolated()
+        };
+        let repo = self.discover_git_repo(config).ok()?;
+        repo.work_dir().map(Path::to_path_buf)
+    }
+
+    /// Discovers the Git repository of the current directory as git would,
+    /// loading the configuration `config` permits, whatever its trust.
+    fn discover_git_repo(
+        &self,
+        config: gix::open::permissions::Config,
+    ) -> Result<ThreadSafeRepository, gix::Error> {
+        let permissions = |level| gix::open::Permissions {
+            config,
+            ..gix::open::Permissions::default_for_level(level)
+        };
+        let mut options = git_sec::trust::Mapping::<gix::open::Options>::default();
+        options.reduced = options
+            .reduced
+            .permissions(permissions(git_sec::Trust::Reduced));
+        options.full = options.full.permissions(permissions(git_sec::Trust::Full));
+        let upwards = gix::discover::upwards::Options {
+            match_ceiling_dir_or_error: false,
+            ..Default::default()
+        };
+        ThreadSafeRepository::discover_with_environment_overrides_opts(
+            &self.current_dir,
+            upwards,
+            options,
+        )
+    }
+
     /// Will lazily discover Jujutsu repo root when a module requests it.
     pub fn get_jj_repo(&self) -> Option<&JJRepo> {
         self.jj_repo.get_or_init(|| JJRepo::discover(self)).as_ref()
+    }
+
+    /// Whether the Git repository has been opened whole.
+    #[cfg(test)]
+    pub fn has_opened_git_repo(&self) -> bool {
+        self.git_repo.get().is_some()
     }
 
     #[cfg(test)]
@@ -920,7 +959,7 @@ pub enum Target {
 }
 
 /// Properties as passed on from the shell as arguments
-#[derive(Parser, Debug)]
+#[derive(Parser, Clone, Debug)]
 pub struct Properties {
     /// The status code of the previously run command as an unsigned or signed 32bit integer
     #[clap(short = 's', long = "status", allow_negative_numbers = true)]

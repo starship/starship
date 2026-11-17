@@ -1,12 +1,11 @@
 use pest::error::Error as PestError;
-use rayon::prelude::*;
 use std::borrow::Cow;
 use std::collections::{BTreeMap, BTreeSet};
 use std::error::Error;
 use std::fmt;
 
 use crate::config::{Style, parse_style_string};
-use crate::context::{Context, Shell};
+use crate::context::Context;
 use crate::segment::Segment;
 
 use super::model::*;
@@ -54,6 +53,7 @@ impl From<String> for StringFormatterError {
     }
 }
 
+#[derive(Clone)]
 pub struct StringFormatter<'a> {
     format: Vec<FormatElement<'a>>,
     variables: VariableMapType<'a>,
@@ -114,10 +114,10 @@ impl<'a> StringFormatter<'a> {
     pub fn map<T, M>(mut self, mapper: M) -> Self
     where
         T: Into<Cow<'a, str>>,
-        M: Fn(&str) -> Option<Result<T, StringFormatterError>> + Sync,
+        M: Fn(&str) -> Option<Result<T, StringFormatterError>>,
     {
         self.variables
-            .par_iter_mut()
+            .iter_mut()
             .filter(|(_, value)| value.is_none())
             .for_each(|(key, value)| {
                 *value = mapper(key).map(|var| var.map(|var| VariableValue::Plain(var.into())));
@@ -135,10 +135,10 @@ impl<'a> StringFormatter<'a> {
     pub fn map_no_escaping<T, M>(mut self, mapper: M) -> Self
     where
         T: Into<Cow<'a, str>>,
-        M: Fn(&str) -> Option<Result<T, StringFormatterError>> + Sync,
+        M: Fn(&str) -> Option<Result<T, StringFormatterError>>,
     {
         self.variables
-            .par_iter_mut()
+            .iter_mut()
             .filter(|(_, value)| value.is_none())
             .for_each(|(key, value)| {
                 *value = mapper(key)
@@ -156,7 +156,7 @@ impl<'a> StringFormatter<'a> {
     #[must_use]
     pub fn map_meta<M>(mut self, mapper: M) -> Self
     where
-        M: Fn(&str, &BTreeSet<String>) -> Option<&'a str> + Sync,
+        M: Fn(&str, &BTreeSet<String>) -> Option<&'a str>,
     {
         let variables = self.get_variables();
         let (variables, style_variables) = self
@@ -198,10 +198,10 @@ impl<'a> StringFormatter<'a> {
     #[must_use]
     pub fn map_variables_to_segments<M>(mut self, mapper: M) -> Self
     where
-        M: Fn(&str) -> Option<Result<Vec<Segment>, StringFormatterError>> + Sync,
+        M: Fn(&str) -> Option<Result<Vec<Segment>, StringFormatterError>>,
     {
         self.variables
-            .par_iter_mut()
+            .iter_mut()
             .filter(|(_, value)| value.is_none())
             .for_each(|(key, value)| {
                 *value = mapper(key).map(|var| var.map(VariableValue::Styled));
@@ -216,10 +216,10 @@ impl<'a> StringFormatter<'a> {
     pub fn map_style<T, M>(mut self, mapper: M) -> Self
     where
         T: Into<Cow<'a, str>>,
-        M: Fn(&str) -> Option<Result<T, StringFormatterError>> + Sync,
+        M: Fn(&str) -> Option<Result<T, StringFormatterError>>,
     {
         self.style_variables
-            .par_iter_mut()
+            .iter_mut()
             .filter(|(_, value)| value.is_none())
             .for_each(|(key, value)| {
                 *value = mapper(key).map(|var| var.map(Into::into));
@@ -291,16 +291,7 @@ impl<'a> StringFormatter<'a> {
                 .into_iter()
                 .map(|el| {
                     match el {
-                        FormatElement::Text(text) => Ok(Segment::from_text(
-                            style,
-                            shell_prompt_escape(
-                                text,
-                                match context {
-                                    None => Shell::Unknown,
-                                    Some(c) => c.shell,
-                                },
-                            ),
-                        )),
+                        FormatElement::Text(text) => Ok(Segment::from_text(style, text)),
                         FormatElement::TextGroup(textgroup) => {
                             parse_textgroup(textgroup, variables, style_variables, context)
                         }
@@ -319,18 +310,11 @@ impl<'a> StringFormatter<'a> {
                                             segment
                                         })
                                         .collect()),
-                                    VariableValue::Plain(text) => Ok(Segment::from_text(
-                                        style,
-                                        shell_prompt_escape(
-                                            text,
-                                            match context {
-                                                None => Shell::Unknown,
-                                                Some(c) => c.shell,
-                                            },
-                                        ),
-                                    )),
-                                    VariableValue::NoEscapingPlain(text) => {
+                                    VariableValue::Plain(text) => {
                                         Ok(Segment::from_text(style, text))
+                                    }
+                                    VariableValue::NoEscapingPlain(text) => {
+                                        Ok(Segment::verbatim(style, text))
                                     }
                                     VariableValue::Meta(format) => {
                                         let formatter = StringFormatter {
@@ -435,28 +419,6 @@ fn clone_without_meta<'a>(variables: &VariableMapType<'a>) -> VariableMapType<'a
             (key.clone(), value)
         })
         .collect()
-}
-
-/// Escape interpretable characters for the shell prompt
-pub fn shell_prompt_escape<T>(text: T, shell: Shell) -> String
-where
-    T: Into<String>,
-{
-    // Handle other interpretable characters
-    match shell {
-        // Bash might interpret backslashes, backticks and $
-        // see #658 for more details
-        Shell::Bash => text
-            .into()
-            .replace('\\', r"\\")
-            .replace('$', r"\$")
-            .replace('`', r"\`"),
-        Shell::Zsh => {
-            // % is an escape in zsh, see PROMPT in `man zshmisc`
-            text.into().replace('%', "%%")
-        }
-        _ => text.into(),
-    }
 }
 
 #[cfg(test)]
@@ -853,47 +815,5 @@ mod tests {
                 .parse(None, None)
         });
         assert!(segments.is_err());
-    }
-
-    #[test]
-    fn test_bash_escape() {
-        let test = "$(echo a)";
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::Bash),
-            r"\$(echo a)"
-        );
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
-            test
-        );
-
-        let test = r"\$(echo a)";
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::Bash),
-            r"\\\$(echo a)"
-        );
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
-            test
-        );
-
-        let test = r"`echo a`";
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::Bash),
-            r"\`echo a\`"
-        );
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
-            test
-        );
-    }
-    #[test]
-    fn test_zsh_escape() {
-        let test = "10%";
-        assert_eq!(shell_prompt_escape(test.to_owned(), Shell::Zsh), "10%%");
-        assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
-            test
-        );
     }
 }
