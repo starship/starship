@@ -1,0 +1,276 @@
+# Darkberry for Starship: wine-dark surfaces with berry accents.
+# https://github.com/shythulu/DarkBerry
+#
+# Four flavours live in the [palettes.*] tables at the bottom. Pick one by
+# setting `palette` to darkberry_wisp (light), darkberry_fen (soft dark),
+# darkberry_mire (dark, the default) or darkberry_blackwater (darkest).
+
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# A two-line box-drawing prompt. Row one is where you are: OS, user, host,
+# path, branch and working tree, then a rule pushing toolchain versions to
+# the right margin. Row two is the caret, with what just happened (duration,
+# exit status, jobs, clock) opposite it in right_format.
+#
+# The frame (╭─ ╰─ ─) is plain Unicode box drawing, so it survives without a
+# Nerd Font; only the module icons need one. The $fill rule means the prompt
+# spans the full width: comfortable at 100+ columns, cramped under about 70.
+
+format = """
+[╭─](frame)\
+$os\
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_status\
+$git_state\
+[ ](frame)$fill[ ](frame)\
+$rust\
+$nodejs\
+$python\
+$line_break\
+[╰─ ](frame)$character"""
+
+# What just happened, pinned to the right margin of the caret line. zsh puts
+# RPROMPT on the last line of a multi-line prompt, which is where the caret is,
+# so the frame closes on the left and the status sits opposite it.
+right_format = """
+$cmd_duration\
+$status\
+$jobs\
+$time"""
+
+add_newline = true
+command_timeout = 1000
+palette = 'darkberry_mire'
+
+# The rule that spans to the right margin.
+[fill]
+symbol = "─"
+style = "rule"
+
+# ---- row one: where you are ------------------------------------------------
+
+[os]
+disabled = false
+style = "berry"
+format = '[ $symbol]($style)'
+
+[os.symbols]
+Macos = "󰀵"
+Arch = "󰣇"
+EndeavourOS = "󰣇"
+Fedora = "󰣛"
+Windows = "󰍲"
+Ubuntu = "󰕈"
+Debian = "󰣚"
+Linux = "󰌽"
+
+[username]
+show_always = false
+style_user = "berry"
+style_root = "bold error"
+format = '[ $user]($style)'
+
+[hostname]
+ssh_only = true
+style = "plum"
+format = '[ 󰒋 $hostname]($style)'
+
+[directory]
+style = "berry"
+format = '[ $path]($style)[$read_only]($read_only_style)'
+read_only = " 󰌾"
+read_only_style = "error"
+truncation_length = 5
+truncation_symbol = "…/"
+truncate_to_repo = true
+repo_root_style = "bold berry"
+before_repo_root_style = "text_subtle"
+repo_root_format = '[ $before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style)'
+
+[directory.substitutions]
+"Documents" = "󰈙"
+"Downloads" = ""
+"Music" = "󰝚"
+"Pictures" = ""
+"Developer" = "󰲋"
+"dev" = "󰲋"
+
+[git_branch]
+symbol = ""
+style = "lavender"
+format = ' [$symbol $branch]($style)'
+truncation_length = 28
+truncation_symbol = "…"
+
+[git_status]
+style = "honey"
+conflicted = "[=$count](bold error)"
+ahead = "[⇡$count](success)"
+behind = "[⇣$count](apricot)"
+diverged = "[⇕$ahead_count/$behind_count](plum)"
+untracked = "[?$count](text_subtle)"
+stashed = "[󰏗$count](frost)"
+modified = "[!$count](warning)"
+staged = "[+$count](success)"
+renamed = "[»$count](lavender)"
+deleted = "[✘$count](bold error)"
+format = '([ $all_status$ahead_behind]($style))'
+
+[git_state]
+style = "bold error"
+format = ' [$state $progress_current/$progress_total]($style)'
+
+[time]
+disabled = false
+time_format = "%H:%M"
+style = "text_subtle"
+format = '[ 󰅐 $time]($style)'
+
+# ---- the right margin: what just happened ----------------------------------
+# These render into right_format. $time is kept so the margin is never empty,
+# which reads better than a caret line that is sometimes bare and sometimes not.
+
+[rust]
+symbol = ""
+style = "apricot"
+format = '[$symbol $version ]($style)'
+
+[nodejs]
+symbol = ""
+style = "gooseberry"
+format = '[$symbol $version ]($style)'
+detect_files = ["package.json", ".nvmrc", ".node-version"]
+detect_folders = []
+
+[python]
+symbol = ""
+style = "honey"
+format = '[$symbol$version( $virtualenv) ]($style)'
+
+[cmd_duration]
+min_time = 2000
+style = "apricot"
+format = '[ 󰔟 $duration]($style)'
+show_notifications = false
+
+[status]
+disabled = false
+style = "bold error"
+symbol = "✘"
+not_found_symbol = "󰍉"
+sigint_symbol = "󰜺"
+signal_symbol = "⚡"
+map_symbol = true
+format = '[ $symbol $status]($style)'
+
+[jobs]
+symbol = "󰜎"
+number_threshold = 1
+style = "info"
+format = '[ $symbol$number]($style)'
+
+# ---- row two: the caret ----------------------------------------------------
+
+[line_break]
+disabled = false
+
+[character]
+disabled = false
+success_symbol = '[❯](bold cursor)'
+error_symbol = '[❯](bold error)'
+vimcmd_symbol = '[❮](bold plum)'
+
+# ---- off -------------------------------------------------------------------
+[package]
+disabled = true
+[aws]
+disabled = true
+[gcloud]
+disabled = true
+
+# Wisp: Light.
+[palettes.darkberry_wisp]
+# Roles: what a colour means.
+cursor = "#a83570"
+success = "#2c6f2d"
+warning = "#815b02"
+error = "#bb262a"
+info = "#006f5f"
+text_subtle = "#967d8c"
+frame = "#967d8c"
+rule = "#c3abb9"
+
+# Palette colours: no role carries these meanings.
+berry = "#bf0b64"
+plum = "#8c3eb2"
+lavender = "#7350a8"
+apricot = "#a24712"
+frost = "#026b80"
+gooseberry = "#2c6f2d"
+honey = "#815b02"
+
+# Fen: Soft dark.
+[palettes.darkberry_fen]
+# Roles: what a colour means.
+cursor = "#ffc4dd"
+success = "#b7e6b7"
+warning = "#f0d6a0"
+error = "#ff8a8a"
+info = "#b0dfd9"
+text_subtle = "#a28297"
+frame = "#a28297"
+rule = "#7b5a6e"
+
+# Palette colours: no role carries these meanings.
+berry = "#fa99b4"
+plum = "#ecbcfc"
+lavender = "#c9b0e8"
+apricot = "#f7bf9e"
+frost = "#83d4db"
+gooseberry = "#b7e6b7"
+honey = "#f0d6a0"
+
+# Mire: The main dark flavour (default).
+[palettes.darkberry_mire]
+# Roles: what a colour means.
+cursor = "#feafd4"
+success = "#a3daa3"
+warning = "#e8c98a"
+error = "#f06a6a"
+info = "#9ed0c4"
+text_subtle = "#91828b"
+frame = "#91828b"
+rule = "#4f3143"
+
+# Palette colours: no role carries these meanings.
+berry = "#fd7ca5"
+plum = "#ddb0ec"
+lavender = "#baa8dc"
+apricot = "#f2ad8a"
+frost = "#86c0cc"
+gooseberry = "#a3daa3"
+honey = "#e8c98a"
+
+# Blackwater: Darkest. Deeper surfaces, same accents as Mire.
+[palettes.darkberry_blackwater]
+# Roles: what a colour means.
+cursor = "#feafd4"
+success = "#a3daa3"
+warning = "#e8c98a"
+error = "#f06a6a"
+info = "#9ed0c4"
+text_subtle = "#887882"
+frame = "#887882"
+rule = "#432c3b"
+
+# Palette colours: no role carries these meanings.
+berry = "#fd7ca5"
+plum = "#ddb0ec"
+lavender = "#baa8dc"
+apricot = "#f2ad8a"
+frost = "#86c0cc"
+gooseberry = "#a3daa3"
+honey = "#e8c98a"
