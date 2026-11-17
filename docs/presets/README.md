@@ -83,3 +83,9 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
 
 [![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)
+
+## [Kanagawa](./kanagawa.md)
+
+This preset is inspired by [Pastel Powerline](./pastel-powerline.md), and uses color codes from [kanagawa.vscode](https://github.com/barklan/kanagawa.vscode).
+
+[![Screenshot of Kanagawa preset](/presets/img/kanagawa.png "Click to view Kanagawa preset")](./kanagawa)
