@@ -309,6 +309,7 @@ pub fn description(module: &str) -> &'static str {
         "gcloud" => "The current GCP client configuration",
         "git_branch" => "The active branch of the current Git repo",
         "git_commit" => "The active commit (and tag if any) of the current Git repo",
+        "git_host" => "The host of the current Git repo's remote",
         "git_metrics" => "The currently added/deleted lines in your Git repo",
         "git_state" => "The current Git operation, and it's progress",
         "git_status" => {
