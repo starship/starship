@@ -358,19 +358,15 @@ pub fn parse_style_string(style_string: &str, context: Option<&Context>) -> Opti
     style_string
         .split_whitespace()
         .try_fold(Style::default(), |style, token| {
-            let token = token.to_lowercase();
-
             // Check for FG/BG identifiers and strip them off if appropriate
             // If col_fg is true, color the foreground. If it's false, color the background.
-            let (token, col_fg) = if token.as_str().starts_with("fg:") {
-                (token.trim_start_matches("fg:").to_owned(), true)
-            } else if token.as_str().starts_with("bg:") {
-                (token.trim_start_matches("bg:").to_owned(), false)
-            } else {
-                (token, true) // Bare colors are assumed to color the foreground
+            let (token, col_fg) = match token.get(..3) {
+                Some(prefix) if prefix.eq_ignore_ascii_case("fg:") => (&token[3..], true),
+                Some(prefix) if prefix.eq_ignore_ascii_case("bg:") => (&token[3..], false),
+                _ => (token, true), // Bare colors are assumed to color the foreground
             };
 
-            match token.as_str() {
+            match token.to_lowercase().as_str() {
                 "underline" => Some(style.map_style(nu_ansi_term::Style::underline)),
                 "bold" => Some(style.map_style(nu_ansi_term::Style::bold)),
                 "italic" => Some(style.map_style(nu_ansi_term::Style::italic)),
@@ -388,13 +384,13 @@ pub fn parse_style_string(style_string: &str, context: Option<&Context>) -> Opti
 
                 // When the string is supposed to be a color:
                 // Decide if we yield none, reset background or set color.
-                color_string => {
-                    if color_string == "none" && col_fg {
+                keyword => {
+                    if keyword == "none" && col_fg {
                         None // fg:none yields no style.
                     } else {
                         // Either bg or valid color or both.
                         let parsed = parse_color_string(
-                            color_string,
+                            token,
                             context.and_then(|x| {
                                 get_palette(
                                     &x.root_config.palettes,
@@ -455,7 +451,10 @@ fn parse_color_string(
     }
 
     // Check palette for a matching user-defined color
-    if let Some(palette_color) = palette.as_ref().and_then(|x| x.get(color_string)) {
+    if let Some(palette_color) = palette.as_ref().and_then(|x| {
+        x.get(color_string)
+            .or_else(|| x.get(&color_string.to_lowercase()))
+    }) {
         log::trace!("Read user-defined color string: {color_string} defined as {palette_color}");
         return parse_color_string(palette_color, None);
     }
@@ -511,6 +510,7 @@ fn get_palette<'a>(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::test::default_context;
     use nu_ansi_term::Style as AnsiStyle;
 
     // Small wrapper to allow deserializing Style without a struct with #[serde(deserialize_with=)]
@@ -1004,6 +1004,34 @@ mod tests {
         assert_eq!(
             parse_color_string("green", Some(&palette)),
             Some(Color::Green)
+        );
+    }
+
+    #[test]
+    fn table_get_styles_palette_uppercase_names() {
+        let context = default_context().set_config(toml::toml! {
+            palette = "base16"
+            [palettes.base16]
+            base0B = "#a6e3a1"
+            base0D = "#89b4fa"
+            mustard = "#af8700"
+        });
+
+        // Test palette colors with uppercase letters in their names
+        let style = parse_style_string("BOLD fg:base0B BG:base0D", Some(&context)).unwrap();
+        assert_eq!(
+            style.to_ansi_style(None),
+            AnsiStyle::new()
+                .bold()
+                .fg(Color::Rgb(166, 227, 161))
+                .on(Color::Rgb(137, 180, 250))
+        );
+
+        // Test that lowercase palette names still match regardless of case
+        let style = parse_style_string("fg:Mustard", Some(&context)).unwrap();
+        assert_eq!(
+            style.to_ansi_style(None),
+            AnsiStyle::new().fg(Color::Rgb(175, 135, 0))
         );
     }
 
