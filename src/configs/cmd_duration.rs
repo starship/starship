@@ -15,6 +15,7 @@ pub struct CmdDurationConfig<'a> {
     pub disabled: bool,
     pub show_notifications: bool,
     pub min_time_to_notify: i64,
+    pub notify_ignore_commands: Vec<&'a str>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_timeout: Option<u32>,
@@ -30,6 +31,7 @@ impl Default for CmdDurationConfig<'_> {
             disabled: false,
             show_notifications: false,
             min_time_to_notify: 45_000,
+            notify_ignore_commands: vec![],
             notification_timeout: None,
         }
     }
