@@ -25,9 +25,18 @@ struct StarshipPath {
 }
 impl StarshipPath {
     fn init() -> io::Result<Self> {
-        let exe_name = option_env!("CARGO_PKG_NAME").unwrap_or("starship");
-
-        let native_path = which(exe_name).or_else(|_| env::current_exe())?;
+        // If we were invoked via a direct path, prefer to use the current
+        // binary for init. Otherwise, prefer to look it up in the system `PATH`,
+        // falling back to the current binary in case of failure.
+        let native_path = if env::args_os()
+            .next()
+            .is_some_and(|s| Path::new(&s).components().count() > 1)
+        {
+            env::current_exe()?
+        } else {
+            let exe_name = option_env!("CARGO_PKG_NAME").unwrap_or("starship");
+            which(exe_name).or_else(|_| env::current_exe())?
+        };
 
         Ok(Self { native_path })
     }
