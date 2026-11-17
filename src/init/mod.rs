@@ -162,13 +162,13 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
              * https://github.com/starship/starship/pull/5020
              * https://github.com/starship/starship/issues/5382
              */
-            r#"eval -- "$({0} init bash --print-full-init)""#,
+            r#"if [[ $- == *i* ]]; then eval -- "$({0} init bash --print-full-init)"; fi"#,
             starship.sprint_posix()?
         ),
         "zsh" => print_script(ZSH_INIT, &starship.sprint_posix()?),
         "fish" => print!(
             // Fish does process substitution with pipes and psub instead of bash syntax
-            r"source ({} init fish --print-full-init | psub)",
+            r"if status is-interactive; source ({} init fish --print-full-init | psub); end",
             starship.sprint_posix()?
         ),
         "powershell" => print!(
