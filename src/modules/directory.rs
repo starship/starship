@@ -1246,7 +1246,10 @@ mod tests {
             .path(dir)
             .collect();
         // The repo root is truncated away, so there is nothing to highlight
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("b/b/q/quzz")));
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint(convert_path_sep("b/b/q/quzz"))
+        ));
         assert_eq!(expected, actual);
         tmp_dir.close()
     }
