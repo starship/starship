@@ -2102,6 +2102,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "nix"
+version = "0.32.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "77730ed34f01f4990cb2ea67fec715ecebc6fab9a6396cf83c5529b13f581bdc"
+dependencies = [
+ "bitflags 2.13.2",
+ "cfg-if 1.0.5",
+ "cfg_aliases",
+ "libc",
+]
+
+[[package]]
 name = "nom"
 version = "5.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2449,7 +2461,7 @@ checksum = "9cf20a545b305cf1da722b236b5155c9bb35f1d5ceb28c048bd96ca842f41b5b"
 dependencies = [
  "android_system_properties",
  "log",
- "nix",
+ "nix 0.31.3",
  "objc2",
  "objc2-foundation",
  "objc2-ui-kit",
@@ -3271,7 +3283,7 @@ dependencies = [
  "jsonc-parser",
  "log",
  "mockall",
- "nix",
+ "nix 0.32.0",
  "notify-rust",
  "nu-ansi-term",
  "open",
@@ -3321,7 +3333,7 @@ dependencies = [
  "lazycell",
  "libc",
  "mach2 0.7.0",
- "nix",
+ "nix 0.31.3",
  "num-traits",
  "objc2-core-foundation",
  "objc2-io-kit",
