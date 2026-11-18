@@ -247,7 +247,7 @@ mod tests {
                 })
                 .collect();
 
-            let expected = Some(format!("{} ", Color::Purple.bold().paint("\u{f408}")));
+            let expected = Some(format!("{} ", Color::Purple.bold().paint("")));
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
@@ -324,7 +324,7 @@ mod tests {
                     "github.com" = ""
                 })
                 .collect();
-            let expected = Some(format!("{} ", Color::Purple.bold().paint("\u{f408}")));
+            let expected = Some(format!("{} ", Color::Purple.bold().paint("")));
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
@@ -381,7 +381,7 @@ mod tests {
                 })
                 .collect();
 
-            let expected = Some(format!("{} ", Color::Purple.bold().paint("\u{f408}")));
+            let expected = Some(format!("{} ", Color::Purple.bold().paint("")));
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
@@ -484,7 +484,7 @@ mod tests {
                 })
                 .collect();
 
-            let expected = Some(format!("{} ", Color::Purple.bold().paint("\u{e5fb}")));
+            let expected = Some(format!("{} ", Color::Purple.bold().paint("")));
             assert_eq!(expected, actual);
             repo_dir.close()?;
         }
