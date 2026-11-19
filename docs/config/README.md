@@ -1858,7 +1858,7 @@ environment variables has been set.
 
 *: This variable can only be used as a part of a style string
 
-### Examples 
+### Examples
 
 #### Display account and project
 
@@ -1990,20 +1990,20 @@ The `git_host` module shows an icon for the host of the remote of the current br
 
 ### Options
 
-| Option     | Default                | Description                                                                              |
-| ---------- | ---------------------- | ---------------------------------------------------------------------------------------- |
-| `format`   | `'[$symbol]($style) '` | The format for the module.                                                               |
-| `style`    | `'bold purple'`        | The style for the module.                                                                |
-| `symbols`  | `{ ... }`              | Table of symbols keyed by lowercase host name, e.g. `'github.com'`. See defaults below.  |
-| `unknown`  | `' '`                 | The symbol used when the host is not in `symbols`.                                       |
-| `disabled` | `true`                 | Disables the `git_host` module.                                                          |
+| Option     | Default                | Description                                                                             |
+| ---------- | ---------------------- | --------------------------------------------------------------------------------------- |
+| `format`   | `'[$symbol]($style) '` | The format for the module.                                                              |
+| `style`    | `'bold purple'`        | The style for the module.                                                               |
+| `symbols`  | `{ ... }`              | Table of symbols keyed by lowercase host name, e.g. `'github.com'`. See defaults below. |
+| `unknown`  | `' '`                 | The symbol used when the host is not in `symbols`.                                      |
+| `disabled` | `true`                 | Disables the `git_host` module.                                                         |
 
 ### Variables
 
-| Variable | Example | Description                                    |
-| -------- | ------- | ---------------------------------------------- |
-| symbol   | ``      | The symbol matching the host of the remote     |
-| style\*  |         | Mirrors the value of option `style`            |
+| Variable | Example | Description                                |
+| -------- | ------- | ------------------------------------------ |
+| symbol   | ``      | The symbol matching the host of the remote |
+| style\*  |         | Mirrors the value of option `style`        |
 
 *: This variable can only be used as a part of a style string
 
