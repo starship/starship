@@ -1990,13 +1990,13 @@ The `git_host` module shows an icon for the host of the remote of the current br
 
 ### Options
 
-| Option     | Default                | Description                                                                             |
-| ---------- | ---------------------- | --------------------------------------------------------------------------------------- |
-| `format`   | `'[$symbol]($style) '` | The format for the module.                                                              |
-| `style`    | `'bold purple'`        | The style for the module.                                                               |
-| `symbols`  | `{ ... }`              | Table of symbols keyed by lowercase host name, e.g. `'github.com'`. See defaults below. |
-| `unknown`  | `' '`                 | The symbol used when the host is not in `symbols`.                                      |
-| `disabled` | `true`                 | Disables the `git_host` module.                                                         |
+| Option     | Default                | Description                                                         |
+| ---------- | ---------------------- | ------------------------------------------------------------------- |
+| `format`   | `'[$symbol]($style) '` | The format for the module.                                          |
+| `style`    | `'bold purple'`        | The style for the module.                                           |
+| `symbols`  | `{}`                   | Table of symbols keyed by lowercase host name, e.g. `'github.com'`. |
+| `unknown`  | `''`                  | The symbol used when the host is not in `symbols`.                  |
+| `disabled` | `true`                 | Disables the `git_host` module.                                     |
 
 ### Variables
 
