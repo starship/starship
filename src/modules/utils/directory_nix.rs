@@ -46,7 +46,7 @@ fn get_supplementary_groups() -> Vec<u32> {
 }
 
 #[cfg(all(unix, any(target_os = "macos", target_os = "ios")))]
-fn get_supplementary_groups() -> Vec<u32> {
+const fn get_supplementary_groups() -> Vec<u32> {
     // at the moment nix crate does not provide it for macOS
     Vec::new()
 }

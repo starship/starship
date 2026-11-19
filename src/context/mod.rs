@@ -486,6 +486,8 @@ impl<'a> Context<'a> {
             }
         }
         let mut cmd = create_command(cmd).ok()?;
+        #[cfg(test)]
+        cmd.envs(&self.env.env);
         cmd.args(args).current_dir(&self.current_dir);
         exec_timeout(
             &mut cmd,
