@@ -13,6 +13,7 @@ use std::clone::Clone;
 use std::collections::HashMap;
 use std::ffi::OsStr;
 use std::io::ErrorKind;
+use std::path::{Path, PathBuf};
 
 use toml::Value;
 
@@ -78,7 +79,7 @@ pub enum Either<A, B> {
 
 /// A wrapper around `Vec<T>` that implements `ModuleConfig`, and either
 /// accepts a value of type `T` or a list of values of type `T`.
-#[derive(Clone, Default, Serialize)]
+#[derive(Clone, Debug, Default, Serialize)]
 pub struct VecOr<T>(pub Vec<T>);
 
 impl<'de, T> Deserialize<'de> for VecOr<T>
@@ -136,15 +137,91 @@ impl StarshipConfig {
     fn config_from_file(config_file_path: Option<&OsStr>) -> Option<toml::Table> {
         let toml_content = Self::read_config_content_as_str(config_file_path)?;
 
-        match toml::from_str(&toml_content) {
-            Ok(parsed) => {
-                log::debug!("Config parsed: {parsed:?}");
-                Some(parsed)
-            }
+        let mut parsed: toml::Table = match toml::from_str(&toml_content) {
+            Ok(parsed) => parsed,
             Err(error) => {
                 log::error!("Unable to parse the config file: {error}");
-                None
+                return None;
             }
+        };
+
+        if let Some(config_file_path) = config_file_path {
+            let config_file_path = PathBuf::from(config_file_path);
+            let mut stack = vec![canonicalize_path(&config_file_path)];
+            Self::apply_includes(&mut parsed, &config_file_path, &mut stack);
+        }
+
+        log::debug!("Config parsed: {parsed:?}");
+        Some(parsed)
+    }
+
+    fn apply_includes(table: &mut toml::Table, including_file: &Path, stack: &mut Vec<PathBuf>) {
+        let Some(entry) = table.remove("include_optional") else {
+            return;
+        };
+
+        let entries = match entry {
+            Value::String(entry) => Ok(vec![entry]),
+            Value::Array(entries) => entries
+                .into_iter()
+                .map(|entry| match entry {
+                    Value::String(entry) => Ok(entry),
+                    _ => Err(()),
+                })
+                .collect::<Result<Vec<_>, _>>(),
+            _ => Err(()),
+        };
+
+        let Ok(entries) = entries else {
+            log::error!(
+                "Unable to parse `include_optional`: expected a string or an array of strings"
+            );
+            return;
+        };
+
+        for entry in entries {
+            let path = resolve_include_path(&entry, including_file);
+            let canonical_path = canonicalize_path(&path);
+
+            if stack.contains(&canonical_path) {
+                log::error!(
+                    "Ignoring cyclic `include_optional` entry {path:?} in {including_file:?}"
+                );
+                continue;
+            }
+
+            if stack.len() >= MAX_INCLUDE_DEPTH {
+                log::error!(
+                    "Ignoring `include_optional` entry {path:?}: exceeded a maximum depth of {MAX_INCLUDE_DEPTH}"
+                );
+                continue;
+            }
+
+            let content = match utils::read_file(&path) {
+                Ok(content) => content,
+                Err(error) if error.kind() == ErrorKind::NotFound => {
+                    log::debug!("Skipping missing include file {path:?}");
+                    continue;
+                }
+                Err(error) => {
+                    log::error!("Unable to read include file {path:?}: {error}");
+                    continue;
+                }
+            };
+
+            let mut included: toml::Table = match toml::from_str(&content) {
+                Ok(included) => included,
+                Err(error) => {
+                    log::error!("Unable to parse include file {path:?}: {error}");
+                    continue;
+                }
+            };
+
+            stack.push(canonical_path);
+            Self::apply_includes(&mut included, &path, stack);
+            stack.pop();
+
+            merge_tables(table, included);
         }
     }
 
@@ -246,6 +323,48 @@ impl StarshipConfig {
     /// Get the table of all the registered `env_var` modules, if any
     pub fn get_env_var_modules(&self) -> Option<&toml::value::Table> {
         self.get_config(&["env_var"])?.as_table()
+    }
+}
+
+const MAX_INCLUDE_DEPTH: usize = 10;
+
+fn resolve_include_path(entry: &str, including_file: &Path) -> PathBuf {
+    let path = Path::new(entry);
+
+    if path.is_absolute() {
+        return path.to_path_buf();
+    }
+
+    if let Some(entry) = entry.strip_prefix("~/")
+        && let Some(home) = utils::home_dir()
+    {
+        return home.join(entry);
+    }
+
+    including_file
+        .parent()
+        .map_or_else(|| path.to_path_buf(), |dir| dir.join(path))
+}
+
+fn canonicalize_path(path: &Path) -> PathBuf {
+    dunce::canonicalize(path).unwrap_or_else(|_| path.to_path_buf())
+}
+
+fn merge_tables(target: &mut toml::Table, source: toml::Table) {
+    for (key, incoming) in source {
+        if matches!(
+            (target.get(&key), &incoming),
+            (Some(Value::Table(_)), Value::Table(_))
+        ) {
+            if let (Some(Value::Table(existing)), Value::Table(incoming)) =
+                (target.get_mut(&key), incoming)
+            {
+                merge_tables(existing, incoming);
+            }
+            continue;
+        }
+
+        target.insert(key, incoming);
     }
 }
 
@@ -664,6 +783,178 @@ mod tests {
 
         assert!(rust_config.is_ok());
         assert_eq!(rust_config.unwrap().foo, "test");
+    }
+
+    #[test]
+    fn test_include_optional_merges_tables() {
+        let dir = tempfile::TempDir::new().unwrap();
+        let config_path = dir.path().join("starship.toml");
+
+        std::fs::write(
+            &config_path,
+            "include_optional = \"palette.toml\"\npalette = \"main\"\n\n[palettes.main]\nred = \"#ff0000\"\n",
+        )
+        .unwrap();
+        std::fs::write(
+            dir.path().join("palette.toml"),
+            "[palettes.main]\ngreen = \"#00ff00\"\n\n[palettes.other]\nblue = \"#0000ff\"\n",
+        )
+        .unwrap();
+
+        let config = StarshipConfig::initialize(Some(config_path.as_os_str()))
+            .config
+            .unwrap();
+
+        assert!(!config.contains_key("include_optional"));
+        assert_eq!(config["palette"].as_str(), Some("main"));
+        assert_eq!(config["palettes"]["main"]["red"].as_str(), Some("#ff0000"));
+        assert_eq!(
+            config["palettes"]["main"]["green"].as_str(),
+            Some("#00ff00")
+        );
+        assert_eq!(
+            config["palettes"]["other"]["blue"].as_str(),
+            Some("#0000ff")
+        );
+    }
+
+    #[test]
+    fn test_include_optional_missing_file() {
+        let dir = tempfile::TempDir::new().unwrap();
+        let config_path = dir.path().join("starship.toml");
+
+        std::fs::write(
+            &config_path,
+            "include_optional = \"missing.toml\"\nformat = \"x\"\n",
+        )
+        .unwrap();
+
+        let config = StarshipConfig::initialize(Some(config_path.as_os_str()))
+            .config
+            .unwrap();
+
+        assert!(!config.contains_key("include_optional"));
+        assert_eq!(config["format"].as_str(), Some("x"));
+    }
+
+    #[test]
+    fn test_include_optional_precedence() {
+        let dir = tempfile::TempDir::new().unwrap();
+        let config_path = dir.path().join("starship.toml");
+
+        std::fs::write(
+            &config_path,
+            "include_optional = [\"first.toml\", \"second.toml\"]\nformat = \"main\"\n",
+        )
+        .unwrap();
+        std::fs::write(
+            dir.path().join("first.toml"),
+            "format = \"first\"\nline_ending = \"crlf\"\n",
+        )
+        .unwrap();
+        std::fs::write(dir.path().join("second.toml"), "format = \"second\"\n").unwrap();
+
+        let config = StarshipConfig::initialize(Some(config_path.as_os_str()))
+            .config
+            .unwrap();
+
+        assert_eq!(config["format"].as_str(), Some("second"));
+        assert_eq!(config["line_ending"].as_str(), Some("crlf"));
+    }
+
+    #[test]
+    fn test_include_optional_absolute_and_nested_paths() {
+        let dir = tempfile::TempDir::new().unwrap();
+        let config_path = dir.path().join("starship.toml");
+        let nested = dir.path().join("nested");
+        std::fs::create_dir(&nested).unwrap();
+
+        std::fs::write(
+            &config_path,
+            format!(
+                "include_optional = {}\n",
+                Value::String(nested.join("inner.toml").to_string_lossy().into_owned())
+            ),
+        )
+        .unwrap();
+        std::fs::write(
+            nested.join("inner.toml"),
+            "include_optional = \"deepest.toml\"\nformat = \"inner\"\n",
+        )
+        .unwrap();
+        std::fs::write(nested.join("deepest.toml"), "add_newline = false\n").unwrap();
+
+        let config = StarshipConfig::initialize(Some(config_path.as_os_str()))
+            .config
+            .unwrap();
+
+        assert!(!config.contains_key("include_optional"));
+        assert_eq!(config["format"].as_str(), Some("inner"));
+        assert_eq!(config["add_newline"].as_bool(), Some(false));
+    }
+
+    #[test]
+    fn test_include_optional_cycle() {
+        let dir = tempfile::TempDir::new().unwrap();
+        let config_path = dir.path().join("starship.toml");
+
+        std::fs::write(
+            &config_path,
+            "include_optional = \"other.toml\"\nformat = \"main\"\n",
+        )
+        .unwrap();
+        std::fs::write(
+            dir.path().join("other.toml"),
+            "include_optional = \"starship.toml\"\nadd_newline = false\n",
+        )
+        .unwrap();
+
+        let config = StarshipConfig::initialize(Some(config_path.as_os_str()))
+            .config
+            .unwrap();
+
+        assert_eq!(config["format"].as_str(), Some("main"));
+        assert_eq!(config["add_newline"].as_bool(), Some(false));
+    }
+
+    #[test]
+    fn test_canonicalize_path_matches_aliases_and_symlinks() {
+        let dir = tempfile::TempDir::new().unwrap();
+        let config_path = dir.path().join("starship.toml");
+        std::fs::write(&config_path, "").unwrap();
+        std::fs::create_dir(dir.path().join("sub")).unwrap();
+
+        #[cfg(unix)]
+        std::os::unix::fs::symlink(&config_path, dir.path().join("link.toml")).unwrap();
+        #[cfg(windows)]
+        std::os::windows::fs::symlink_file(&config_path, dir.path().join("link.toml")).unwrap();
+
+        let canonical = canonicalize_path(&config_path);
+
+        assert_eq!(
+            canonical,
+            canonicalize_path(&dir.path().join("./starship.toml"))
+        );
+        assert_eq!(
+            canonical,
+            canonicalize_path(&dir.path().join("sub").join("../starship.toml"))
+        );
+        assert_eq!(canonical, canonicalize_path(&dir.path().join("link.toml")));
+    }
+
+    #[test]
+    fn test_include_optional_invalid_type() {
+        let dir = tempfile::TempDir::new().unwrap();
+        let config_path = dir.path().join("starship.toml");
+
+        std::fs::write(&config_path, "include_optional = 3\nformat = \"x\"\n").unwrap();
+
+        let config = StarshipConfig::initialize(Some(config_path.as_os_str()))
+            .config
+            .unwrap();
+
+        assert!(!config.contains_key("include_optional"));
+        assert_eq!(config["format"].as_str(), Some("x"));
     }
 
     #[test]
