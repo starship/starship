@@ -1879,6 +1879,14 @@ pub mod tests {
 
     #[test]
     fn worktree_in_different_dir() -> io::Result<()> {
+        if std::env::var_os("STARSHIP_TEST_SEPARATE_WORKTREE").is_some() {
+            let actual = ModuleRenderer::new("git_status")
+                .path(std::env::current_dir()?)
+                .collect();
+            assert_eq!(format_output("✘?"), actual);
+            return Ok(());
+        }
+
         for &mode in COMMON_GIT_PROVIDERS {
             let worktree_dir = tempfile::tempdir()?;
             let repo_dir = fixture_repo(mode)?;
@@ -1894,12 +1902,23 @@ pub mod tests {
 
             File::create(worktree_dir.path().join("test_file"))?.sync_all()?;
 
-            let actual = ModuleRenderer::new("git_status")
-                .path(repo_dir.path())
-                .collect();
-            let expected = format_output("✘?");
-
-            assert_eq!(expected, actual);
+            // Reduced trust ignores local core.worktree; exercise the explicit environment override.
+            let output = create_command(std::env::current_exe()?)?
+                .args([
+                    "--exact",
+                    "modules::git_status::tests::worktree_in_different_dir",
+                    "--nocapture",
+                ])
+                .current_dir(repo_dir.path())
+                .env("GIT_WORK_TREE", worktree_dir.path())
+                .env("STARSHIP_TEST_SEPARATE_WORKTREE", "1")
+                .output()?;
+            assert!(
+                output.status.success(),
+                "{}\n{}",
+                String::from_utf8_lossy(&output.stdout),
+                String::from_utf8_lossy(&output.stderr),
+            );
             worktree_dir.close()?;
             repo_dir.close()?;
         }

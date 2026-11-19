@@ -119,6 +119,10 @@ impl<'a> ModuleRenderer<'a> {
         self.context
             .logical_dir
             .clone_from(&self.context.current_dir);
+        // Fixture tests exercise Git fallbacks unless they explicitly request reduced trust.
+        if self.context.get_git_repo().is_ok() {
+            self.context.set_git_trust(gix::sec::Trust::Full);
+        }
         self
     }
 
