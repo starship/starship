@@ -35,6 +35,7 @@ config-schema = ["schemars"]
 notify = ["notify-rust"]
 
 [dependencies]
+anstream = { version = "1.0.0", default-features = false }
 clap = { version = "4.6.7", features = ["derive", "cargo", "unicode"] }
 clap_complete = "4.6.11"
 clap_complete_nushell = "4.6.2"
@@ -126,6 +127,7 @@ winresource = "0.1.34"
 
 [dev-dependencies]
 mockall = "=0.15.0"
+proptest = { version = "=1.11.0", default-features = false, features = ["std"] }
 
 [profile.release]
 codegen-units = 1
