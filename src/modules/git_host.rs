@@ -57,9 +57,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn tracking_remote_name(context: &Context, repo: &GitRepo) -> Option<String> {
     let name = if repo.uses_reftables() {
         let branch = repo
-            .exec_git(context, ["symbolic-ref", "--short", "HEAD"])
-            .map(|out| out.stdout.trim().to_string())
-            .filter(|b| !b.is_empty());
+            .exec_git(context, ["symbolic-ref", "HEAD"])
+            .and_then(|out| {
+                out.stdout
+                    .trim()
+                    .strip_prefix("refs/heads/")
+                    .map(str::to_string)
+            });
 
         branch.and_then(|b| {
             repo.exec_git(context, ["config", "--get", &format!("branch.{b}.remote")])
@@ -511,6 +515,66 @@ mod tests {
             assert_eq!(actual, expected);
             repo_dir.close()?;
         }
+        Ok(())
+    }
+
+    #[test]
+    fn branch_and_tag_with_the_same_name() -> io::Result<()> {
+        for &mode in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(mode)?;
+
+            run_git_cmd(
+                [
+                    "remote",
+                    "set-url",
+                    "origin",
+                    "https://github.com/user/repo.git",
+                ],
+                repo_dir.path(),
+            )?;
+
+            run_git_cmd(
+                [
+                    "remote",
+                    "add",
+                    "upstream",
+                    "https://gitlab.com/user/repo.git",
+                ],
+                repo_dir.path(),
+            )?;
+
+            // A tag with the same name as the current branch makes
+            // `symbolic-ref --short HEAD` return `heads/master` on reftable repositories.
+            run_git_cmd(["tag", "master"], repo_dir.path())?;
+
+            run_git_cmd(
+                ["update-ref", "refs/remotes/upstream/master", "HEAD"],
+                repo_dir.path(),
+            )?;
+
+            run_git_cmd(
+                ["branch", "--set-upstream-to=upstream/master"],
+                repo_dir.path(),
+            )?;
+
+            let actual = ModuleRenderer::new("git_host")
+                .path(repo_dir.path())
+                .config(toml::toml! {
+                    [git_host]
+                    disabled = false
+
+                    [git_host.symbols]
+                    "gitlab.com" = ""
+                })
+                .collect();
+
+            let expected = Some(format!("{} ", Color::Purple.bold().paint("")));
+
+            assert_eq!(actual, expected);
+
+            repo_dir.close()?;
+        }
+
         Ok(())
     }
 
