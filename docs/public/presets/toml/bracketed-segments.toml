@@ -6,6 +6,9 @@ format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
 [azure]
 format = '\[[$symbol($subscription)]($style)\]'
 
+[scaleway]
+format = '\[[$symbol($profile )($project )(\($zone\) )]($style)\]'
+
 [battery]
 format = '\[[$symbol$percentage]($style)\]'
 

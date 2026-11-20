@@ -86,6 +86,7 @@ $aws\
 $gcloud\
 $openstack\
 $azure\
+$scaleway\
 $crystal\
 $custom\
 $status\
@@ -261,6 +262,11 @@ disabled = true
 format = " [aws](italic) [$symbol $profile $region]($style)"
 style = "bold blue"
 symbol = "▲ "
+
+[scaleway]
+format = " [scw](italic) [$symbol $profile $project $zone]($style)"
+style = "bold purple"
+symbol = "☁ "
 
 [buf]
 symbol = "■ "

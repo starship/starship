@@ -91,6 +91,7 @@ mod rlang;
 mod ruby;
 mod rust;
 mod scala;
+mod scaleway;
 mod shell;
 mod shlvl;
 mod singularity;
@@ -221,6 +222,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "ruby" => ruby::module(context),
             "rust" => rust::module(context),
             "scala" => scala::module(context),
+            "scaleway" => scaleway::module(context),
             "shell" => shell::module(context),
             "shlvl" => shlvl::module(context),
             "singularity" => singularity::module(context),
@@ -368,6 +370,7 @@ pub fn description(module: &str) -> &'static str {
         "ruby" => "The currently installed version of Ruby",
         "rust" => "The currently installed version of Rust",
         "scala" => "The currently installed version of Scala",
+        "scaleway" => "The current Scaleway profile, organization, project, zone and region",
         "shell" => "The currently used shell indicator",
         "shlvl" => "The current value of SHLVL",
         "singularity" => "The currently used Singularity image",
