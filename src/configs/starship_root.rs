@@ -55,6 +55,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "fossil_metrics",
     "git_branch",
     "git_commit",
+    "git_host",
     "git_state",
     "git_metrics",
     "git_status",

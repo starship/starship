@@ -275,6 +275,7 @@ $fossil_branch\
 $fossil_metrics\
 $git_branch\
 $git_commit\
+$git_host\
 $git_state\
 $git_metrics\
 $git_status\
@@ -1981,6 +1982,43 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 [git_commit]
 commit_hash_length = 4
 tag_symbol = '🔖 '
+```
+
+## Git Host
+
+The `git_host` module shows an icon for the host of the remote of the current branch of the repo in your current directory. If the branch has no tracking remote, it falls back to `origin`, or to the only remote if there is just one.
+
+### Options
+
+| Option     | Default                | Description                                                         |
+| ---------- | ---------------------- | ------------------------------------------------------------------- |
+| `format`   | `'[$symbol]($style) '` | The format for the module.                                          |
+| `style`    | `'bold purple'`        | The style for the module.                                           |
+| `symbols`  | `{}`                   | Table of symbols keyed by lowercase host name, e.g. `'github.com'`. |
+| `unknown`  | `''`                  | The symbol used when the host is not in `symbols`.                  |
+| `disabled` | `true`                 | Disables the `git_host` module.                                     |
+
+### Variables
+
+| Variable | Example | Description                                |
+| -------- | ------- | ------------------------------------------ |
+| symbol   | ``      | The symbol matching the host of the remote |
+| style\*  |         | Mirrors the value of option `style`        |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[git_host]
+disabled = false
+unknown = '❓'
+
+[git_host.symbols]
+'gitlab.com' = '🦊'
+'git.example.com' = '🏠'
 ```
 
 ## Git State
