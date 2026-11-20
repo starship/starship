@@ -73,6 +73,7 @@ impl Default for OSConfig<'_> {
                 Type::openEuler => "🦉 ",
                 Type::openSUSE => "🦎 ",
                 Type::OracleLinux => "🦴 ",
+                Type::Parrot => "🦜 ",
                 Type::PikaOS => "🐤 ",
                 Type::Pop => "🍭 ",
                 Type::Raspbian => "🍓 ",
