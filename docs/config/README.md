@@ -3413,7 +3413,8 @@ The `mise` module shows the current mise health as reported by running `mise doc
 # ~/.config/starship.toml
 
 [mise]
-health = 'ready'
+disabled = false
+healthy_symbol = 'ready'
 ```
 
 ## Mojo
