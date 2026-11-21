@@ -36,9 +36,9 @@ notify = ["notify-rust"]
 
 [dependencies]
 anstream = { version = "1.0.0", default-features = false }
-clap = { version = "4.6.7", features = ["derive", "cargo", "unicode"] }
-clap_complete = "4.6.11"
-clap_complete_nushell = "4.6.2"
+clap = { version = "4.6.8", features = ["derive", "cargo", "unicode"] }
+clap_complete = "4.6.12"
+clap_complete_nushell = "4.6.3"
 dirs = "7.0.0"
 dunce = "1.0.5"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
@@ -53,7 +53,7 @@ gix = { version = "0.90.0", default-features = false, features = [
 guess_host_triple = "0.1.5"
 home = "0.5.12"
 indexmap = { version = "2.14.2", features = ["serde"] }
-jiff = { version = "0.2.43", features = ["serde"] }
+jiff = { version = "1.0.0", features = ["serde"] }
 jsonc-parser = { version = "0.34.0", features = ["serde"] }
 log = { version = "0.4.35", features = ["std"] }
 # notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
@@ -70,7 +70,7 @@ pest = "2.9.6"
 pest_derive = "2.9.6"
 process_control = "5.2.0"
 quick-xml = "0.42.0"
-rand = "0.10.3"
+rand = "0.10.4"
 rayon = "1.12.0"
 regex = { version = "1.13.1", default-features = false, features = ["perf", "std", "unicode-perl"] }
 rust-ini = "0.21.3"
@@ -84,7 +84,7 @@ shell-words = "1.1.1"
 # see: https://github.com/svartalf/rust-battery/issues/33
 starship-battery = { version = "0.12.0", optional = true }
 strsim = "0.11.1"
-systemstat = "=0.2.7"
+systemstat = "=0.2.8"
 tempfile = "3.27.0"
 terminal_size = "0.4.4"
 toml = { version = "1.2.1", features = ["preserve_order"] }
@@ -116,7 +116,7 @@ features = [
 ]
 
 [target.'cfg(not(windows))'.dependencies]
-nix = { version = "0.31.3", default-features = false, features = ["feature", "fs", "user"] }
+nix = { version = "0.32.0", default-features = false, features = ["feature", "fs", "user"] }
 
 [build-dependencies]
 shadow-rs = { version = "2.0.0", default-features = false, features = ["build"] }
