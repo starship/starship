@@ -1912,7 +1912,7 @@ dependencies = [
  "jiff-core 1.0.0",
  "proc-macro2",
  "quote",
- "syn 3.0.9",
+ "syn 3.0.10",
 ]
 
 [[package]]
