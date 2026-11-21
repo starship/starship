@@ -1,5 +1,5 @@
 use jiff::{
-    Timestamp, Zoned,
+    Timestamp, ZonedDateTime,
     civil::Time,
     tz::{Offset, TimeZone},
 };
@@ -22,7 +22,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Hide prompt if current time is not inside time_range
     let (display_start, display_end) = parse_time_range(config.time_range);
-    let time_now = Zoned::now().time();
+    let time_now = ZonedDateTime::now().time();
     if !is_inside_time_range(time_now, display_start, display_end) {
         return None;
     }
@@ -35,12 +35,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let formatted_time_string = match &config.utc_time_offset {
         Either::First(TimezoneWrapper(tz)) => {
             // Use IANA timezone name
-            let target_time = Timestamp::now().to_zoned(tz.clone());
+            let target_time = Timestamp::now().to_zoned_datetime(tz.clone());
             format_time_fixed_offset(time_format, target_time)
         }
         Either::Second("local") => {
             // Use local timezone
-            format_time(time_format, Zoned::now())
+            format_time(time_format, ZonedDateTime::now())
         }
         Either::Second(utc_time_offset) => {
             // Use numeric offset
@@ -49,7 +49,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     log::warn!(
                         "Invalid utc_time_offset configuration provided! Falling back to \"local\"."
                     );
-                    format_time(time_format, Zoned::now())
+                    format_time(time_format, ZonedDateTime::now())
                 })
         }
     };
@@ -95,7 +95,7 @@ fn create_offset_time_string(
         let tz = TimeZone::fixed(timezone_offset);
         log::trace!("Target timezone offset is {timezone_offset}");
 
-        let target_time = utc_time.to_zoned(tz);
+        let target_time = utc_time.to_zoned_datetime(tz);
         log::trace!("Time in target timezone now is {target_time}");
 
         Ok(format_time_fixed_offset(time_format, target_time))
@@ -106,11 +106,11 @@ fn create_offset_time_string(
 
 /// Format a given time into the given string. This function should be referentially
 /// transparent, which makes it easy to test (unlike anything involving the actual time)
-fn format_time(time_format: &str, local_time: Zoned) -> String {
+fn format_time(time_format: &str, local_time: ZonedDateTime) -> String {
     local_time.strftime(time_format).to_string()
 }
 
-fn format_time_fixed_offset(time_format: &str, zoned_time: Zoned) -> String {
+fn format_time_fixed_offset(time_format: &str, zoned_time: ZonedDateTime) -> String {
     zoned_time.strftime(time_format).to_string()
 }
 
@@ -171,7 +171,7 @@ mod tests {
     fn test_midnight_12hr() {
         let time = date(2014, 7, 8)
             .at(0, 0, 0, 0)
-            .to_zoned(TimeZone::system())
+            .to_zoned_datetime(TimeZone::system())
             .unwrap();
         let formatted = format_time(FMT_12, time);
         assert_eq!(formatted, "12:00:00 AM");
@@ -181,7 +181,7 @@ mod tests {
     fn test_midnight_24hr() {
         let time = date(2014, 7, 8)
             .at(0, 0, 0, 0)
-            .to_zoned(TimeZone::system())
+            .to_zoned_datetime(TimeZone::system())
             .unwrap();
         let formatted = format_time(FMT_24, time);
         assert_eq!(formatted, "00:00:00");
@@ -191,7 +191,7 @@ mod tests {
     fn test_noon_12hr() {
         let time = date(2014, 7, 8)
             .at(12, 0, 0, 0)
-            .to_zoned(TimeZone::system())
+            .to_zoned_datetime(TimeZone::system())
             .unwrap();
         let formatted = format_time(FMT_12, time);
         assert_eq!(formatted, "12:00:00 PM");
@@ -201,7 +201,7 @@ mod tests {
     fn test_noon_24hr() {
         let time = date(2014, 7, 8)
             .at(12, 0, 0, 0)
-            .to_zoned(TimeZone::system())
+            .to_zoned_datetime(TimeZone::system())
             .unwrap();
         let formatted = format_time(FMT_24, time);
         assert_eq!(formatted, "12:00:00");
@@ -211,7 +211,7 @@ mod tests {
     fn test_arbtime_12hr() {
         let time = date(2014, 7, 8)
             .at(15, 36, 47, 0)
-            .to_zoned(TimeZone::system())
+            .to_zoned_datetime(TimeZone::system())
             .unwrap();
         let formatted = format_time(FMT_12, time);
         assert_eq!(formatted, "3:36:47 PM");
@@ -221,7 +221,7 @@ mod tests {
     fn test_arbtime_24hr() {
         let time = date(2014, 7, 8)
             .at(15, 36, 47, 0)
-            .to_zoned(TimeZone::system())
+            .to_zoned_datetime(TimeZone::system())
             .unwrap();
         let formatted = format_time(FMT_24, time);
         assert_eq!(formatted, "15:36:47");
@@ -231,7 +231,7 @@ mod tests {
     fn test_format_with_paren() {
         let time = date(2014, 7, 8)
             .at(15, 36, 47, 0)
-            .to_zoned(TimeZone::system())
+            .to_zoned_datetime(TimeZone::system())
             .unwrap();
         let formatted = format_time("[%T]", time);
         assert_eq!(formatted, "[15:36:47]");
@@ -241,7 +241,10 @@ mod tests {
     fn test_midnight_12hr_fixed_offset() {
         let timezone_offset = Offset::from_seconds(0).unwrap();
         let tz = TimeZone::fixed(timezone_offset);
-        let time = date(2014, 7, 8).at(0, 0, 0, 0).to_zoned(tz).unwrap();
+        let time = date(2014, 7, 8)
+            .at(0, 0, 0, 0)
+            .to_zoned_datetime(tz)
+            .unwrap();
         let formatted = format_time_fixed_offset(FMT_12, time);
         assert_eq!(formatted, "12:00:00 AM");
     }
@@ -250,7 +253,10 @@ mod tests {
     fn test_midnight_24hr_fixed_offset() {
         let timezone_offset = Offset::from_seconds(0).unwrap();
         let tz = TimeZone::fixed(timezone_offset);
-        let time = date(2014, 7, 8).at(0, 0, 0, 0).to_zoned(tz).unwrap();
+        let time = date(2014, 7, 8)
+            .at(0, 0, 0, 0)
+            .to_zoned_datetime(tz)
+            .unwrap();
         let formatted = format_time_fixed_offset(FMT_24, time);
         assert_eq!(formatted, "00:00:00");
     }
@@ -259,7 +265,10 @@ mod tests {
     fn test_noon_12hr_fixed_offset() {
         let timezone_offset = Offset::from_seconds(0).unwrap();
         let tz = TimeZone::fixed(timezone_offset);
-        let time = date(2014, 7, 8).at(12, 0, 0, 0).to_zoned(tz).unwrap();
+        let time = date(2014, 7, 8)
+            .at(12, 0, 0, 0)
+            .to_zoned_datetime(tz)
+            .unwrap();
         let formatted = format_time_fixed_offset(FMT_12, time);
         assert_eq!(formatted, "12:00:00 PM");
     }
@@ -268,7 +277,10 @@ mod tests {
     fn test_noon_24hr_fixed_offset() {
         let timezone_offset = Offset::from_seconds(0).unwrap();
         let tz = TimeZone::fixed(timezone_offset);
-        let time = date(2014, 7, 8).at(12, 0, 0, 0).to_zoned(tz).unwrap();
+        let time = date(2014, 7, 8)
+            .at(12, 0, 0, 0)
+            .to_zoned_datetime(tz)
+            .unwrap();
         let formatted = format_time_fixed_offset(FMT_24, time);
         assert_eq!(formatted, "12:00:00");
     }
@@ -277,7 +289,10 @@ mod tests {
     fn test_arbtime_12hr_fixed_offset() {
         let timezone_offset = Offset::from_seconds(0).unwrap();
         let tz = TimeZone::fixed(timezone_offset);
-        let time = date(2014, 7, 8).at(15, 36, 47, 0).to_zoned(tz).unwrap();
+        let time = date(2014, 7, 8)
+            .at(15, 36, 47, 0)
+            .to_zoned_datetime(tz)
+            .unwrap();
         let formatted = format_time_fixed_offset(FMT_12, time);
         assert_eq!(formatted, "3:36:47 PM");
     }
@@ -286,7 +301,10 @@ mod tests {
     fn test_arbtime_24hr_fixed_offset() {
         let timezone_offset = Offset::from_seconds(0).unwrap();
         let tz = TimeZone::fixed(timezone_offset);
-        let time = date(2014, 7, 8).at(15, 36, 47, 0).to_zoned(tz).unwrap();
+        let time = date(2014, 7, 8)
+            .at(15, 36, 47, 0)
+            .to_zoned_datetime(tz)
+            .unwrap();
         let formatted = format_time_fixed_offset(FMT_24, time);
         assert_eq!(formatted, "15:36:47");
     }
@@ -295,7 +313,10 @@ mod tests {
     fn test_format_with_paren_fixed_offset() {
         let timezone_offset = Offset::from_seconds(0).unwrap();
         let tz = TimeZone::fixed(timezone_offset);
-        let time = date(2014, 7, 8).at(15, 36, 47, 0).to_zoned(tz).unwrap();
+        let time = date(2014, 7, 8)
+            .at(15, 36, 47, 0)
+            .to_zoned_datetime(tz)
+            .unwrap();
         let formatted = format_time_fixed_offset("[%T]", time);
         assert_eq!(formatted, "[15:36:47]");
     }
@@ -304,7 +325,7 @@ mod tests {
     fn test_create_formatted_time_string_with_minus_3() {
         let utc_time = date(2014, 7, 8)
             .at(15, 36, 47, 0)
-            .to_zoned(TimeZone::UTC)
+            .to_zoned_datetime(TimeZone::UTC)
             .unwrap()
             .timestamp();
         let utc_time_offset_str = "-3";
@@ -317,7 +338,7 @@ mod tests {
     fn test_create_formatted_time_string_with_plus_5() {
         let utc_time = date(2014, 7, 8)
             .at(15, 36, 47, 0)
-            .to_zoned(TimeZone::UTC)
+            .to_zoned_datetime(TimeZone::UTC)
             .unwrap()
             .timestamp();
         let utc_time_offset_str = "+5";
@@ -330,7 +351,7 @@ mod tests {
     fn test_create_formatted_time_string_with_plus_9_30() {
         let utc_time = date(2014, 7, 8)
             .at(15, 36, 47, 0)
-            .to_zoned(TimeZone::UTC)
+            .to_zoned_datetime(TimeZone::UTC)
             .unwrap()
             .timestamp();
         let utc_time_offset_str = "+9.5";
@@ -343,7 +364,7 @@ mod tests {
     fn test_create_formatted_time_string_with_plus_5_45() {
         let utc_time = date(2014, 7, 8)
             .at(15, 36, 47, 0)
-            .to_zoned(TimeZone::UTC)
+            .to_zoned_datetime(TimeZone::UTC)
             .unwrap()
             .timestamp();
         let utc_time_offset_str = "+5.75";
@@ -356,7 +377,7 @@ mod tests {
     fn test_create_formatted_time_string_with_plus_24() {
         let utc_time = date(2014, 7, 8)
             .at(15, 36, 47, 0)
-            .to_zoned(TimeZone::UTC)
+            .to_zoned_datetime(TimeZone::UTC)
             .unwrap()
             .timestamp();
         let utc_time_offset_str = "+24";
@@ -369,7 +390,7 @@ mod tests {
     fn test_create_formatted_time_string_with_minus_24() {
         let utc_time = date(2014, 7, 8)
             .at(15, 36, 47, 0)
-            .to_zoned(TimeZone::UTC)
+            .to_zoned_datetime(TimeZone::UTC)
             .unwrap()
             .timestamp();
         let utc_time_offset_str = "-24";
@@ -382,7 +403,7 @@ mod tests {
     fn test_create_formatted_time_string_with_plus_9001() {
         let utc_time = date(2014, 7, 8)
             .at(15, 36, 47, 0)
-            .to_zoned(TimeZone::UTC)
+            .to_zoned_datetime(TimeZone::UTC)
             .unwrap()
             .timestamp();
         let utc_time_offset_str = "+9001";
@@ -395,7 +416,7 @@ mod tests {
     fn test_create_formatted_time_string_with_minus_4242() {
         let utc_time = date(2014, 7, 8)
             .at(15, 36, 47, 0)
-            .to_zoned(TimeZone::UTC)
+            .to_zoned_datetime(TimeZone::UTC)
             .unwrap()
             .timestamp();
         let utc_time_offset_str = "-4242";
@@ -408,7 +429,7 @@ mod tests {
     fn test_create_formatted_time_string_with_invalid_string() {
         let utc_time = date(2014, 7, 8)
             .at(15, 36, 47, 0)
-            .to_zoned(TimeZone::UTC)
+            .to_zoned_datetime(TimeZone::UTC)
             .unwrap()
             .timestamp();
         let utc_time_offset_str = "completely wrong config";
