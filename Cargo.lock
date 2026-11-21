@@ -3267,7 +3267,7 @@ dependencies = [
 
 [[package]]
 name = "starship"
-version = "1.27.0"
+version = "1.28.0"
 dependencies = [
  "clap",
  "clap_complete",
