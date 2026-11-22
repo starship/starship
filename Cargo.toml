@@ -72,7 +72,7 @@ process_control = "5.2.0"
 quick-xml = "0.42.0"
 rand = "0.10.4"
 rayon = "1.12.0"
-regex = { version = "1.13.1", default-features = false, features = ["perf", "std", "unicode-perl"] }
+regex = { version = "1.13.2", default-features = false, features = ["perf", "std", "unicode-perl"] }
 rust-ini = "0.21.3"
 semver = "1.0.28"
 serde = { version = "1.0.229", features = ["derive"] }
