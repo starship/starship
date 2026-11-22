@@ -1,3 +1,4 @@
+use super::utils::format;
 use super::{Context, Module, ModuleConfig, Shell};
 use crate::configs::character::CharacterConfig;
 use crate::formatter::StringFormatter;
@@ -60,8 +61,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
-            .map_meta(|variable, _| match variable {
-                "symbol" => Some(symbol),
+            .map_variables_to_segments(|variable| match variable {
+                "symbol" => Some(format::styled(symbol, "", context, |_| None)),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -83,6 +84,22 @@ mod test {
     use crate::context::Shell;
     use crate::test::ModuleRenderer;
     use nu_ansi_term::Color;
+
+    #[test]
+    fn conditional_status_symbol() {
+        for (status, expected) in [(0, Some("ok ".to_owned())), (1, None)] {
+            let actual = ModuleRenderer::new("character")
+                .status(status)
+                .config(toml::toml! {
+                    [character]
+                    success_symbol = "ok"
+                    error_symbol = ""
+                    format = "($symbol )"
+                })
+                .collect();
+            assert_eq!(expected, actual, "status: {status}");
+        }
+    }
 
     #[test]
     fn success_status() {

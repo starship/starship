@@ -2,6 +2,7 @@ use std::fs::File;
 use std::io::{self, Read};
 use std::path::Path;
 
+use super::utils::format;
 use super::{Context, Module, ModuleConfig};
 use crate::configs::hg_state::HgStateConfig;
 use crate::formatter::StringFormatter;
@@ -25,8 +26,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
-            .map_meta(|variable, _| match variable {
-                "state" => Some(state_description.label),
+            .map_variables_to_segments(|variable| match variable {
+                "state" => Some(format::styled(
+                    state_description.label,
+                    config.style,
+                    context,
+                    |_| None,
+                )),
                 _ => None,
             })
             .map_style(|variable| match variable {
@@ -115,6 +121,33 @@ mod tests {
 
     use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
     use crate::utils::create_command;
+
+    #[test]
+    fn conditional_state() -> io::Result<()> {
+        let repo_dir = tempfile::tempdir()?;
+        create_dir_all(repo_dir.path().join(".hg"))?;
+        File::create(repo_dir.path().join(".hg/rebasestate"))?;
+        for (state, expected) in [
+            ("REBASING", Some("REBASING ".to_owned())),
+            ("", None),
+            (
+                "[REBASING]($style)",
+                Some(format!("{} ", Color::Yellow.bold().paint("REBASING"))),
+            ),
+        ] {
+            let actual = ModuleRenderer::new("hg_state")
+                .path(repo_dir.path())
+                .config(toml::toml! {
+                    [hg_state]
+                    disabled = false
+                    rebase = state
+                    format = "($state )"
+                })
+                .collect();
+            assert_eq!(expected, actual, "state: {state}");
+        }
+        repo_dir.close()
+    }
 
     #[test]
     fn test_hg_show_nothing_on_empty_dir() -> io::Result<()> {

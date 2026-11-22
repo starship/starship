@@ -1,3 +1,4 @@
+use super::utils::format;
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::guix_shell::GuixShellConfig;
@@ -19,8 +20,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
-            .map_meta(|variable, _| match variable {
-                "symbol" => Some(config.symbol),
+            .map_variables_to_segments(|variable| match variable {
+                "symbol" => Some(format::styled(config.symbol, config.style, context, |_| {
+                    None
+                })),
                 _ => None,
             })
             .map_style(|variable| match variable {
@@ -45,6 +48,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod tests {
     use crate::test::ModuleRenderer;
     use nu_ansi_term::Color;
+
+    #[test]
+    fn conditional_environment_symbol() {
+        for (symbol, expected) in [("guix", Some("guix ".to_owned())), ("", None)] {
+            let actual = ModuleRenderer::new("guix_shell")
+                .env("GUIX_ENVIRONMENT", "/gnu/store/test-profile")
+                .config(toml::toml! {
+                    [guix_shell]
+                    symbol = symbol
+                    format = "($symbol )"
+                })
+                .collect();
+            assert_eq!(expected, actual, "symbol: {symbol}");
+        }
+    }
 
     #[test]
     fn no_env_variables() {

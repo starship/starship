@@ -402,6 +402,20 @@ mod tests {
     }
 
     #[test]
+    fn conditional_symbol_without_profile() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_REGION", "ap-northeast-2")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .config(toml::toml! {
+                [aws]
+                symbol = "AWS"
+                format = "($symbol$profile )"
+            })
+            .collect();
+        assert_eq!(None, actual);
+    }
+
+    #[test]
     fn profile_set() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
