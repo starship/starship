@@ -282,6 +282,48 @@ const CMDEXE_INIT: &str = include_str!("starship.lua");
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[cfg(unix)]
+    #[test]
+    #[ignore = "requires zsh"]
+    fn zsh_prompts_preserve_executable_path_quoting() -> io::Result<()> {
+        use std::fs::{self, File, Permissions};
+        use std::io::Write as _;
+        use std::os::unix::fs::PermissionsExt as _;
+
+        let dir = tempfile::tempdir()?;
+        let native_path = dir.path().join("starship's test executable");
+        let mut executable = File::create(&native_path)?;
+        executable.write_all(b"#!/bin/sh\nprintf '%s|' \"$@\"\n")?;
+        executable.sync_all()?;
+        drop(executable);
+        fs::set_permissions(&native_path, Permissions::from_mode(0o700))?;
+
+        let path = StarshipPath { native_path }.sprint()?;
+        let init = ZSH_INIT.replace("::STARSHIP::", &path);
+        let script = format!(
+            r#"{init}
+COLUMNS=92
+KEYMAP=viins
+STARSHIP_CMD_STATUS=7
+STARSHIP_PIPE_STATUS=(0 7)
+STARSHIP_DURATION=250
+STARSHIP_JOBS_COUNT=2
+print -rP -- "$PROMPT"
+print -rP -- "$RPROMPT""#
+        );
+        let output = create_command("zsh")?.args(["-dfc", &script]).output()?;
+
+        assert!(output.status.success(), "{output:?}");
+        assert!(output.stderr.is_empty(), "{output:?}");
+        let args = "--terminal-width=92|--keymap=viins|--status=7|--pipestatus=0 7|--cmd-duration=250|--jobs=2|";
+        assert_eq!(
+            String::from_utf8_lossy(&output.stdout),
+            format!("prompt|{args}\nprompt|--right|{args}\n")
+        );
+        dir.close()
+    }
+
     #[test]
     fn escape_pwsh() -> io::Result<()> {
         let starship_path = StarshipPath {
