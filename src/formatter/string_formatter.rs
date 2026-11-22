@@ -359,28 +359,61 @@ impl<'a> StringFormatter<'a> {
                                                 .and_then(|result| result.as_ref().ok())
                                                 // false if the variable is None or Err, or a meta variable
                                                 // that shouldn't show
-                                                .is_some_and(|result| match result {
-                                                    // If the variable is a meta variable, also
-                                                    // check the format string inside it.
-                                                    VariableValue::Meta(meta_elements) => {
-                                                        let meta_variables =
-                                                            clone_without_meta(variables);
-                                                        should_show_elements(
-                                                            meta_elements,
-                                                            &meta_variables,
-                                                        )
-                                                    }
-                                                    VariableValue::Plain(plain_value) => {
-                                                        !plain_value.is_empty()
-                                                    }
-                                                    VariableValue::NoEscapingPlain(
-                                                        no_escaping_plain_value,
-                                                    ) => !no_escaping_plain_value.is_empty(),
-                                                    VariableValue::Styled(segments) => segments
-                                                        .iter()
-                                                        .any(|x| !x.value().is_empty()),
+                                                .is_some_and(|result| {
+                                                    variable_has_content(result, variables)
                                                 })
                                         })
+                                })
+                            }
+
+                            // Whether a mapped variable value resolves to non-empty content.
+                            fn variable_has_content<'a>(
+                                result: &VariableValue<'a>,
+                                variables: &'a VariableMapType<'a>,
+                            ) -> bool {
+                                match result {
+                                    // If the variable is a meta variable, also
+                                    // check the format string inside it.
+                                    VariableValue::Meta(meta_elements) => {
+                                        let meta_variables = clone_without_meta(variables);
+                                        should_show_meta_elements(meta_elements, &meta_variables)
+                                    }
+                                    VariableValue::Plain(plain_value) => !plain_value.is_empty(),
+                                    VariableValue::NoEscapingPlain(no_escaping_plain_value) => {
+                                        !no_escaping_plain_value.is_empty()
+                                    }
+                                    VariableValue::Styled(segments) => {
+                                        segments.iter().any(|x| !x.value().is_empty())
+                                    }
+                                }
+                            }
+
+                            // Like `should_show_elements`, but checks the expansion of a meta
+                            // variable, where non-empty literal text also counts as content.
+                            // Nested conditionals inside the expansion still require a
+                            // non-empty variable to show.
+                            fn should_show_meta_elements<'a>(
+                                format_elements: &[FormatElement],
+                                variables: &'a VariableMapType<'a>,
+                            ) -> bool {
+                                format_elements.iter().any(|el| match el {
+                                    FormatElement::Text(text) => !text.is_empty(),
+                                    FormatElement::TextGroup(textgroup) => {
+                                        should_show_meta_elements(&textgroup.format, variables)
+                                    }
+                                    FormatElement::Conditional(format) => {
+                                        should_show_elements(format, variables)
+                                    }
+                                    FormatElement::Variable(name) => {
+                                        variables.get(name.as_ref()).is_some_and(|map_result| {
+                                            map_result
+                                                .as_ref()
+                                                .and_then(|result| result.as_ref().ok())
+                                                .is_some_and(|result| {
+                                                    variable_has_content(result, variables)
+                                                })
+                                        })
+                                    }
                                 })
                             }
 
@@ -798,6 +831,22 @@ mod tests {
             });
         let result = formatter.parse(None, None).unwrap();
         let mut result_iter = result.iter();
+        match_next!(result_iter, " ", None);
+    }
+
+    #[test]
+    fn test_conditional_meta_variable_literal() {
+        const FORMAT_STR: &str = r"([$all](red) )";
+
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map_meta(|var, _| match var {
+                "all" => Some("literal"),
+                _ => None,
+            });
+        let result = formatter.parse(None, None).unwrap();
+        let mut result_iter = result.iter();
+        match_next!(result_iter, "literal", Some(Color::Red.normal()));
         match_next!(result_iter, " ", None);
     }
 

@@ -142,6 +142,30 @@ mod tests {
     }
 
     #[test]
+    fn test_sudo_cached_conditional_format() {
+        let actual = ModuleRenderer::new("sudo")
+            .cmd(
+                "sudo -Nnv",
+                Some(CommandOutput {
+                    stdout: String::new(),
+                    stderr: String::new(),
+                }),
+            )
+            .config(toml::toml! {
+                [sudo]
+                disabled = false
+                allow_windows = true
+                symbol = "sudo"
+                style = "197"
+                format = "([$symbol]($style) )"
+            })
+            .collect();
+        let expected = Some(format!("{}{}", Color::Fixed(197).paint("sudo"), " "));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     #[cfg(windows)]
     fn test_allow_windows_disabled_blocks_windows() {
         let actual = ModuleRenderer::new("sudo")
