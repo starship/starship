@@ -551,7 +551,14 @@ fn home_dir(env: &Env) -> Option<PathBuf> {
     utils::home_dir()
 }
 
+/// The configuration file a new context reads.
+///
+/// In-crate unit tests read only explicitly mocked configuration. Integration
+/// tests compile the library normally and must isolate their own environment.
 fn get_config_path_os(env: &Env) -> Option<OsString> {
+    if cfg!(test) && env.get_env_os("STARSHIP_CONFIG").is_none() && env.get_env("HOME").is_none() {
+        return None;
+    }
     if let Some(config_path) = env.get_env_os("STARSHIP_CONFIG") {
         return Some(config_path);
     }
@@ -916,7 +923,7 @@ pub enum Target {
 #[derive(Parser, Debug)]
 pub struct Properties {
     /// The status code of the previously run command as an unsigned or signed 32bit integer
-    #[clap(short = 's', long = "status")]
+    #[clap(short = 's', long = "status", allow_negative_numbers = true)]
     pub status_code: Option<String>,
     /// Bash, Fish and Zsh support returning codes for each process in a pipeline.
     #[clap(long, value_delimiter = ' ')]
@@ -987,6 +994,27 @@ mod tests {
     use super::*;
     use crate::test::default_context;
     use std::io;
+
+    #[test]
+    fn properties_accept_signed_and_unsigned_status_codes() {
+        for status in ["-1", "-2147483648", "0", "4294967295"] {
+            for flag in ["-s", "--status"] {
+                let properties =
+                    Properties::try_parse_from(["starship", flag, status, "--jobs", "2"]).unwrap();
+
+                assert_eq!(properties.status_code.as_deref(), Some(status));
+                assert_eq!(properties.jobs, 2);
+            }
+        }
+    }
+
+    #[test]
+    fn properties_require_a_status_value() {
+        for flag in ["-s", "--status"] {
+            assert!(Properties::try_parse_from(["starship", flag, "--jobs"]).is_err());
+            assert!(Properties::try_parse_from(["starship", flag, "--not-a-number"]).is_err());
+        }
+    }
 
     #[test]
     fn git_executable_preference_requires_full_trust() -> io::Result<()> {
@@ -1422,6 +1450,29 @@ mod tests {
         });
 
         assert_ne!(context.config.config, mod_context.config.config);
+    }
+
+    #[test]
+    fn unit_test_configuration_requires_an_explicit_config_or_home() {
+        let mut environment = Env::default();
+        assert_eq!(None, super::get_config_path_os(&environment));
+
+        environment.insert("HOME", "/test-home".to_owned());
+        assert_eq!(
+            Some(
+                PathBuf::from("/test-home")
+                    .join(".config")
+                    .join("starship.toml")
+                    .into_os_string()
+            ),
+            super::get_config_path_os(&environment),
+        );
+
+        environment.insert("STARSHIP_CONFIG", "/explicit/starship.toml".to_owned());
+        assert_eq!(
+            Some(PathBuf::from("/explicit/starship.toml").into_os_string()),
+            super::get_config_path_os(&environment),
+        );
     }
 
     #[cfg(windows)]

@@ -383,7 +383,7 @@ If the option `force_display` is set to `true`, all available information will b
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile
 is read from the `AWS_VAULT` env var and the credentials expiration date
-is read from the `AWS_SESSION_EXPIRATION` env var.
+is read from the `AWS_CREDENTIAL_EXPIRATION` or `AWS_SESSION_EXPIRATION` env var.
 
 When using [awsu](https://github.com/kreuzwerker/awsu) the profile
 is read from the `AWSU_PROFILE` env var.
@@ -540,6 +540,7 @@ The module is only visible when the device's battery is below 10%.
 | `discharging_symbol` | `'󰂃 '`                            | The symbol shown when the battery is discharging.   |
 | `unknown_symbol`     | `'󰂑 '`                            | The symbol shown when the battery state is unknown. |
 | `empty_symbol`       | `'󰂎 '`                            | The symbol shown when the battery state is empty.   |
+| `paused_symbol`      | `'󱞜 '`                            | The symbol shown when charging is paused.           |
 | `format`             | `'[$symbol$percentage]($style) '` | The format for the module.                          |
 | `display`            | [link](#battery-display)          | Display threshold and style for the module.         |
 | `disabled`           | `false`                           | Disables the `battery` module.                      |
@@ -2208,6 +2209,7 @@ By default the module will be shown if any of the following conditions are met:
 | `symbol`            | `'⭐ '`                              | A format string representing the symbol of Gleam.                         |
 | `detect_extensions` | `['gleam']`                          | Which extensions should trigger this module.                              |
 | `detect_files`      | `['gleam.toml']`                     | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `style`             | `'bold #FFAFF3'`                     | The style for the module.                                                 |
 | `disabled`          | `false`                              | Disables the `gleam` module.                                              |
 
@@ -3187,7 +3189,7 @@ The `maven` module indicates the presence of a Maven project in the current dire
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `pom.xml` file.
-- The current directory contains a `.mvn/wrapper/maven-wrapper.properties` file.
+- The current directory contains a `.mvn` directory.
 
 If you use an alternate POM syntax (for example `pom.hocon`), add its filename to `detect_files`.
 
@@ -3200,7 +3202,7 @@ If you use an alternate POM syntax (for example `pom.hocon`), add its filename t
 | `symbol`            | `'🅼 '`                               | A format string representing the symbol of Maven.                         |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
 | `detect_files`      | `['pom.xml']`                        | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_folders`    | `['.mvn']`                           | Which folders should trigger this module.                                 |
 | `style`             | `'bold bright-cyan'`                 | The style for the module.                                                 |
 | `disabled`          | `false`                              | Disables the `maven` module.                                              |
 | `recursive`         | `false`                              | Enables recursive finding for the `.mvn` directory.                       |
@@ -3416,7 +3418,8 @@ The `mise` module shows the current mise health as reported by running `mise doc
 # ~/.config/starship.toml
 
 [mise]
-health = 'ready'
+disabled = false
+healthy_symbol = 'ready'
 ```
 
 ## Mojo
@@ -4782,7 +4785,7 @@ The module will be shown if any of the following conditions are met:
 | `format`            | `'via [$symbol($version)]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${major}.${minor}.${patch}'`     | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'S '`                              | A format string representing the symbol of Solidity                       |
-| `compiler           | ['solc']                            | The default compiler for Solidity.                                        |
+| `compiler`          | `['solc']`                          | The default compiler for Solidity.                                        |
 | `detect_extensions` | `['sol']`                           | Which extensions should trigger this module.                              |
 | `detect_files`      | `[]`                                | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                | Which folders should trigger this module.                                 |
