@@ -809,7 +809,10 @@ mod tests {
             Some("`to_be_escaped`".to_string()),
             crate::print::get_module("custom.test", &context)
         );
-        assert_eq!("\\`to_be_escaped\\`", crate::print::get_prompt(&context));
+        assert_eq!(
+            "\\\\`to_be_escaped\\\\`",
+            crate::print::get_prompt(&context)
+        );
 
         dir.close()
     }

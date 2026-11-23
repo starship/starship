@@ -22,7 +22,7 @@ pub fn shell_prompt_escape<'a>(text: impl Into<Cow<'a, str>>, shell: Shell) -> C
             // see #658 for more details
             b'\\' => Some(r"\\\\"),
             b'$' => Some(r"\\$"),
-            b'`' => Some(r"\`"),
+            b'`' => Some(r"\\`"),
             _ => None,
         }),
         Shell::Zsh | Shell::Tcsh => escape_ascii(text, |byte| match byte {
@@ -87,12 +87,12 @@ mod tests {
             (Shell::Bash, "$(echo a)", r"\\$(echo a)"),
             (Shell::Bash, r"a\b", r"a\\\\b"),
             (Shell::Bash, r"\$", r"\\\\\\$"),
-            (Shell::Bash, "`id`", r"\`id\`"),
+            (Shell::Bash, "`id`", r"\\`id\\`"),
             (Shell::Zsh, "%{x%}$HOME", "%%{x%%}$HOME"),
             (Shell::Tcsh, "50% done", "50%% done"),
             (Shell::Xonsh, "{{x}", "{{{{x}}"),
             // Characters past ASCII sit between and around the escapes.
-            (Shell::Bash, "é$ü`目\\🚀", r"é\\$ü\`目\\\\🚀"),
+            (Shell::Bash, "é$ü`目\\🚀", r"é\\$ü\\`目\\\\🚀"),
             (Shell::Xonsh, "{é}{🚀}", "{{é}}{{🚀}}"),
             // What a shell does not act on is left as it is.
             (Shell::Bash, "%{}", "%{}"),
