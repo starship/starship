@@ -5493,8 +5493,12 @@ These modules will be shown if any of the following conditions are met:
 > [!WARNING]
 > If `unsafe_no_escape` is enabled or prior to starship v1.20 command output is printed unescaped to the prompt.
 >
-> Whatever output the command generates is printed unmodified in the prompt. This means if the output
-> contains shell-specific interpretable sequences, they could be interpreted on display.
+> By default (`unsafe_no_escape = false`), Starship escapes shell-interpretable characters in command output and shows
+> its terminal control characters as text, such as `^[` for an escape, keeping only line breaks, tabs, SGR styling
+> sequences (`\e[...m`) and `http(s)` hyperlinks (`\e]8;;https://...\e\\`) as they are.
+>
+> When `unsafe_no_escape` is enabled, whatever output the command generates is printed unmodified in the prompt. This means if the output
+> contains shell-specific interpretable sequences or terminal control sequences, they could be interpreted on display.
 > Depending on the shell, this can mean that e.g. strings enclosed by backticks are executed by the shell.
 > Such sequences are usually shell specific, e.g. you can write a command module that writes bash sequences,
 > e.g. `\h`, but this module will not work in a fish or zsh shell.
@@ -5512,7 +5516,7 @@ These modules will be shown if any of the following conditions are met:
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
 | `description`       | `'<custom config>'`             | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
-| `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                                                                                                                                                                 |
+| `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell, and keeps its terminal control characters.                                                                                                                                                      |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
