@@ -3,7 +3,7 @@
 use std::borrow::Cow;
 use std::fmt::{self, Write as _};
 
-use anstream::adapter::StripStr;
+use anstream::adapter::StripBytes;
 use nu_ansi_term::Style as AnsiStyle;
 use unicode_segmentation::UnicodeSegmentation;
 
@@ -81,8 +81,9 @@ struct Encoder<W> {
     shell: Shell,
     output: W,
     /// Where controls begin and end, as the terminal parses them, across
-    /// writes too.
-    parser: StripStr,
+    /// writes too: a style arrives in pieces, `\x1b[` before its codes.
+    /// `StripStr` forgets a control left open at the end of a write.
+    parser: StripBytes,
     /// The kind of text written: verbatim text is prompt syntax.
     kind: Kind,
     /// Whether a mark is open around the controls written last.
@@ -94,7 +95,7 @@ impl<W: fmt::Write> Encoder<W> {
         Self {
             shell,
             output,
-            parser: StripStr::new(),
+            parser: StripBytes::new(),
             kind: Kind::Text,
             marking: false,
         }
@@ -134,8 +135,10 @@ impl<W: fmt::Write> fmt::Write for Encoder<W> {
             marking,
         } = self;
         let mut parsed = 0;
-        for drawn in parser.strip_next(text).chain([&text[text.len()..]]) {
-            let start = drawn.as_ptr().addr() - text.as_ptr().addr();
+        let bytes = text.as_bytes();
+        for drawn in parser.strip_next(bytes).chain([&bytes[bytes.len()..]]) {
+            let start = drawn.as_ptr().addr() - bytes.as_ptr().addr();
+            let drawn = &text[start..start + drawn.len()];
             if start > parsed {
                 if !std::mem::replace(marking, true) {
                     output.write_str(begin)?;
