@@ -1,8 +1,20 @@
-//! Literal prompt text.
+//! Literal prompt text and visible terminal controls.
+//!
+//! Shell escaping and terminal sanitization are separate operations: use
+//! `sanitized` or `visible_controls` first when text comes from outside the
+//! configuration, then escape it for the shell's documented prompt phase.
 
 use std::borrow::Cow;
 
 use crate::context::Shell;
+
+const ESCAPE: char = '\x1b';
+const STYLING_PREFIX: &str = "\x1b[";
+const HYPERLINK_PREFIX: &str = "\x1b]8;";
+const BELL_TERMINATOR: &str = "\x07";
+const STRING_TERMINATOR: &str = "\x1b\\";
+const C1_UTF8_LEAD: u8 = 0xc2;
+const CARET_NOTATION_BIT: u8 = b'@';
 
 /// Escape literal text for the prompt phase used by `shell`.
 ///
@@ -41,6 +53,27 @@ pub fn shell_prompt_escape<'a>(text: impl Into<Cow<'a, str>>, shell: Shell) -> C
     }
 }
 
+/// Show C0/C1 controls, preserving line feeds, tabs, complete SGR styling,
+/// and complete OSC 8 hyperlinks with an empty or lowercase HTTP(S) URI.
+///
+/// The sequence grammar is deliberately narrow: styling parameters contain
+/// only digits, `;`, and `:`; hyperlink fields contain printable ASCII and end
+/// in BEL or `ESC \`. URI validation stops at the scheme prefix.
+///
+/// Rejected sequences retain their payload with each control made visible.
+/// Preserved styling and hyperlinks can affect subsequent text; they are not
+/// automatically reset. Use [`visible_controls`] when that is undesirable.
+pub fn sanitized<'a>(text: impl Into<Cow<'a, str>>) -> Cow<'a, str> {
+    show_controls(text.into(), preserved_sequence_length)
+}
+
+/// Show C0 controls and DEL in caret notation and C1 controls as `\u{xx}`.
+/// Line feeds and tabs remain; CRLF becomes LF. Other Unicode characters,
+/// including format and bidirectional controls, are outside this policy.
+pub fn visible_controls<'a>(text: impl Into<Cow<'a, str>>) -> Cow<'a, str> {
+    show_controls(text.into(), |_| None)
+}
+
 /// The stable mapping matches ASCII only and expands every match. ASCII
 /// offsets are UTF-8 boundaries. Count only the changed suffix to avoid
 /// output growth, without an edit list or temporary strings.
@@ -73,6 +106,110 @@ fn escape_ascii<'a>(
     }
     output.push_str(&text[copied..]);
     Cow::Owned(output)
+}
+
+fn show_controls<'a>(
+    text: Cow<'a, str>,
+    preserved_length: impl Fn(&str) -> Option<usize>,
+) -> Cow<'a, str> {
+    let mut output: Option<String> = None;
+    let mut copied = 0;
+    let mut searched = 0;
+    while let Some((offset, control)) = next_control(&text[searched..]) {
+        let start = searched + offset;
+        searched = start + control.len_utf8();
+        if control == ESCAPE
+            && let Some(length) = preserved_length(&text[start..])
+        {
+            searched = start + length;
+            continue;
+        }
+
+        let drop_carriage_return = control == '\r' && text[searched..].starts_with('\n');
+        let output = output.get_or_insert_with(|| {
+            let replacement_length = if drop_carriage_return {
+                0
+            } else if control.is_ascii() {
+                "^@".len()
+            } else {
+                r"\u{80}".len()
+            };
+            // Keep space freed by CRLF normalization for later replacements.
+            String::with_capacity(
+                text.len() + replacement_length.saturating_sub(control.len_utf8()),
+            )
+        });
+        output.push_str(&text[copied..start]);
+        if !drop_carriage_return {
+            push_visible_control(output, control);
+        }
+        copied = searched;
+    }
+    match output {
+        None => text,
+        Some(mut output) => {
+            output.push_str(&text[copied..]);
+            Cow::Owned(output)
+        }
+    }
+}
+
+/// Skip ordinary UTF-8 bytes without decoding characters. C1 controls have
+/// the unique lead byte 0xc2; its printable Latin-1 neighbors are skipped.
+fn next_control(mut text: &str) -> Option<(usize, char)> {
+    let mut skipped = 0;
+    loop {
+        let offset = text
+            .bytes()
+            .position(|byte| byte.is_ascii_control() || byte == C1_UTF8_LEAD)?;
+        let control = text[offset..].chars().next()?;
+        if control.is_control() && !matches!(control, '\n' | '\t') {
+            return Some((skipped + offset, control));
+        }
+        let consumed = offset + control.len_utf8();
+        skipped += consumed;
+        text = &text[consumed..];
+    }
+}
+
+fn push_visible_control(output: &mut String, control: char) {
+    if control.is_ascii() {
+        output.push('^');
+        output.push(char::from(control as u8 ^ CARET_NOTATION_BIT));
+    } else {
+        output.extend(control.escape_unicode());
+    }
+}
+
+fn preserved_sequence_length(text: &str) -> Option<usize> {
+    styling_sequence_length(text).or_else(|| hyperlink_sequence_length(text))
+}
+
+fn styling_sequence_length(text: &str) -> Option<usize> {
+    let parameters = text.strip_prefix(STYLING_PREFIX)?;
+    let end = parameters
+        .bytes()
+        .position(|byte| !byte.is_ascii_digit() && !matches!(byte, b';' | b':'))?;
+    (parameters.as_bytes()[end] == b'm').then_some(STYLING_PREFIX.len() + end + "m".len())
+}
+
+fn hyperlink_sequence_length(text: &str) -> Option<usize> {
+    let body = text.strip_prefix(HYPERLINK_PREFIX)?;
+    let end = body.bytes().position(|byte| !matches!(byte, b' '..=b'~'))?;
+    let (_, destination) = body[..end].split_once(';')?;
+    if !is_web_link_or_close(destination) {
+        return None;
+    }
+    let terminator = [BELL_TERMINATOR, STRING_TERMINATOR]
+        .into_iter()
+        .find(|terminator| body[end..].starts_with(terminator))?;
+    Some(HYPERLINK_PREFIX.len() + end + terminator.len())
+}
+
+fn is_web_link_or_close(destination: &str) -> bool {
+    destination.is_empty()
+        || destination.starts_with("http://")
+        || destination.starts_with("https://")
 }
 
 #[cfg(test)]
@@ -197,5 +334,71 @@ mod tests {
                  \x20   print(format(text), end='\\0')",
             ],
         );
+    }
+
+    #[test]
+    fn controls_are_shown_but_for_whole_styling_and_web_links() {
+        for (text, shown) in [
+            // C0 and DEL in caret notation, C1 as its escape.
+            ("\0\x07\x08\x1b\x1f\x7f", "^@^G^H^[^_^?"),
+            ("\u{9b}2J\u{9d}52;c;x\u{9c}", r"\u{9b}2J\u{9d}52;c;x\u{9c}"),
+            // The characters that share the first byte of C1 are not controls.
+            ("\u{a0}\u{bf}é", "\u{a0}\u{bf}é"),
+            // A carriage return shows, but for the one a Windows line ends with.
+            ("a\r\nb\r\r\nc\r", "a\nb^M\nc^M"),
+            ("a\r\x1b[0m\n", "a^M\x1b[0m\n"),
+            // Whole styling is kept, and nothing else that begins as it does.
+            ("\x1b[1;38:2::1:2:3mx\x1b[m", "\x1b[1;38:2::1:2:3mx\x1b[m"),
+            ("\x1b[?25l\x1b[2J\x1b[31", "^[[?25l^[[2J^[[31"),
+            ("\x1b[31\x1b[1m", "^[[31\x1b[1m"),
+            ("\x1b\x1b[1m", "^[\x1b[1m"),
+            // Whole web links are kept, and their ends.
+            (
+                "\x1b]8;id=1;https://x;y\x1b\\a\x1b]8;;\x07",
+                "\x1b]8;id=1;https://x;y\x1b\\a\x1b]8;;\x07",
+            ),
+            ("\x1b]8;;http://x\x07", "\x1b]8;;http://x\x07"),
+            // Any other link, or one that is not whole, shows.
+            (
+                "\x1b]8;;file:///etc/passwd\x07",
+                "^[]8;;file:///etc/passwd^G",
+            ),
+            ("\x1b]8;;HTTPS://x\x07", "^[]8;;HTTPS://x^G"),
+            ("\x1b]8;;https://exämple\x07", "^[]8;;https://exämple^G"),
+            ("\x1b]8;;https://x\x1b[2J\x07", "^[]8;;https://x^[[2J^G"),
+            ("\x1b]8;https://x\x07", "^[]8;https://x^G"),
+            ("\x1b]8;;https://x", "^[]8;;https://x"),
+            ("\x1b]52;c;SGk=\x1b\\", "^[]52;c;SGk=^[\\"),
+        ] {
+            assert_eq!(shown, sanitized(text), "{text:?}");
+            // What is shown is shown again as it is.
+            assert!(matches!(sanitized(shown), Cow::Borrowed(_)), "{shown:?}");
+        }
+        assert_eq!("^[[31mred^[[0m", visible_controls("\x1b[31mred\x1b[0m"));
+        assert_eq!(
+            "^[]8;;https://x^G",
+            visible_controls("\x1b]8;;https://x\x07")
+        );
+    }
+
+    #[test]
+    fn a_sequence_is_kept_only_when_whole() {
+        for kept in [
+            "\x1b[1;38:2::1:2:3m",
+            "\x1b]8;id=a;https://x?y=1;z\x07",
+            "\x1b]8;;http://x\x1b\\",
+        ] {
+            assert_eq!(kept, sanitized(kept));
+            // Cut short, or with a control before any of its characters.
+            for end in (1..kept.len()).filter(|end| kept.is_char_boundary(*end)) {
+                for broken in [
+                    kept[..end].to_owned(),
+                    format!("{}\x08{}", &kept[..end], &kept[end..]),
+                ] {
+                    let shown = sanitized(broken.as_str());
+                    assert!(!shown.contains('\x1b'), "{broken:?} became {shown:?}");
+                }
+            }
+        }
     }
 }

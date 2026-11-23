@@ -125,7 +125,7 @@ impl<W: fmt::Write> fmt::Write for Encoder<W> {
             // Marking nothing, a shell takes controls as it takes the text.
             return match self.kind {
                 Kind::Verbatim => self.output.write_str(text),
-                Kind::Text | Kind::Fill => self
+                Kind::Text | Kind::Untrusted | Kind::Fill => self
                     .output
                     .write_str(&shell_prompt_escape(text, self.shell)),
             };
@@ -156,7 +156,7 @@ impl<W: fmt::Write> fmt::Write for Encoder<W> {
                 }
                 match kind {
                     Kind::Verbatim => output.write_str(drawn)?,
-                    Kind::Text | Kind::Fill => {
+                    Kind::Text | Kind::Untrusted | Kind::Fill => {
                         output.write_str(&shell_prompt_escape(drawn, *shell))?
                     }
                 }
@@ -217,7 +217,7 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
             continue;
         };
         match kind {
-            Kind::Text | Kind::Verbatim => {
+            Kind::Text | Kind::Untrusted | Kind::Verbatim => {
                 let style = resolve(*style, previous.as_ref());
                 previous = Some(style);
                 runs.push(Run {

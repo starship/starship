@@ -1968,4 +1968,24 @@ mod tests {
             "~/user/gitrepo-diff/gitrepo".to_string()
         );
     }
+
+    #[test]
+    fn a_directory_name_shows_rather_than_performs_its_controls() {
+        let hostile = PathBuf::from("/tmp/evil\x1b]52;c;SGk=\x07dir\x1b[2Jname");
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                use_os_path_sep = false
+            })
+            .path(hostile)
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan
+                .bold()
+                .paint("/tmp/evil^[]52;c;SGk=^Gdir^[[2Jname")
+        ));
+
+        assert_eq!(expected, actual);
+    }
 }
