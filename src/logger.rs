@@ -1,4 +1,4 @@
-use crate::utils;
+use crate::utils::{self, escape::visible_controls};
 use log::{Level, LevelFilter, Metadata, Record};
 use nu_ansi_term::Color;
 use std::sync::OnceLock;
@@ -154,11 +154,13 @@ impl log::Log for StarshipLogger {
             return;
         }
 
+        // A message may quote a file, a path or the output of a command, and
+        // both a terminal and whoever reads the log file must see it as text.
+        let message = visible_controls(record.args().to_string());
         let to_print = format!(
-            "[{}] - ({}): {}",
+            "[{}] - ({}): {message}",
             record.level(),
             record.module_path().unwrap_or_default(),
-            record.args()
         );
 
         // A log message is only printed or written to the log file,
@@ -211,7 +213,7 @@ impl log::Log for StarshipLogger {
 
         // Print messages to stderr
         eprintln!(
-            "[{}] - ({}): {}",
+            "[{}] - ({}): {message}",
             match record.level() {
                 Level::Trace => Color::Blue.dimmed().paint(format!("{}", record.level())),
                 Level::Debug => Color::Cyan.paint(format!("{}", record.level())),
@@ -220,7 +222,6 @@ impl log::Log for StarshipLogger {
                 Level::Error => Color::Red.paint(format!("{}", record.level())),
             },
             record.module_path().unwrap_or_default(),
-            record.args()
         );
 
         // Add to duplicate detection set, which only looks up warnings and
@@ -318,6 +319,33 @@ mod test {
         let content = read_file(log_file)?;
 
         assert_eq!(content, "[ERROR] - (): error\n[WARN] - (): warn\n");
+
+        log_dir.close()
+    }
+
+    #[test]
+    fn a_logged_control_sequence_is_written_as_text() -> io::Result<()> {
+        let log_dir = tempfile::tempdir()?;
+        let log_file = log_dir.path().join("test.log");
+
+        let mut logger = StarshipLogger::default();
+        logger.set_log_file_path(log_file.clone());
+        logger.set_log_level(Level::Warn);
+        logger.log(
+            &Record::builder()
+                .level(Level::Warn)
+                .args(format_args!(
+                    "</b\x1b]52;c;SGk=\x07>\n\tat \u{9b}2Jline 1\r\x7f"
+                ))
+                .build(),
+        );
+        logger.flush();
+        drop(logger);
+
+        assert_eq!(
+            read_file(log_file)?,
+            "[WARN] - (): </b^[]52;c;SGk=^G>\n\tat \\u{9b}2Jline 1^M^?\n"
+        );
 
         log_dir.close()
     }
