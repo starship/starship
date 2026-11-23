@@ -11,6 +11,7 @@ use crate::config::Style;
 use crate::context::Shell;
 use crate::print::{UnicodeWidthGraphemes, printable};
 use crate::segment::{Kind, Segment};
+use crate::utils::escape::shell_prompt_escape;
 
 /// Text in one style, borrowed from its segment unless it is a stretched fill.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -124,7 +125,9 @@ impl<W: fmt::Write> fmt::Write for Encoder<W> {
             // Marking nothing, a shell takes controls as it takes the text.
             return match self.kind {
                 Kind::Verbatim => self.output.write_str(text),
-                Kind::Text | Kind::Fill => escape(text, self.shell, &mut self.output),
+                Kind::Text | Kind::Fill => self
+                    .output
+                    .write_str(&shell_prompt_escape(text, self.shell)),
             };
         };
         let Self {
@@ -145,7 +148,7 @@ impl<W: fmt::Write> fmt::Write for Encoder<W> {
                 }
                 // A shell decodes what it is told draws nothing as it does
                 // anything else.
-                escape(&text[parsed..start], *shell, output)?;
+                output.write_str(&shell_prompt_escape(&text[parsed..start], *shell))?;
             }
             if !drawn.is_empty() {
                 if std::mem::take(marking) {
@@ -153,37 +156,15 @@ impl<W: fmt::Write> fmt::Write for Encoder<W> {
                 }
                 match kind {
                     Kind::Verbatim => output.write_str(drawn)?,
-                    Kind::Text | Kind::Fill => escape(drawn, *shell, output)?,
+                    Kind::Text | Kind::Fill => {
+                        output.write_str(&shell_prompt_escape(drawn, *shell))?
+                    }
                 }
             }
             parsed = start + drawn.len();
         }
         Ok(())
     }
-}
-
-/// Writes `text` so that `shell` shows it as it is.
-fn escape(text: &str, shell: Shell, output: &mut impl fmt::Write) -> fmt::Result {
-    let mut unchanged = 0;
-    for (index, character) in text.char_indices() {
-        let escaped = match (shell, character) {
-            // Bash decodes prompt escapes, then expands what they leave: a
-            // backslash survives both doubled twice, and a dollar as `\\$`,
-            // which is not the root-sensitive `\$`.
-            (Shell::Bash, '\\') => r"\\\\",
-            (Shell::Bash, '$') => r"\\$",
-            (Shell::Bash, '`') => r"\`",
-            (Shell::Zsh | Shell::Tcsh, '%') => "%%",
-            // Xonsh formats a prompt, filling in fields such as `{user}`.
-            (Shell::Xonsh, '{') => "{{",
-            (Shell::Xonsh, '}') => "}}",
-            _ => continue,
-        };
-        output.write_str(&text[unchanged..index])?;
-        output.write_str(escaped)?;
-        unchanged = index + character.len_utf8();
-    }
-    output.write_str(&text[unchanged..])
 }
 
 /// Paints one line. Fills share the width the rest of the line leaves, with

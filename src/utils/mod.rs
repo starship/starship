@@ -1,4 +1,5 @@
 pub mod env;
+pub mod escape;
 pub mod serde;
 pub mod statusline;
 
