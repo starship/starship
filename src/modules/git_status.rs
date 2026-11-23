@@ -5,7 +5,7 @@ use crate::formatter::StringFormatter;
 use crate::segment::Segment;
 use crate::{context, num_configured_starship_threads, num_rayon_threads};
 use gix::bstr::ByteVec;
-use gix::status::Submodule;
+use gix::status::{Submodule, UntrackedFiles};
 use regex::Regex;
 use std::path::PathBuf;
 use std::sync::atomic::AtomicBool;
@@ -321,6 +321,35 @@ pub fn get_static_repo_status(
     status.as_ref().map(|(status, _)| Arc::clone(status))
 }
 
+/// The mode used for untracked files in the repo, if any.
+fn untracked_files_mode(git_config: &gix::config::Snapshot) -> Option<UntrackedFiles> {
+    // The bash key is used by both the official bash hook and fish,
+    // and takes precedence over the more general status key.
+    const BASH_KEY: &str = "bash.showUntrackedFiles";
+    let status_key = &gix::config::tree::Status::SHOW_UNTRACKED_FILES;
+    let value = git_config
+        .string(BASH_KEY)
+        .or_else(|| git_config.string(status_key))?;
+    // Re-use the Gitoxide parser
+    status_key
+        .try_into_show_untracked_files(value)
+        .ok()
+        .or_else(|| {
+            // Gix parser doesn't handle booleans yet.
+            // https://github.com/GitoxideLabs/gitoxide/issues/3128
+            git_config
+                .boolean(BASH_KEY)
+                .or_else(|| git_config.boolean(status_key))
+                .map(|b| {
+                    if b {
+                        UntrackedFiles::Collapsed
+                    } else {
+                        UntrackedFiles::None
+                    }
+                })
+        })
+}
+
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
 fn get_repo_status(
     context: &Context,
@@ -331,8 +360,13 @@ fn get_repo_status(
 
     let mut repo_status = RepoStatus::default();
     let gix_repo = repo.open();
-    let has_untracked = !config.untracked.is_empty();
     let git_config = gix_repo.config_snapshot();
+    // No need to look for untracked files if they aren't displayed.
+    let untracked_mode = if config.untracked.is_empty() {
+        Some(UntrackedFiles::None)
+    } else {
+        untracked_files_mode(&git_config)
+    };
     if repo.use_git_executable(config.use_git_executable)? {
         let mut args = vec!["status", "--porcelain=2"];
 
@@ -344,12 +378,15 @@ fn get_repo_status(
         }
 
         // ... and add flags that omit information the user doesn't want
-        if !has_untracked {
-            args.push("--untracked-files=no");
+        match untracked_mode {
+            Some(UntrackedFiles::None) => args.push("--untracked-files=no"),
+            Some(UntrackedFiles::Collapsed) => args.push("--untracked-files=normal"),
+            Some(UntrackedFiles::Files) => args.push("--untracked-files=all"),
+            None => {}
         }
         if config.ignore_submodules {
             args.push("--ignore-submodules=dirty");
-        } else if !has_untracked {
+        } else if untracked_mode == Some(UntrackedFiles::None) {
             args.push("--ignore-submodules=untracked");
         }
 
@@ -388,7 +425,7 @@ fn get_repo_status(
                     ignore: gix::submodule::config::Ignore::Dirty,
                     check_dirty,
                 }
-            } else if !has_untracked {
+            } else if untracked_mode == Some(UntrackedFiles::None) {
                 Submodule::Given {
                     ignore: gix::submodule::config::Ignore::Untracked,
                     check_dirty,
@@ -406,11 +443,20 @@ fn get_repo_status(
                 } else {
                     Some(num_rayon_threads())
                 };
-                if config.untracked.is_empty() {
-                    opts.dirwalk_options.take();
-                } else if let Some(opts) = opts.dirwalk_options.as_mut() {
-                    opts.set_emit_untracked(gix::dir::walk::EmissionMode::Matching)
-                        .set_emit_ignored(None)
+                opts.dirwalk_options = untracked_mode.map_or(opts.dirwalk_options, |m| {
+                    let opts = gix_repo.dirwalk_options().ok()?;
+                    let opts = opts.emit_untracked(match m {
+                        UntrackedFiles::None => return None,
+                        UntrackedFiles::Collapsed => {
+                            gix::dir::walk::EmissionMode::CollapseDirectory
+                        }
+                        UntrackedFiles::Files => gix::dir::walk::EmissionMode::Matching,
+                    });
+                    Some(opts)
+                });
+
+                if let Some(opts) = opts.dirwalk_options.as_mut() {
+                    opts.set_emit_ignored(None)
                         .set_emit_pruned(false)
                         .set_emit_empty_directories(false);
                 }
@@ -1195,6 +1241,74 @@ pub mod tests {
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn doesnt_show_untracked_file_if_disabled_for_prompt() -> io::Result<()> {
+        for &mode in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(mode)?;
+
+            create_untracked(repo_dir.path())?;
+
+            for (key, value) in [
+                ("status.showUntrackedFiles", "true"),
+                ("bash.showUntrackedFiles", "no"),
+            ] {
+                create_command("git")?
+                    .args(["config", key, value])
+                    .current_dir(repo_dir.path())
+                    .output()?;
+            }
+
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
+            let expected = None;
+
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn untracked_count_follows_show_untracked_files() -> io::Result<()> {
+        // An untracked directory counts once, unless every file is asked for.
+        for (show_untracked_files, expected) in
+            [(None, "?1"), (Some("normal"), "?1"), (Some("all"), "?2")]
+        {
+            for &mode in COMMON_GIT_PROVIDERS {
+                let repo_dir = fixture_repo(mode)?;
+
+                let untracked_dir = repo_dir.path().join("untracked_dir");
+                std::fs::create_dir(&untracked_dir)?;
+                File::create(untracked_dir.join("a"))?.sync_all()?;
+                File::create(untracked_dir.join("b"))?.sync_all()?;
+
+                if let Some(value) = show_untracked_files {
+                    create_command("git")?
+                        .args(["config", "status.showUntrackedFiles", value])
+                        .current_dir(repo_dir.path())
+                        .output()?;
+                }
+
+                let actual = ModuleRenderer::new("git_status")
+                    .config(toml::toml! {
+                        [git_status]
+                        untracked = "?$count"
+                    })
+                    .path(repo_dir.path())
+                    .collect();
+
+                assert_eq!(
+                    format_output(expected),
+                    actual,
+                    "status.showUntrackedFiles={show_untracked_files:?}, {mode:?}"
+                );
+                repo_dir.close()?;
+            }
         }
         Ok(())
     }
