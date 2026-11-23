@@ -349,8 +349,10 @@ impl fmt::Display for Painted<'_> {
 mod tests {
     use super::*;
     use crate::config::parse_style_string;
+    use crate::utils::exec_cmd;
     use nu_ansi_term::Color;
     use proptest::prelude::*;
+    use std::time::Duration;
 
     fn text(style: &str, value: &str) -> Segment {
         Segment::from_text(parse_style_string(style, None), value).remove(0)
@@ -692,6 +694,36 @@ mod tests {
             ),
             painted.escaped_for(Shell::Bash)
         );
+    }
+
+    #[test]
+    fn bash_draws_a_prompt_as_the_terminal_is_given_it() {
+        let mut segments =
+            Segment::from_text(None, "\x1b]8;;https://x\x1b\\a\\b$c`d\x1b]8;;\x1b\\ ");
+        segments.extend(Segment::untrusted(
+            parse_style_string("red", None),
+            "\x1b]8;;https://x\x1b\\v\\1$x\x1b]8;;\x07\x1b[1m%",
+        ));
+        segments.extend(Segment::from_text(None, r"\a$b"));
+        let painted = Painted::new(&segments, None);
+        let prompt = painted.escaped_for(Shell::Bash);
+
+        // An interactive bash marks where each control begins and ends.
+        // Expanding a prompt with `@P` needs bash 4.4.
+        let script = r#"[ -n "$BASH_VERSION" ] && printf '%s' "${1@P}""#;
+        let arguments = ["--norc", "--noprofile", "-i", "-c", script, "bash", &prompt];
+        let Some(output) = exec_cmd("bash", &arguments, Duration::from_secs(10)) else {
+            eprintln!("bash is not here, or is not a version these tests can ask: skipped");
+            return;
+        };
+        let drawn = painted.to_string();
+        assert_eq!(drawn, output.stdout.replace(['\x01', '\x02'], ""));
+        let unmarked: String = output
+            .stdout
+            .split('\x01')
+            .map(|part| part.split_once('\x02').map_or(part, |(_, after)| after))
+            .collect();
+        assert_eq!(printable(&drawn), unmarked);
     }
 
     #[test]
