@@ -13,6 +13,12 @@ use crate::print::{UnicodeWidthGraphemes, printable};
 use crate::segment::{Kind, Segment};
 use crate::utils::escape::shell_prompt_escape;
 
+/// Ends all styling.
+const RESET: &str = "\x1b[0m";
+/// Ends a hyperlink. BEL ends it rather than `ESC \`, whose backslash a
+/// shell would take for an escape.
+const LINK_END: &str = "\x1b]8;;\x07";
+
 /// Text in one style, borrowed from its segment unless it is a stretched fill.
 #[derive(Clone, Debug, PartialEq, Eq)]
 struct Run<'a> {
@@ -68,6 +74,17 @@ impl<'a> Painted<'a> {
                 encoder.write_str(&run.text)?;
                 encoder.kind = Kind::Text;
                 style = run.style;
+                // Styling an untrusted value brought is unknown to the runs
+                // after it. The reset ends it with the style of the run, and
+                // the next run starts anew. A link the value opened is closed
+                // after the reset.
+                if run.kind == Kind::Untrusted && run.text.contains('\x1b') {
+                    encoder.write_str(RESET)?;
+                    if run.text.contains("\x1b]8;") {
+                        encoder.write_str(LINK_END)?;
+                    }
+                    style = AnsiStyle::default();
+                }
             }
         }
         write!(encoder, "{}", style.infix(AnsiStyle::default()))?;
@@ -627,6 +644,54 @@ mod tests {
         ] {
             assert_eq!(prompt, painted.escaped_for(shell), "{shell:?}");
         }
+    }
+
+    #[test]
+    fn styling_an_untrusted_value_brings_ends_with_it() {
+        let red = parse_style_string("red", None);
+        for (style, own) in [(None, ""), (red, "\x1b[31m")] {
+            // Concealed text, in a value shown plain and in one shown in red.
+            let mut segments = Segment::untrusted(style, "v1\x1b[8m");
+            segments.extend(Segment::from_text(style, " on "));
+            segments.extend(Segment::from_text(None, "main"));
+            let reset_own = if own.is_empty() { "" } else { "\x1b[0m" };
+
+            assert_eq!(
+                format!("{own}v1\x1b[8m\x1b[0m{own} on {reset_own}main"),
+                Painted::new(&segments, None).to_string()
+            );
+        }
+        // A value without styling is painted as text is.
+        assert_eq!(
+            Painted::new(&Segment::from_text(red, "v1"), None).to_string(),
+            Painted::new(&Segment::untrusted(red, "v1"), None).to_string()
+        );
+    }
+
+    #[test]
+    fn a_link_an_untrusted_value_opens_ends_with_it() {
+        let mut segments = Segment::untrusted(None, "\x1b]8;;https://x\x1b\\v1\nv2");
+        segments.extend(Segment::from_text(None, r" on \main"));
+        let painted = Painted::new(&segments, None);
+
+        // Each line of the value ends what it opened.
+        assert_eq!(
+            "\x1b]8;;https://x\x1b\\v1\x1b[0m\x1b]8;;\x07\nv2 on \\main",
+            painted.to_string()
+        );
+        // The ends are marked with the controls before them.
+        assert_eq!(
+            concat!(
+                r"\[",
+                "\x1b]8;;https://x\x1b",
+                r"\\\\\]v1\[",
+                "\x1b[0m\x1b]8;;\x07",
+                r"\]",
+                "\nv2 on ",
+                r"\\\\main"
+            ),
+            painted.escaped_for(Shell::Bash)
+        );
     }
 
     #[test]

@@ -23,7 +23,8 @@ pub enum Kind {
     /// Shown as written.
     Text,
     /// Text from outside the configuration, holding no control but styling
-    /// and web links.
+    /// and web links. Styling or a link it brings ends with it, so it cannot
+    /// conceal, recolor or link what follows.
     Untrusted,
     /// Handed to a shell exactly as written, so that the shell may expand it:
     /// the output of a custom module with `unsafe_no_escape`.
