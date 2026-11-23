@@ -61,7 +61,7 @@ fn cache_path() -> PathBuf {
 }
 
 fn load() -> Cache {
-    std::fs::read_to_string(cache_path())
+    crate::utils::read_file(cache_path())
         .ok()
         .and_then(|content| serde_json::from_str(&content).ok())
         .unwrap_or_default()
@@ -250,7 +250,7 @@ fn acquire_lock(dir: &Path) -> Option<CacheLock> {
 /// True while the current lock holder may still be active: either it is owned by this process, or
 /// the marker is younger than the grace period. Otherwise the marker is assumed abandoned.
 fn lock_may_be_live(lock_path: &Path) -> bool {
-    let owns_lock = std::fs::read_to_string(lock_path)
+    let owns_lock = crate::utils::read_file(lock_path)
         .ok()
         .and_then(|content| content.trim().parse::<u32>().ok())
         .is_some_and(|pid| pid == std::process::id());
