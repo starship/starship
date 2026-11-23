@@ -13,15 +13,17 @@ use std::sync::{Mutex, MutexGuard, PoisonError, mpsc};
 use std::thread;
 use std::time::{Duration, Instant};
 
-use alacritty_terminal::event::{Event, EventListener, WindowSize};
+use alacritty_terminal::event::{Event, EventListener, OnResize, WindowSize};
 use alacritty_terminal::grid::Dimensions;
 use alacritty_terminal::index::Line;
+use alacritty_terminal::term::cell::Flags;
 use alacritty_terminal::term::{Config, Term};
 use alacritty_terminal::tty::{self, EventedReadWrite, Options, Shell as Program};
 use alacritty_terminal::vte::ansi::Processor;
 use nix::sys::signal::{self, Signal};
 use nix::unistd::Pid;
 use tempfile::TempDir;
+use unicode_width::UnicodeWidthStr;
 
 /// Reads a test fixture or log without allowing it to grow without limit.
 fn read_file(path: impl AsRef<Path>) -> std::io::Result<String> {
@@ -108,6 +110,27 @@ impl Shell {
                 "1..15 | ForEach-Object { Start-Sleep -Milliseconds 200 }; Write-Output ('RESULT:' + 'typed')"
             }
         }
+    }
+
+    /// How many columns the shell leaves right of a right prompt, if it draws
+    /// one.
+    const fn right_prompt_indent(self) -> Option<usize> {
+        match self {
+            Self::Zsh => Some(1),
+            Self::Fish | Self::Nushell | Self::BashWithBle | Self::Xonsh => Some(0),
+            Self::Bash | Self::Pwsh => None,
+        }
+    }
+
+    /// Whether the shell renders its prompt again for a new width.
+    const fn renders_for_a_new_width(self) -> bool {
+        matches!(self, Self::Zsh | Self::Fish)
+    }
+
+    /// Whether the shell redraws its prompt in place for a new width: ble.sh
+    /// leaves the tail of a filled line on the row below it.
+    const fn redraws_in_place_for_a_new_width(self) -> bool {
+        !matches!(self, Self::BashWithBle)
     }
 
     /// The command that turns on the shell's vi key bindings, if it has them.
@@ -245,6 +268,10 @@ impl Fixture {
         let directory = self.directory.path();
         HashMap::from([
             ("HOME".into(), directory.display().to_string()),
+            // Wide and non-ASCII text is measured as the terminal draws it
+            // only under a UTF-8 locale.
+            ("LANG".into(), "C.UTF-8".into()),
+            ("LC_ALL".into(), "C.UTF-8".into()),
             ("PATH".into(), shell.search_path().display().to_string()),
             (
                 "STARSHIP_CONFIG".into(),
@@ -282,7 +309,19 @@ impl EventListener for Listener {
     }
 }
 
-struct Size;
+/// A terminal `LINES` high and as many columns wide as it holds.
+struct Size(usize);
+
+impl Size {
+    fn window(&self) -> WindowSize {
+        WindowSize {
+            num_lines: LINES as u16,
+            num_cols: self.0 as u16,
+            cell_width: 8,
+            cell_height: 16,
+        }
+    }
+}
 
 impl Dimensions for Size {
     fn total_lines(&self) -> usize {
@@ -294,7 +333,7 @@ impl Dimensions for Size {
     }
 
     fn columns(&self) -> usize {
-        COLUMNS
+        self.0
     }
 }
 
@@ -328,12 +367,7 @@ impl Session {
                 drain_on_exit: false,
                 env: fixture.environment(shell),
             },
-            WindowSize {
-                num_lines: LINES as u16,
-                num_cols: COLUMNS as u16,
-                cell_width: 8,
-                cell_height: 16,
-            },
+            Size(COLUMNS).window(),
             0,
         )
         .unwrap_or_else(|error| panic!("unable to start {}: {error}", shell.name()));
@@ -342,7 +376,7 @@ impl Session {
             shell,
             pty,
             parser: Processor::new(),
-            terminal: Term::new(Config::default(), &Size, Listener(sender)),
+            terminal: Term::new(Config::default(), &Size(COLUMNS), Listener(sender)),
             events,
             exited: false,
             closed: false,
@@ -421,14 +455,32 @@ impl Session {
     }
 
     fn rows(&self, first: i32) -> String {
+        self.lines(first).join("\n")
+    }
+
+    /// Each row from `first` on, as drawn: a wide character once.
+    fn lines(&self, first: i32) -> Vec<String> {
         let grid = self.terminal.grid();
         (first..=grid.bottommost_line().0)
             .map(|row| {
-                let text: String = grid[Line(row)].into_iter().map(|cell| cell.c).collect();
+                let text: String = grid[Line(row)]
+                    .into_iter()
+                    .filter(|cell| {
+                        !cell
+                            .flags
+                            .intersects(Flags::WIDE_CHAR_SPACER | Flags::LEADING_WIDE_CHAR_SPACER)
+                    })
+                    .map(|cell| cell.c)
+                    .collect();
                 text.trim_end().to_owned()
             })
-            .collect::<Vec<_>>()
-            .join("\n")
+            .collect()
+    }
+
+    /// Makes the terminal `columns` wide, as a window resized is.
+    fn resize(&mut self, columns: usize) {
+        self.terminal.resize(Size(columns));
+        self.pty.on_resize(Size(columns).window());
     }
 
     fn wait_for(&mut self, text: &str) -> String {
@@ -443,6 +495,109 @@ impl Session {
                 "{} never drew {text:?}; it drew:\n{}",
                 self.shell.name(),
                 self.transcript(),
+            );
+            self.pump(Duration::from_millis(25));
+        }
+    }
+
+    /// Reads what the shell draws until `drawn` holds of the session.
+    fn wait_until(&mut self, what: &str, drawn: impl Fn(&Self) -> bool) {
+        let deadline = Instant::now() + TIMEOUT;
+        while !drawn(self) {
+            assert!(
+                !self.exited && Instant::now() < deadline,
+                "{} never drew {what}; it drew:\n{}",
+                self.shell.name(),
+                self.transcript(),
+            );
+            self.pump(Duration::from_millis(25));
+        }
+    }
+
+    /// The rows above the last prompt of [`LAYOUT`], scrollback included, and
+    /// those from its filled line down to the last row drawn.
+    fn last_prompt(&self) -> Option<(Vec<String>, Vec<String>)> {
+        let mut rows = self.lines(self.terminal.grid().topmost_line().0);
+        while rows.last().is_some_and(String::is_empty) {
+            rows.pop();
+        }
+        let start = rows
+            .iter()
+            .rposition(|row| filled(right_prompt(row).0).is_some())?;
+        let prompt = rows.split_off(start);
+        Some((rows, prompt))
+    }
+
+    /// What is wrong, if anything, with the last prompt of [`LAYOUT`],
+    /// rendered `width` columns wide: it is to be drawn once, below the rows
+    /// `above` as they were, with `typed` after its last cell and the cursor
+    /// after that. A shell that counts the prompt otherwise than the terminal
+    /// draws it redraws it from the wrong row, over a line above or below a
+    /// stale copy, and lays out what follows it from the wrong column.
+    fn misdrawn(&self, above: &[String], width: usize, typed: &str) -> Option<String> {
+        let columns = self.terminal.columns();
+        let Some((drawn, prompt)) = self.last_prompt() else {
+            return Some("no prompt".into());
+        };
+        if drawn != above {
+            return Some(format!(
+                "the rows above it changed from:\n{}",
+                above.join("\n")
+            ));
+        }
+        // A right prompt is drawn on one row at most, ending where the shell
+        // ends one.
+        let right: Vec<_> = prompt.iter().filter(|row| right_prompt(row).1).collect();
+        if right.len() > 1 {
+            return Some("its right prompt is drawn twice".into());
+        }
+        if let Some(row) = right.first() {
+            let indent = columns - row.width();
+            if self.shell.right_prompt_indent() != Some(indent) {
+                return Some(format!(
+                    "its right prompt ends {indent} columns from the edge"
+                ));
+            }
+        }
+        let rows: Vec<_> = prompt.iter().map(|row| right_prompt(row).0).collect();
+        let [first, second, wrapped @ .., _] = rows.as_slice() else {
+            return Some(format!("it is {} rows high", rows.len()));
+        };
+        if filled(first) != Some(width) {
+            return Some(format!("its first line is not filled to {width} columns"));
+        }
+        if *second != "TOP BEL ST SLOW" {
+            return Some("its second line is not whole".into());
+        }
+        // What is typed follows the prompt's last cell, row after row up to a
+        // right prompt or the terminal's edge, and the cursor follows it.
+        let line = format!("> {typed}");
+        if rows[2..].concat() != line.trim_end() {
+            return Some(format!("what follows its second line is not {line:?}"));
+        }
+        let grid = self.terminal.grid();
+        let cursor = (
+            (grid.cursor.point.line.0 - grid.topmost_line().0) as usize,
+            grid.cursor.point.column.0,
+        );
+        let after = (
+            above.len() + rows.len() - 1,
+            line[wrapped.concat().len()..].width(),
+        );
+        (cursor != after).then(|| format!("the cursor is at {cursor:?}, not {after:?}"))
+    }
+
+    /// Asserts that [`Session::misdrawn`] finds nothing wrong once the shell
+    /// is done drawing, `after` what: a stream started again, for a keymap
+    /// or a width, streams its late module in again.
+    fn assert_drawn(&mut self, above: &[String], width: usize, typed: &str, after: &str) {
+        let deadline = Instant::now() + TIMEOUT;
+        while let Some(wrong) = self.misdrawn(above, width, typed) {
+            assert!(
+                !self.exited && Instant::now() < deadline,
+                "{} misdrew the prompt after {after}: {wrong}; it drew:\n{}",
+                self.shell.name(),
+                self.transcript()
             );
             self.pump(Duration::from_millis(25));
         }
@@ -782,6 +937,152 @@ shell = ["/bin/sh"]
     session.close();
 }
 
+/// A prompt that a shell redraws in place only if it counts each cell of it
+/// as the terminal draws it: a line filled to the terminal's width between
+/// wide and non-ASCII text, styles of several parameters, links ended by BEL
+/// and by ST, a module that streams in late, and beside the last line a right
+/// prompt that refreshes every second.
+const LAYOUT: &str = r#"
+format = """
+[界](bold red)$fill[é](dimmed white)
+[TOP](dimmed white) ${custom.links}${custom.slow}
+$character"""
+right_format = "$time"
+add_newline = false
+
+[fill]
+symbol = "-"
+style = "dimmed white"
+
+[custom.links]
+command = '''LINKS'''
+when = true
+shell = ["/bin/sh"]
+format = "$output"
+
+[custom.slow]
+command = "sleep 1; printf SLOW"
+when = true
+shell = ["/bin/sh"]
+format = " $output"
+ignore_timeout = true
+
+[time]
+disabled = false
+format = "[RIGHT $time]($style)"
+time_format = "%S"
+style = "dimmed white"
+
+[character]
+success_symbol = "[>](bold green)"
+vimcmd_symbol = "[<](bold green)"
+"#;
+
+impl Shell {
+    /// [`LAYOUT`], its links drawn as plain text where the line editor
+    /// cannot parse them: prompt_toolkit, for xonsh, prints their parameters.
+    fn layout(self) -> String {
+        let links = match self {
+            Self::Xonsh => "printf 'BEL ST'",
+            _ => LINKS,
+        };
+        LAYOUT.replace("LINKS", links)
+    }
+}
+
+/// Two links, one ended by BEL and the other by ST.
+const LINKS: &str = r"printf '\033]8;;https://starship.rs\007BEL\033]8;;\007 \033]8;;https://starship.rs\033\\ST\033]8;;\033\\'";
+
+/// How wide a row is, if it is the filled line of [`LAYOUT`].
+fn filled(row: &str) -> Option<usize> {
+    let fill = row.strip_prefix('界')?.strip_suffix('é')?;
+    (!fill.is_empty() && fill.chars().all(|c| c == '-')).then(|| row.width())
+}
+
+/// A row of [`LAYOUT`] without the right prompt it ends with, and whether it
+/// ends with one.
+fn right_prompt(row: &str) -> (&str, bool) {
+    match row.rfind("RIGHT ") {
+        Some(start) => (row[..start].trim_end(), true),
+        None => (row, false),
+    }
+}
+
+/// Whatever redraws a prompt redraws it in place, as [`Session::misdrawn`]
+/// checks: an update the stream sends, refreshes, a keymap switch, typing
+/// that wraps and is erased again, a resize and a cleared screen.
+fn redraws_keep_the_layout(shell: Shell) {
+    let mut session = Session::start(shell, &shell.layout());
+    session.wait_for("SLOW");
+    if let Some(bindings) = shell.vi_key_bindings() {
+        session.send(bindings);
+        session.wait_for(bindings);
+        session.enter();
+        session.settle();
+    }
+    // A line printed ahead of the prompt, as its first paint leaves it.
+    session.send(shell.input());
+    session.wait_for(shell.input());
+    session.enter();
+    session.wait_until("a prompt below what was printed", |session| {
+        session
+            .last_prompt()
+            .is_some_and(|(above, _)| above.last().is_some_and(|row| row == "RESULT:typed"))
+    });
+    let (above, _) = session.last_prompt().unwrap();
+    session.assert_drawn(&above, COLUMNS, "", "the stream's update");
+    if shell.vi_key_bindings().is_some() {
+        session.send("\x1b");
+        session.wait_until("the command keymap", |session| {
+            session
+                .last_prompt()
+                .is_some_and(|(_, prompt)| prompt.last().is_some_and(|row| row.starts_with('<')))
+        });
+        session.send("a");
+        session.assert_drawn(&above, COLUMNS, "", "a keymap switch");
+    }
+    // A word that no line editor annotates or completes.
+    let typed = "x0123456789";
+    session.send(typed);
+    session.assert_drawn(&above, COLUMNS, typed, "typing");
+    // The right prompt refreshes every second.
+    session.pump(Duration::from_secs(3));
+    session.assert_drawn(&above, COLUMNS, typed, "refreshes");
+    // Typed past the terminal's edge, and erased back across it.
+    let wraps = format!("{typed}{}WRAPPED", "a".repeat(COLUMNS - typed.len()));
+    session.send(&wraps[typed.len()..]);
+    session.assert_drawn(&above, COLUMNS, &wraps, "typing that wraps");
+    let erased = &wraps[..COLUMNS - 10];
+    session.send(&"\x7f".repeat(wraps.len() - erased.len()));
+    session.assert_drawn(&above, COLUMNS, erased, "erasing across where it wraps");
+    session.send(&"\x7f".repeat(erased.len() - typed.len()));
+    session.assert_drawn(&above, COLUMNS, typed, "erasing");
+    let mut width = COLUMNS;
+    if shell.redraws_in_place_for_a_new_width() {
+        session.resize(COLUMNS + 20);
+        // Time for the shell to take the new width in.
+        session.pump(Duration::from_secs(1));
+        if shell.renders_for_a_new_width() {
+            width = COLUMNS + 20;
+        }
+        session.assert_drawn(&above, width, typed, "a resize");
+    }
+    // A cleared screen shows the prompt from its top row, and what was above
+    // it in the scrollback alone, if at all.
+    session.send("\x0c");
+    session.wait_until("a cleared screen", |session| {
+        session
+            .last_prompt()
+            .is_some_and(|(above, _)| above.len() == session.terminal.grid().history_size())
+    });
+    let (above, _) = session.last_prompt().unwrap();
+    session.assert_drawn(&above, width, typed, "clearing the screen");
+    session.pump(Duration::from_millis(1500));
+    session.assert_drawn(&above, width, typed, "refreshes of a cleared screen");
+    session.send(&"\x7f".repeat(typed.len()));
+    session.close();
+}
+
 /// Whether a session's log in `directory` holds `text`.
 fn logged(directory: &Path, text: &str) -> bool {
     fs::read_dir(directory)
@@ -807,6 +1108,7 @@ macro_rules! in_shells {
 in_shells! {
     Zsh, "requires zsh":
         zsh_streams => streams,
+        zsh_redraws_keep_the_layout => redraws_keep_the_layout,
         zsh_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
         zsh_shows_text_as_it_is => text_is_shown_as_it_is,
         zsh_keeps_the_right_prompt_current => the_right_prompt_is_kept_current,
@@ -816,6 +1118,7 @@ in_shells! {
         zsh_reports_into_the_log_alone_while_editing => a_stream_started_while_editing_reports_into_the_log_alone;
     Fish, "requires fish":
         fish_streams => streams,
+        fish_redraws_keep_the_layout => redraws_keep_the_layout,
         fish_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
         fish_shows_text_as_it_is => text_is_shown_as_it_is,
         fish_keeps_the_right_prompt_current => the_right_prompt_is_kept_current,
@@ -824,15 +1127,18 @@ in_shells! {
         fish_reports_into_the_log_alone_while_editing => a_stream_started_while_editing_reports_into_the_log_alone;
     Nushell, "requires nu 0.115 or later":
         nushell_streams => streams,
+        nushell_redraws_keep_the_layout => redraws_keep_the_layout,
         nushell_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
         nushell_shows_text_as_it_is => text_is_shown_as_it_is,
         nushell_keeps_the_right_prompt_current => the_right_prompt_is_kept_current,
         nushell_runs_a_command_without_its_stream => a_command_runs_without_its_stream,
         nushell_shows_warnings_only_before_the_first_paint => warnings_are_shown_only_before_the_first_paint;
     Bash, "requires bash":
-        bash_shows_text_as_it_is => text_is_shown_as_it_is;
+        bash_shows_text_as_it_is => text_is_shown_as_it_is,
+        bash_redraws_keep_the_layout => redraws_keep_the_layout;
     BashWithBle, "requires bash 4.2 or later, and STARSHIP_TEST_BLE naming ble.sh":
         bash_with_ble_streams => streams,
+        bash_with_ble_redraws_keep_the_layout => redraws_keep_the_layout,
         bash_with_ble_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
         bash_with_ble_shows_text_as_it_is => text_is_shown_as_it_is,
         bash_with_ble_keeps_the_right_prompt_current => the_right_prompt_is_kept_current,
@@ -840,6 +1146,7 @@ in_shells! {
         bash_with_ble_shows_warnings_only_before_the_first_paint => warnings_are_shown_only_before_the_first_paint;
     Xonsh, "requires xonsh":
         xonsh_streams => streams,
+        xonsh_redraws_keep_the_layout => redraws_keep_the_layout,
         xonsh_leaves_an_accepted_line_alone => an_accepted_line_is_left_alone,
         xonsh_shows_text_as_it_is => text_is_shown_as_it_is,
         xonsh_keeps_the_right_prompt_current => the_right_prompt_is_kept_current,
