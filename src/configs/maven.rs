@@ -34,7 +34,7 @@ impl Default for MavenConfig<'_> {
             cache_ttl: 3600,
             detect_extensions: vec![],
             detect_files: vec!["pom.xml"],
-            detect_folders: vec![],
+            detect_folders: vec![".mvn"],
         }
     }
 }

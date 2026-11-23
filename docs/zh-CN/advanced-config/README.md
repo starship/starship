@@ -435,10 +435,10 @@ The `claude_context` module displays context window usage as a percentage and vi
 | `gauge_full_symbol`    | `'█'`                             | The symbol used for filled segments of the gauge.  |
 | `gauge_partial_symbol` | `'▒'`                             | The symbol used for partial segments of the gauge. |
 | `gauge_empty_symbol`   | `'░'`                             | The symbol used for empty segments of the gauge.   |
-| `display`              | [见下文解释](#display)                 | Threshold and style configurations.                |
+| `dispaly`              | [见下文解释](#display)                 | Threshold and style configurations.                |
 | `disabled`             | `false`                           | Disables the `claude_context` module.              |
 
-##### Display
+##### Dispaly
 
 The `display` option is an array of objects that define thresholds and styles for different usage levels. The module uses the style from the highest matching threshold or hides the module if `hidden` is `true`.
 
@@ -550,10 +550,10 @@ The `claude_cost` module displays the total cost of the current Claude Code sess
 | ---------- | ---------------------------------- | --------------------------------------------------- |
 | `format`   | `'[$symbol(\\$$cost)]($style) '` | 组件格式化模板。                                            |
 | `符号`       | `'💰 '`                            | The symbol shown before the cost.   |
-| `display`  | [见下文解释](#display-1)                | Threshold and style configurations. |
+| `dispaly`  | [见下文解释](#display-1)                | Threshold and style configurations. |
 | `disabled` | `false`                            | Disables the `claude_cost` module.  |
 
-##### Display
+##### Dispaly
 
 The `display` option is an array of objects that define cost thresholds and styles. The module uses the style from the highest matching threshold or hides the module if `hidden` is `true`.
 

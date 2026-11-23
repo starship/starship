@@ -175,15 +175,50 @@ mod tests {
     }
 
     #[test]
-    fn folder_with_maven_config_does_not_trigger_module() -> io::Result<()> {
+    fn folder_with_mvn_directory_triggers_module() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let maven_config = dir.path().join(".mvn").join("maven.config");
-        fs::create_dir_all(maven_config.parent().unwrap())?;
-        File::create(maven_config)?.sync_all()?;
+        fs::create_dir_all(dir.path().join(".mvn"))?;
 
-        let actual = ModuleRenderer::new("maven").path(dir.path()).collect();
+        let binary_name = if cfg!(windows) { "mvn.cmd" } else { "mvn" };
+        let actual = ModuleRenderer::new("maven")
+            .config(toml::toml! {
+                [maven]
+                cache = false
+            })
+            .path(dir.path())
+            .cmd(
+                &display_command(binary_name, &["--version"]),
+                Some(CommandOutput {
+                    stdout: String::from("Apache Maven 4.0.0-rc-6 (test-runner)"),
+                    stderr: String::new(),
+                }),
+            )
+            .collect();
 
-        let expected = None;
+        let expected = Some(format!(
+            "via {}",
+            Color::LightCyan.bold().paint("🅼 v4.0.0-rc-6 ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_mvn_directory_and_missing_mvn_shows_symbol() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        fs::create_dir_all(dir.path().join(".mvn"))?;
+
+        let binary_name = if cfg!(windows) { "mvn.cmd" } else { "mvn" };
+        let actual = ModuleRenderer::new("maven")
+            .config(toml::toml! {
+                [maven]
+                cache = false
+            })
+            .path(dir.path())
+            .cmd(&display_command(binary_name, &["--version"]), None)
+            .collect();
+
+        let expected = Some(format!("via {}", Color::LightCyan.bold().paint("🅼 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -229,7 +264,10 @@ distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-mav
             })
             .path(dir.path())
             .cmd(
-                &display_command("mvn", &["--version"]),
+                &display_command(
+                    if cfg!(windows) { "mvn.cmd" } else { "mvn" },
+                    &["--version"],
+                ),
                 Some(CommandOutput {
                     stdout: String::from("Apache Maven 4.0.0-rc-6 (test-runner)"),
                     stderr: String::new(),
@@ -272,7 +310,10 @@ distributionType=only-script
             })
             .path(dir.path())
             .cmd(
-                &display_command("mvn", &["--version"]),
+                &display_command(
+                    if cfg!(windows) { "mvn.cmd" } else { "mvn" },
+                    &["--version"],
+                ),
                 Some(CommandOutput {
                     stdout: String::from("Apache Maven 4.0.0-rc-6 (test-runner)"),
                     stderr: String::new(),

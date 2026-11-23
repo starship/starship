@@ -6,7 +6,6 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::git_branch::GitBranchConfig;
 use crate::context::GitRepo;
 use crate::formatter::StringFormatter;
-use crate::modules::git_status::uses_reftables;
 
 /// Creates a module with the Git branch in the current directory
 ///
@@ -35,7 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     // Get branch and remote information
-    let (branch_name, remote_branch, remote_name) = if uses_reftables(&gix_repo) {
+    let (branch_name, remote_branch, remote_name) = if repo.uses_reftables() {
         // Use git executable for branch information
         if let Some((branch, remote_branch)) = get_branch_info_from_git(context, repo) {
             // Successfully got branch name, parse upstream into remote_name and remote_branch
@@ -96,6 +95,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let is_ignored_remote = config
+        .ignore_remotes
+        .iter()
+        .any(|ignored| remote_name.as_deref() == Some(ignored));
+
     let mut graphemes: Vec<&str> = branch_name.graphemes(true).collect();
 
     let remote_branch_string = remote_branch.unwrap_or_default();
@@ -142,7 +146,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     }
                 }
                 "remote_name" => {
-                    if show_remote && !remote_name_graphemes.is_empty() {
+                    if show_remote && !is_ignored_remote && !remote_name_graphemes.is_empty() {
                         Some(Ok(remote_name_graphemes.concat()))
                     } else {
                         None
@@ -187,7 +191,12 @@ fn get_branch_info_from_git(
     repo: &GitRepo,
 ) -> Option<(gix::refs::FullName, Option<gix::refs::FullName>)> {
     // Get current branch name using git symbolic-ref
-    let branch_output = repo.exec_git(context, ["symbolic-ref", "HEAD"])?;
+    // These fixed ref queries do not run worktree filters or hooks.
+    let branch_output = repo.exec_git_with_required_trust(
+        context,
+        gix::sec::Trust::Reduced,
+        ["symbolic-ref", "HEAD"],
+    )?;
 
     // Check if the command was successful (exit code 0)
     // symbolic-ref returns non-zero exit code when HEAD is detached
@@ -198,8 +207,9 @@ fn get_branch_info_from_git(
 
     let branch_name: gix::refs::FullName = branch_name.try_into().ok()?;
     // Get upstream tracking branch using git for-each-ref
-    let upstream_output = repo.exec_git(
+    let upstream_output = repo.exec_git_with_required_trust(
         context,
+        gix::sec::Trust::Reduced,
         [
             "for-each-ref",
             "--format=%(upstream)",
@@ -244,6 +254,27 @@ mod tests {
         let expected = None;
 
         assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn reduced_trust_shows_branch_and_upstream_with_reftables() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git {
+            reftable: true,
+            bare: false,
+        })?;
+
+        let actual = ModuleRenderer::new("git_branch")
+            .config(toml::toml! {
+                [git_branch]
+                format = "$branch $remote_name/$remote_branch"
+                always_show_remote = true
+            })
+            .path(repo_dir.path())
+            .git_trust(gix::sec::Trust::Reduced)
+            .collect();
+
+        assert_eq!(actual.as_deref(), Some("master origin/master"));
         repo_dir.close()
     }
 
@@ -514,6 +545,48 @@ mod tests {
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn test_ignore_remotes() -> io::Result<()> {
+        for &mode in COMMON_GIT_PROVIDERS {
+            // Both repos must use the same hash format; SHA1/SHA256 repos can't fetch from each other.
+            let sha256 = rand::random();
+            let remote_dir = fixture_repo_with_hash(mode, sha256)?;
+            let repo_dir = fixture_repo_with_hash(mode, sha256)?;
+
+            create_command("git")?
+                .args(["checkout", "-b", "test_branch"])
+                .current_dir(repo_dir.path())
+                .output()?;
+
+            create_command("git")?
+                .args(["remote", "add", "--fetch", "remote_repo"])
+                .arg(remote_dir.path())
+                .current_dir(repo_dir.path())
+                .output()?;
+
+            create_command("git")?
+                .args(["branch", "--set-upstream-to", "remote_repo/master"])
+                .current_dir(repo_dir.path())
+                .output()?;
+
+            let actual = ModuleRenderer::new("git_branch")
+                .path(repo_dir.path())
+                .config(toml::toml! {
+                    [git_branch]
+                        ignore_remotes = ["remote_repo"]
+                        format = "($remote_name/)$branch"
+                })
+                .collect();
+
+            let expected = Some("test_branch");
+
+            assert_eq!(expected, actual.as_deref());
+            repo_dir.close()?;
+            remote_dir.close()?;
         }
         Ok(())
     }
