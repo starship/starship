@@ -6,10 +6,7 @@ use crate::utils::{CommandOutput, PathExt, create_command, exec_timeout, read_fi
 use crate::modules;
 use crate::utils;
 use clap::Parser;
-use gix::{
-    Repository, ThreadSafeRepository,
-    sec::{self as git_sec, trust::DefaultForLevel},
-};
+use gix::{Repository, ThreadSafeRepository};
 #[cfg(test)]
 use std::collections::HashMap;
 use std::collections::HashSet;
@@ -337,33 +334,12 @@ impl<'a> Context<'a> {
     pub fn get_git_repo(&self) -> Result<&GitRepo, &gix::Error> {
         self.git_repo
             .get_or_init(|| -> Result<GitRepo, gix::Error> {
-                // custom open options
-                let mut git_open_opts_map =
-                    git_sec::trust::Mapping::<gix::open::Options>::default();
-
                 // Load all the configuration as it affects aspects of the
                 // `git_status` and `git_metrics` modules.
                 let config = gix::open::permissions::Config {
                     git_binary: true,
-                    system: true,
-                    git: true,
-                    user: true,
-                    env: true,
-                    includes: true,
+                    ..gix::open::permissions::Config::all()
                 };
-                // change options for config permissions without touching anything else
-                git_open_opts_map.reduced =
-                    git_open_opts_map
-                        .reduced
-                        .permissions(gix::open::Permissions {
-                            config,
-                            ..gix::open::Permissions::default_for_level(git_sec::Trust::Reduced)
-                        });
-                git_open_opts_map.full =
-                    git_open_opts_map.full.permissions(gix::open::Permissions {
-                        config,
-                        ..gix::open::Permissions::default_for_level(git_sec::Trust::Full)
-                    });
 
                 let shared_repo =
                     match ThreadSafeRepository::discover_with_environment_overrides_opts(
@@ -372,7 +348,12 @@ impl<'a> Context<'a> {
                             match_ceiling_dir_or_error: false,
                             ..Default::default()
                         },
-                        git_open_opts_map,
+                        |options, trust| {
+                            options.permissions(gix::open::Permissions {
+                                config,
+                                ..gix::open::Permissions::default_for_level(trust)
+                            })
+                        },
                     ) {
                         Ok(repo) => repo,
                         Err(e) => {
