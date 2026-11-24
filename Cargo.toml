@@ -36,7 +36,7 @@ notify = ["notify-rust"]
 
 [dependencies]
 anstream = { version = "1.0.0", default-features = false }
-clap = { version = "4.6.8", features = ["derive", "cargo", "unicode"] }
+clap = { version = "4.6.9", features = ["derive", "cargo", "unicode"] }
 clap_complete = "4.6.12"
 clap_complete_nushell = "4.6.3"
 dirs = "7.0.0"
