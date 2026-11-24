@@ -204,7 +204,7 @@ style = 'fg:black bg:yellow'
 
 [lua]
 format = '[ $symbol( $version) ]($style)'
-symbol = ''
+symbol = ''
 style = 'fg:black bg:yellow'
 
 [rlang]

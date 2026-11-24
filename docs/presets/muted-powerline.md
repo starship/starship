@@ -3,8 +3,8 @@
 # Muted Powerline Preset
 
 This preset is inspired by [Powerlevel10k](https://github.com/romkatv/powerlevel10k), with a muted
-palette. The username and hostname only appear over SSH, and the right side shows memory usage and
-the time.
+palette. The hostname only appears over SSH, the username follows Starship's defaults (SSH, root, or
+a user other than the login one), and the right side shows memory usage and the time.
 
 ![Screenshot of Muted Powerline preset](/presets/img/muted-powerline.png)
 
