@@ -92,20 +92,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             dir_string
         };
 
-    let prefix = if is_truncated {
+    let is_fish_style =
+        is_truncated && config.fish_style_pwd_dir_length > 0 && config.substitutions_empty();
+    let prefix = if is_fish_style {
+        // If user is using fish style path, we need to add the segment first
+        let contracted_home_dir = contract_path(display_dir, &home_dir, config.home_symbol);
+        to_fish_style(
+            config.fish_style_pwd_dir_length as usize,
+            &contracted_home_dir,
+            &dir_string,
+        )
+    } else if is_truncated {
         // Substitutions could have changed the prefix, so don't allow them and
         // fish-style path contraction together
-        if config.fish_style_pwd_dir_length > 0 && config.substitutions_empty() {
-            // If user is using fish style path, we need to add the segment first
-            let contracted_home_dir = contract_path(display_dir, &home_dir, config.home_symbol);
-            to_fish_style(
-                config.fish_style_pwd_dir_length as usize,
-                &contracted_home_dir,
-                &dir_string,
-            )
-        } else {
-            String::from(config.truncation_symbol)
-        }
+        String::from(config.truncation_symbol)
     } else {
         String::new()
     };
@@ -123,19 +123,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
             let num_segments_after_root = after_repo_root.split('/').count();
 
-            (config.truncation_length == 0
-                || ((num_segments_after_root - 1) as i64) < config.truncation_length)
-                .then(|| {
-                    [
-                        before_root_dir(&dir_string, &contracted_path).to_string(),
-                        repo_path_vec[0].to_string(),
-                        after_repo_root,
-                    ]
-                })
+            if config.truncation_length == 0
+                || ((num_segments_after_root - 1) as i64) < config.truncation_length
+            {
+                Some([
+                    format!("{prefix}{}", before_root_dir(&dir_string, &contracted_path)),
+                    repo_path_vec[0].to_string(),
+                    after_repo_root,
+                ])
+            } else if is_fish_style {
+                split_fish_prefix_at_repo_root(&prefix, &dir_string, num_segments_after_root - 1)
+            } else {
+                None
+            }
         });
 
     let path_vec = match split_at_repo_root {
-        Some([before_root, root, after_root]) => [prefix + &before_root, root, after_root],
+        Some(parts) => parts,
         // the whole path in one segment, with no repo root to highlight
         None => [String::new(), String::new(), prefix + dir_string.as_str()],
     };
@@ -385,6 +389,38 @@ fn before_root_dir<'a>(path: &'a str, repo: &'a str) -> &'a str {
         Some((a, _)) => a,
         None => path,
     }
+}
+
+/// Split a fish-style `prefix` and truncated `dir_string` around the shortened repo root.
+///
+/// `segments_after_root` is the number of path components strictly below the repo root.
+fn split_fish_prefix_at_repo_root(
+    prefix: &str,
+    dir_string: &str,
+    segments_after_root: usize,
+) -> Option<[String; 3]> {
+    let dir_components = dir_string.split('/').count();
+    let in_prefix_after_root = segments_after_root.checked_sub(dir_components)?;
+    let prefix_parts: Vec<&str> = prefix.strip_suffix('/')?.split('/').collect();
+    let repo_idx = prefix_parts.len().checked_sub(1 + in_prefix_after_root)?;
+    let repo_root = prefix_parts[repo_idx];
+    if repo_root.is_empty() {
+        return None;
+    }
+
+    let before_root = if repo_idx == 0 {
+        String::new()
+    } else {
+        format!("{}/", prefix_parts[..repo_idx].join("/"))
+    };
+    let after_root_prefix = &prefix_parts[repo_idx + 1..];
+    let after_root = if after_root_prefix.is_empty() {
+        format!("/{dir_string}")
+    } else {
+        format!("/{}/{dir_string}", after_root_prefix.join("/"))
+    };
+
+    Some([before_root, repo_root.to_string(), after_root])
 }
 
 #[cfg(test)]
@@ -1862,6 +1898,164 @@ mod tests {
         ));
         assert_eq!(expected, actual);
         tmp_dir.close()
+    }
+
+    #[test]
+    fn highlight_git_root_dir_fish_style_shortened() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("above").join("repo");
+        let dir = repo_dir.join("src/sub/path");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let before = format!(
+            "{}/",
+            to_fish_style(2, &tmp_dir.path().join("above").to_slash_lossy(), "")
+        );
+
+        // Deeply nested (repo root and one child are both in the fish-style prefix)
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 2
+                truncate_to_repo = false
+                fish_style_pwd_dir_length = 2
+                repo_root_style = "green"
+                before_repo_root_style = "blue"
+            })
+            .path(&dir)
+            .collect();
+        let expected = Some(format!(
+            "{}{}{}re{} ",
+            Color::Blue.prefix(),
+            convert_path_sep(&before),
+            Color::Green.prefix(),
+            Color::Cyan.bold().paint(convert_path_sep("/sr/sub/path"))
+        ));
+        assert_eq!(expected, actual);
+
+        // Exact boundary (segments_after_root == truncation_length)
+        let boundary_dir = repo_dir.join("src/sub");
+        let actual_boundary = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 2
+                truncate_to_repo = false
+                fish_style_pwd_dir_length = 2
+                repo_root_style = "green"
+                before_repo_root_style = "blue"
+            })
+            .path(boundary_dir)
+            .collect();
+        let expected_boundary = Some(format!(
+            "{}{}{}re{} ",
+            Color::Blue.prefix(),
+            convert_path_sep(&before),
+            Color::Green.prefix(),
+            Color::Cyan.bold().paint(convert_path_sep("/src/sub"))
+        ));
+        assert_eq!(expected_boundary, actual_boundary);
+
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn highlight_git_root_dir_fish_style_shortened_truncate_to_repo_true() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("above").join(".repo");
+        let dir = repo_dir.join("src/sub/path");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let before = format!(
+            "{}/",
+            to_fish_style(2, &tmp_dir.path().join("above").to_slash_lossy(), "")
+        );
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 2
+                truncate_to_repo = true
+                fish_style_pwd_dir_length = 2
+                repo_root_style = "green"
+                before_repo_root_style = "blue"
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!(
+            "{}{}{}.re{} ",
+            Color::Blue.prefix(),
+            convert_path_sep(&before),
+            Color::Green.prefix(),
+            Color::Cyan.bold().paint(convert_path_sep("/sr/sub/path"))
+        ));
+        assert_eq!(expected, actual);
+
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn highlight_git_root_dir_truncated_without_fish_style() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("above").join("repo");
+        let dir = repo_dir.join("src/sub/path");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 2
+                truncate_to_repo = false
+                fish_style_pwd_dir_length = 0
+                repo_root_style = "green"
+                before_repo_root_style = "blue"
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint(convert_path_sep("sub/path"))
+        ));
+        assert_eq!(expected, actual);
+
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn split_fish_prefix_at_repo_root_cases() {
+        assert_eq!(
+            split_fish_prefix_at_repo_root("~/pr/re/a/", "b/c", 3),
+            Some(["~/pr/".to_string(), "re".to_string(), "/a/b/c".to_string()])
+        );
+        assert_eq!(
+            split_fish_prefix_at_repo_root("~/pr/re/", "a/b", 2),
+            Some(["~/pr/".to_string(), "re".to_string(), "/a/b".to_string()])
+        );
+        assert_eq!(
+            split_fish_prefix_at_repo_root("/re/a/", "b/c", 3),
+            Some(["/".to_string(), "re".to_string(), "/a/b/c".to_string()])
+        );
+        // Duplicate directory names pick the repo root by component position, not substring
+        assert_eq!(
+            split_fish_prefix_at_repo_root("~/re/su/re/a/", "b/c", 3),
+            Some([
+                "~/re/su/".to_string(),
+                "re".to_string(),
+                "/a/b/c".to_string()
+            ])
+        );
+        // Repo root is the home directory itself
+        assert_eq!(
+            split_fish_prefix_at_repo_root("~/a/", "b/c", 3),
+            Some([String::new(), "~".to_string(), "/a/b/c".to_string()])
+        );
+        // Repo root contracted away above home directory
+        assert_eq!(split_fish_prefix_at_repo_root("~/a/", "b/c", 4), None);
+        // Empty repo root (filesystem root) or non-slash-terminated prefix
+        assert_eq!(split_fish_prefix_at_repo_root("/a/", "b/c", 3), None);
+        assert_eq!(split_fish_prefix_at_repo_root("", "b/c", 2), None);
     }
 
     // sample for invalid unicode from https://doc.rust-lang.org/std/ffi/struct.OsStr.html#method.to_string_lossy
