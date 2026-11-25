@@ -95,7 +95,7 @@ urlencoding = "2.1.3"
 versions = "8.0.1"
 which = "8.0.6"
 whoami = { version = "2.1.3", default-features = false, features = ["std", "wasi-wasite"] }
-yaml-rust2 = "0.13.1"
+yaml-rust2 = "0.13.2"
 
 [dependencies.schemars]
 version = "1.2.3"
