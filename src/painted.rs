@@ -86,7 +86,10 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
     let mut previous = None;
     let mut runs = Vec::with_capacity(segments.len());
     for segment in segments {
-        let Segment::Styled { kind, style, value } = segment else {
+        let Segment::Styled {
+            kind, style, value, ..
+        } = segment
+        else {
             continue;
         };
         match kind {
@@ -160,7 +163,7 @@ fn text_width(segments: &[Segment]) -> usize {
         })
         .map(|between| {
             group.clear();
-            group.extend(between.iter().map(Segment::value));
+            group.extend(between.iter().map(Segment::display_value));
             group.width_graphemes()
         })
         .sum()
@@ -202,6 +205,7 @@ impl fmt::Display for Painted<'_> {
 mod tests {
     use super::*;
     use crate::config::parse_style_string;
+    use crate::context::Shell;
     use nu_ansi_term::Color;
     use proptest::prelude::*;
 
@@ -211,6 +215,25 @@ mod tests {
 
     fn fill(value: &str) -> Segment {
         Segment::fill(None, value)
+    }
+
+    #[test]
+    fn shell_escaped_text_uses_unescaped_width_for_fills() {
+        let mut zsh = Segment::from_shell_text(None, "87%", Shell::Zsh);
+        zsh.insert(0, fill("-"));
+        assert_eq!("-----87%%", Painted::new(&zsh, Some(8)).to_string());
+
+        let mut bash = Segment::from_shell_text(None, "$(a)\n$b", Shell::Bash);
+        let second_line_fill_idx = bash
+            .iter()
+            .position(|s| matches!(s, Segment::LineBreak))
+            .unwrap()
+            + 1;
+        bash.insert(second_line_fill_idx, fill("-"));
+        assert_eq!(
+            "\\$(a)\n------\\$b",
+            Painted::new(&bash, Some(8)).to_string()
+        );
     }
 
     #[test]

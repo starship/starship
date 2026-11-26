@@ -1,4 +1,7 @@
-use crate::{config::Style, print::UnicodeWidthGraphemes};
+use crate::{
+    config::Style, context::Shell, formatter::string_formatter::shell_prompt_escape,
+    print::UnicodeWidthGraphemes,
+};
 use nu_ansi_term::{AnsiString, Style as AnsiStyle};
 
 /// A piece of a prompt: text in a style, or the end of a line.
@@ -12,6 +15,9 @@ pub enum Segment {
         /// If none, the style of the module showing it.
         style: Option<Style>,
         value: String,
+        /// Original unescaped text when shell escaping changed `value`, so
+        /// width calculations measure what the terminal displays.
+        display: Option<String>,
     },
     LineBreak,
 }
@@ -31,17 +37,49 @@ impl Segment {
         Self::lines(Kind::Text, style, value.into())
     }
 
+    /// Segments showing shell-escaped `value` in `style`, split at line breaks,
+    /// retaining the unescaped text for terminal width calculation when escaping changed it.
+    pub fn from_shell_text(style: Option<Style>, value: &str, shell: Shell) -> Vec<Self> {
+        let make = |line: &str| {
+            let escaped = shell_prompt_escape(line, shell);
+            let display = (escaped != line).then(|| line.to_owned());
+            Self::Styled {
+                kind: Kind::Text,
+                style,
+                value: escaped,
+                display,
+            }
+        };
+        if !value.contains('\n') {
+            return vec![make(value)];
+        }
+        let mut segments = Vec::new();
+        for line in value.split('\n') {
+            if !segments.is_empty() {
+                segments.push(Self::LineBreak);
+            }
+            segments.push(make(line));
+        }
+        segments
+    }
+
     /// A segment repeating `value` across the width its line leaves.
     pub fn fill(style: Option<Style>, value: impl Into<String>) -> Self {
         Self::Styled {
             kind: Kind::Fill,
             style,
             value: value.into(),
+            display: None,
         }
     }
 
     fn lines(kind: Kind, style: Option<Style>, value: String) -> Vec<Self> {
-        let styled = |value| Self::Styled { kind, style, value };
+        let styled = |value| Self::Styled {
+            kind,
+            style,
+            value,
+            display: None,
+        };
         if !value.contains('\n') {
             return vec![styled(value)];
         }
@@ -77,6 +115,18 @@ impl Segment {
         }
     }
 
+    /// The unescaped text as drawn by the terminal (for width measurement).
+    pub fn display_value(&self) -> &str {
+        match self {
+            Self::Styled {
+                display: Some(display),
+                ..
+            } => display,
+            Self::Styled { value, .. } => value,
+            Self::LineBreak => "\n",
+        }
+    }
+
     /// The value in its style, resolved against `previous` and unstretched.
     pub fn ansi_string(&self, previous: Option<&AnsiStyle>) -> AnsiString<'_> {
         match self {
@@ -91,7 +141,7 @@ impl Segment {
 
     pub fn width_graphemes(&self) -> usize {
         match self {
-            Self::Styled { value, .. } => value.width_graphemes(),
+            Self::Styled { .. } => self.display_value().width_graphemes(),
             Self::LineBreak => 0,
         }
     }
@@ -108,13 +158,15 @@ mod tests {
                 Segment::Styled {
                     kind: Kind::Text,
                     style: None,
-                    value: "a".to_owned()
+                    value: "a".to_owned(),
+                    display: None,
                 },
                 Segment::LineBreak,
                 Segment::Styled {
                     kind: Kind::Text,
                     style: None,
-                    value: String::new()
+                    value: String::new(),
+                    display: None,
                 },
             ],
             Segment::from_text(None, "a\n")
