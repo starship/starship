@@ -548,12 +548,11 @@ fn get_repo_status(
 }
 
 fn ahead_behind_from_git(context: &Context, repo: &context::GitRepo) -> Option<(usize, usize)> {
-    // This ref query does not run worktree filters or hooks. Disable lazy fetching as well.
+    // This ref query does not run worktree filters or hooks.
     let output = repo.exec_git_with_required_trust(
         context,
         gix::sec::Trust::Reduced,
         [
-            "--no-lazy-fetch",
             "rev-list",
             "--left-right",
             "--count",
