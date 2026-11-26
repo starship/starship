@@ -52,14 +52,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Attempt repository path contraction (if we are in a git repository)
     // Otherwise use the logical path, automatically contracting
-    let repo = if config.truncate_to_repo || config.repo_root_style.is_some() {
-        context.get_git_repo().ok()
+    let repo_root = if config.truncate_to_repo || config.repo_root_style.is_some() {
+        context.find_git_work_tree()
     } else {
         None
     };
     let dir_string = if config.truncate_to_repo {
-        repo.and_then(|r| r.workdir.as_ref())
-            .filter(|&root| root != &home_dir)
+        repo_root
+            .as_deref()
+            .filter(|&root| root != home_dir)
             .and_then(|root| contract_repo_path(display_dir, root))
     } else {
         None
@@ -114,8 +115,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // highlight and the logical path actually lies under it. A symlink pointing
     // sideways into a subdirectory of the repo resolves into it without sharing
     // a prefix with it, so it has no contracted form and is not split.
-    let split_at_repo_root = repo
-        .and_then(|r| r.workdir.as_ref())
+    let split_at_repo_root = repo_root
+        .as_deref()
         .filter(|_| config.repo_root_style.is_some())
         .and_then(|repo_root| contract_repo_path(display_dir, repo_root))
         .and_then(|contracted_path| {
@@ -1060,6 +1061,27 @@ mod tests {
     }
 
     #[test]
+    fn a_linked_worktree_is_its_root_without_opening_its_repository_whole() -> io::Result<()> {
+        let repository = crate::test::fixture_repo(crate::test::FixtureProvider::Git {
+            reftable: false,
+            bare: false,
+        })?;
+        let linked = TempDir::new()?;
+        let worktree = linked.path().join("rocket-controls");
+        create_command("git")?
+            .args(["worktree", "add", "--quiet", "-b", "linked"])
+            .arg(&worktree)
+            .current_dir(repository.path())
+            .output()?;
+        let context = ModuleRenderer::new("directory").path(worktree).into();
+
+        let expected = format!("{} ", Color::Cyan.bold().paint("rocket-controls"));
+        assert_eq!(expected, module(&context).unwrap().to_string());
+        assert!(!context.has_opened_git_repo(), "waited on the git modules");
+        Ok(())
+    }
+
+    #[test]
     #[ignore]
     fn directory_in_git_repo() -> io::Result<()> {
         let tmp_dir = TempDir::new()?;
@@ -1945,5 +1967,25 @@ mod tests {
             before_root_dir("~/user/gitrepo-diff/gitrepo", "aaa"),
             "~/user/gitrepo-diff/gitrepo".to_string()
         );
+    }
+
+    #[test]
+    fn a_directory_name_shows_rather_than_performs_its_controls() {
+        let hostile = PathBuf::from("/tmp/evil\x1b]52;c;SGk=\x07dir\x1b[2Jname");
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                use_os_path_sep = false
+            })
+            .path(hostile)
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan
+                .bold()
+                .paint("/tmp/evil^[]52;c;SGk=^Gdir^[[2Jname")
+        ));
+
+        assert_eq!(expected, actual);
     }
 }

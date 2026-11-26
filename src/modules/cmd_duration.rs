@@ -87,10 +87,7 @@ fn undistract_me<'a>(
         #[cfg(target_os = "macos")]
         let _ = notify_rust::set_application("com.apple.Terminal");
 
-        let body = format!(
-            "Command execution {}",
-            anstream::adapter::strip_str(&module.get_segments().concat())
-        );
+        let body = notification_body(&module);
 
         let timeout = match config.notification_timeout {
             Some(v) => Timeout::Milliseconds(v),
@@ -112,10 +109,37 @@ fn undistract_me<'a>(
     module
 }
 
+#[cfg(any(feature = "notify", test))]
+fn notification_body(module: &Module) -> String {
+    format!(
+        "Command execution {}",
+        anstream::adapter::strip_str(&module.get_segments().concat())
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
     use nu_ansi_term::Color;
+
+    #[test]
+    fn notifications_exclude_styles_and_terminal_control_strings() {
+        let mut module = super::Module::new("cmd_duration", "Command duration", None);
+        module.set_segments(crate::segment::Segment::from_text(
+            Some(Color::Yellow.into()),
+            concat!(
+                "\x1b[31m5s\x1b[0m",
+                "\x1b]title\x07",
+                "\x1b]title\x1b\\",
+                "\x1bPpayload\x1b\\",
+                "\x1bXpayload\x1b\\",
+                "\x1b^payload\x1b\\",
+                "\x1b_payload\x1b\\",
+            ),
+        ));
+
+        assert_eq!("Command execution 5s", super::notification_body(&module));
+    }
 
     #[test]
     fn config_blank_duration_1s() {

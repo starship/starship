@@ -1,18 +1,28 @@
 //! Segments painted for the terminal: every style resolved, every fill stretched.
 
 use std::borrow::Cow;
-use std::fmt;
+use std::fmt::{self, Write as _};
 
-use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
+use anstream::adapter::StripBytes;
+use nu_ansi_term::Style as AnsiStyle;
 use unicode_segmentation::UnicodeSegmentation;
 
 use crate::config::Style;
+use crate::context::Shell;
 use crate::print::{UnicodeWidthGraphemes, printable};
 use crate::segment::{Kind, Segment};
+use crate::utils::escape::shell_prompt_escape;
+
+/// Ends all styling.
+const RESET: &str = "\x1b[0m";
+/// Ends a hyperlink. BEL ends it rather than `ESC \`, whose backslash a
+/// shell would take for an escape.
+const LINK_END: &str = "\x1b]8;;\x07";
 
 /// Text in one style, borrowed from its segment unless it is a stretched fill.
 #[derive(Clone, Debug, PartialEq, Eq)]
 struct Run<'a> {
+    kind: Kind,
     style: AnsiStyle,
     text: Cow<'a, str>,
 }
@@ -36,20 +46,141 @@ impl<'a> Painted<'a> {
         }
     }
 
-    /// Preserve line breaks while allowing ANSI sequences to collapse.
-    fn ansi_strings<'s>(
-        &'s self,
-        text: impl Fn(&'s Run<'a>) -> Cow<'s, str>,
-    ) -> Vec<AnsiString<'s>> {
-        let runs: usize = self.lines.iter().map(Vec::len).sum();
-        let mut strings = Vec::with_capacity(runs + self.lines.len().saturating_sub(1));
+    /// This prompt drawn below an empty line.
+    pub fn below_a_line_break(mut self) -> Self {
+        self.lines.insert(0, Vec::new());
+        self
+    }
+
+    /// The prompt as `shell` reads it.
+    pub fn escaped_for(&self, shell: Shell) -> String {
+        let mut prompt = String::new();
+        self.encode(&mut Encoder::new(shell, &mut prompt))
+            .expect("writing to a String cannot fail");
+        prompt
+    }
+
+    /// Writes every run, styles changing between them as little as they can.
+    fn encode(&self, encoder: &mut Encoder<impl fmt::Write>) -> fmt::Result {
+        let mut style = AnsiStyle::default();
         for (index, line) in self.lines.iter().enumerate() {
             if index > 0 {
-                strings.push(AnsiString::from("\n"));
+                writeln!(encoder, "{}", style.infix(AnsiStyle::default()))?;
+                style = AnsiStyle::default();
             }
-            strings.extend(line.iter().map(|run| run.style.paint(text(run))));
+            for run in line {
+                write!(encoder, "{}", style.infix(run.style))?;
+                encoder.kind = run.kind;
+                encoder.write_str(&run.text)?;
+                encoder.kind = Kind::Text;
+                style = run.style;
+                // Styling an untrusted value brought is unknown to the runs
+                // after it. The reset ends it with the style of the run, and
+                // the next run starts anew. A link the value opened is closed
+                // after the reset.
+                if run.kind == Kind::Untrusted && run.text.contains('\x1b') {
+                    encoder.write_str(RESET)?;
+                    if run.text.contains("\x1b]8;") {
+                        encoder.write_str(LINK_END)?;
+                    }
+                    style = AnsiStyle::default();
+                }
+            }
         }
-        strings
+        write!(encoder, "{}", style.infix(AnsiStyle::default()))?;
+        encoder.finish()
+    }
+}
+
+/// Writes what a terminal is to read into a prompt as its shell takes it:
+/// text escaped, unless it is prompt syntax, and controls escaped and marked
+/// as drawing nothing, one mark around any controls that follow one another.
+struct Encoder<W> {
+    shell: Shell,
+    output: W,
+    /// Where controls begin and end, as the terminal parses them, across
+    /// writes too: a style arrives in pieces, `\x1b[` before its codes.
+    /// `StripStr` forgets a control left open at the end of a write.
+    parser: StripBytes,
+    /// The kind of text written: verbatim text is prompt syntax.
+    kind: Kind,
+    /// Whether a mark is open around the controls written last.
+    marking: bool,
+}
+
+impl<W: fmt::Write> Encoder<W> {
+    fn new(shell: Shell, output: W) -> Self {
+        Self {
+            shell,
+            output,
+            parser: StripBytes::new(),
+            kind: Kind::Text,
+            marking: false,
+        }
+    }
+
+    /// The marks a shell is told draws nothing between, if it is told.
+    fn marks(&self) -> Option<(&'static str, &'static str)> {
+        match self.shell {
+            Shell::Bash => Some((r"\[", r"\]")),
+            Shell::Zsh | Shell::Tcsh => Some(("%{", "%}")),
+            _ => None,
+        }
+    }
+
+    fn finish(&mut self) -> fmt::Result {
+        match self.marks() {
+            Some((_, end)) if std::mem::take(&mut self.marking) => self.output.write_str(end),
+            _ => Ok(()),
+        }
+    }
+}
+
+impl<W: fmt::Write> fmt::Write for Encoder<W> {
+    fn write_str(&mut self, text: &str) -> fmt::Result {
+        let Some((begin, end)) = self.marks() else {
+            // Marking nothing, a shell takes controls as it takes the text.
+            return match self.kind {
+                Kind::Verbatim => self.output.write_str(text),
+                Kind::Text | Kind::Untrusted | Kind::Fill => self
+                    .output
+                    .write_str(&shell_prompt_escape(text, self.shell)),
+            };
+        };
+        let Self {
+            shell,
+            output,
+            parser,
+            kind,
+            marking,
+        } = self;
+        let mut parsed = 0;
+        let bytes = text.as_bytes();
+        for drawn in parser.strip_next(bytes).chain([&bytes[bytes.len()..]]) {
+            let start = drawn.as_ptr().addr() - bytes.as_ptr().addr();
+            let drawn = &text[start..start + drawn.len()];
+            if start > parsed {
+                if !std::mem::replace(marking, true) {
+                    output.write_str(begin)?;
+                }
+                // A shell decodes what it is told draws nothing as it does
+                // anything else.
+                output.write_str(&shell_prompt_escape(&text[parsed..start], *shell))?;
+            }
+            if !drawn.is_empty() {
+                if std::mem::take(marking) {
+                    output.write_str(end)?;
+                }
+                match kind {
+                    Kind::Verbatim => output.write_str(drawn)?,
+                    Kind::Text | Kind::Untrusted | Kind::Fill => {
+                        output.write_str(&shell_prompt_escape(drawn, *shell))?
+                    }
+                }
+            }
+            parsed = start + drawn.len();
+        }
+        Ok(())
     }
 }
 
@@ -76,12 +207,25 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
     // How wide each fill is in turn, if each gets a column or more of what
     // the rest of the line leaves. Measuring text takes a pass over every
     // grapheme, which only a fill needs.
-    let mut widths = width.filter(|_| fills > 0).and_then(|width| {
-        let available = width.checked_sub(text_width(segments))?;
-        let share = available / fills;
-        (share > 0)
-            .then(|| (0..fills).map(move |fill| share + usize::from(fill < available % fills)))
-    });
+    let mut widths = width
+        .filter(|_| {
+            fills > 0
+                && !segments.iter().any(|segment| {
+                    matches!(
+                        segment,
+                        Segment::Styled {
+                            kind: Kind::Verbatim,
+                            ..
+                        }
+                    )
+                })
+        })
+        .and_then(|width| {
+            let available = width.checked_sub(text_width(segments))?;
+            let share = available / fills;
+            (share > 0)
+                .then(|| (0..fills).map(move |fill| share + usize::from(fill < available % fills)))
+        });
 
     let mut previous = None;
     let mut runs = Vec::with_capacity(segments.len());
@@ -90,10 +234,11 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
             continue;
         };
         match kind {
-            Kind::Text => {
+            Kind::Text | Kind::Untrusted | Kind::Verbatim => {
                 let style = resolve(*style, previous.as_ref());
                 previous = Some(style);
                 runs.push(Run {
+                    kind: *kind,
                     style,
                     text: Cow::Borrowed(value),
                 });
@@ -127,6 +272,7 @@ fn paint_fill<'a>(
 ) {
     if !style.is_some_and(|style| style.references_previous()) {
         runs.push(Run {
+            kind: Kind::Fill,
             style: resolve(style, inherited.as_ref()),
             text,
         });
@@ -137,6 +283,7 @@ fn paint_fill<'a>(
         let style = resolve(style, previous.as_ref());
         previous = Some(style);
         runs.push(Run {
+            kind: Kind::Fill,
             style,
             text: Cow::Owned(grapheme.to_owned()),
         });
@@ -190,11 +337,11 @@ fn stretch(pattern: Cow<'_, str>, width: usize) -> Cow<'_, str> {
     })
 }
 
-/// The bytes a terminal draws, with escape sequences collapsed between runs.
+/// The bytes a terminal draws: the prompt as a shell that escapes nothing
+/// and marks nothing reads it.
 impl fmt::Display for Painted<'_> {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let strings = self.ansi_strings(|run| Cow::Borrowed(&run.text));
-        write!(formatter, "{}", AnsiStrings(&strings))
+        self.encode(&mut Encoder::new(Shell::Unknown, formatter))
     }
 }
 
@@ -202,8 +349,10 @@ impl fmt::Display for Painted<'_> {
 mod tests {
     use super::*;
     use crate::config::parse_style_string;
+    use crate::utils::exec_cmd;
     use nu_ansi_term::Color;
     use proptest::prelude::*;
+    use std::time::Duration;
 
     fn text(style: &str, value: &str) -> Segment {
         Segment::from_text(parse_style_string(style, None), value).remove(0)
@@ -468,5 +617,125 @@ mod tests {
                 prop_assert_eq!(width, painted.to_string().width_graphemes());
             }
         }
+    }
+
+    #[test]
+    fn a_shell_receives_literals_escaped_syntax_as_it_is_and_controls_marked() {
+        let mut segments = Segment::from_text(None, "\x1b]8;;x\x1b\\$5 {u} 50%\x1b]8;;\x07");
+        segments.extend(Segment::verbatim(None, "%~"));
+        segments.push(fill("%"));
+        let painted = Painted::new(&segments, Some(13));
+
+        for (shell, prompt) in [
+            (
+                Shell::Bash,
+                concat!(
+                    r"\[",
+                    "\x1b]8;;x\x1b",
+                    r"\\\\\]\\$5 {u} 50%\[",
+                    "\x1b]8;;\x07",
+                    r"\]%~%"
+                ),
+            ),
+            (
+                Shell::Zsh,
+                "%{\x1b]8;;x\x1b\\%}$5 {u} 50%%%{\x1b]8;;\x07%}%~%%",
+            ),
+            (Shell::Xonsh, "\x1b]8;;x\x1b\\$5 {{u}} 50%\x1b]8;;\x07%~%"),
+            (Shell::Fish, "\x1b]8;;x\x1b\\$5 {u} 50%\x1b]8;;\x07%~%"),
+        ] {
+            assert_eq!(prompt, painted.escaped_for(shell), "{shell:?}");
+        }
+    }
+
+    #[test]
+    fn styling_an_untrusted_value_brings_ends_with_it() {
+        let red = parse_style_string("red", None);
+        for (style, own) in [(None, ""), (red, "\x1b[31m")] {
+            // Concealed text, in a value shown plain and in one shown in red.
+            let mut segments = Segment::untrusted(style, "v1\x1b[8m");
+            segments.extend(Segment::from_text(style, " on "));
+            segments.extend(Segment::from_text(None, "main"));
+            let reset_own = if own.is_empty() { "" } else { "\x1b[0m" };
+
+            assert_eq!(
+                format!("{own}v1\x1b[8m\x1b[0m{own} on {reset_own}main"),
+                Painted::new(&segments, None).to_string()
+            );
+        }
+        // A value without styling is painted as text is.
+        assert_eq!(
+            Painted::new(&Segment::from_text(red, "v1"), None).to_string(),
+            Painted::new(&Segment::untrusted(red, "v1"), None).to_string()
+        );
+    }
+
+    #[test]
+    fn a_link_an_untrusted_value_opens_ends_with_it() {
+        let mut segments = Segment::untrusted(None, "\x1b]8;;https://x\x1b\\v1\nv2");
+        segments.extend(Segment::from_text(None, r" on \main"));
+        let painted = Painted::new(&segments, None);
+
+        // Each line of the value ends what it opened.
+        assert_eq!(
+            "\x1b]8;;https://x\x1b\\v1\x1b[0m\x1b]8;;\x07\nv2 on \\main",
+            painted.to_string()
+        );
+        // The ends are marked with the controls before them.
+        assert_eq!(
+            concat!(
+                r"\[",
+                "\x1b]8;;https://x\x1b",
+                r"\\\\\]v1\[",
+                "\x1b[0m\x1b]8;;\x07",
+                r"\]",
+                "\nv2 on ",
+                r"\\\\main"
+            ),
+            painted.escaped_for(Shell::Bash)
+        );
+    }
+
+    #[test]
+    fn bash_draws_a_prompt_as_the_terminal_is_given_it() {
+        let mut segments =
+            Segment::from_text(None, "\x1b]8;;https://x\x1b\\a\\b$c`d\x1b]8;;\x1b\\ ");
+        segments.extend(Segment::untrusted(
+            parse_style_string("red", None),
+            "\x1b]8;;https://x\x1b\\v\\1$x\x1b]8;;\x07\x1b[1m%",
+        ));
+        segments.extend(Segment::from_text(None, r"\a$b"));
+        let painted = Painted::new(&segments, None);
+        let prompt = painted.escaped_for(Shell::Bash);
+
+        // An interactive bash marks where each control begins and ends.
+        // Expanding a prompt with `@P` needs bash 4.4.
+        let script = r#"[ -n "$BASH_VERSION" ] && printf '%s' "${1@P}""#;
+        let arguments = ["--norc", "--noprofile", "-i", "-c", script, "bash", &prompt];
+        let Some(output) = exec_cmd("bash", &arguments, Duration::from_secs(10)) else {
+            eprintln!("bash is not here, or is not a version these tests can ask: skipped");
+            return;
+        };
+        let drawn = painted.to_string();
+        assert_eq!(drawn, output.stdout.replace(['\x01', '\x02'], ""));
+        let unmarked: String = output
+            .stdout
+            .split('\x01')
+            .map(|part| part.split_once('\x02').map_or(part, |(_, after)| after))
+            .collect();
+        assert_eq!(printable(&drawn), unmarked);
+    }
+
+    #[test]
+    fn verbatim_text_leaves_fill_width_unknown_only_on_its_own_line() {
+        let mut segments = Segment::verbatim(None, "$HOME");
+        segments.push(fill("."));
+        segments.push(Segment::LineBreak);
+        segments.extend(Segment::from_text(None, "x"));
+        segments.push(fill("."));
+        let painted = Painted::new(&segments, Some(8));
+
+        assert_eq!("$HOME.\nx.......", painted.to_string());
+        assert_eq!("$HOME.\nx.......", painted.escaped_for(Shell::Bash));
     }
 }

@@ -1,13 +1,61 @@
 use jiff::{
     Timestamp, ZonedDateTime,
-    civil::Time,
+    civil::{Time, date},
+    fmt::strtime,
     tz::{Offset, TimeZone},
 };
+
+use std::time::Duration;
 
 use super::{Context, Module, ModuleConfig};
 use crate::config::Either;
 use crate::configs::time::{TimeConfig, TimezoneWrapper};
 use crate::formatter::StringFormatter;
+
+/// How often to redraw the time shown while the prompt is: every hundredth or
+/// tenth of a second, or every second, if that is how soon Jiff shows it
+/// otherwise; and else every minute, as the hours and days of every time zone
+/// turn over on the minute too. A time range is kept to the second, and a
+/// format showing nothing of the time, outside one, is never redrawn.
+pub fn period(context: &Context) -> Option<Duration> {
+    let configuration = TimeConfig::try_load(context.config.get_module_config("time"));
+    if configuration.disabled || !configuration.refresh {
+        return None;
+    }
+
+    let format = configuration
+        .time_format
+        .unwrap_or(if configuration.use_12hr { "%r" } else { "%T" });
+    let (display_start, display_end) = parse_time_range(configuration.time_range);
+    let ranged = display_start.is_some() || display_end.is_some();
+    if !ranged && !format.replace("%%", "").contains('%') {
+        return None;
+    }
+    // Each step crosses a boundary of its own size and no larger.
+    let probe = date(2001, 2, 3)
+        .at(11, 5, 6, 789_000_000)
+        .to_zoned_datetime(TimeZone::UTC)
+        .ok()?;
+    let shown = |after: Duration| {
+        let at = probe.checked_add(after).ok()?;
+        strtime::format(format, &at).ok()
+    };
+    let before = shown(Duration::ZERO);
+    let turns_over = [
+        Duration::from_millis(10),
+        Duration::from_millis(100),
+        Duration::from_secs(1),
+    ]
+    .into_iter()
+    .find(|&step| shown(step) != before)
+    .unwrap_or(Duration::from_secs(60));
+
+    Some(if ranged {
+        turns_over.min(Duration::from_secs(1))
+    } else {
+        turns_over
+    })
+}
 
 /// Outputs the current time
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -168,6 +216,58 @@ mod tests {
     const FMT_24: &str = "%T";
 
     #[test]
+    fn the_time_is_redrawn_as_often_as_it_turns_over_and_at_least_each_minute() {
+        let every = |milliseconds| Some(Duration::from_millis(milliseconds));
+        for (time_format, time_range, period) in [
+            (None, "-", every(1_000)),
+            (Some("%-I:%M %p"), "-", every(60_000)),
+            (Some("%Y-%m-%d"), "-", every(60_000)),
+            (Some("%Z"), "-", every(60_000)),
+            (Some("%H:%M:%S%.3f"), "-", every(10)),
+            (Some("%1f"), "-", every(100)),
+            (Some("%.1f"), "-", every(100)),
+            (Some("%1N"), "-", every(100)),
+            (Some("%01f"), "-", every(100)),
+            (Some("%5.1f"), "-", every(100)),
+            (Some("%S %.1f"), "-", every(100)),
+            (Some("%2f"), "-", every(10)),
+            (Some("%.3f"), "-", every(10)),
+            (Some("%f"), "-", every(10)),
+            (Some("%.f"), "-", every(10)),
+            (Some("%N"), "-", every(10)),
+            (Some("%0N"), "-", every(10)),
+            (Some("%0f"), "-", every(10)),
+            (Some("%9f"), "-", every(10)),
+            (Some("%%f %S"), "-", every(1_000)),
+            (Some("%.0f"), "-", every(60_000)),
+            (Some("100%% done"), "-", None),
+            (Some("trailing %"), "-", every(60_000)),
+            (Some("at noon"), "10:00:00-14:00:00", every(1_000)),
+            (Some("at noon"), "10:00:00-14:00:00-15:00:00", None),
+        ] {
+            let mut time = toml::Table::new();
+            time.insert("disabled".to_owned(), false.into());
+            time.insert("time_range".to_owned(), time_range.into());
+            if let Some(time_format) = time_format {
+                time.insert("time_format".to_owned(), time_format.into());
+            }
+            let context = crate::test::default_context()
+                .set_config(toml::Table::from_iter([("time".to_owned(), time.into())]));
+
+            assert_eq!(
+                period,
+                super::period(&context),
+                "{time_format:?} in {time_range}"
+            );
+        }
+        assert_eq!(
+            None,
+            super::period(&crate::test::default_context()),
+            "disabled"
+        );
+    }
+
+    #[test]
     fn test_midnight_12hr() {
         let time = date(2014, 7, 8)
             .at(0, 0, 0, 0)
@@ -241,10 +341,7 @@ mod tests {
     fn test_midnight_12hr_fixed_offset() {
         let timezone_offset = Offset::from_seconds(0).unwrap();
         let tz = TimeZone::fixed(timezone_offset);
-        let time = date(2014, 7, 8)
-            .at(0, 0, 0, 0)
-            .to_zoned_datetime(tz)
-            .unwrap();
+        let time = date(2014, 7, 8).at(0, 0, 0, 0).to_zoned_datetime(tz).unwrap();
         let formatted = format_time_fixed_offset(FMT_12, time);
         assert_eq!(formatted, "12:00:00 AM");
     }
@@ -253,10 +350,7 @@ mod tests {
     fn test_midnight_24hr_fixed_offset() {
         let timezone_offset = Offset::from_seconds(0).unwrap();
         let tz = TimeZone::fixed(timezone_offset);
-        let time = date(2014, 7, 8)
-            .at(0, 0, 0, 0)
-            .to_zoned_datetime(tz)
-            .unwrap();
+        let time = date(2014, 7, 8).at(0, 0, 0, 0).to_zoned_datetime(tz).unwrap();
         let formatted = format_time_fixed_offset(FMT_24, time);
         assert_eq!(formatted, "00:00:00");
     }
@@ -265,10 +359,7 @@ mod tests {
     fn test_noon_12hr_fixed_offset() {
         let timezone_offset = Offset::from_seconds(0).unwrap();
         let tz = TimeZone::fixed(timezone_offset);
-        let time = date(2014, 7, 8)
-            .at(12, 0, 0, 0)
-            .to_zoned_datetime(tz)
-            .unwrap();
+        let time = date(2014, 7, 8).at(12, 0, 0, 0).to_zoned_datetime(tz).unwrap();
         let formatted = format_time_fixed_offset(FMT_12, time);
         assert_eq!(formatted, "12:00:00 PM");
     }
@@ -277,10 +368,7 @@ mod tests {
     fn test_noon_24hr_fixed_offset() {
         let timezone_offset = Offset::from_seconds(0).unwrap();
         let tz = TimeZone::fixed(timezone_offset);
-        let time = date(2014, 7, 8)
-            .at(12, 0, 0, 0)
-            .to_zoned_datetime(tz)
-            .unwrap();
+        let time = date(2014, 7, 8).at(12, 0, 0, 0).to_zoned_datetime(tz).unwrap();
         let formatted = format_time_fixed_offset(FMT_24, time);
         assert_eq!(formatted, "12:00:00");
     }
@@ -289,10 +377,7 @@ mod tests {
     fn test_arbtime_12hr_fixed_offset() {
         let timezone_offset = Offset::from_seconds(0).unwrap();
         let tz = TimeZone::fixed(timezone_offset);
-        let time = date(2014, 7, 8)
-            .at(15, 36, 47, 0)
-            .to_zoned_datetime(tz)
-            .unwrap();
+        let time = date(2014, 7, 8).at(15, 36, 47, 0).to_zoned_datetime(tz).unwrap();
         let formatted = format_time_fixed_offset(FMT_12, time);
         assert_eq!(formatted, "3:36:47 PM");
     }
@@ -301,10 +386,7 @@ mod tests {
     fn test_arbtime_24hr_fixed_offset() {
         let timezone_offset = Offset::from_seconds(0).unwrap();
         let tz = TimeZone::fixed(timezone_offset);
-        let time = date(2014, 7, 8)
-            .at(15, 36, 47, 0)
-            .to_zoned_datetime(tz)
-            .unwrap();
+        let time = date(2014, 7, 8).at(15, 36, 47, 0).to_zoned_datetime(tz).unwrap();
         let formatted = format_time_fixed_offset(FMT_24, time);
         assert_eq!(formatted, "15:36:47");
     }
@@ -313,10 +395,7 @@ mod tests {
     fn test_format_with_paren_fixed_offset() {
         let timezone_offset = Offset::from_seconds(0).unwrap();
         let tz = TimeZone::fixed(timezone_offset);
-        let time = date(2014, 7, 8)
-            .at(15, 36, 47, 0)
-            .to_zoned_datetime(tz)
-            .unwrap();
+        let time = date(2014, 7, 8).at(15, 36, 47, 0).to_zoned_datetime(tz).unwrap();
         let formatted = format_time_fixed_offset("[%T]", time);
         assert_eq!(formatted, "[15:36:47]");
     }

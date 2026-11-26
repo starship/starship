@@ -1,10 +1,11 @@
-use crate::{config::Style, print::UnicodeWidthGraphemes};
+use crate::{config::Style, print::UnicodeWidthGraphemes, utils::escape::sanitized};
 use nu_ansi_term::{AnsiString, Style as AnsiStyle};
+use std::borrow::Cow;
 
 /// A piece of a prompt: text in a style, or the end of a line.
 ///
-/// Text keeps any shell escaping the formatter applied. Shell wrappers for ANSI
-/// sequences are added when the prompt is written out.
+/// Text is held as it is shown. It is escaped for a shell, and its ANSI
+/// sequences wrapped, only when the painted prompt is written out.
 #[derive(Clone, Debug, PartialEq)]
 pub enum Segment {
     Styled {
@@ -21,6 +22,13 @@ pub enum Segment {
 pub enum Kind {
     /// Shown as written.
     Text,
+    /// Text from outside the configuration, holding no control but styling
+    /// and web links. Styling or a link it brings ends with it, so it cannot
+    /// conceal, recolor or link what follows.
+    Untrusted,
+    /// Handed to a shell exactly as written, so that the shell may expand it:
+    /// the output of a custom module with `unsafe_no_escape`.
+    Verbatim,
     /// Repeated across the width the rest of its line leaves.
     Fill,
 }
@@ -29,6 +37,19 @@ impl Segment {
     /// Segments showing `value` in `style`, split at its line breaks.
     pub fn from_text(style: Option<Style>, value: impl Into<String>) -> Vec<Self> {
         Self::lines(Kind::Text, style, value.into())
+    }
+
+    /// Segments showing a `value` that came from outside the configuration:
+    /// text of a file, a path, the environment or the output of a command.
+    /// Nothing of it but styling and web links reaches the terminal as a
+    /// control; see [`sanitized`] and [`Kind::Untrusted`].
+    pub fn untrusted<'a>(style: Option<Style>, value: impl Into<Cow<'a, str>>) -> Vec<Self> {
+        Self::lines(Kind::Untrusted, style, sanitized(value).into_owned())
+    }
+
+    /// Segments a shell receives unescaped; see [`Kind::Verbatim`].
+    pub fn verbatim(style: Option<Style>, value: impl Into<String>) -> Vec<Self> {
+        Self::lines(Kind::Verbatim, style, value.into())
     }
 
     /// A segment repeating `value` across the width its line leaves.
@@ -106,18 +127,18 @@ mod tests {
         assert_eq!(
             vec![
                 Segment::Styled {
-                    kind: Kind::Text,
+                    kind: Kind::Verbatim,
                     style: None,
                     value: "a".to_owned()
                 },
                 Segment::LineBreak,
                 Segment::Styled {
-                    kind: Kind::Text,
+                    kind: Kind::Verbatim,
                     style: None,
                     value: String::new()
                 },
             ],
-            Segment::from_text(None, "a\n")
+            Segment::verbatim(None, "a\n")
         );
     }
 

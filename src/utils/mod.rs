@@ -1,4 +1,5 @@
 pub mod env;
+pub mod escape;
 pub mod serde;
 pub mod statusline;
 
@@ -12,7 +13,6 @@ use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
 
 use crate::context::Context;
-use crate::context::Shell;
 
 /// Default timeout for command execution in milliseconds
 pub const DEFAULT_COMMAND_TIMEOUT_MS: u64 = 500;
@@ -698,45 +698,6 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
     Some(out)
 }
 
-/// Wraps ANSI color escape sequences in the shell-appropriate wrappers.
-/// Many shells cannot deal with raw unprintable characters and miscompute the cursor position,
-/// leading to strange visual bugs like duplicated/missing chars. This function wraps every
-/// control sequence, as a terminal parses it, in shell-specific escapes to avoid these problems.
-pub fn wrap_colorseq_for_shell(ansi: String, shell: Shell) -> String {
-    let (beg, end) = match shell {
-        // \[ and \]
-        Shell::Bash => ("\u{5c}\u{5b}", "\u{5c}\u{5d}"),
-        // %{ and %}
-        Shell::Tcsh | Shell::Zsh => ("\u{25}\u{7b}", "\u{25}\u{7d}"),
-        _ => return ansi,
-    };
-
-    let printables = anstream::adapter::strip_str(&ansi)
-        .map(|printable| (printable.as_ptr().addr() - ansi.as_ptr().addr(), printable));
-    let mut wrapped = String::with_capacity(ansi.len());
-    let mut drawn = 0;
-    // Each printable run after the controls before it, and the controls left.
-    for (mut start, mut printable) in printables.chain([(ansi.len(), "")]) {
-        // Bash escaping doubled a terminator's backslash; both belong to it.
-        if shell == Shell::Bash
-            && ansi[drawn..start].ends_with("\x1b\\")
-            && let Some(rest) = printable.strip_prefix('\\')
-        {
-            start += 1;
-            printable = rest;
-        }
-        let controls = &ansi[drawn..start];
-        if !controls.is_empty() {
-            wrapped.push_str(beg);
-            wrapped.push_str(controls);
-            wrapped.push_str(end);
-        }
-        wrapped.push_str(printable);
-        drawn = start + printable.len();
-    }
-    wrapped
-}
-
 fn internal_exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
     cmd: T,
     args: &[U],
@@ -1097,39 +1058,6 @@ mod tests {
         let expected = None;
 
         assert_eq!(result, expected);
-    }
-
-    #[test]
-    fn test_color_sequence_wrappers() {
-        for (ansi, zsh, bash) in [
-            (
-                "\x1b[31mred\x1b[0m",
-                "%{\x1b[31m%}red%{\x1b[0m%}",
-                "\\[\x1b[31m\\]red\\[\x1b[0m\\]",
-            ),
-            // A hyperlink, terminated either way, draws only its text.
-            (
-                "\x1b]8;;https://x\x1b\\aaa\x1b]8;;\x07|",
-                "%{\x1b]8;;https://x\x1b\\%}aaa%{\x1b]8;;\x07%}|",
-                "\\[\x1b]8;;https://x\x1b\\\\]aaa\\[\x1b]8;;\x07\\]|",
-            ),
-            ("\x1b[J", "%{\x1b[J%}", "\\[\x1b[J\\]"),
-            // Bash escaped the backslash of a terminator, and both belong to it.
-            (
-                "\x1b]8;;x\x1b\\\\a",
-                "%{\x1b]8;;x\x1b\\%}\\a",
-                "\\[\x1b]8;;x\x1b\\\\\\]a",
-            ),
-            ("a\x07b", "a%{\x07%}b", "a\\[\x07\\]b"),
-            ("one\ntwo", "one\ntwo", "one\ntwo"),
-            ("herpaderp", "herpaderp", "herpaderp"),
-            ("", "", ""),
-        ] {
-            assert_eq!(zsh, wrap_colorseq_for_shell(ansi.to_owned(), Shell::Zsh));
-            assert_eq!(zsh, wrap_colorseq_for_shell(ansi.to_owned(), Shell::Tcsh));
-            assert_eq!(bash, wrap_colorseq_for_shell(ansi.to_owned(), Shell::Bash));
-            assert_eq!(ansi, wrap_colorseq_for_shell(ansi.to_owned(), Shell::Fish));
-        }
     }
 
     #[test]

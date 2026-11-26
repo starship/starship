@@ -25,6 +25,9 @@ pub struct TimeConfig<'a> {
     #[cfg_attr(feature = "config-schema", schemars(with = "String"))]
     pub utc_time_offset: Either<TimezoneWrapper, &'a str>,
     pub time_range: &'a str,
+    /// Redraw the time while the prompt is shown, as often as what it shows
+    /// turns over.
+    pub refresh: bool,
 }
 
 impl Default for TimeConfig<'_> {
@@ -37,6 +40,7 @@ impl Default for TimeConfig<'_> {
             disabled: true,
             utc_time_offset: Either::Second("local"),
             time_range: "-",
+            refresh: true,
         }
     }
 }
