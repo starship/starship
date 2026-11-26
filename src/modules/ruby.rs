@@ -48,7 +48,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 )
                 .map(Ok),
                 "gemset" => {
-                    format_rvm_gemset(&context.exec_cmd("rvm", &["current"])?.stdout).map(Ok)
+                    format_rvm_gemset(&context.exec_cmd_no_cache("rvm", &["current"])?.stdout)
+                        .map(Ok)
                 }
                 _ => None,
             })

@@ -77,7 +77,7 @@ fn swift_version_output(context: &Context) -> Option<CommandOutput> {
     {
         // `swift-frontend` usually isn't on PATH on macOS; locate it inside
         // the active toolchain instead. `xcrun --find` itself is fast.
-        if let Some(found) = context.exec_cmd("xcrun", &["--find", "swift-frontend"]) {
+        if let Some(found) = context.exec_cmd_no_cache("xcrun", &["--find", "swift-frontend"]) {
             let output = context.exec_cmd(found.stdout.trim(), &["--version"]);
             if output
                 .as_ref()

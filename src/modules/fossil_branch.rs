@@ -30,7 +30,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let truncated_branch_name = {
-        let output = context.exec_cmd("fossil", &["branch", "current"])?.stdout;
+        let output = context
+            .exec_cmd_no_cache("fossil", &["branch", "current"])?
+            .stdout;
         truncate_text(output.trim(), len, config.truncation_symbol)
     };
 

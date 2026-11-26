@@ -238,7 +238,7 @@ pub fn create_command<T: AsRef<OsStr>>(binary_name: T) -> Result<Command> {
     Ok(cmd)
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct CommandOutput {
     pub stdout: String,
     pub stderr: String,

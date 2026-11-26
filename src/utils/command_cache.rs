@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::ffi::OsStr;
 use std::fmt::Debug;
-use std::io::ErrorKind;
+use std::fs::{File, TryLockError};
 use std::path::{Path, PathBuf};
 use std::thread;
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
@@ -11,12 +11,9 @@ use serde::{Deserialize, Serialize};
 use crate::logger::get_log_dir;
 use crate::utils::CommandOutput;
 
-const CACHE_FILE: &str = "commands.json";
-const LOCK_FILE: &str = "commands.json.lock";
-// How old a lock marker must be before it is assumed abandoned (left behind by a crashed
-// process) and reclaimed. Writers only hold the lock for milliseconds, so this short grace makes
-// recovery prompt without evicting an active holder.
-const LOCK_GRACE: Duration = Duration::from_secs(2);
+// Version the files because the payload and lock protocol differ from the old marker cache.
+const CACHE_FILE: &str = "commands.v2.json";
+const LOCK_FILE: &str = "commands.v2.lock";
 // Hard cap on how long we keep polling a genuinely-contended lock before giving up and skipping
 // the write. Live contention is released in milliseconds, so this rarely binds.
 const LOCK_TIMEOUT: Duration = Duration::from_secs(10);
@@ -31,7 +28,7 @@ std::thread_local! {
 #[derive(Debug, Default, Deserialize, Serialize)]
 struct Cache {
     #[serde(default)]
-    entries: HashMap<Box<str>, CacheEntry<Box<[u8]>>>,
+    entries: HashMap<Box<str>, CacheEntry<CommandOutput>>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -39,6 +36,8 @@ struct CacheEntry<T> {
     value: T,
     #[serde(default)]
     written_at: u64,
+    #[serde(default)]
+    expires_at: u64,
 }
 
 fn now() -> u64 {
@@ -65,50 +64,6 @@ fn load() -> Cache {
         .ok()
         .and_then(|content| serde_json::from_str(&content).ok())
         .unwrap_or_default()
-}
-
-fn serialize(output: &CommandOutput) -> Box<[u8]> {
-    let stdout = output.stdout.as_bytes();
-    let stderr = output.stderr.as_bytes();
-    let stdout_len = u64::try_from(stdout.len()).unwrap_or(u64::MAX);
-    let stderr_len = u64::try_from(stderr.len()).unwrap_or(u64::MAX);
-    let mut data = Vec::with_capacity(16 + stdout.len() + stderr.len());
-    // Length-prefixed encoding so that arbitrary output (including a NUL byte) round-trips
-    // without ambiguity between stdout and stderr. Lengths are stored as 64-bit values so their
-    // conversion never wraps on any supported platform.
-    data.extend_from_slice(&stdout_len.to_le_bytes());
-    data.extend_from_slice(stdout);
-    data.extend_from_slice(&stderr_len.to_le_bytes());
-    data.extend_from_slice(stderr);
-    data.into_boxed_slice()
-}
-
-/// Decodes a value written by [`serialize`]. Returns `None` when the payload is truncated or
-/// declares a length beyond its own data so callers can treat malformed entries as a cache miss
-/// instead of silently returning empty output.
-fn deserialize(data: &[u8]) -> Option<CommandOutput> {
-    let mut offset = 0;
-    let stdout_len = read_length(data, &mut offset)?;
-    let stdout = data.get(offset..offset.checked_add(stdout_len)?)?;
-    offset = offset.checked_add(stdout_len)?;
-    let stderr_len = read_length(data, &mut offset)?;
-    let stderr = data.get(offset..offset.checked_add(stderr_len)?)?;
-    Some(CommandOutput {
-        stdout: String::from_utf8_lossy(stdout).into_owned(),
-        stderr: String::from_utf8_lossy(stderr).into_owned(),
-    })
-}
-
-/// Reads a 64-bit little-endian length from `bytes` starting at `offset`, advancing `offset` past
-/// it. Returns `None` on a truncated, out-of-range, or unrepresentable payload.
-fn read_length(bytes: &[u8], offset: &mut usize) -> Option<usize> {
-    let start = *offset;
-    let end = start.checked_add(8)?;
-    let raw = bytes.get(start..end)?;
-    let len = u64::from_le_bytes(raw.try_into().ok()?);
-    let len = usize::try_from(len).ok()?;
-    *offset = end;
-    Some(len)
 }
 
 /// Builds a stable cache key for a command invocation.
@@ -189,78 +144,36 @@ pub fn get(key: &str, ttl: u64) -> Option<CommandOutput> {
     }
     let cache = load();
     let entry = cache.entries.get(key)?;
-    if now().saturating_sub(entry.written_at) > ttl {
+    let now = now();
+    if now >= entry.expires_at || now.saturating_sub(entry.written_at) >= ttl {
         return None;
     }
-    deserialize(&entry.value)
+    Some(entry.value.clone())
 }
 
-/// A best-effort cross-process lock backed by an atomic `create_new` lock file. Serializes
-/// concurrent `set` calls so the read/merge/write sequence does not lose entries.
-struct CacheLock {
-    path: PathBuf,
-    _file: std::fs::File,
-}
-
-impl Drop for CacheLock {
-    fn drop(&mut self) {
-        let _ = std::fs::remove_file(&self.path);
-    }
-}
-
-fn acquire_lock(dir: &Path) -> Option<CacheLock> {
-    let lock_path = dir.join(LOCK_FILE);
+/// Serializes writers using an OS lock, released even if the process crashes.
+/// Never unlink the file: a waiter may already have opened the same inode.
+fn acquire_lock(dir: &Path) -> Option<File> {
+    let file = std::fs::OpenOptions::new()
+        .read(true)
+        .write(true)
+        .create(true)
+        .truncate(false)
+        .open(dir.join(LOCK_FILE))
+        .ok()?;
     let started = Instant::now();
-
     loop {
-        match std::fs::OpenOptions::new()
-            .write(true)
-            .create_new(true)
-            .open(&lock_path)
-        {
-            Ok(file) => {
-                // Record the owner PID so a peer can reason about ownership and (combined with the
-                // age guard) recover promptly if this process crashes.
-                let _ = std::fs::write(&lock_path, std::process::id().to_string());
-                return Some(CacheLock {
-                    path: lock_path,
-                    _file: file,
-                });
-            }
-            Err(error) if error.kind() == ErrorKind::AlreadyExists => {
-                // Ownership-aware recovery: a lock owned by the current process is never reclaimed
-                // (it is an active re-entrant holder), and a recently-created marker is assumed to
-                // belong to a live peer. Older markers are treated as abandoned and reclaimed
-                // immediately, so a crashed process does not block the synchronous module for long.
-                if lock_may_be_live(&lock_path) {
-                    if started.elapsed() >= LOCK_TIMEOUT {
-                        return None;
-                    }
-                    thread::sleep(Duration::from_millis(20));
-                } else {
-                    let _ = std::fs::remove_file(&lock_path);
-                    continue;
+        match file.try_lock() {
+            Ok(()) => return Some(file),
+            Err(TryLockError::WouldBlock) => {
+                if started.elapsed() >= LOCK_TIMEOUT {
+                    return None;
                 }
+                thread::sleep(Duration::from_millis(20));
             }
-            Err(_) => return None,
+            Err(TryLockError::Error(_)) => return None,
         }
     }
-}
-
-/// True while the current lock holder may still be active: either it is owned by this process, or
-/// the marker is younger than the grace period. Otherwise the marker is assumed abandoned.
-fn lock_may_be_live(lock_path: &Path) -> bool {
-    let owns_lock = crate::utils::read_file(lock_path)
-        .ok()
-        .and_then(|content| content.trim().parse::<u32>().ok())
-        .is_some_and(|pid| pid == std::process::id());
-    if owns_lock {
-        return true;
-    }
-    std::fs::metadata(lock_path)
-        .and_then(|meta| meta.modified())
-        .map(|modified| modified.elapsed().unwrap_or_default() < LOCK_GRACE)
-        .unwrap_or(true)
 }
 
 /// Caches the `CommandOutput` associated with `key`. A `ttl` of `0` (or less) disables the cache
@@ -286,11 +199,14 @@ pub fn set(key: &str, output: CommandOutput, ttl: u64) {
     };
 
     let mut cache = load();
+    let now = now();
+    cache.entries.retain(|_, entry| now < entry.expires_at);
     cache.entries.insert(
         key.into(),
         CacheEntry {
-            value: serialize(&output),
-            written_at: now(),
+            value: output,
+            written_at: now,
+            expires_at: now.saturating_add(ttl),
         },
     );
 
@@ -307,20 +223,26 @@ pub fn set(key: &str, output: CommandOutput, ttl: u64) {
     }
 }
 
+/// Runs a test against its own cache, restoring the override even on panic.
+#[cfg(test)]
+pub fn with_temp_path<F: FnOnce(&PathBuf)>(f: F) {
+    struct RestorePath(Option<PathBuf>);
+
+    impl Drop for RestorePath {
+        fn drop(&mut self) {
+            TEST_PATH.with(|p| *p.borrow_mut() = self.0.take());
+        }
+    }
+
+    let dir = tempfile::tempdir().unwrap();
+    let path = dir.path().join(CACHE_FILE);
+    let _restore = RestorePath(TEST_PATH.with(|p| p.replace(Some(path.clone()))));
+    f(&path);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    fn with_temp_path<F: FnOnce(&PathBuf)>(f: F) {
-        let dir = tempfile::tempdir().unwrap();
-        let path = dir.path().join(CACHE_FILE);
-        // Set the override for this thread while the closure runs, then restore it.
-        let previous = TEST_PATH.with(|p| p.borrow().clone());
-        TEST_PATH.with(|p| *p.borrow_mut() = Some(path.clone()));
-        f(&path);
-        TEST_PATH.with(|p| *p.borrow_mut() = previous);
-        let _ = dir.close();
-    }
 
     fn sample_output() -> CommandOutput {
         CommandOutput {
@@ -372,8 +294,9 @@ mod tests {
             cache.entries.insert(
                 "/mvn".into(),
                 CacheEntry {
-                    value: serialize(&sample_output()),
+                    value: sample_output(),
                     written_at: now() - 10_000,
+                    expires_at: now() - 6400,
                 },
             );
             std::fs::write(path, serde_json::to_vec(&cache).unwrap()).unwrap();
@@ -423,58 +346,86 @@ mod tests {
     }
 
     #[test]
-    fn serialization_round_trips_nul_bytes() {
-        let output = CommandOutput {
-            stdout: "line\x00with nul".to_string(),
-            stderr: "err\x00too".to_string(),
-        };
-        let data = serialize(&output);
-        let back = deserialize(&data).unwrap();
-        assert_eq!(back.stdout, "line\x00with nul");
-        assert_eq!(back.stderr, "err\x00too");
+    fn output_round_trips_special_characters() {
+        with_temp_path(|_| {
+            for (stdout, stderr) in [
+                ("line\x00with nul", "err\x00too"),
+                ("out", ""),
+                ("", ""),
+                ("\u{1f680}\n\"\\", "\u{e9}\r\t"),
+            ] {
+                let output = CommandOutput {
+                    stdout: stdout.into(),
+                    stderr: stderr.into(),
+                };
+                set("cmd", output.clone(), 3600);
+                assert_eq!(get("cmd", 3600), Some(output));
+            }
+        });
     }
 
     #[test]
-    fn serialization_round_trips_empty_stderr() {
-        let output = CommandOutput {
-            stdout: "out".to_string(),
-            stderr: String::new(),
-        };
-        let back = deserialize(&serialize(&output)).unwrap();
-        assert_eq!(back.stdout, "out");
-        assert_eq!(back.stderr, "");
-    }
-
-    #[test]
-    fn deserialize_rejects_truncated_payload() {
-        let full = serialize(&sample_output());
-        for cut in 0..full.len() {
-            assert_eq!(deserialize(&full[..cut]), None, "cut at {cut}");
-        }
-    }
-
-    #[test]
-    fn deserialize_rejects_oversized_length() {
-        // A header declaring more bytes than the payload holds must be a miss, not empty output.
-        let mut data = vec![0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
-        data.extend_from_slice(b"short");
-        assert_eq!(deserialize(&data), None);
+    fn output_is_stored_as_compact_strings() {
+        with_temp_path(|path| {
+            let output = CommandOutput {
+                stdout: "x".repeat(4096),
+                stderr: "y".repeat(4096),
+            };
+            set("cmd", output.clone(), 3600);
+            let data = crate::utils::read_file(path).unwrap();
+            assert!(data.len() < output.stdout.len() + output.stderr.len() + 200);
+            let json: serde_json::Value = serde_json::from_str(&data).unwrap();
+            assert_eq!(json["entries"]["cmd"]["value"]["stdout"], output.stdout);
+            assert_eq!(get("cmd", 3600), Some(output));
+        });
     }
 
     #[test]
     fn malformed_payload_is_a_cache_miss() {
         with_temp_path(|path| {
-            let mut cache = Cache::default();
-            cache.entries.insert(
-                "/mvn".into(),
-                CacheEntry {
-                    value: vec![0xff, 0xff, 0xff, 0xff].into_boxed_slice(),
-                    written_at: now(),
-                },
-            );
-            std::fs::write(path, serde_json::to_vec(&cache).unwrap()).unwrap();
+            for content in [
+                r#"{"entries":{"cmd":{"value":[255,255],"written_at":0}}}"#,
+                r#"{"entries":{"cmd":{"value":{"stdout":"out"},"written_at":0}}}"#,
+                "not json",
+            ] {
+                std::fs::write(path, content).unwrap();
+                assert_eq!(get("cmd", 3600), None);
+                set("cmd", sample_output(), 3600);
+                assert_eq!(get("cmd", 3600), Some(sample_output()));
+            }
+        });
+    }
 
-            assert_eq!(get("/mvn", 3600), None);
+    #[test]
+    fn writes_prune_expired_entries_using_their_own_ttl() {
+        with_temp_path(|path| {
+            let now = now();
+            let mut cache = Cache::default();
+            for (key, written_at, expires_at) in [
+                ("expired", now - 100, now - 1),
+                ("boundary", now - 100, now),
+                ("long-lived", now - 100, now + 3600),
+            ] {
+                cache.entries.insert(
+                    key.into(),
+                    CacheEntry {
+                        value: sample_output(),
+                        written_at,
+                        expires_at,
+                    },
+                );
+            }
+            std::fs::write(path, serde_json::to_vec(&cache).unwrap()).unwrap();
+            assert_eq!(get("expired", 3600), None);
+            assert_eq!(get("boundary", 3600), None);
+            // A shorter caller TTL is still respected.
+            assert_eq!(get("long-lived", 1), None);
+            set("new", sample_output(), 1);
+            let cache = load();
+            assert_eq!(cache.entries.len(), 2);
+            assert!(cache.entries.contains_key("new"));
+            assert!(cache.entries.contains_key("long-lived"));
+            assert_eq!(get("long-lived", 3600), Some(sample_output()));
         });
     }
 
@@ -514,17 +465,80 @@ mod tests {
     }
 
     #[test]
+    fn cache_lock_child() {
+        let Some(dir) = std::env::var_os("STARSHIP_CACHE_LOCK_TEST_DIR") else {
+            return;
+        };
+        let dir = PathBuf::from(dir);
+        let _guard = acquire_lock(&dir).unwrap();
+        std::fs::write(dir.join("ready"), b"").unwrap();
+        loop {
+            thread::sleep(Duration::from_millis(20));
+        }
+    }
+
+    #[test]
+    fn cache_lock_survives_live_owner_and_recovers_after_crash() {
+        struct ChildGuard(std::process::Child);
+        impl Drop for ChildGuard {
+            fn drop(&mut self) {
+                let _ = self.0.kill();
+                let _ = self.0.wait();
+            }
+        }
+
+        let dir = tempfile::tempdir().unwrap();
+        let mut child = ChildGuard(
+            crate::utils::create_command(std::env::current_exe().unwrap())
+                .unwrap()
+                .args(["--exact", "utils::command_cache::tests::cache_lock_child"])
+                .env("STARSHIP_CACHE_LOCK_TEST_DIR", dir.path())
+                .stdout(std::process::Stdio::null())
+                .spawn()
+                .unwrap(),
+        );
+        let started = Instant::now();
+        while !dir.path().join("ready").exists() {
+            assert!(child.0.try_wait().unwrap().is_none(), "child exited early");
+            assert!(started.elapsed() < Duration::from_secs(10));
+            thread::sleep(Duration::from_millis(20));
+        }
+
+        let target = dir.path().to_path_buf();
+        let (tx, rx) = std::sync::mpsc::channel();
+        let waiter = thread::spawn(move || {
+            let guard = acquire_lock(&target);
+            tx.send(guard.is_some()).unwrap();
+        });
+        // A live owner must not be evicted after the old two-second grace period.
+        let early = rx.recv_timeout(Duration::from_secs(3));
+        child.0.kill().unwrap();
+        child.0.wait().unwrap();
+        waiter.join().unwrap();
+        assert!(matches!(
+            early,
+            Err(std::sync::mpsc::RecvTimeoutError::Timeout)
+        ));
+        assert!(rx.recv_timeout(Duration::from_secs(1)).unwrap());
+        // Process death releases the OS lock without needing to replace its file.
+        assert!(acquire_lock(dir.path()).is_some());
+    }
+
+    #[test]
     fn lock_is_acquired_and_released() {
         with_temp_path(|_| {
             let dir = cache_path().parent().unwrap().to_path_buf();
-            let lock = dir.join(LOCK_FILE);
-
             let guard = acquire_lock(&dir).unwrap();
-            // Ownership of the lock file is exclusive as long as the guard is alive.
-            assert!(lock.exists());
+            let peer = File::options()
+                .read(true)
+                .write(true)
+                .open(dir.join(LOCK_FILE))
+                .unwrap();
+            assert!(matches!(peer.try_lock(), Err(TryLockError::WouldBlock)));
             drop(guard);
-            // Dropping the guard releases the lock by removing the file.
-            assert!(!lock.exists());
+            // Retaining the same inode prevents a waiter from locking an unlinked file.
+            assert!(dir.join(LOCK_FILE).exists());
+            peer.try_lock().unwrap();
         });
     }
 }

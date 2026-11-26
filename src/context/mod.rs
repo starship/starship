@@ -493,19 +493,6 @@ impl<'a> Context<'a> {
         use_cache: bool,
     ) -> Option<CommandOutput> {
         log::trace!("Executing command {cmd:?} with args {args:?} from context");
-        #[cfg(test)]
-        {
-            let command = crate::utils::display_command(&cmd, args);
-            if let Some(output) = self
-                .cmd
-                .get(command.as_str())
-                .cloned()
-                .or_else(|| crate::utils::mock_cmd(&cmd, args))
-            {
-                return output;
-            }
-        }
-
         // A global, shared, cross-process cache for command output. It is only active when the
         // user configures a positive TTL; a TTL of 0 (the default) keeps the historical behavior
         // of always executing the command. The key includes the resolved binary (so a switch of
@@ -522,18 +509,38 @@ impl<'a> Context<'a> {
             return Some(output);
         }
 
-        let mut command = create_command(cmd).ok()?;
-        command.args(args).current_dir(&self.current_dir);
-        let output = exec_timeout(
-            &mut command,
-            Duration::from_millis(self.root_config.command_timeout),
-        );
+        let output = self.execute_command(cmd, args);
 
         if let (Some(key), Some(output)) = (cache_key.as_deref(), output.as_ref()) {
             crate::utils::command_cache::set(key, output.clone(), cache_ttl);
         }
 
         output
+    }
+    fn execute_command<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
+        &self,
+        cmd: T,
+        args: &[U],
+    ) -> Option<CommandOutput> {
+        #[cfg(test)]
+        {
+            let command = crate::utils::display_command(&cmd, args);
+            if let Some(output) = self
+                .cmd
+                .get(command.as_str())
+                .cloned()
+                .or_else(|| crate::utils::mock_cmd(&cmd, args))
+            {
+                return output;
+            }
+        }
+
+        let mut command = create_command(cmd).ok()?;
+        command.args(args).current_dir(&self.current_dir);
+        exec_timeout(
+            &mut command,
+            Duration::from_millis(self.root_config.command_timeout),
+        )
     }
 
     /// Attempt to execute several commands with `exec_cmd`, return the results of the first that works
@@ -1037,6 +1044,117 @@ mod tests {
     use super::*;
     use crate::test::default_context;
     use std::io;
+    #[cfg(unix)]
+    #[test]
+    fn command_cache_with_real_execution() {
+        crate::utils::command_cache::with_temp_path(|path| {
+            let dir = tempfile::tempdir().unwrap();
+            let mut context = default_context().set_config(toml::toml! {
+                command_cache_ttl = 3600
+                command_timeout = 5000
+            });
+            context.current_dir = dir.path().into();
+            let args = ["-c", "printf x >> runs; printf output; printf error >&2"];
+            let expected = Some(CommandOutput {
+                stdout: "output".into(),
+                stderr: "error".into(),
+            });
+            assert_eq!(context.exec_cmd("sh", &args), expected);
+            assert_eq!(context.exec_cmd("sh", &args), expected);
+            assert_eq!(
+                crate::utils::read_file(dir.path().join("runs")).unwrap(),
+                "x"
+            );
+            let cached = crate::utils::read_file(path).unwrap();
+            assert_eq!(context.exec_cmd_no_cache("sh", &args), expected);
+            assert_eq!(crate::utils::read_file(path).unwrap(), cached);
+            context.root_config.command_cache_ttl = 0;
+            assert_eq!(context.exec_cmd("sh", &args), expected);
+            assert_eq!(
+                crate::utils::read_file(dir.path().join("runs")).unwrap(),
+                "xxx"
+            );
+            assert_eq!(crate::utils::read_file(path).unwrap(), cached);
+        });
+    }
+
+    #[test]
+    fn command_cache_hit_skips_execution_and_bypass_does_not_update_it() {
+        crate::utils::command_cache::with_temp_path(|_| {
+            let mut context = default_context().set_config(toml::toml! {
+                command_cache_ttl = 3600
+            });
+            let original = CommandOutput {
+                stdout: "original".into(),
+                stderr: "diagnostic".into(),
+            };
+            let fresh = CommandOutput {
+                stdout: "fresh".into(),
+                stderr: String::new(),
+            };
+            context
+                .cmd
+                .insert("cache-test query", Some(original.clone()));
+            assert_eq!(
+                context.exec_cmd("cache-test", &["query"]),
+                Some(original.clone())
+            );
+            // A command which would now fail must not execute on a cache hit.
+            context.cmd.insert("cache-test query", None);
+            assert_eq!(
+                context.exec_cmd("cache-test", &["query"]),
+                Some(original.clone())
+            );
+            assert_eq!(context.exec_cmd_no_cache("cache-test", &["query"]), None);
+            context.cmd.insert("cache-test query", Some(fresh.clone()));
+            assert_eq!(
+                context.exec_cmd_no_cache("cache-test", &["query"]),
+                Some(fresh)
+            );
+            assert_eq!(context.exec_cmd("cache-test", &["query"]), Some(original));
+        });
+    }
+
+    #[test]
+    fn command_cache_zero_ttl_neither_reads_nor_writes() {
+        use crate::utils::command_cache;
+
+        command_cache::with_temp_path(|path| {
+            let mut context = default_context().set_config(toml::toml! {
+                command_cache_ttl = 0
+            });
+            let key = command_cache::key(Some(&context.current_dir), "cache-test", &["query"]);
+            let cached = CommandOutput {
+                stdout: "cached".into(),
+                stderr: String::new(),
+            };
+            let fresh = CommandOutput {
+                stdout: "fresh".into(),
+                stderr: String::new(),
+            };
+            context.cmd.insert("cache-test query", Some(fresh.clone()));
+            assert_eq!(
+                context.exec_cmd("cache-test", &["query"]),
+                Some(fresh.clone())
+            );
+            assert!(!path.exists(), "zero TTL must not create the cache");
+            command_cache::set(&key, cached.clone(), 3600);
+            assert_eq!(context.exec_cmd("cache-test", &["query"]), Some(fresh));
+            assert_eq!(command_cache::get(&key, 3600), Some(cached));
+        });
+    }
+
+    #[test]
+    fn command_cache_does_not_store_failed_commands() {
+        crate::utils::command_cache::with_temp_path(|path| {
+            let mut context = default_context().set_config(toml::toml! {
+                command_cache_ttl = 3600
+            });
+            context.cmd.insert("cache-test query", None);
+            assert_eq!(context.exec_cmd("cache-test", &["query"]), None);
+            assert!(!path.exists());
+        });
+    }
 
     #[test]
     fn properties_accept_signed_and_unsigned_status_codes() {

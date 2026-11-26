@@ -29,7 +29,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     // the `--json` flag is silently ignored for direnv versions <2.33.0
-    let direnv_status = &context.exec_cmd("direnv", &["status", "--json"])?.stdout;
+    let direnv_status = &context
+        .exec_cmd_no_cache("direnv", &["status", "--json"])?
+        .stdout;
     let state = serde_json::from_str::<RawDirenvState>(direnv_status).map_or_else(
         |_| {
             DirenvState::from_lines(direnv_status)

@@ -351,7 +351,7 @@ fn get_nimble_version(context: &Context, config: &PackageConfig) -> Option<Strin
         return None;
     }
 
-    let cmd_output = context.exec_cmd("nimble", &["dump", "--json"])?;
+    let cmd_output = context.exec_cmd_no_cache("nimble", &["dump", "--json"])?;
     let nimble_json: json::Value = json::from_str(&cmd_output.stdout).ok()?;
 
     let raw_version = nimble_json.get("version")?.as_str()?;
