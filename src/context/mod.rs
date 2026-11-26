@@ -340,6 +340,7 @@ impl<'a> Context<'a> {
                 // custom open options
                 let mut git_open_opts_map =
                     git_sec::trust::Mapping::<gix::open::Options>::default();
+                let installation_config = git_repo::installation_config(self);
 
                 // Load all the configuration as it affects aspects of the
                 // `git_status` and `git_metrics` modules.
@@ -364,6 +365,13 @@ impl<'a> Context<'a> {
                         config,
                         ..gix::open::Permissions::default_for_level(git_sec::Trust::Full)
                     });
+                if let Some(path) = installation_config {
+                    git_open_opts_map.reduced = git_open_opts_map
+                        .reduced
+                        .git_installation_config_path(path.clone());
+                    git_open_opts_map.full =
+                        git_open_opts_map.full.git_installation_config_path(path);
+                }
 
                 let shared_repo =
                     match ThreadSafeRepository::discover_with_environment_overrides_opts(
