@@ -712,6 +712,16 @@
         "tag_max_candidates": 0
       }
     },
+    "git_host": {
+      "$ref": "#/$defs/GitHostConfig",
+      "default": {
+        "format": "[$symbol]($style) ",
+        "style": "bold purple",
+        "symbols": {},
+        "unknown": "",
+        "disabled": true
+      }
+    },
     "git_metrics": {
       "$ref": "#/$defs/GitMetricsConfig",
       "default": {
@@ -3794,6 +3804,35 @@
           "format": "uint",
           "minimum": 0,
           "default": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "GitHostConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "[$symbol]($style) "
+        },
+        "style": {
+          "type": "string",
+          "default": "bold purple"
+        },
+        "symbols": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {}
+        },
+        "unknown": {
+          "type": "string",
+          "default": ""
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": true
         }
       },
       "additionalProperties": false
