@@ -15,14 +15,15 @@ pub fn text<F>(
 where
     F: Fn(&str) -> Option<String> + Send + Sync,
 {
-    if let Ok(formatter) = StringFormatter::new(format_str) {
-        formatter
+    match StringFormatter::new(format_str) {
+        Ok(formatter) => formatter
             .map(|variable| mapper(variable).map(Ok))
             .parse(None, Some(context))
-            .ok()
-    } else {
-        log::warn!("Error parsing format string `{config_path}`");
-        None
+            .ok(),
+        Err(error) => {
+            log::warn!("Error parsing format string `{config_path}`:\n{error}");
+            None
+        }
     }
 }
 
