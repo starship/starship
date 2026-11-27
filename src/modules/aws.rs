@@ -4,7 +4,7 @@ use std::path::PathBuf;
 use std::str::FromStr;
 
 use ini::Ini;
-use jiff::{Timestamp, Zoned};
+use jiff::{Timestamp, ZonedDateTime};
 use serde_json as json;
 use sha1::{Digest, Sha1};
 
@@ -179,7 +179,7 @@ fn get_credentials_duration(
         expires_at?.parse::<Timestamp>().ok()
     }?;
 
-    Some(expiration_date.as_second() - Zoned::now().timestamp().as_second())
+    Some(expiration_date.as_second() - ZonedDateTime::now().timestamp().as_second())
 }
 
 fn alias_name(name: Option<String>, aliases: &HashMap<String, &str>) -> Option<String> {
@@ -744,7 +744,8 @@ credential_process = /opt/bin/awscreds-retriever
         let expiration_env_vars = ["AWS_SESSION_EXPIRATION", "AWS_CREDENTIAL_EXPIRATION"];
         for env_var in expiration_env_vars {
             let now_plus_half_hour =
-                Timestamp::from_second(Zoned::now().timestamp().as_second() + 1800).unwrap();
+                Timestamp::from_second(ZonedDateTime::now().timestamp().as_second() + 1800)
+                    .unwrap();
 
             let actual = ModuleRenderer::new("aws")
                 .env("AWS_PROFILE", "astronauts")
@@ -777,7 +778,7 @@ credential_process = /opt/bin/awscreds-retriever
         let mut file = File::create(&credentials_path)?;
 
         let now_plus_half_hour =
-            Timestamp::from_second(Zoned::now().timestamp().as_second() + 1800).unwrap();
+            Timestamp::from_second(ZonedDateTime::now().timestamp().as_second() + 1800).unwrap();
 
         let expiration_date = now_plus_half_hour.to_string();
 
@@ -845,7 +846,8 @@ aws_secret_access_key=dummy
 
     #[test]
     fn expiration_date_set_expired() {
-        let now = Timestamp::from_second(Zoned::now().timestamp().as_second() - 1800).unwrap();
+        let now =
+            Timestamp::from_second(ZonedDateTime::now().timestamp().as_second() - 1800).unwrap();
 
         let symbol = "!!!";
 
@@ -1071,7 +1073,7 @@ sso_role_name = <AWS-ROLE-NAME>
         )?;
 
         let one_second_ago =
-            Timestamp::from_second(Zoned::now().timestamp().as_second() - 1).unwrap();
+            Timestamp::from_second(ZonedDateTime::now().timestamp().as_second() - 1).unwrap();
 
         file.write_all(format!(r#"{{"expiresAt": "{one_second_ago}"}}"#).as_bytes())?;
         file.sync_all()?;
@@ -1117,7 +1119,7 @@ sso_registration_scopes = sso:account:access
         )?;
 
         let one_second_ago =
-            Timestamp::from_second(Zoned::now().timestamp().as_second() - 1).unwrap();
+            Timestamp::from_second(ZonedDateTime::now().timestamp().as_second() - 1).unwrap();
 
         cache_file.write_all(format!(r#"{{"expiresAt": "{one_second_ago}"}}"#).as_bytes())?;
         cache_file.sync_all()?;

@@ -1,10 +1,15 @@
 name: Spell Check
 on: [pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   typos:
     name: Spell Check with Typos
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-    - uses: crate-ci/typos@512fc24f32f44ab01972217aaaf3dc86ec234d53 # v1.50.2
+      with:
+        persist-credentials: false
+    - uses: crate-ci/typos@276087d9a4f06398b3e04825487805e2d7375888 # v1.52.2
