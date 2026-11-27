@@ -42,7 +42,7 @@ clap_complete_nushell = "4.6.3"
 dirs = "7.0.0"
 dunce = "1.0.5"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
-gix = { version = "0.90.0", default-features = false, features = [
+gix = { version = "0.91.0", default-features = false, features = [
   "max-performance",
   "revision",
   "status",

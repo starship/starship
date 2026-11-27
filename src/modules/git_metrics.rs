@@ -53,8 +53,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             }
         }
         let status = super::git_status::get_static_repo_status(context, repo, &status_config)?;
-        let gix_repo = gix_repo.with_object_memory();
-        gix_repo.write_blob([]).ok()?; /* create empty blob */
         let tree_index_cache = prevent_external_diff(
             gix_repo
                 .diff_resource_cache(
@@ -78,12 +76,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .changes
             .par_iter()
             .map_init(
-                {
-                    let repo = gix_repo.into_sync();
-                    move || {
-                        let repo = repo.to_thread_local();
-                        (repo, tree_index_cache.clone(), index_worktree_cache.clone())
-                    }
+                || {
+                    (
+                        repo.open(),
+                        tree_index_cache.clone(),
+                        index_worktree_cache.clone(),
+                    )
                 },
                 |(repo, tree_index_cache, index_worktree_cache), change| {
                     use gix::status;
@@ -100,7 +98,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                 } => {
                                     diff.added += count_lines(
                                         location,
-                                        id.as_ref().into(),
+                                        Some(id.as_ref().into()),
                                         *entry_mode,
                                         tree_index_cache,
                                         repo,
@@ -114,7 +112,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                 } => {
                                     diff.deleted += count_lines(
                                         location,
-                                        id.as_ref().into(),
+                                        Some(id.as_ref().into()),
                                         *entry_mode,
                                         tree_index_cache,
                                         repo,
@@ -131,10 +129,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                     let location = location.as_ref();
                                     diff.add(diff_two_opt(
                                         location,
-                                        previous_id.as_ref().to_owned(),
+                                        Some(previous_id.as_ref().to_owned()),
                                         *previous_entry_mode,
                                         location,
-                                        id.as_ref().to_owned(),
+                                        Some(id.as_ref().to_owned()),
                                         *entry_mode,
                                         tree_index_cache,
                                         repo,
@@ -153,7 +151,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                     if *copy {
                                         diff.added += count_lines(
                                             location.as_ref(),
-                                            id.as_ref().into(),
+                                            Some(id.as_ref().into()),
                                             *entry_mode,
                                             tree_index_cache,
                                             repo,
@@ -161,10 +159,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                     } else {
                                         diff.add(diff_two_opt(
                                             source_location.as_ref(),
-                                            source_id.as_ref().to_owned(),
+                                            Some(source_id.as_ref().to_owned()),
                                             *source_entry_mode,
                                             location,
-                                            id.as_ref().to_owned(),
+                                            Some(id.as_ref().to_owned()),
                                             *entry_mode,
                                             tree_index_cache,
                                             repo,
@@ -185,7 +183,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                 } => {
                                     diff.deleted += count_lines(
                                         rela_path.as_bstr(),
-                                        entry.id,
+                                        Some(entry.id),
                                         entry.mode,
                                         tree_index_cache,
                                         repo,
@@ -204,10 +202,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                     let location = rela_path.as_bstr();
                                     diff.add(diff_two_opt(
                                         location,
-                                        entry.id,
+                                        Some(entry.id),
                                         entry.mode,
                                         location,
-                                        repo.object_hash().null(),
+                                        None,
                                         entry.mode,
                                         index_worktree_cache,
                                         repo,
@@ -221,7 +219,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                 } => {
                                     diff.added += count_lines(
                                         rela_path.as_bstr(),
-                                        repo.object_hash().null(),
+                                        None,
                                         entry.mode,
                                         index_worktree_cache,
                                         repo,
@@ -282,10 +280,10 @@ const fn prevent_external_diff(mut cache: gix::diff::blob::Platform) -> gix::dif
 #[allow(clippy::too_many_arguments)]
 fn diff_two_opt(
     lhs_location: &BStr,
-    lhs_id: gix::ObjectId,
+    lhs_id: Option<gix::ObjectId>,
     lhs_kind: gix::index::entry::Mode,
     rhs_location: &BStr,
-    rhs_id: gix::ObjectId,
+    rhs_id: Option<gix::ObjectId>,
     rhs_kind: gix::index::entry::Mode,
     cache: &mut gix::diff::blob::Platform,
     find: &impl gix::objs::FindObjectOrHeader,
@@ -316,22 +314,13 @@ fn diff_two_opt(
 
 fn count_lines(
     location: &BStr,
-    id: gix::ObjectId,
+    id: Option<gix::ObjectId>,
     kind: gix::index::entry::Mode,
     cache: &mut gix::diff::blob::Platform,
     find: &impl gix::objs::FindObjectOrHeader,
 ) -> u32 {
-    diff_two_opt(
-        location,
-        id.kind().null(),
-        kind,
-        location,
-        id,
-        kind,
-        cache,
-        find,
-    )
-    .map_or(0, |diff| diff.insertions)
+    diff_two_opt(location, None, kind, location, id, kind, cache, find)
+        .map_or(0, |diff| diff.insertions)
 }
 
 /// Represents the parsed output from a git diff.

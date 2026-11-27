@@ -113,14 +113,19 @@ impl GitRepo {
             "core.fsmonitor="
         };
 
-        command.env("GIT_OPTIONAL_LOCKS", "0").args([
-            OsStr::new("-C"),
-            context.current_dir.as_os_str(),
-            OsStr::new("--git-dir"),
-            self.path.as_os_str(),
-            OsStr::new("-c"),
-            OsStr::new(fsm_config_value),
-        ]);
+        // Block all transports even on Git versions that ignore GIT_NO_LAZY_FETCH.
+        command
+            .env("GIT_OPTIONAL_LOCKS", "0")
+            .env("GIT_NO_LAZY_FETCH", "1")
+            .env("GIT_ALLOW_PROTOCOL", "")
+            .args([
+                OsStr::new("-C"),
+                context.current_dir.as_os_str(),
+                OsStr::new("--git-dir"),
+                self.path.as_os_str(),
+                OsStr::new("-c"),
+                OsStr::new(fsm_config_value),
+            ]);
 
         // Bare repositories might not have a workdir, so we need to check for that.
         if let Some(wt) = self.workdir.as_ref() {
