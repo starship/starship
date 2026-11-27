@@ -31,6 +31,18 @@ impl Grapheme<'_> {
 
 pub trait UnicodeWidthGraphemes {
     fn width_graphemes(&self) -> usize;
+
+    fn width_graphemes_for_shell(&self, shell: Shell) -> usize
+    where
+        Self: AsRef<str>,
+    {
+        let width = self.width_graphemes();
+        if shell == Shell::Tcsh {
+            width + self.as_ref().matches('!').count()
+        } else {
+            width
+        }
+    }
 }
 
 impl<T> UnicodeWidthGraphemes for T
@@ -193,7 +205,7 @@ pub fn get_prompt(context: &Context) -> String {
     let segments = formatter
         .parse(None, Some(context))
         .expect("Unexpected error returned in root format variables");
-    let painted = Painted::new(&segments, Some(context.width));
+    let painted = Painted::for_shell(&segments, Some(context.width), context.shell);
 
     if config.add_newline && context.target != Target::Continuation {
         // continuation prompts normally do not include newlines, but they can
@@ -649,6 +661,76 @@ mod test {
         let expected = String::from(">>"); // should strip new lines
         let actual = get_prompt(&context);
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn tcsh_fill_accounts_for_exclamation_escape() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "!${fill}ab"
+            [fill]
+            symbol = "."
+            style = ""
+        });
+        context.shell = Shell::Tcsh;
+        context.width = 10;
+
+        let actual = get_prompt(&context);
+
+        assert!(actual.starts_with(r"\!"));
+        assert_eq!(actual.matches('.').count(), 6);
+        assert_eq!(actual.chars().count(), context.width);
+    }
+
+    #[test]
+    fn tcsh_fill_symbol_accounts_for_exclamation_escape() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "a${fill}b"
+            [fill]
+            symbol = "!"
+            style = ""
+        });
+        context.shell = Shell::Tcsh;
+        context.width = 10;
+
+        let actual = get_prompt(&context);
+
+        assert_eq!(actual, r"a\!\!\!\!b");
+        assert_eq!(actual.chars().count(), context.width);
+    }
+
+    #[test]
+    fn tcsh_fill_distributes_width_across_segments() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "a${fill}b${fill}c"
+            [fill]
+            symbol = "!"
+            style = ""
+        });
+        context.shell = Shell::Tcsh;
+        context.width = 11;
+
+        let actual = get_prompt(&context);
+
+        assert_eq!(actual, r"a\!\!b\!\!c");
+        assert_eq!(actual.chars().count(), context.width);
+    }
+
+    #[test]
+    fn tcsh_fill_suppresses_segments_when_width_is_too_small() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "a${fill}b${fill}c"
+            [fill]
+            symbol = "!"
+            style = ""
+        });
+        context.shell = Shell::Tcsh;
+        context.width = 4;
+
+        assert_eq!(get_prompt(&context), "abc");
     }
 
     #[test]

@@ -7,6 +7,7 @@ use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
 use unicode_segmentation::UnicodeSegmentation;
 
 use crate::config::Style;
+use crate::context::Shell;
 use crate::print::{UnicodeWidthGraphemes, printable};
 use crate::segment::{Kind, Segment};
 
@@ -28,10 +29,15 @@ pub struct Painted<'a> {
 impl<'a> Painted<'a> {
     /// Paints `segments`, stretching fills to `width` when one is known.
     pub fn new(segments: &'a [Segment], width: Option<usize>) -> Self {
+        Self::for_shell(segments, width, Shell::Unknown)
+    }
+
+    /// Paints `segments` for a shell whose output may escape prompt text.
+    pub fn for_shell(segments: &'a [Segment], width: Option<usize>, shell: Shell) -> Self {
         Self {
             lines: segments
                 .split(|segment| matches!(segment, Segment::LineBreak))
-                .map(|line| paint_line(line, width))
+                .map(|line| paint_line(line, width, shell))
                 .collect(),
         }
     }
@@ -60,7 +66,7 @@ impl<'a> Painted<'a> {
 /// A run inherits from its left neighbor on the same line, except that
 /// nothing inherits across a fill: the fill resolves against the run before
 /// it, and the run after it starts afresh.
-fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
+fn paint_line(segments: &[Segment], width: Option<usize>, shell: Shell) -> Vec<Run<'_>> {
     let fills = segments
         .iter()
         .filter(|segment| {
@@ -76,12 +82,20 @@ fn paint_line(segments: &[Segment], width: Option<usize>) -> Vec<Run<'_>> {
     // How wide each fill is in turn, if each gets a column or more of what
     // the rest of the line leaves. Measuring text takes a pass over every
     // grapheme, which only a fill needs.
-    let mut widths = width.filter(|_| fills > 0).and_then(|width| {
-        let available = width.checked_sub(text_width(segments))?;
-        let share = available / fills;
-        (share > 0)
-            .then(|| (0..fills).map(move |fill| share + usize::from(fill < available % fills)))
-    });
+    let mut widths = if shell == Shell::Tcsh {
+        tcsh_fill_widths(segments, width, fills)
+    } else {
+        width.filter(|_| fills > 0).and_then(|width| {
+            let available = width.checked_sub(text_width(segments, shell))?;
+            let share = available / fills;
+            (share > 0).then(|| {
+                (0..fills)
+                    .map(move |fill| share + usize::from(fill < available % fills))
+                    .collect::<Vec<_>>()
+                    .into_iter()
+            })
+        })
+    };
 
     let mut previous = None;
     let mut runs = Vec::with_capacity(segments.len());
@@ -146,7 +160,7 @@ fn paint_fill<'a>(
 /// The width of the text of `segments` between fills. Adjacent text runs can
 /// belong to one grapheme despite their different styles, which a fill
 /// separates.
-fn text_width(segments: &[Segment]) -> usize {
+fn text_width(segments: &[Segment], shell: Shell) -> usize {
     let mut group = String::new();
     segments
         .split(|segment| {
@@ -161,9 +175,66 @@ fn text_width(segments: &[Segment]) -> usize {
         .map(|between| {
             group.clear();
             group.extend(between.iter().map(Segment::value));
-            group.width_graphemes()
+            group.width_graphemes_for_shell(shell)
         })
         .sum()
+}
+
+/// Allocate tcsh fill columns after accounting for the extra column added
+/// when each literal `!` is escaped in the final prompt.
+fn tcsh_fill_widths(
+    segments: &[Segment],
+    width: Option<usize>,
+    fills: usize,
+) -> Option<std::vec::IntoIter<usize>> {
+    let width = width.filter(|_| fills > 0)?;
+    let available = width.checked_sub(text_width(segments, Shell::Tcsh))?;
+    let patterns: Vec<_> = segments
+        .iter()
+        .filter_map(|segment| match segment {
+            Segment::Styled {
+                kind: Kind::Fill,
+                value,
+                ..
+            } => Some(printable(value)),
+            _ => None,
+        })
+        .collect();
+
+    // Keep the existing rule that every fill needs at least one column to
+    // stretch. With less room, a zero-width fill avoids overflowing tcsh.
+    if available < fills {
+        return Some(vec![0; fills].into_iter());
+    }
+
+    let mut low = 0;
+    let mut high = available;
+    while low < high {
+        let total = low + (high - low).div_ceil(2);
+        let candidate = distribute_fill_width(total, fills);
+        let rendered_width = patterns
+            .iter()
+            .zip(candidate.iter())
+            .map(|(pattern, size)| {
+                stretch(Cow::Borrowed(pattern.as_ref()), *size)
+                    .width_graphemes_for_shell(Shell::Tcsh)
+            })
+            .sum::<usize>();
+        if rendered_width <= available {
+            low = total;
+        } else {
+            high = total - 1;
+        }
+    }
+
+    Some(distribute_fill_width(low, fills).into_iter())
+}
+
+fn distribute_fill_width(total: usize, fills: usize) -> Vec<usize> {
+    let share = total / fills;
+    (0..fills)
+        .map(|fill| share + usize::from(fill < total % fills))
+        .collect()
 }
 
 /// `pattern` repeated across `width` columns: whole repetitions, then one
