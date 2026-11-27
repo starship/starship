@@ -83,6 +83,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
     };
 
+    // Keep the path as displayed before truncation (repo- or home-contracted),
+    // so that the fish style prefix is derived from the same path
+    let untruncated_dir_string = dir_string.clone();
+
     // Truncate the dir string to the maximum number of path components
     let dir_string =
         if let Some(truncated) = truncate(&dir_string, config.truncation_length as usize) {
@@ -97,10 +101,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         // fish-style path contraction together
         if config.fish_style_pwd_dir_length > 0 && config.substitutions_empty() {
             // If user is using fish style path, we need to add the segment first
-            let contracted_home_dir = contract_path(display_dir, &home_dir, config.home_symbol);
             to_fish_style(
                 config.fish_style_pwd_dir_length as usize,
-                &contracted_home_dir,
+                &untruncated_dir_string,
                 &dir_string,
             )
         } else {
@@ -1182,12 +1185,71 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(&format!(
-                "{}/rocket-controls/src/meters/fuel-gauge",
-                to_fish_style(1, &tmp_dir.path().join("above-repo").to_slash_lossy(), "")
-            )))
+            Color::Cyan
+                .bold()
+                .paint(convert_path_sep("rocket-controls/src/meters/fuel-gauge"))
         ));
 
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    #[ignore]
+    fn fish_path_directory_in_git_repo_truncate_to_repo_true_and_truncated() -> io::Result<()> {
+        // https://github.com/starship/starship/issues/7086
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("foo").join("bar");
+        let dir = repo_dir.join("baz/quox/quzz");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 1
+                truncate_to_repo = true
+                fish_style_pwd_dir_length = 1
+            })
+            .path(dir)
+            .collect();
+        // Only the components truncated away from the repo-relative path are
+        // abbreviated; nothing above the repo root is shown.
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint(convert_path_sep("b/b/q/quzz"))
+        ));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    #[ignore]
+    fn fish_path_directory_in_git_repo_truncate_to_repo_true_repo_root_style() -> io::Result<()> {
+        // https://github.com/starship/starship/issues/7086
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("foo").join("bar");
+        let dir = repo_dir.join("baz/quox/quzz");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 1
+                truncate_to_repo = true
+                fish_style_pwd_dir_length = 1
+                repo_root_format = "$repo_root$path"
+                repo_root_style = "bold red"
+            })
+            .path(dir)
+            .collect();
+        // The repo root is truncated away, so there is nothing to highlight
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint(convert_path_sep("b/b/q/quzz"))
+        ));
         assert_eq!(expected, actual);
         tmp_dir.close()
     }
@@ -1394,10 +1456,9 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(&format!(
-                "{}/rocket-controls-symlink/src/meters/fuel-gauge",
-                to_fish_style(1, &tmp_dir.path().join("above-repo").to_slash_lossy(), "")
-            )))
+            Color::Cyan.bold().paint(convert_path_sep(
+                "rocket-controls-symlink/src/meters/fuel-gauge"
+            ))
         ));
 
         assert_eq!(expected, actual);
