@@ -103,12 +103,24 @@ mod tests {
     }
 
     #[test]
-    fn test_render_format_status_immediate_conflict() {
-        tester(JJRepo::STATUS_IMMEDIATE_CONFLICT)
+    fn test_render_format_status_conflicted_in_current() {
+        tester(JJRepo::STATUS_CONFLICTED_CURRENT)
             .options(toml! { format = "$all" })
             .expected("!◌+=✘~»")
             .render();
-        tester(JJRepo::STATUS_IMMEDIATE_CONFLICT)
+        tester(JJRepo::STATUS_CONFLICTED_CURRENT)
+            .options(toml! { format = "$conflicted" })
+            .expected("!")
+            .render();
+    }
+
+    #[test]
+    fn test_render_format_status_conflicted_in_parent() {
+        tester(JJRepo::STATUS_CONFLICTED_PARENT)
+            .options(toml! { format = "$all" })
+            .expected("!◌+=✘~»")
+            .render();
+        tester(JJRepo::STATUS_CONFLICTED_PARENT)
             .options(toml! { format = "$conflicted" })
             .expected("!")
             .render();
@@ -116,11 +128,11 @@ mod tests {
 
     #[test]
     fn test_render_format_status_no_conflict() {
-        tester(JJRepo::STATUS_NO_CONFLICT)
+        tester(JJRepo::STATUS_CONFLICTED_NONE)
             .options(toml! { format = "$all" })
             .expected("◌+=✘~»")
             .render();
-        tester(JJRepo::STATUS_NO_CONFLICT)
+        tester(JJRepo::STATUS_CONFLICTED_NONE)
             .options(toml! { format = "$conflicted" })
             .render();
     }

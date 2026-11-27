@@ -96,7 +96,7 @@ impl Default for StarshipLogger {
 
         Self {
             log_file_content: RwLock::new(
-                fs::read_to_string(&session_log_file)
+                utils::read_file(&session_log_file)
                     .unwrap_or_default()
                     .lines()
                     .map(std::string::ToString::to_string)
@@ -104,31 +104,30 @@ impl Default for StarshipLogger {
             ),
             log_file: OnceLock::new(),
             log_file_path: session_log_file,
-            log_level: env::var("STARSHIP_LOG").map_or_else(
-                |_| Level::Warn,
-                |level| match level.to_ascii_lowercase().as_str() {
+            log_level: env::var("STARSHIP_LOG").map_or(Level::Warn, |level| {
+                match level.to_ascii_lowercase().as_str() {
                     "trace" => Level::Trace,
                     "debug" => Level::Debug,
                     "info" => Level::Info,
                     "warn" => Level::Warn,
                     "error" => Level::Error,
                     _ => Level::Warn,
-                },
-            ),
+                }
+            }),
         }
     }
 }
 
 impl StarshipLogger {
     /// Override the minimum log level
-    pub fn set_log_level(&mut self, level: log::Level) {
+    pub const fn set_log_level(&mut self, level: log::Level) {
         self.log_level = level;
     }
 
     /// Override the log level path
     /// This won't change anything if a log file was already opened
     pub fn set_log_file_path(&mut self, path: PathBuf) {
-        let contents = fs::read_to_string(&path)
+        let contents = utils::read_file(&path)
             .unwrap_or_default()
             .lines()
             .map(std::string::ToString::to_string)

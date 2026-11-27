@@ -9,8 +9,8 @@ use quick_xml::Reader as QXReader;
 use quick_xml::events::Event as QXEvent;
 use regex::Regex;
 use serde_json as json;
+#[cfg(test)]
 use std::fs;
-use std::io::Read;
 use versions::Version;
 
 /// Creates a module with the current package version
@@ -297,43 +297,39 @@ fn get_sbt_version(context: &Context, config: &PackageConfig) -> Option<String> 
 }
 
 fn get_cargo_version(context: &Context, config: &PackageConfig) -> Option<String> {
-    let mut file_contents = context.read_file_from_pwd("Cargo.toml")?;
+    let file_contents = context.read_file_from_pwd("Cargo.toml")?;
 
-    let mut cargo_toml: toml::Table = toml::from_str(&file_contents).ok()?;
+    let cargo_toml: toml::Table = toml::from_str(&file_contents).ok()?;
     let cargo_version = cargo_toml.get("package").and_then(|p| p.get("version"));
-    let raw_version = if let Some(v) = cargo_version.and_then(toml::Value::as_str) {
+    let ancestor_cargo_toml;
+    let raw_version = if let Some(version) = cargo_version.and_then(toml::Value::as_str) {
         // regular version string
-        v
+        version
     } else if cargo_version
-        .and_then(|v| v.get("workspace"))
+        .and_then(|version| version.get("workspace"))
         .and_then(toml::Value::as_bool)
         .unwrap_or_default()
     {
         // workspace version string (`package.version.workspace = true`)
         // need to read the Cargo.toml file from the workspace root
-        let mut version = None;
-        if let Some(workspace) = cargo_toml.get("workspace") {
-            // current Cargo.toml file is also the workspace root
-            version = workspace.get("package")?.get("version")?.as_str();
+        let workspace_toml = if cargo_toml.contains_key("workspace") {
+            &cargo_toml
         } else {
-            // discover the workspace root
-            for path in context.current_dir.ancestors().skip(1) {
-                // Assume the workspace root is the first ancestor that contains a Cargo.toml file
-                if let Ok(mut file) = fs::File::open(path.join("Cargo.toml")) {
-                    file_contents.clear(); // clear the buffer for reading new Cargo.toml
-                    file.read_to_string(&mut file_contents).ok()?;
-                    cargo_toml = toml::from_str(&file_contents).ok()?;
-                    // Read workspace.package.version
-                    version = cargo_toml
-                        .get("workspace")?
-                        .get("package")?
-                        .get("version")?
-                        .as_str();
-                    break;
-                }
-            }
-        }
-        version?
+            // Assume the workspace root is the first ancestor with a readable Cargo.toml.
+            let workspace_contents = context
+                .current_dir
+                .ancestors()
+                .skip(1)
+                .find_map(|path| read_file(path.join("Cargo.toml")).ok())?;
+            ancestor_cargo_toml = toml::from_str(&workspace_contents).ok()?;
+            &ancestor_cargo_toml
+        };
+
+        workspace_toml
+            .get("workspace")?
+            .get("package")?
+            .get("version")?
+            .as_str()?
     } else {
         // This might be a workspace file
         cargo_toml
@@ -405,6 +401,14 @@ fn get_galaxy_version(context: &Context, config: &PackageConfig) -> Option<Strin
     format_version(raw_version, config.version_format)
 }
 
+fn get_zig_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = context.read_file_from_pwd("build.zig.zon")?;
+    let re = Regex::new(r#"(?m)^\s*\.version\s*=\s*"(?P<version>[^"]+)""#).unwrap();
+    let caps = re.captures(&file_contents)?;
+
+    format_version(&caps["version"], config.version_format)
+}
+
 fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let package_version_fn: Vec<fn(&Context, &PackageConfig) -> Option<String>> = vec![
         get_cargo_version,
@@ -428,6 +432,7 @@ fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
         get_dart_pub_version,
         get_rlang_version,
         get_galaxy_version,
+        get_zig_version,
     ];
 
     package_version_fn.iter().find_map(|f| f(context, config))
@@ -1685,6 +1690,39 @@ Title: Starship
         fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, Some("v1.2.3"), None);
 
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_zig_version() -> io::Result<()> {
+        let config_name = "build.zig.zon";
+        let config_content = r#".{
+    .name = .starship,
+    .version = "1.0.0",
+    .fingerprint = 0xc23d1996901833d9, // Changing this has security and trust implications.
+    .minimum_zig_version = "0.16.0",
+    .dependencies = .{},
+    .paths = .{ "build.zig", "build.zig.zon", "src" },
+}"#;
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, Some("v1.0.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_zig_version_without_version() -> io::Result<()> {
+        let config_name = "build.zig.zon";
+        let config_content = r#".{
+    .name = .starship,
+    .fingerprint = 0xc23d1996901833d9,
+    .paths = .{ "build.zig" },
+}"#;
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 

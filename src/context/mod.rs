@@ -62,7 +62,7 @@ pub struct Context<'a> {
     pub properties: Properties,
 
     /// Private field to store Git information for modules who need it
-    git_repo: OnceLock<Result<GitRepo, Box<gix::discover::Error>>>,
+    git_repo: OnceLock<Result<GitRepo, gix::Error>>,
 
     /// Private field to store JJ information for modules who need it
     jj_repo: OnceLock<Option<JJRepo>>,
@@ -334,9 +334,9 @@ impl<'a> Context<'a> {
     }
 
     /// Will lazily get repo root and branch when a module requests it.
-    pub fn get_git_repo(&self) -> Result<&GitRepo, &gix::discover::Error> {
+    pub fn get_git_repo(&self) -> Result<&GitRepo, &gix::Error> {
         self.git_repo
-            .get_or_init(|| -> Result<GitRepo, Box<gix::discover::Error>> {
+            .get_or_init(|| -> Result<GitRepo, gix::Error> {
                 // custom open options
                 let mut git_open_opts_map =
                     git_sec::trust::Mapping::<gix::open::Options>::default();
@@ -377,15 +377,13 @@ impl<'a> Context<'a> {
                         Ok(repo) => repo,
                         Err(e) => {
                             log::debug!("Failed to find git repo: {e}");
-                            return Err(Box::new(e));
+                            return Err(e);
                         }
                     };
 
                 let repository = shared_repo.to_thread_local();
-                log::trace!(
-                    "Found git repo: {repository:?}, (trust: {:?})",
-                    repository.git_dir_trust()
-                );
+                let trust = repository.git_dir_trust();
+                log::trace!("Found git repo: {repository:?}, (trust: {trust:?})");
 
                 let branch = get_current_branch(&repository);
                 let remote =
@@ -405,15 +403,22 @@ impl<'a> Context<'a> {
                     state: repository.state(),
                     remote,
                     fs_monitor_value_is_true,
+                    trust,
                 })
             })
             .as_ref()
-            .map_err(std::convert::AsRef::as_ref)
     }
 
     /// Will lazily discover Jujutsu repo root when a module requests it.
     pub fn get_jj_repo(&self) -> Option<&JJRepo> {
         self.jj_repo.get_or_init(|| JJRepo::discover(self)).as_ref()
+    }
+
+    #[cfg(test)]
+    pub(crate) fn set_git_trust(&mut self, trust: gix::sec::Trust) {
+        // Override only Starship's command policy, leaving discovery and gix permissions intact.
+        self.get_git_repo().expect("test repository must open");
+        self.git_repo.get_mut().unwrap().as_mut().unwrap().trust = trust;
     }
 
     #[cfg(test)]
@@ -546,7 +551,14 @@ fn home_dir(env: &Env) -> Option<PathBuf> {
     utils::home_dir()
 }
 
+/// The configuration file a new context reads.
+///
+/// In-crate unit tests read only explicitly mocked configuration. Integration
+/// tests compile the library normally and must isolate their own environment.
 fn get_config_path_os(env: &Env) -> Option<OsString> {
+    if cfg!(test) && env.get_env_os("STARSHIP_CONFIG").is_none() && env.get_env("HOME").is_none() {
+        return None;
+    }
     if let Some(config_path) = env.get_env_os("STARSHIP_CONFIG") {
         return Some(config_path);
     }
@@ -911,7 +923,7 @@ pub enum Target {
 #[derive(Parser, Debug)]
 pub struct Properties {
     /// The status code of the previously run command as an unsigned or signed 32bit integer
-    #[clap(short = 's', long = "status")]
+    #[clap(short = 's', long = "status", allow_negative_numbers = true)]
     pub status_code: Option<String>,
     /// Bash, Fish and Zsh support returning codes for each process in a pipeline.
     #[clap(long, value_delimiter = ' ')]
@@ -982,6 +994,152 @@ mod tests {
     use super::*;
     use crate::test::default_context;
     use std::io;
+
+    #[test]
+    fn properties_accept_signed_and_unsigned_status_codes() {
+        for status in ["-1", "-2147483648", "0", "4294967295"] {
+            for flag in ["-s", "--status"] {
+                let properties =
+                    Properties::try_parse_from(["starship", flag, status, "--jobs", "2"]).unwrap();
+
+                assert_eq!(properties.status_code.as_deref(), Some(status));
+                assert_eq!(properties.jobs, 2);
+            }
+        }
+    }
+
+    #[test]
+    fn properties_require_a_status_value() {
+        for flag in ["-s", "--status"] {
+            assert!(Properties::try_parse_from(["starship", flag, "--jobs"]).is_err());
+            assert!(Properties::try_parse_from(["starship", flag, "--not-a-number"]).is_err());
+        }
+    }
+
+    #[test]
+    fn git_executable_preference_requires_full_trust() -> io::Result<()> {
+        use crate::test::{COMMON_GIT_PROVIDERS, fixture_repo};
+        use gix::sec::Trust;
+
+        let repo_dir = fixture_repo(COMMON_GIT_PROVIDERS[0])?;
+        let mut context: Context = crate::test::ModuleRenderer::new("git_status")
+            .path(repo_dir.path())
+            .into();
+
+        for (trust, enabled, expected) in [
+            (Trust::Full, false, false),
+            (Trust::Full, true, true),
+            (Trust::Reduced, false, false),
+            (Trust::Reduced, true, false),
+        ] {
+            context.set_git_trust(trust);
+            assert_eq!(
+                context.get_git_repo().unwrap().use_git_executable(enabled),
+                Some(expected),
+            );
+        }
+        repo_dir.close()
+    }
+
+    #[test]
+    fn git_executable_handles_backend_requirements() -> io::Result<()> {
+        use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
+        use gix::sec::Trust;
+
+        for (reftable, fsmonitor, sparse) in [
+            (false, true, false),
+            (true, false, false),
+            (false, false, true),
+        ] {
+            let repo_dir = fixture_repo(FixtureProvider::Git {
+                reftable,
+                bare: false,
+            })?;
+            if sparse {
+                crate::modules::git_status::tests::make_sparse(repo_dir.path())?;
+            }
+            let mut context: Context = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .into();
+
+            for (trust, expected) in [(Trust::Full, true), (Trust::Reduced, false)] {
+                context.set_git_trust(trust);
+                context
+                    .git_repo
+                    .get_mut()
+                    .unwrap()
+                    .as_mut()
+                    .unwrap()
+                    .fs_monitor_value_is_true = fsmonitor;
+                assert_eq!(
+                    context.get_git_repo().unwrap().use_git_executable(false),
+                    Some(expected),
+                    "reftable={reftable}, fsmonitor={fsmonitor}, sparse={sparse}, trust={trust:?}",
+                );
+            }
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn git_commands_require_full_trust_by_default() -> io::Result<()> {
+        use crate::test::{COMMON_GIT_PROVIDERS, fixture_repo};
+        use gix::sec::Trust;
+
+        let repo_dir = fixture_repo(COMMON_GIT_PROVIDERS[0])?;
+        let mut context: Context = crate::test::ModuleRenderer::new("git_status")
+            .path(repo_dir.path())
+            .into();
+
+        for (trust, allowed) in [(Trust::Full, true), (Trust::Reduced, false)] {
+            context.set_git_trust(trust);
+            let output = context
+                .get_git_repo()
+                .unwrap()
+                .exec_git(&context, ["rev-parse", "--is-inside-work-tree"]);
+            if allowed {
+                assert_eq!(output.unwrap().stdout.trim(), "true");
+            } else {
+                assert!(output.is_none());
+            }
+        }
+        repo_dir.close()
+    }
+
+    #[test]
+    fn git_commands_honor_explicit_required_trust() -> io::Result<()> {
+        use crate::test::{COMMON_GIT_PROVIDERS, fixture_repo};
+        use gix::sec::Trust;
+
+        let repo_dir = fixture_repo(COMMON_GIT_PROVIDERS[0])?;
+        let mut context: Context = crate::test::ModuleRenderer::new("git_status")
+            .path(repo_dir.path())
+            .into();
+
+        for (trust, required, allowed) in [
+            (Trust::Full, Trust::Full, true),
+            (Trust::Full, Trust::Reduced, true),
+            (Trust::Reduced, Trust::Reduced, true),
+            (Trust::Reduced, Trust::Full, false),
+        ] {
+            context.set_git_trust(trust);
+            let output = context
+                .get_git_repo()
+                .unwrap()
+                .exec_git_with_required_trust(
+                    &context,
+                    required,
+                    ["for-each-ref", "--format=%(refname)", "refs/heads/master"],
+                );
+            if allowed {
+                assert_eq!(output.unwrap().stdout.trim(), "refs/heads/master");
+            } else {
+                assert!(output.is_none());
+            }
+        }
+        repo_dir.close()
+    }
 
     fn testdir(paths: &[&str]) -> Result<tempfile::TempDir, std::io::Error> {
         let dir = tempfile::tempdir()?;
@@ -1292,6 +1450,29 @@ mod tests {
         });
 
         assert_ne!(context.config.config, mod_context.config.config);
+    }
+
+    #[test]
+    fn unit_test_configuration_requires_an_explicit_config_or_home() {
+        let mut environment = Env::default();
+        assert_eq!(None, super::get_config_path_os(&environment));
+
+        environment.insert("HOME", "/test-home".to_owned());
+        assert_eq!(
+            Some(
+                PathBuf::from("/test-home")
+                    .join(".config")
+                    .join("starship.toml")
+                    .into_os_string()
+            ),
+            super::get_config_path_os(&environment),
+        );
+
+        environment.insert("STARSHIP_CONFIG", "/explicit/starship.toml".to_owned());
+        assert_eq!(
+            Some(PathBuf::from("/explicit/starship.toml").into_os_string()),
+            super::get_config_path_os(&environment),
+        );
     }
 
     #[cfg(windows)]

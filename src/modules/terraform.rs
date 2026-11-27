@@ -244,6 +244,25 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
     }
 
     #[test]
+    fn folder_with_tofu_file() -> io::Result<()> {
+        // OpenTofu reads `.tofu` files in place of the `.tf` file of the same
+        // name, so a module written for OpenTofu alone need not contain a
+        // single `.tf` file. `commands` below already falls back to `tofu
+        // version`, so the module has to notice those directories.
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("main.tofu"))?;
+
+        let actual = ModuleRenderer::new("terraform").path(dir.path()).collect();
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(105).bold().paint("💠 default")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
     fn folder_with_workspace_override() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.tf"))?;
