@@ -927,4 +927,44 @@ mod test {
         let actual = get_prompt(&context);
         assert_eq!(expected, actual);
     }
+
+    #[test]
+    fn zsh_fill_ignores_prompt_percent_escaping() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "$fill$env_var>"
+            [fill]
+            symbol = "-"
+            style = ""
+            [env_var]
+            variable = "PCT"
+            format = "$env_value%"
+        });
+        context.shell = Shell::Zsh;
+        context.width = 12;
+        context.env.insert("PCT", "87".to_owned());
+
+        // Rendered text is `--------87%>` (12 columns); zsh escapes `%` as `%%`.
+        assert_eq!("--------87%%>", get_prompt(&context));
+    }
+
+    #[test]
+    fn bash_fill_ignores_prompt_escaping() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "$fill$env_var>"
+            [fill]
+            symbol = "-"
+            style = ""
+            [env_var]
+            variable = "VAL"
+            format = "$env_value"
+        });
+        context.shell = Shell::Bash;
+        context.width = 10;
+        context.env.insert("VAL", "$(x)".to_owned());
+
+        // Rendered text is `-----$(x)>` (10 columns); bash escapes `$` as `\$`.
+        assert_eq!(r"-----\$(x)>", get_prompt(&context));
+    }
 }

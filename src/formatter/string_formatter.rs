@@ -291,15 +291,10 @@ impl<'a> StringFormatter<'a> {
                 .into_iter()
                 .map(|el| {
                     match el {
-                        FormatElement::Text(text) => Ok(Segment::from_text(
+                        FormatElement::Text(text) => Ok(Segment::from_shell_text(
                             style,
-                            shell_prompt_escape(
-                                text,
-                                match context {
-                                    None => Shell::Unknown,
-                                    Some(c) => c.shell,
-                                },
-                            ),
+                            text.as_ref(),
+                            context.map_or(Shell::Unknown, |c| c.shell),
                         )),
                         FormatElement::TextGroup(textgroup) => {
                             parse_textgroup(textgroup, variables, style_variables, context)
@@ -319,15 +314,10 @@ impl<'a> StringFormatter<'a> {
                                             segment
                                         })
                                         .collect()),
-                                    VariableValue::Plain(text) => Ok(Segment::from_text(
+                                    VariableValue::Plain(text) => Ok(Segment::from_shell_text(
                                         style,
-                                        shell_prompt_escape(
-                                            text,
-                                            match context {
-                                                None => Shell::Unknown,
-                                                Some(c) => c.shell,
-                                            },
-                                        ),
+                                        text.as_ref(),
+                                        context.map_or(Shell::Unknown, |c| c.shell),
                                     )),
                                     VariableValue::NoEscapingPlain(text) => {
                                         Ok(Segment::from_text(style, text))
