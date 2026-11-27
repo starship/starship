@@ -83,3 +83,9 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
 
 [![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)
+
+## [Muted Powerline](./muted-powerline.md)
+
+This preset is inspired by [Powerlevel10k](https://github.com/romkatv/powerlevel10k), with a muted palette.
+
+[![Screenshot of Muted Powerline preset](/presets/img/muted-powerline.png "Click to view Muted Powerline preset")](./muted-powerline)

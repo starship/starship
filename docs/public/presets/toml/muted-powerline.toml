@@ -1,0 +1,281 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+[](gray)\
+$os\
+$username\
+$directory\
+[](bg:green fg:blue)\
+$git_branch\
+$git_status\
+[](fg:green bg:yellow)\
+$c\
+$rust\
+$golang\
+$nodejs\
+$php\
+$java\
+$kotlin\
+$haskell\
+$python\
+$ruby\
+$dotnet\
+$swift\
+$scala\
+$dart\
+$lua\
+$rlang\
+$perl\
+$elixir\
+$julia\
+$terraform\
+$docker_context\
+[](fg:yellow bg:gray)\
+$hostname\
+[ ](fg:gray)\
+$cmd_duration\
+$fill\
+[ ](fg:gray)\
+$memory_usage\
+$time\
+[](blue)\
+$line_break\
+$character
+"""
+
+palette = 'brei0x'
+
+# A continuation prompt that displays two filled-in arrows
+continuation_prompt = '[❯❯](bold fg:muted)'
+
+[os]
+format = '[$symbol]($style)'
+style = 'bg:gray fg:white'
+disabled = false
+
+[os.symbols]
+Alpaquita = ' '
+Alpine = ' '
+AlmaLinux = ' '
+Amazon = ' '
+Android = ' '
+Arch = ' '
+Artix = ' '
+CentOS = ' '
+Debian = ' '
+DragonFly = ' '
+Emscripten = ' '
+EndeavourOS = ' '
+Fedora = ' '
+FreeBSD = ' '
+Garuda = '󰛓 '
+Gentoo = ' '
+HardenedBSD = '󰞌 '
+Illumos = '󰈸 '
+Kali = ' '
+Linux = ' '
+Mabox = ' '
+Macos = ' '
+Manjaro = ' '
+Mariner = ' '
+MidnightBSD = ' '
+Mint = ' '
+NetBSD = ' '
+NixOS = ' '
+OpenBSD = '󰈺 '
+openSUSE = ' '
+OracleLinux = '󰌷 '
+Pop = ' '
+Raspbian = ' '
+Redhat = ' '
+RedHatEnterprise = ' '
+RockyLinux = ' '
+Redox = '󰀘 '
+Solus = '󰠳 '
+SUSE = ' '
+Ubuntu = ' '
+Unknown = ' '
+Void = ' '
+Windows = '󰍲 '
+
+[username]
+format = '[  $user ]($style)'
+style_root = 'bg:red fg:black bold'
+style_user = 'bg:white fg:black'
+
+[directory]
+truncation_length = 3
+truncation_symbol = '…/'
+format = '[ $read_only]($read_only_style)[$path ]($style)'
+style = 'bg:blue fg:black'
+read_only = ' '
+read_only_style = 'bg:blue fg:red'
+
+[directory.substitutions]
+'~' = ' '
+'Developer' = ' 󰲋 '
+'Documents' = ' 󰈙 '
+'Downloads' = '  '
+'Music' = '  '
+'Pictures' = '  '
+
+[git_branch]
+format = '[ $symbol $branch ]($style)'
+symbol = ''
+style = 'fg:black bg:green'
+
+[git_status]
+format = '[($all_status$ahead_behind )]($style)'
+style = 'fg:black bg:green'
+ahead = '↑${count}'
+behind = '↓${count}'
+diverged = '↕↑${ahead_count}↓${behind_count}'
+deleted = ''
+
+[c]
+format = '[ $symbol( $version) ]($style)'
+symbol = ''
+style = 'fg:black bg:yellow'
+
+[rust]
+format = '[ $symbol( $version) ]($style)'
+symbol = ''
+style = 'fg:black bg:yellow'
+
+[golang]
+format = '[ $symbol( $version) ]($style)'
+symbol = ''
+style = 'fg:black bg:yellow'
+
+[nodejs]
+format = '[ $symbol( $version) ]($style)'
+symbol = ''
+style = 'fg:black bg:yellow'
+
+[php]
+format = '[ $symbol( $version) ]($style)'
+symbol = ''
+style = 'fg:black bg:yellow'
+
+[java]
+format = '[ $symbol( $version) ]($style)'
+symbol = ''
+style = 'fg:black bg:yellow'
+
+[kotlin]
+format = '[ $symbol( $version) ]($style)'
+symbol = ''
+style = 'fg:black bg:yellow'
+
+[haskell]
+format = '[ $symbol( $version) ]($style)'
+symbol = ''
+style = 'fg:black bg:yellow'
+
+[python]
+format = '[ $symbol( $version)(\(#$virtualenv\)) ]($style)'
+symbol = ''
+style = 'fg:black bg:yellow'
+
+[ruby]
+format = '[ $symbol( $version) ]($style)'
+symbol = '󰫏'
+style = 'fg:black bg:yellow'
+
+[dotnet]
+format = '[ $symbol( $version) ]($style)'
+symbol = ''
+style = 'fg:black bg:yellow'
+
+[swift]
+format = '[ $symbol( $version) ]($style)'
+symbol = ''
+style = 'fg:black bg:yellow'
+
+[scala]
+format = '[ $symbol( $version) ]($style)'
+symbol = ''
+style = 'fg:black bg:yellow'
+
+[dart]
+format = '[ $symbol( $version) ]($style)'
+symbol = ''
+style = 'fg:black bg:yellow'
+
+[lua]
+format = '[ $symbol( $version) ]($style)'
+symbol = ''
+style = 'fg:black bg:yellow'
+
+[rlang]
+format = '[ $symbol( $version) ]($style)'
+symbol = '󰟔'
+style = 'fg:black bg:yellow'
+
+[perl]
+format = '[ $symbol( $version) ]($style)'
+symbol = ''
+style = 'fg:black bg:yellow'
+
+[elixir]
+format = '[ $symbol( $version) ]($style)'
+symbol = ''
+style = 'fg:black bg:yellow'
+
+[julia]
+format = '[ $symbol( $version) ]($style)'
+symbol = ''
+style = 'fg:black bg:yellow'
+
+[terraform]
+format = '[ $symbol( $version) ]($style)'
+symbol = '󱁢'
+style = 'fg:black bg:yellow'
+
+[docker_context]
+format = '[ $symbol ($context) ]($style)'
+symbol = ''
+style = 'fg:black bg:yellow'
+
+[hostname]
+format = '[  $hostname]($style)'
+ssh_only = true
+trim_at = '.'
+style = 'fg:white bg:gray'
+
+[cmd_duration]
+format = ' in $duration '
+
+[fill]
+style = 'fg:muted'
+symbol = '-'
+
+[character]
+success_symbol = '[❯](bold fg:muted)'
+error_symbol = '[❯](bold fg:red)'
+vimcmd_symbol = '[❮](bold fg:blue)'
+vimcmd_replace_one_symbol = '[❮](bold fg:yellow)'
+vimcmd_replace_symbol = '[❮](bold fg:yellow)'
+vimcmd_visual_symbol = '[❮](bold fg:yellow)'
+
+[memory_usage]
+format = '[ ${ram_pct} ]($style)'
+style = 'fg:white bg:gray'
+threshold = -1
+disabled = false
+
+[time]
+format = '[  $time]($style)'
+style = 'fg:black bg:blue'
+time_format = '%R'
+disabled = false
+
+[palettes.brei0x]
+blue = '#4668a6'
+green = '#4E9A06'
+yellow = '#C4A000'
+red = '#A63D40'
+gray = '#3e4451'
+muted = '#5c6370'
+white = '#abb2bf'
+black = '#282c34'
