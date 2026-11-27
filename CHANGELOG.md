@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.28.0](https://github.com/starship/starship/compare/v1.27.0...v1.28.0) (2026-11-27)
+
+
+### Features
+
+* **battery:** add `paused_symbol` for paused charging state ([#7852](https://github.com/starship/starship/issues/7852)) ([122e31e](https://github.com/starship/starship/commit/122e31e3cfe1a21b96ae537cc22ffdac8c59767d))
+
+
+### Bug Fixes
+
+* **cli:** accept negative status code arguments ([#7823](https://github.com/starship/starship/issues/7823)) ([c7d513c](https://github.com/starship/starship/commit/c7d513ce6ae6838249100f246e0d48be45a78294))
+* **git_commit:** return None on unborn HEAD when repo has no commits ([#7807](https://github.com/starship/starship/issues/7807)) ([a94a596](https://github.com/starship/starship/commit/a94a596c905ffcd55df7e2d043efd25bd1bbfc0c))
+* **jujutsu:** Support bookmark names JJ surrounds with `"` on printing ([#7824](https://github.com/starship/starship/issues/7824)) ([be4597d](https://github.com/starship/starship/commit/be4597d0bfac61091b97eabc699814af51490d8f))
+* **kubernetes:** show module when detect_env_vars matches alongside a scan config ([#7844](https://github.com/starship/starship/issues/7844)) ([18f5c6a](https://github.com/starship/starship/commit/18f5c6a3450198c2a81228bdb81df4620bc20c47))
+* **maven:** detect a project by its .mvn directory again ([#7859](https://github.com/starship/starship/issues/7859)) ([b21ea00](https://github.com/starship/starship/commit/b21ea00de16010a43c5a4843fa866354708ae741))
+* **php:** show the version when php is a batch file shim ([#7858](https://github.com/starship/starship/issues/7858)) ([279008f](https://github.com/starship/starship/commit/279008f5eb23e83249e829dbd316df7722c35513))
+* **zsh:** avoid glob grouping in ZSH_VERSION check for sh_glob compatibility ([#7806](https://github.com/starship/starship/issues/7806)) ([8cc4307](https://github.com/starship/starship/commit/8cc43075a23b9743055d1b07e98cc22d701ba90b))
+
 ## [1.27.0](https://github.com/starship/starship/compare/v1.26.0...v1.27.0) (2026-10-17)
 
 
