@@ -73,6 +73,19 @@ onMounted(() => {
    winget install starship
    ```
 
+   With [Zi](https://github.com/z-shell/zi) (Zsh), which also initializes Starship:
+
+   ```sh
+   zi ice as'program' from'gh-r' pick'starship' \
+     atclone'./starship completions zsh > _starship' \
+     atpull'%atclone' blockf \
+     atload'eval "$(starship init zsh)"'
+   zi light starship/starship
+   ```
+
+   Make sure `compinit` runs after this block so the generated `_starship` completion is picked up.
+   If you install with Zi, skip the Zsh init snippet below.
+
 1. Add the init script to your shell's config file:
 
    #### Bash

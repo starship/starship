@@ -200,6 +200,22 @@ Install Starship using any of the following package managers:
 
 </details>
 
+#### Zsh plugin manager (Zi)
+
+If you use [Zi](https://github.com/z-shell/zi), you can install Starship directly from the latest
+GitHub release and initialize it in one step. Add the following to `~/.zshrc` after Zi itself is
+loaded, and skip the `eval "$(starship init zsh)"` line in Step 2:
+
+```sh
+zi ice as'program' from'gh-r' pick'starship' \
+  atclone'./starship completions zsh > _starship' \
+  atpull'%atclone' blockf \
+  atload'eval "$(starship init zsh)"'
+zi light starship/starship
+```
+
+Make sure `compinit` runs after this block so the generated `_starship` completion is picked up.
+
 ### Step 2. Set up your shell to use Starship
 
 Configure your shell to initialize starship. Select yours from the list below:

@@ -7,13 +7,25 @@
 # after drawing the prompt. This ensures that the timing for one command is only
 # ever drawn once (for the prompt immediately after it is run).
 
+# `starship init zsh` replaces the marker below with the absolute path to the
+# binary. A plugin manager may instead source this file directly, and the binary
+# may have moved since the script was generated. In either case, fall back to a
+# binary next to this script, then to `starship` on PATH.
+__starship_cmd=::STARSHIP::
+if [[ ! -x ${__starship_cmd} ]]; then
+    __starship_source=${(%):-%x}
+    __starship_cmd="${__starship_source:h}/starship"
+    unset __starship_source
+    [[ -x ${__starship_cmd} ]] || __starship_cmd=starship
+fi
+
 zmodload zsh/parameter  # Needed to access jobstates variable for STARSHIP_JOBS_COUNT
 
 # Defines a function `__starship_get_time` that sets the time since epoch in millis in STARSHIP_CAPTURED_TIME.
 if [[ $ZSH_VERSION == [1-4]* ]]; then
     # ZSH <= 5; Does not have a built-in variable so we will rely on Starship's inbuilt time function.
     __starship_get_time() {
-        STARSHIP_CAPTURED_TIME=$(::STARSHIP:: time)
+        STARSHIP_CAPTURED_TIME=$("$__starship_cmd" time)
     }
 else
     zmodload zsh/datetime
@@ -31,6 +43,11 @@ fi
 prompt_starship_precmd() {
     # Save the status, because subsequent commands in this function will change $?
     STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=(${pipestatus[@]})
+
+    # A plugin manager may source this script inside a scoped function, which
+    # discards the `setopt promptsubst` below. Hooks run later, outside that
+    # scope, so make sure the option is enabled before the prompt is expanded.
+    setopt promptsubst
 
     # Calculate duration if a command was executed
     if (( ${+STARSHIP_START_TIME} )); then
@@ -97,6 +114,6 @@ VIRTUAL_ENV_DISABLE_PROMPT=1
 
 setopt promptsubst
 
-PROMPT='$('::STARSHIP::' prompt --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
-RPROMPT='$('::STARSHIP::' prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
-PROMPT2="$(::STARSHIP:: prompt --continuation)"
+PROMPT='$("$__starship_cmd" prompt --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
+RPROMPT='$("$__starship_cmd" prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
+PROMPT2="$("$__starship_cmd" prompt --continuation)"
