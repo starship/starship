@@ -73,6 +73,28 @@ onMounted(() => {
    winget install starship
    ```
 
+   With [Zi](https://github.com/z-shell/zi) (Zsh), which also initializes Starship:
+
+   ```sh
+   zi ice as'program' from'gh-r' pick'starship' \
+     atclone'./starship completions zsh > _starship' \
+     atpull'%atclone' blockf \
+     atload'eval "$(starship init zsh)"'
+   zi light starship/starship
+   ```
+
+   If you install with Zi, skip the Zsh init snippet below.
+
+   To build from source instead of downloading a release binary, use the following. This requires
+   Rust/Cargo, and the first load compiles Starship:
+
+   ```sh
+   zi ice as'program' pick'starship' src'init.zsh' blockf \
+     atclone'cargo build --release --locked && cp target/release/starship . && ./starship init zsh > init.zsh && ./starship completions zsh > _starship' \
+     atpull'%atclone'
+   zi light starship/starship
+   ```
+
 1. Add the init script to your shell's config file:
 
    #### Bash
