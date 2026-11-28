@@ -291,7 +291,7 @@ fn execute_rustup_default(context: &Context) -> Option<String> {
     // `rustup default` output is:
     //    stable-x86_64-apple-darwin (default)
     context
-        .exec_cmd("rustup", &["default"])?
+        .exec_cmd_no_cache("rustup", &["default"])?
         .stdout
         .split_whitespace()
         .next()

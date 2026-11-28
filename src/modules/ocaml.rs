@@ -89,7 +89,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn get_opam_switch(context: &Context) -> Option<OpamSwitch> {
     let opam_switch = context
-        .exec_cmd("opam", &["switch", "show", "--safe"])?
+        .exec_cmd_no_cache("opam", &["switch", "show", "--safe"])?
         .stdout;
 
     parse_opam_switch(opam_switch.trim())

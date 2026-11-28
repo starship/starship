@@ -28,7 +28,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "symbol" => Some(Ok(config.symbol)),
-                "health" => match context.exec_cmd("mise", &["doctor"]) {
+                "health" => match context.exec_cmd_no_cache("mise", &["doctor"]) {
                     Some(_) => Some(Ok(config.healthy_symbol)),
                     None => Some(Ok(config.unhealthy_symbol)),
                 },
@@ -56,6 +56,37 @@ mod tests {
     use nu_ansi_term::Color;
 
     use std::io;
+    #[test]
+    fn command_cache_does_not_preserve_healthy_state() {
+        use crate::{context::Context, utils::command_cache};
+
+        command_cache::with_temp_path(|_| {
+            let dir = tempfile::tempdir().unwrap();
+            std::fs::write(dir.path().join(".mise.toml"), "").unwrap();
+            let context: Context = ModuleRenderer::new("mise")
+                .path(dir.path())
+                .config(toml::toml! {
+                    command_cache_ttl = 3600
+                    [mise]
+                    disabled = false
+                    format = "$health"
+                    healthy_symbol = "healthy"
+                    unhealthy_symbol = "unhealthy"
+                })
+                .cmd("mise doctor", None)
+                .into();
+            let key = command_cache::key(Some(&context.current_dir), "mise", &["doctor"]);
+            command_cache::set(
+                &key,
+                CommandOutput {
+                    stdout: String::new(),
+                    stderr: String::new(),
+                },
+                3600,
+            );
+            assert_eq!(super::module(&context).unwrap().to_string(), "unhealthy");
+        });
+    }
 
     #[test]
     fn folder_without_mise_config() {

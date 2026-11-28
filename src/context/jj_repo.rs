@@ -96,7 +96,7 @@ impl JJRepo {
     pub fn current_change(&self, context: &Context) -> Option<&CurrentChange> {
         self.current_change
             .get_or_init(|| {
-                let res = context.exec_cmd("jj", &[
+                let res = context.exec_cmd_no_cache("jj", &[
                     "--color".as_ref(),
                     "never".as_ref(),
                     // Will search for diffs and such normally but not update the underlying repository

@@ -82,7 +82,7 @@ fn get_pyenv_version(context: &Context) -> Option<String> {
     if version_name.is_none() {
         version_name = Some(
             context
-                .exec_cmd("pyenv", &["version-name"])?
+                .exec_cmd_no_cache("pyenv", &["version-name"])?
                 .stdout
                 .trim()
                 .to_string(),

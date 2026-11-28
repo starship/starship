@@ -24,7 +24,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         "-Nnv"
     };
 
-    let is_sudo_cached = context.exec_cmd("sudo", &[sudo_flags]).is_some();
+    let is_sudo_cached = context.exec_cmd_no_cache("sudo", &[sudo_flags]).is_some();
 
     if !is_sudo_cached {
         return None;
@@ -58,6 +58,35 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod tests {
     use crate::{test::ModuleRenderer, utils::CommandOutput};
     use nu_ansi_term::Color;
+    #[test]
+    fn command_cache_does_not_preserve_expired_credentials() {
+        use crate::{context::Context, utils::command_cache};
+
+        command_cache::with_temp_path(|_| {
+            for (legacy, flags) in [(false, "-Nnv"), (true, "-nv")] {
+                let context: Context = ModuleRenderer::new("sudo")
+                    .config(toml::toml! {
+                        command_cache_ttl = 3600
+                        [sudo]
+                        disabled = false
+                        allow_windows = true
+                        use_legacy_check = legacy
+                    })
+                    .cmd(if legacy { "sudo -nv" } else { "sudo -Nnv" }, None)
+                    .into();
+                let key = command_cache::key(Some(&context.current_dir), "sudo", &[flags]);
+                command_cache::set(
+                    &key,
+                    CommandOutput {
+                        stdout: String::new(),
+                        stderr: String::new(),
+                    },
+                    3600,
+                );
+                assert!(super::module(&context).is_none());
+            }
+        });
+    }
 
     #[test]
     fn test_sudo_not_cached() {

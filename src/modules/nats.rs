@@ -13,7 +13,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let ctx_str = context
-        .exec_cmd("nats", &["context", "info", "--json"])?
+        .exec_cmd_no_cache("nats", &["context", "info", "--json"])?
         .stdout;
     let nats_context: json::Value = json::from_str(&ctx_str)
         .map_err(|e| {

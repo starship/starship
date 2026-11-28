@@ -55,7 +55,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_pijul_current_channel(ctx: &Context) -> Option<String> {
-    let output = ctx.exec_cmd("pijul", &["channel"])?.stdout;
+    let output = ctx.exec_cmd_no_cache("pijul", &["channel"])?.stdout;
 
     output
         .lines()

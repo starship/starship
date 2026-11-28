@@ -1,3 +1,4 @@
+pub mod command_cache;
 pub mod env;
 pub mod serde;
 pub mod statusline;
@@ -237,7 +238,7 @@ pub fn create_command<T: AsRef<OsStr>>(binary_name: T) -> Result<Command> {
     Ok(cmd)
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct CommandOutput {
     pub stdout: String,
     pub stderr: String,
@@ -297,6 +298,12 @@ FreeBSD clang version 11.0.1 (git@github.com:llvm/llvm-project.git llvmorg-11.0.
 Target: x86_64-unknown-freebsd13.0
 Thread model: posix
 InstalledDir: /usr/bin",
+            ),
+            stderr: String::default(),
+        }),
+        "mvn --version" | "mvn.cmd --version" => Some(CommandOutput {
+            stdout: String::from(
+                "Apache Maven 4.0.0-rc-6 (6a8189b24518daa120539fa41ce12f2b48ec09a8)\n",
             ),
             stderr: String::default(),
         }),

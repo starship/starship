@@ -21,7 +21,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Read the total number of added and deleted lines from "fossil diff -i --numstat"
     let output = context
-        .exec_cmd("fossil", &["diff", "-i", "--numstat"])?
+        .exec_cmd_no_cache("fossil", &["diff", "-i", "--numstat"])?
         .stdout;
     let stats = FossilDiff::parse(&output, config.only_nonzero_diffs);
 

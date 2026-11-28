@@ -11,7 +11,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     fn netns_name(context: &Context) -> Option<String> {
         context
-            .exec_cmd("ip", &["netns", "identify"])
+            .exec_cmd_no_cache("ip", &["netns", "identify"])
             .map(|output| output.stdout.trim().to_string())
             .filter(|name| !name.is_empty())
     }
