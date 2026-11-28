@@ -85,9 +85,8 @@ onMounted(() => {
 
    If you install with Zi, skip the Zsh init snippet below.
 
-   The recipe above needs a GitHub release with pre-built binaries. For a repository that has no
-   release assets (for example, a fork), build from source instead. This requires Rust/Cargo, and
-   the first load compiles Starship:
+   To build from source instead of downloading a release binary, use the following. This requires
+   Rust/Cargo, and the first load compiles Starship:
 
    ```sh
    zi ice as'program' pick'starship' src'init.zsh' blockf \
