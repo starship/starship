@@ -18,6 +18,7 @@ pub const ALL_MODULES: &[&str] = &[
     "claude_context",
     "claude_cost",
     "claude_model",
+    "claude_usage",
     "cmake",
     "cmd_duration",
     "cobol",
