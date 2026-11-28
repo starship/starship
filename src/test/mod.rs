@@ -183,6 +183,14 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
+    pub fn last_command<T>(mut self, command: T) -> Self
+    where
+        T: Into<String>,
+    {
+        self.context.properties.last_command = Some(command.into());
+        self
+    }
+
     pub fn keymap<T>(mut self, keymap: T) -> Self
     where
         T: Into<String>,
