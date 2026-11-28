@@ -1270,13 +1270,16 @@ a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/
 
 Let us consider the path `/path/to/home/git_repo/src/lib`
 
-| Variable         | Example               | Description                             |
-| ---------------- | --------------------- | --------------------------------------- |
-| before_root_path | `'/path/to/home/'`    | The path before git root directory path |
-| repo_root        | `'git_repo'`          | The git root directory name             |
-| path             | `'/src/lib'`          | The remaining path                      |
-| style            | `'black bold dimmed'` | Mirrors the value of option `style`     |
-| repo_root_style  | `'underline white'`   | Style for git root directory name       |
+| Variable           | Example               | Description                             |
+| ------------------ | --------------------- | --------------------------------------- |
+| before_root_path\* | `'/path/to/home/'`    | The path before git root directory path |
+| repo_root\*        | `'git_repo'`          | The git root directory name             |
+| path               | `'/src/lib'`          | The remaining path                      |
+| style              | `'black bold dimmed'` | Mirrors the value of option `style`     |
+| repo_root_style    | `'underline white'`   | Style for git root directory name       |
+
+\*: If your home directory is the root of the git repo, `before_root_path` is empty and `repo_root`
+is the `home_symbol`. For example, `/Users/bob/dev` gives `''`, `'~'` and `'/dev'`.
 
 </details>
 
