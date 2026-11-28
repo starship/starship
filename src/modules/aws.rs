@@ -227,6 +227,8 @@ fn has_defined_credentials(
         "AWS_ACCESS_KEY_ID",
         "AWS_SECRET_ACCESS_KEY",
         "AWS_SESSION_TOKEN",
+        "AWS_CONTAINER_CREDENTIALS_FULL_URI",
+        "AWS_CONTAINER_CREDENTIALS_RELATIVE_URI",
     ];
 
     // accept if set through environment variable
@@ -428,6 +430,47 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn profile_set_from_aws_vault_server() -> io::Result<()> {
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        let actual = module_renderer
+            .env("AWS_VAULT", "astronauts-vault")
+            .env("AWS_REGION", "ap-northeast-2")
+            .env(
+                "AWS_CONTAINER_CREDENTIALS_FULL_URI",
+                "http://127.0.0.1:45647",
+            )
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow
+                .bold()
+                .paint("☁️  astronauts-vault (ap-northeast-2) ")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn region_set_with_credential_server() -> io::Result<()> {
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        let actual = module_renderer
+            .env("AWS_REGION", "ap-northeast-2")
+            .env(
+                "AWS_CONTAINER_CREDENTIALS_RELATIVE_URI",
+                "/v2/credentials/abc",
+            )
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  (ap-northeast-2) ")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
     }
 
     #[test]
