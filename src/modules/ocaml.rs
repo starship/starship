@@ -51,7 +51,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "switch_name" => {
                     let (_, name) = opam_switch.deref().as_ref()?;
-                    Some(Ok(name.to_string()))
+                    Some(Ok(name.clone()))
                 }
                 "version" => {
                     let is_esy_project = context

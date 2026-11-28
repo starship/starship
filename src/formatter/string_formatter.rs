@@ -308,38 +308,40 @@ impl<'a> StringFormatter<'a> {
                             .get(name.as_ref())
                             .expect("Uncached variable found")
                             .as_ref()
-                            .map(|segments| match segments.clone()? {
-                                VariableValue::Styled(segments) => Ok(segments
-                                    .into_iter()
-                                    .map(|mut segment| {
-                                        // Derive upper style if the style of segments are none.
-                                        segment.set_style_if_empty(style);
-                                        segment
-                                    })
-                                    .collect()),
-                                VariableValue::Plain(text) => Ok(Segment::from_text(
-                                    style,
-                                    shell_prompt_escape(
-                                        text,
-                                        match context {
-                                            None => Shell::Unknown,
-                                            Some(c) => c.shell,
-                                        },
-                                    ),
-                                )),
-                                VariableValue::NoEscapingPlain(text) => {
-                                    Ok(Segment::from_text(style, text))
-                                }
-                                VariableValue::Meta(format) => {
-                                    let formatter = StringFormatter {
-                                        format,
-                                        variables: clone_without_meta(variables),
-                                        style_variables: style_variables.clone(),
-                                    };
-                                    formatter.parse(style, context)
-                                }
-                            })
-                            .unwrap_or_else(|| Ok(Vec::new())),
+                            .map_or_else(
+                                || Ok(Vec::new()),
+                                |segments| match segments.clone()? {
+                                    VariableValue::Styled(segments) => Ok(segments
+                                        .into_iter()
+                                        .map(|mut segment| {
+                                            // Derive upper style if the style of segments are none.
+                                            segment.set_style_if_empty(style);
+                                            segment
+                                        })
+                                        .collect()),
+                                    VariableValue::Plain(text) => Ok(Segment::from_text(
+                                        style,
+                                        shell_prompt_escape(
+                                            text,
+                                            match context {
+                                                None => Shell::Unknown,
+                                                Some(c) => c.shell,
+                                            },
+                                        ),
+                                    )),
+                                    VariableValue::NoEscapingPlain(text) => {
+                                        Ok(Segment::from_text(style, text))
+                                    }
+                                    VariableValue::Meta(format) => {
+                                        let formatter = StringFormatter {
+                                            format,
+                                            variables: clone_without_meta(variables),
+                                            style_variables: style_variables.clone(),
+                                        };
+                                        formatter.parse(style, context)
+                                    }
+                                },
+                            ),
                         FormatElement::Conditional(format) => {
                             // Show the conditional format string if all the variables inside are not
                             // none or empty string.

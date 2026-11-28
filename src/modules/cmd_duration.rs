@@ -69,7 +69,6 @@ fn undistract_me<'a>(
     elapsed: u128,
 ) -> Module<'a> {
     use notify_rust::{Notification, Timeout};
-    use nu_ansi_term::{AnsiStrings, unstyle};
 
     if config.show_notifications && config.min_time_to_notify as u128 <= elapsed {
         if cfg!(target_os = "linux") {
@@ -80,7 +79,7 @@ fn undistract_me<'a>(
 
             if !in_graphical_session {
                 return module;
-            };
+            }
         }
 
         // On macOS 26+ notify-rust will get stuck finding the current application identifier
@@ -90,7 +89,7 @@ fn undistract_me<'a>(
 
         let body = format!(
             "Command execution {}",
-            unstyle(&AnsiStrings(&module.ansi_strings()))
+            anstream::adapter::strip_str(&module.get_segments().concat())
         );
 
         let timeout = match config.notification_timeout {

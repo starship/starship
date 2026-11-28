@@ -15,6 +15,8 @@
         '📦 dependencies',
     ],
     minimumReleaseAge: '4 days',
+    // TODO: re-enable when hosted renovate gets updated
+    // minimumReleaseAgePackageManagerSync: true,
     semanticCommits: 'enabled',
     semanticCommitType: 'build',
     rangeStrategy: 'bump',
@@ -124,16 +126,7 @@
                 'cargo install.*--version (?<currentValue>\\S+).*\\s(?<depName>\\S+)',
             ],
             datasourceTemplate: 'crate',
-        },
-        {
-            customType: 'regex',
-            managerFilePatterns: [
-                '/^(workflow-templates|\\.github\\/workflows)\\/[^/]+\\.ya?ml$/',
-            ],
-            matchStrings: [
-                '^\\s+tool: (?<depName>[\\w-]+)@(?<currentValue>[^\\s]+)',
-            ],
-            datasourceTemplate: 'crate',
+            versioningTemplate: 'semver',
         },
         {
             customType: 'regex',

@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: '0 0 * * *'
 
+permissions: {}
+
 jobs:
   trigger_crowdin_tm:
     name: Crowdin Translation Memory Trigger

@@ -1,9 +1,10 @@
+use super::utils::format;
 use super::{Context, Module, ModuleConfig};
 use crate::configs::git_status::GitStatusConfig;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
 use crate::{context, num_configured_starship_threads, num_rayon_threads};
-use gix::bstr::ByteVec;
+use gix::bstr::ByteSlice;
 use gix::status::Submodule;
 use regex::Regex;
 use std::path::PathBuf;
@@ -33,7 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
 
     // Return None if not in git repository
-    let repo = context.get_repo().ok()?;
+    let repo = context.get_git_repo().ok()?;
 
     if repo.open().workdir().is_none() {
         log::debug!("This is a bare repository, git_status is not applicable");
@@ -63,12 +64,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map_variables_to_segments(|variable: &str| {
                 let segments = match variable {
                     "stashed" => info.get_stashed().and_then(|count| {
-                        format_count(config.stashed, "git_status.stashed", context, count)
+                        format::count(config.stashed, "git_status.stashed", context, count)
                     }),
                     "ahead_behind" => info.get_ahead_behind().and_then(|(ahead, behind)| {
                         let (ahead, behind) = (ahead?, behind?);
                         if ahead > 0 && behind > 0 {
-                            format_text(
+                            format::text(
                                 config.diverged,
                                 "git_status.diverged",
                                 context,
@@ -79,36 +80,36 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                 },
                             )
                         } else if ahead > 0 && behind == 0 {
-                            format_count(config.ahead, "git_status.ahead", context, ahead)
+                            format::count(config.ahead, "git_status.ahead", context, ahead)
                         } else if behind > 0 && ahead == 0 {
-                            format_count(config.behind, "git_status.behind", context, behind)
+                            format::count(config.behind, "git_status.behind", context, behind)
                         } else {
-                            format_symbol(config.up_to_date, "git_status.up_to_date", context)
+                            format::symbol(config.up_to_date, "git_status.up_to_date", context)
                         }
                     }),
                     "conflicted" => info.get_conflicted().and_then(|count| {
-                        format_count(config.conflicted, "git_status.conflicted", context, count)
+                        format::count(config.conflicted, "git_status.conflicted", context, count)
                     }),
                     "deleted" => info.get_deleted().and_then(|count| {
-                        format_count(config.deleted, "git_status.deleted", context, count)
+                        format::count(config.deleted, "git_status.deleted", context, count)
                     }),
                     "renamed" => info.get_renamed().and_then(|count| {
-                        format_count(config.renamed, "git_status.renamed", context, count)
+                        format::count(config.renamed, "git_status.renamed", context, count)
                     }),
                     "modified" => info.get_modified().and_then(|count| {
-                        format_count(config.modified, "git_status.modified", context, count)
+                        format::count(config.modified, "git_status.modified", context, count)
                     }),
                     "staged" => info.get_staged().and_then(|count| {
-                        format_count(config.staged, "git_status.staged", context, count)
+                        format::count(config.staged, "git_status.staged", context, count)
                     }),
                     "untracked" => info.get_untracked().and_then(|count| {
-                        format_count(config.untracked, "git_status.untracked", context, count)
+                        format::count(config.untracked, "git_status.untracked", context, count)
                     }),
                     "typechanged" => info.get_typechanged().and_then(|count| {
-                        format_count(config.typechanged, "git_status.typechanged", context, count)
+                        format::count(config.typechanged, "git_status.typechanged", context, count)
                     }),
                     "worktree_added" => info.get_worktree_added().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.worktree_added,
                             "git_status.worktree_added",
                             context,
@@ -116,7 +117,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         )
                     }),
                     "worktree_deleted" => info.get_worktree_deleted().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.worktree_deleted,
                             "git_status.worktree_deleted",
                             context,
@@ -124,7 +125,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         )
                     }),
                     "worktree_modified" => info.get_worktree_modified().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.worktree_modified,
                             "git_status.worktree_modified",
                             context,
@@ -132,7 +133,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         )
                     }),
                     "worktree_typechanged" => info.get_worktree_typechanged().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.worktree_typechanged,
                             "git_status.worktree_typechanged",
                             context,
@@ -140,10 +141,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         )
                     }),
                     "index_added" => info.get_index_added().and_then(|count| {
-                        format_count(config.index_added, "git_status.index_added", context, count)
+                        format::count(config.index_added, "git_status.index_added", context, count)
                     }),
                     "index_deleted" => info.get_index_deleted().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.index_deleted,
                             "git_status.index_deleted",
                             context,
@@ -151,7 +152,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         )
                     }),
                     "index_modified" => info.get_index_modified().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.index_modified,
                             "git_status.index_modified",
                             context,
@@ -159,7 +160,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         )
                     }),
                     "index_typechanged" => info.get_index_typechanged().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.index_typechanged,
                             "git_status.index_typechanged",
                             context,
@@ -191,16 +192,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 struct GitStatusInfo<'a> {
     context: &'a Context<'a>,
-    repo: &'a context::Repo,
+    repo: &'a context::GitRepo,
     config: GitStatusConfig<'a>,
     repo_status: OnceLock<Option<Arc<RepoStatus>>>,
     stashed_count: OnceLock<Option<usize>>,
 }
 
 impl<'a> GitStatusInfo<'a> {
-    pub fn load(
+    pub const fn load(
         context: &'a Context,
-        repo: &'a context::Repo,
+        repo: &'a context::GitRepo,
         config: GitStatusConfig<'a>,
     ) -> Self {
         Self {
@@ -302,9 +303,9 @@ impl<'a> GitStatusInfo<'a> {
 /// path so the cache is trashed.
 ///
 /// The trashing is only expected when tests run though, as otherwise one path is used with a variety of modules.
-pub(crate) fn get_static_repo_status(
+pub fn get_static_repo_status(
     context: &Context,
-    repo: &context::Repo,
+    repo: &context::GitRepo,
     config: &GitStatusConfig,
 ) -> Option<Arc<RepoStatus>> {
     static REPO_STATUS: parking_lot::Mutex<Option<(Arc<RepoStatus>, PathBuf)>> =
@@ -320,36 +321,25 @@ pub(crate) fn get_static_repo_status(
     status.as_ref().map(|(status, _)| Arc::clone(status))
 }
 
-pub(crate) fn uses_reftables(repo: &gix::Repository) -> bool {
-    repo.config_snapshot()
-        .string("extensions.refstorage")
-        .is_some_and(|kind| kind.as_ref() == "reftable")
-}
-
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
 fn get_repo_status(
     context: &Context,
-    repo: &context::Repo,
+    repo: &context::GitRepo,
     config: &GitStatusConfig,
 ) -> Option<RepoStatus> {
     log::debug!("New repo status created");
 
     let mut repo_status = RepoStatus::default();
-    let gix_repo = repo.open();
-    // TODO: remove this special case once `gitoxide` can handle sparse indices for tree-index comparisons.
     let has_untracked = !config.untracked.is_empty();
-    let git_config = gix_repo.config_snapshot();
-    if config.use_git_executable
-        || repo.fs_monitor_value_is_true
-        || uses_reftables(&repo.repo.to_thread_local())
-        || gix_repo.index_or_empty().ok()?.is_sparse()
-    {
+    let has_branch_status = !config.ahead.is_empty()
+        || !config.behind.is_empty()
+        || !config.up_to_date.is_empty()
+        || !config.diverged.is_empty();
+    if repo.use_git_executable(config.use_git_executable)? {
         let mut args = vec!["status", "--porcelain=2"];
 
         // for performance reasons, only pass flags if necessary...
-        let has_ahead_behind = !config.ahead.is_empty() || !config.behind.is_empty();
-        let has_up_to_date_diverged = !config.up_to_date.is_empty() || !config.diverged.is_empty();
-        if has_ahead_behind || has_up_to_date_diverged {
+        if has_branch_status {
             args.push("--branch");
         }
 
@@ -373,7 +363,15 @@ fn get_repo_status(
                 repo_status.add(status);
             }
         });
+    } else if repo.uses_reftables() {
+        // Gitoxide cannot read reftable refs, and `git status` requires full trust.
+        // In reduced-trust repositories, show only the upstream counts from a read-only query.
+        if has_branch_status {
+            (repo_status.ahead, repo_status.behind) = ahead_behind_from_git(context, repo).unzip();
+        }
     } else {
+        let gix_repo = repo.open();
+        let git_config = gix_repo.config_snapshot();
         let is_interrupted = Arc::new(AtomicBool::new(false));
         std::thread::Builder::new()
             .name("starship timer".into())
@@ -391,7 +389,7 @@ fn get_repo_status(
         // We don't show details in submodules.
         let check_dirty = true;
         let status = gix_repo
-            .status(gix::features::progress::Discard)
+            .status(gix::progress::Discard)
             .ok()?
             .index_worktree_submodules(if config.ignore_submodules {
                 Submodule::Given {
@@ -408,11 +406,7 @@ fn get_repo_status(
             })
             .index_worktree_options_mut(|opts| {
                 opts.thread_limit = if cfg!(target_os = "macos") {
-                    Some(num_configured_starship_threads().unwrap_or(
-                        // TODO: figure out good defaults for other platforms, maybe make it configurable.
-                        //       Git uses everything (if repo-size permits), but that's not the best choice for MacOS.
-                        3,
-                    ))
+                    num_configured_starship_threads()
                 } else {
                     Some(num_rayon_threads())
                 };
@@ -442,27 +436,9 @@ fn get_repo_status(
         // Thus, we can do some work in this thread without blocking, before starting to count status items.
         let status = status.into_iter(None).ok()?;
 
-        // for performance reasons, only pass flags if necessary...
-        let has_ahead_behind = !config.ahead.is_empty() || !config.behind.is_empty();
-        let has_up_to_date_or_diverged =
-            !config.up_to_date.is_empty() || !config.diverged.is_empty();
-        if (has_ahead_behind || has_up_to_date_or_diverged)
-            && let Some(branch_name) = gix_repo.head_name().ok().flatten().and_then(|ref_name| {
-                Vec::from(gix::bstr::BString::from(ref_name))
-                    .into_string()
-                    .ok()
-            })
-        {
-            let output = repo.exec_git(
-                context,
-                ["for-each-ref", "--format", "%(upstream) %(upstream:track)"]
-                    .into_iter()
-                    .map(ToOwned::to_owned)
-                    .chain(Some(branch_name)),
-            )?;
-            if let Some(line) = output.stdout.lines().next() {
-                repo_status.set_ahead_behind_for_each_ref(line);
-            }
+        if has_branch_status && let Some((ahead, behind)) = ahead_behind(&gix_repo) {
+            repo_status.ahead = Some(ahead);
+            repo_status.behind = Some(behind);
         }
 
         for change in status.filter_map(Result::ok) {
@@ -571,12 +547,84 @@ fn get_repo_status(
     Some(repo_status)
 }
 
-fn sanitize_rename_tracking(mut config: gix::diff::Rewrites) -> gix::diff::Rewrites {
+fn ahead_behind_from_git(context: &Context, repo: &context::GitRepo) -> Option<(usize, usize)> {
+    // This ref query does not run worktree filters or hooks.
+    let output = repo.exec_git_with_required_trust(
+        context,
+        gix::sec::Trust::Reduced,
+        [
+            "rev-list",
+            "--left-right",
+            "--count",
+            "HEAD...@{upstream}",
+            "--",
+        ],
+    )?;
+    let (ahead, behind) = output.stdout.trim().split_once('\t')?;
+    Some((ahead.parse().ok()?, behind.parse().ok()?))
+}
+
+/// Returns `(ahead, behind)` for the checked-out branch using only local refs and objects.
+/// Each count is the number of commits reachable from one tip but not from the other.
+///
+/// The first `branch.<name>.merge` ref is used directly when `branch.<name>.remote` is `.`.
+/// Otherwise, `remote.<name>.fetch` refspecs map it to a local tracking ref without fetching.
+///
+/// Read these keys directly because [`gix::Repository::branch_remote_tracking_ref_name`]
+/// filters out reduced-trust repository config, doesn't special-case `.`, and constructs
+/// a `Remote` that can fail on unrelated settings such as an invalid push URL. The keys
+/// read here only select local refs; no remote connection or command is needed.
+///
+/// Returns `None` if HEAD is detached or unborn, the upstream cannot be resolved, or the
+/// commit counts cannot be computed. For reftable repositories, use [`ahead_behind_from_git`].
+// TODO(gix): replace this with nicer APIs in next release
+fn ahead_behind(repo: &gix::Repository) -> Option<(usize, usize)> {
+    use gix::refspec::{MatchGroup, match_group::Item, parse, parse::Operation};
+
+    let mut branch = repo.head_ref().ok()??;
+    let config = repo.config_snapshot();
+    let config = config.plumbing();
+    let branch_name = branch.name().shorten();
+    let remote = config.string_by("branch", branch_name, "remote")?;
+    let merge = config.strings_by("branch", branch_name, "merge")?;
+    let upstream = if remote == "." {
+        merge.into_iter().next()?
+    } else {
+        let fetch_specs = config.strings_by("remote", remote, "fetch")?;
+        MatchGroup {
+            specs: fetch_specs
+                .iter()
+                .map(|spec| parse(spec.as_bstr(), Operation::Fetch))
+                .collect::<Result<Vec<_>, _>>()
+                .ok()?
+                .into_iter()
+                .filter(|spec| spec.source().is_some() && spec.destination().is_some())
+                .collect(),
+        }
+        .match_lhs(std::iter::once(Item {
+            full_ref_name: merge.first()?.as_bstr(),
+            target: None,
+            object: None,
+        }))
+        .mappings
+        .into_iter()
+        .filter(|mapping| mapping.item_index.is_some())
+        .find_map(|mapping| mapping.rhs)?
+        .into_owned()
+    };
+    let mut upstream = repo.try_find_reference(upstream.as_bstr()).ok()??;
+    let counts = repo
+        .ahead_behind_counts(branch.peel_to_id().ok()?, upstream.peel_to_id().ok()?)
+        .ok()?;
+    Some((counts.ahead, counts.behind))
+}
+
+const fn sanitize_rename_tracking(mut config: gix::diff::Rewrites) -> gix::diff::Rewrites {
     config.limit = 100;
     config
 }
 
-fn get_stashed_count(repo: &context::Repo) -> Option<usize> {
+fn get_stashed_count(repo: &context::GitRepo) -> Option<usize> {
     let repo = repo.open();
     let reference = match repo.try_find_reference("refs/stash") {
         // Only proceed if the found reference has the expected name (not tags/refs/stash etc.)
@@ -603,7 +651,7 @@ fn get_stashed_count(repo: &context::Repo) -> Option<usize> {
 }
 
 #[derive(Default, Debug, Clone)]
-pub(crate) struct RepoStatus {
+pub struct RepoStatus {
     ahead: Option<usize>,
     behind: Option<usize>,
     pub(crate) changes: Vec<gix::status::Item>,
@@ -719,82 +767,6 @@ impl RepoStatus {
             self.behind = caps.get(2).unwrap().as_str().parse::<usize>().ok();
         }
     }
-
-    fn set_ahead_behind_for_each_ref(&mut self, mut s: &str) {
-        if s == " " || s.ends_with(" [gone]") {
-            self.ahead = None;
-            self.behind = None;
-            return;
-        }
-
-        s = s
-            .split_once(' ')
-            .unwrap()
-            .1
-            .trim_matches(|c| c == '[' || c == ']');
-
-        for pair in s.split(',') {
-            let mut tokens = pair.trim().splitn(2, ' ');
-            if let (Some(name), Some(number)) = (tokens.next(), tokens.next()) {
-                let storage = match name {
-                    "ahead" => &mut self.ahead,
-                    "behind" => &mut self.behind,
-                    _ => return,
-                };
-                *storage = number.parse().ok();
-            }
-        }
-        for field in [&mut self.ahead, &mut self.behind] {
-            if field.is_none() {
-                *field = Some(0);
-            }
-        }
-    }
-}
-
-fn format_text<F>(
-    format_str: &str,
-    config_path: &str,
-    context: &Context,
-    mapper: F,
-) -> Option<Vec<Segment>>
-where
-    F: Fn(&str) -> Option<String> + Send + Sync,
-{
-    if let Ok(formatter) = StringFormatter::new(format_str) {
-        formatter
-            .map(|variable| mapper(variable).map(Ok))
-            .parse(None, Some(context))
-            .ok()
-    } else {
-        log::warn!("Error parsing format string `{}`", &config_path);
-        None
-    }
-}
-
-fn format_count(
-    format_str: &str,
-    config_path: &str,
-    context: &Context,
-    count: usize,
-) -> Option<Vec<Segment>> {
-    if count == 0 {
-        return None;
-    }
-
-    format_text(
-        format_str,
-        config_path,
-        context,
-        |variable| match variable {
-            "count" => Some(count.to_string()),
-            _ => None,
-        },
-    )
-}
-
-fn format_symbol(format_str: &str, config_path: &str, context: &Context) -> Option<Vec<Segment>> {
-    format_text(format_str, config_path, context, |_variable| None)
 }
 
 #[cfg(target_os = "linux")]
@@ -901,12 +873,12 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
 }
 
 #[cfg(not(target_os = "linux"))]
-fn git_status_wsl(_context: &Context, _conf: &GitStatusConfig) -> Option<String> {
+const fn git_status_wsl(_context: &Context, _conf: &GitStatusConfig) -> Option<String> {
     None
 }
 
 #[cfg(test)]
-pub(crate) mod tests {
+pub mod tests {
     use crate::test::{
         BARE_GIT_PROVIDERS, COMMON_GIT_PROVIDERS, FixtureProvider, ModuleRenderer, fixture_repo,
     };
@@ -936,6 +908,110 @@ pub(crate) mod tests {
 
         assert_eq!(expected, actual);
         repo_dir.close()
+    }
+
+    #[test]
+    fn reduced_trust_falls_back_to_gix_with_upstream_tracking() -> io::Result<()> {
+        for use_git_executable in [false, true] {
+            // The shared status cache is keyed by path, so each config needs its own repo.
+            let repo_dir = fixture_repo(COMMON_GIT_PROVIDERS[0])?;
+            behind(repo_dir.path())?;
+            fs::write(repo_dir.path().join("untracked-file"), "untracked\n")?;
+
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = "$ahead_behind$untracked"
+                    behind = "behind:$count "
+                    untracked = "untracked:$count"
+                    use_git_executable = use_git_executable
+                })
+                .path(repo_dir.path())
+                .git_trust(gix::sec::Trust::Reduced)
+                .collect();
+
+            assert_eq!(actual.as_deref(), Some("behind:1 untracked:1"));
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn reduced_trust_uses_git_for_reftable_refs() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git {
+            reftable: true,
+            bare: false,
+        })?;
+        diverge(repo_dir.path())?;
+        assert!(
+            create_command("git")?
+                .args([
+                    "commit",
+                    "--allow-empty",
+                    "--no-gpg-sign",
+                    "-m",
+                    "Another commit"
+                ])
+                .current_dir(repo_dir.path())
+                .status()?
+                .success()
+        );
+        fs::write(repo_dir.path().join("untracked-file"), "untracked\n")?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                format = "$ahead_behind$untracked"
+                diverged = "ahead:$ahead_count behind:$behind_count"
+                untracked = " untracked:$count"
+                use_git_executable = false
+            })
+            .path(repo_dir.path())
+            .git_trust(gix::sec::Trust::Reduced)
+            .collect();
+        assert_eq!(actual.as_deref(), Some("ahead:2 behind:1"));
+        repo_dir.close()
+    }
+
+    #[test]
+    fn native_status_resolves_local_and_mapped_upstreams() -> io::Result<()> {
+        for (remote, tracking_ref) in [(".", "refs/heads/topic"), ("origin", "refs/tracking/topic")]
+        {
+            let repo_dir = fixture_repo(COMMON_GIT_PROVIDERS[0])?;
+            for args in [
+                ["update-ref", tracking_ref, "HEAD"].as_slice(),
+                &["config", "branch.master.remote", remote],
+                &["config", "branch.master.merge", "refs/heads/topic"],
+                &[
+                    "config",
+                    "remote.origin.fetch",
+                    "+refs/heads/*:refs/tracking/*",
+                ],
+                &[
+                    "config",
+                    "--add",
+                    "remote.origin.fetch",
+                    "^refs/heads/topic",
+                ],
+            ] {
+                assert!(
+                    create_command("git")?
+                        .args(args)
+                        .current_dir(repo_dir.path())
+                        .status()?
+                        .success()
+                );
+            }
+            behind(repo_dir.path())?;
+
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .git_trust(gix::sec::Trust::Reduced)
+                .collect();
+            assert_eq!(actual, format_output("⇣"));
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
@@ -2166,7 +2242,7 @@ pub(crate) mod tests {
         Ok(())
     }
 
-    pub(crate) fn make_sparse(repo_dir: &Path) -> io::Result<()> {
+    pub fn make_sparse(repo_dir: &Path) -> io::Result<()> {
         let sparse_dirname = "sparse-dir";
         let dir = repo_dir.join(sparse_dirname);
         std::fs::create_dir(&dir)?;

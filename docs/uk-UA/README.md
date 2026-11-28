@@ -107,7 +107,7 @@ onMounted(() => {
 
    #### PowerShell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   Додайте наступний рядок в кінець `Microsoft.PowerShell_profile.ps1`. Ви можете перевірити розташування цього файлу, звернувшись до змінної `$PROFILE` у PowerShell. Зазвичай це `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` або `~/.config/powershell/Microsoft.PowerShell_profile.ps1` у -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -149,8 +149,8 @@ onMounted(() => {
 
    #### Nushell
 
-   > [!WARNING]> This will change in the future.
-   > > Only Nushell v0.96+ is supported.
+   > [!WARNING]> Це може змінитись в майбутньому.
+   > > Підтримується лише Nushell v0.96+.
 
    Додайте наступний рядок наприкінці налаштувань Nushell (знайдіть її за допомоги `$nu.config-path` в Nushell):
 
@@ -171,7 +171,7 @@ onMounted(() => {
 
    #### Cmd
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Потрібно використовувати [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) з Cmd. Додайте наступне у файл `starship.lua` і розмістіть цей файл у теці скриптів Cline:
 
    ```lua
    -- starship.lua

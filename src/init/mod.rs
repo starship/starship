@@ -210,7 +210,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
                  https://github.com/starship/starship/issues/new\n"
             );
         }
-    };
+    }
     Ok(())
 }
 

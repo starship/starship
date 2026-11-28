@@ -35,7 +35,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    if config.require_repo && context.get_repo().is_err() {
+    if config.require_repo && context.get_git_repo().is_err() {
         return None;
     }
 
@@ -99,7 +99,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
         Err(error) => {
             log::warn!("Error in module `custom.{name}`:\n{error}");
         }
-    };
+    }
     Some(module)
 }
 
@@ -126,7 +126,7 @@ fn get_config<'a>(module_name: &str, context: &'a Context<'a>) -> Option<&'a tom
         log::debug!(
             "top level format contains custom module {module_name:?}, but no configuration was provided.",
         );
-    };
+    }
     None
 }
 

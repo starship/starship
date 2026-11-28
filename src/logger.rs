@@ -21,15 +21,16 @@ pub struct StarshipLogger {
 
 /// Returns the path to the log directory.
 pub fn get_log_dir() -> PathBuf {
-    env::var_os("STARSHIP_CACHE")
-        .map(PathBuf::from)
-        .unwrap_or_else(|| {
+    env::var_os("STARSHIP_CACHE").map_or_else(
+        || {
             utils::home_dir()
                 .map(|home| home.join(".cache"))
                 .or_else(dirs::cache_dir)
                 .unwrap_or_else(std::env::temp_dir)
                 .join("starship")
-        })
+        },
+        PathBuf::from,
+    )
 }
 
 /// Deletes all log files in the log directory that were modified more than 24 hours ago.
@@ -87,7 +88,7 @@ impl Default for StarshipLogger {
 
         if let Err(err) = fs::create_dir_all(&log_dir) {
             eprintln!("Unable to create log dir {log_dir:?}: {err:?}!");
-        };
+        }
         let session_log_file = log_dir.join(format!(
             "session_{}.log",
             env::var("STARSHIP_SESSION_KEY").unwrap_or_default()
@@ -95,7 +96,7 @@ impl Default for StarshipLogger {
 
         Self {
             log_file_content: RwLock::new(
-                fs::read_to_string(&session_log_file)
+                utils::read_file(&session_log_file)
                     .unwrap_or_default()
                     .lines()
                     .map(std::string::ToString::to_string)
@@ -103,30 +104,30 @@ impl Default for StarshipLogger {
             ),
             log_file: OnceLock::new(),
             log_file_path: session_log_file,
-            log_level: env::var("STARSHIP_LOG")
-                .map(|level| match level.to_ascii_lowercase().as_str() {
+            log_level: env::var("STARSHIP_LOG").map_or(Level::Warn, |level| {
+                match level.to_ascii_lowercase().as_str() {
                     "trace" => Level::Trace,
                     "debug" => Level::Debug,
                     "info" => Level::Info,
                     "warn" => Level::Warn,
                     "error" => Level::Error,
                     _ => Level::Warn,
-                })
-                .unwrap_or_else(|_| Level::Warn),
+                }
+            }),
         }
     }
 }
 
 impl StarshipLogger {
     /// Override the minimum log level
-    pub fn set_log_level(&mut self, level: log::Level) {
+    pub const fn set_log_level(&mut self, level: log::Level) {
         self.log_level = level;
     }
 
     /// Override the log level path
     /// This won't change anything if a log file was already opened
     pub fn set_log_file_path(&mut self, path: PathBuf) {
-        let contents = fs::read_to_string(&path)
+        let contents = utils::read_file(&path)
             .unwrap_or_default()
             .lines()
             .map(std::string::ToString::to_string)
@@ -163,8 +164,7 @@ impl log::Log for StarshipLogger {
                 && self
                     .log_file_content
                     .read()
-                    .map(|c| c.contains(to_print.as_str()))
-                    .unwrap_or(false)
+                    .is_ok_and(|c| c.contains(to_print.as_str()))
         };
 
         if is_duplicate {
@@ -194,13 +194,13 @@ impl log::Log for StarshipLogger {
             let mut file_handle = match log_file.lock() {
                 Ok(file_handle) => file_handle,
                 Err(err) => {
-                    eprintln!("Log file writer mutex was poisoned! {err:?}",);
+                    eprintln!("Log file writer mutex was poisoned! {err:?}");
                     return;
                 }
             };
             if let Err(err) = writeln!(file_handle, "{to_print}") {
-                eprintln!("Unable to write to session log file {err:?}!",);
-            };
+                eprintln!("Unable to write to session log file {err:?}!");
+            }
         }
 
         // Print messages to stderr

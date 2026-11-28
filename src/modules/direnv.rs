@@ -108,12 +108,12 @@ impl DirenvState {
 
         for line in s.lines() {
             if let Some(path) = line.strip_prefix("Found RC path") {
-                rc_path = PathBuf::from_str(path.trim()).map_err(|e| Cow::from(e.to_string()))?
+                rc_path = PathBuf::from(path.trim())
             } else if let Some(value) = line.strip_prefix("Found RC allowed") {
                 allowed = Some(AllowStatus::from_str(value.trim())?);
             } else if line.contains("No .envrc or .env loaded") {
                 loaded = false;
-            };
+            }
         }
 
         if rc_path.as_os_str().is_empty() || allowed.is_none() {

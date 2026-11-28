@@ -65,7 +65,7 @@ impl<'de> ValueDeserializer<'de> {
         }
     }
 
-    fn with_info(
+    const fn with_info(
         value: ValueRef<'de>,
         info: Option<StructInfo>,
         current_key: &'de str,
@@ -79,7 +79,7 @@ impl<'de> ValueDeserializer<'de> {
         }
     }
 
-    pub fn with_allow_unknown_keys(self) -> Self {
+    pub const fn with_allow_unknown_keys(self) -> Self {
         Self {
             error_on_ignored: false,
             ..self
@@ -94,7 +94,7 @@ impl ValueDeserializer<'_> {
             (Some(key), Some(StructInfo { name, .. })) => {
                 // Prettify name of struct
                 let display_name = name.strip_suffix("Config").unwrap_or(name);
-                ValueError::custom(format!("Error in '{display_name}' at '{key}': {msg}",))
+                ValueError::custom(format!("Error in '{display_name}' at '{key}': {msg}"))
             }
             // Handling other cases leads to duplicates in the error message.
             _ => ValueError::custom(msg),
@@ -103,7 +103,7 @@ impl ValueDeserializer<'_> {
 
     /// Return the fitting `de::Unexpected` type description for the given value.
     /// For use with `Error::invalid_type`.
-    fn serde_unexpected(&self) -> de::Unexpected<'_> {
+    const fn serde_unexpected(&self) -> de::Unexpected<'_> {
         match self.value {
             ValueRef::Boolean(b) => de::Unexpected::Bool(b),
             ValueRef::Integer(i) => de::Unexpected::Signed(i),

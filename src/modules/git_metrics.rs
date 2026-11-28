@@ -8,7 +8,6 @@ use regex::Regex;
 
 use super::Context;
 use crate::configs::git_status::GitStatusConfig;
-use crate::modules::git_status::uses_reftables;
 use crate::{
     config::ModuleConfig, configs::git_metrics::GitMetricsConfig, formatter::StringFormatter,
     formatter::string_formatter::StringFormatterError, module::Module,
@@ -26,17 +25,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let repo = context.get_repo().ok()?;
+    let repo = context.get_git_repo().ok()?;
     let gix_repo = repo.open();
     gix_repo.workdir()?;
     let status_module = context.new_module("git_status");
     let status_config = GitStatusConfig::try_load(status_module.config);
-    // TODO: remove this special case once `gitoxide` can handle sparse indices for tree-index comparisons.
-    let stats = if repo.fs_monitor_value_is_true
-        || status_config.use_git_executable
-        || uses_reftables(&repo.repo.to_thread_local())
-        || gix_repo.index_or_empty().ok()?.is_sparse()
-    {
+    let stats = if repo.use_git_executable(status_config.use_git_executable)? {
         let mut git_args = vec!["diff", "--shortstat"];
         if config.ignore_submodules {
             git_args.push("--ignore-submodules");
@@ -59,8 +53,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             }
         }
         let status = super::git_status::get_static_repo_status(context, repo, &status_config)?;
-        let gix_repo = gix_repo.with_object_memory();
-        gix_repo.write_blob([]).ok()?; /* create empty blob */
         let tree_index_cache = prevent_external_diff(
             gix_repo
                 .diff_resource_cache(
@@ -84,12 +76,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .changes
             .par_iter()
             .map_init(
-                {
-                    let repo = gix_repo.into_sync();
-                    move || {
-                        let repo = repo.to_thread_local();
-                        (repo, tree_index_cache.clone(), index_worktree_cache.clone())
-                    }
+                || {
+                    (
+                        repo.open(),
+                        tree_index_cache.clone(),
+                        index_worktree_cache.clone(),
+                    )
                 },
                 |(repo, tree_index_cache, index_worktree_cache), change| {
                     use gix::status;
@@ -106,7 +98,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                 } => {
                                     diff.added += count_lines(
                                         location,
-                                        id.as_ref().into(),
+                                        Some(id.as_ref().into()),
                                         *entry_mode,
                                         tree_index_cache,
                                         repo,
@@ -120,7 +112,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                 } => {
                                     diff.deleted += count_lines(
                                         location,
-                                        id.as_ref().into(),
+                                        Some(id.as_ref().into()),
                                         *entry_mode,
                                         tree_index_cache,
                                         repo,
@@ -137,10 +129,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                     let location = location.as_ref();
                                     diff.add(diff_two_opt(
                                         location,
-                                        previous_id.as_ref().to_owned(),
+                                        Some(previous_id.as_ref().to_owned()),
                                         *previous_entry_mode,
                                         location,
-                                        id.as_ref().to_owned(),
+                                        Some(id.as_ref().to_owned()),
                                         *entry_mode,
                                         tree_index_cache,
                                         repo,
@@ -158,8 +150,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                 } => {
                                     if *copy {
                                         diff.added += count_lines(
-                                            location,
-                                            id.as_ref().into(),
+                                            location.as_ref(),
+                                            Some(id.as_ref().into()),
                                             *entry_mode,
                                             tree_index_cache,
                                             repo,
@@ -167,10 +159,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                     } else {
                                         diff.add(diff_two_opt(
                                             source_location.as_ref(),
-                                            source_id.as_ref().to_owned(),
+                                            Some(source_id.as_ref().to_owned()),
                                             *source_entry_mode,
                                             location,
-                                            id.as_ref().to_owned(),
+                                            Some(id.as_ref().to_owned()),
                                             *entry_mode,
                                             tree_index_cache,
                                             repo,
@@ -191,7 +183,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                 } => {
                                     diff.deleted += count_lines(
                                         rela_path.as_bstr(),
-                                        entry.id,
+                                        Some(entry.id),
                                         entry.mode,
                                         tree_index_cache,
                                         repo,
@@ -210,10 +202,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                     let location = rela_path.as_bstr();
                                     diff.add(diff_two_opt(
                                         location,
-                                        entry.id,
+                                        Some(entry.id),
                                         entry.mode,
                                         location,
-                                        repo.object_hash().null(),
+                                        None,
                                         entry.mode,
                                         index_worktree_cache,
                                         repo,
@@ -227,7 +219,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                 } => {
                                     diff.added += count_lines(
                                         rela_path.as_bstr(),
-                                        repo.object_hash().null(),
+                                        None,
                                         entry.mode,
                                         index_worktree_cache,
                                         repo,
@@ -280,7 +272,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn prevent_external_diff(mut cache: gix::diff::blob::Platform) -> gix::diff::blob::Platform {
+const fn prevent_external_diff(mut cache: gix::diff::blob::Platform) -> gix::diff::blob::Platform {
     cache.options.skip_internal_diff_if_external_is_configured = false;
     cache
 }
@@ -288,10 +280,10 @@ fn prevent_external_diff(mut cache: gix::diff::blob::Platform) -> gix::diff::blo
 #[allow(clippy::too_many_arguments)]
 fn diff_two_opt(
     lhs_location: &BStr,
-    lhs_id: gix::ObjectId,
+    lhs_id: Option<gix::ObjectId>,
     lhs_kind: gix::index::entry::Mode,
     rhs_location: &BStr,
-    rhs_id: gix::ObjectId,
+    rhs_id: Option<gix::ObjectId>,
     rhs_kind: gix::index::entry::Mode,
     cache: &mut gix::diff::blob::Platform,
     find: &impl gix::objs::FindObjectOrHeader,
@@ -322,22 +314,13 @@ fn diff_two_opt(
 
 fn count_lines(
     location: &BStr,
-    id: gix::ObjectId,
+    id: Option<gix::ObjectId>,
     kind: gix::index::entry::Mode,
     cache: &mut gix::diff::blob::Platform,
     find: &impl gix::objs::FindObjectOrHeader,
 ) -> u32 {
-    diff_two_opt(
-        location,
-        id.kind().null(),
-        kind,
-        location,
-        id,
-        kind,
-        cache,
-        find,
-    )
-    .map_or(0, |diff| diff.insertions)
+    diff_two_opt(location, None, kind, location, id, kind, cache, find)
+        .map_or(0, |diff| diff.insertions)
 }
 
 /// Represents the parsed output from a git diff.
@@ -413,6 +396,34 @@ mod tests {
     }
 
     #[test]
+    fn reduced_trust_falls_back_to_gix_for_metrics() -> io::Result<()> {
+        for use_git_executable in [false, true] {
+            let repo_dir = create_repo_with_commit(COMMON_GIT_PROVIDERS[0])?;
+            write_file(
+                repo_dir.path().join("the_file"),
+                "First Line\nSecond Line\nThird Line\nAdded line\n",
+            )?;
+
+            let actual = ModuleRenderer::new("git_metrics")
+                .config(toml::toml! {
+                    [git_metrics]
+                    disabled = false
+                    format = "+$added/-$deleted"
+                    only_nonzero_diffs = false
+                    [git_status]
+                    use_git_executable = use_git_executable
+                })
+                .path(repo_dir.path())
+                .git_trust(gix::sec::Trust::Reduced)
+                .collect();
+
+            assert_eq!(actual.as_deref(), Some("+1/-0"));
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
     fn shows_added_lines() -> io::Result<()> {
         for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = create_repo_with_commit(mode)?;
@@ -425,7 +436,7 @@ mod tests {
 
             let actual = render_metrics(path);
 
-            let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
@@ -496,7 +507,7 @@ mod tests {
 
             let actual = render_metrics(path);
 
-            let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
@@ -682,7 +693,7 @@ mod tests {
                 .path(path)
                 .collect();
 
-            let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
 
             assert_eq!(expected, actual);
             repo_dir.close()?;

@@ -1,4 +1,5 @@
 use super::{Context, Detected, Module, ModuleConfig};
+#[cfg(not(test))]
 use gix::bstr::ByteSlice;
 
 use crate::configs::username::UsernameConfig;
@@ -55,7 +56,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let show_username = config.show_always
         || is_root // [1] Always show for root user
         || !is_login_user(context, &username) // [2] Show if current user != logged-in user
-        || is_ssh_session(context) // [3] Show for SSH sessions
+        || context.is_ssh_session() // [3] Show for SSH sessions
         || has_detected_env_var == Detected::Yes // [4] Show if env var detection matches
         || (config.show_git_user && is_git_repo); // [5] Show if in Git repo and feature enabled
 
@@ -180,18 +181,13 @@ fn is_root_user() -> bool {
 }
 
 #[cfg(test)]
-fn is_root_user() -> bool {
+const fn is_root_user() -> bool {
     false
 }
 
 #[cfg(all(not(target_os = "windows"), not(test)))]
 fn is_root_user() -> bool {
     nix::unistd::geteuid() == nix::unistd::ROOT
-}
-
-fn is_ssh_session(context: &Context) -> bool {
-    let ssh_env = ["SSH_CONNECTION", "SSH_CLIENT", "SSH_TTY"];
-    ssh_env.iter().any(|env| context.get_env_os(env).is_some())
 }
 
 #[cfg(test)]

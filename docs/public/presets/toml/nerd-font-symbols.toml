@@ -12,6 +12,7 @@ charging_symbol = "󰂄 "
 discharging_symbol = "󰂃 "
 unknown_symbol = "󰂑 "
 empty_symbol = "󰂎 "
+paused_symbol = "󱞜 "
 
 [buf]
 symbol = " "
@@ -115,6 +116,9 @@ ssh_symbol = " "
 [java]
 symbol = " "
 
+[jj_bookmark]
+symbol = " "
+
 [julia]
 symbol = " "
 
@@ -177,6 +181,7 @@ Android = " "
 AOSC = " "
 Arch = " "
 Artix = " "
+Bazzite = " "
 Bluefin = " "
 CachyOS = " "
 CentOS = " "
@@ -190,10 +195,12 @@ FreeBSD = " "
 Garuda = " "
 Gentoo = " "
 HardenedBSD = "󰞌 "
+Hurd = " "
 Illumos = " "
 InstantOS = " "
 Ios = "󰀷 "
 Kali = " "
+KDENeon = " "
 Linux = " "
 Mabox = " "
 Macos = " "

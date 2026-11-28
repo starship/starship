@@ -70,11 +70,8 @@ fn get_aliased_name<'a>(
     let re = match regex::Regex::new(&format!("^{pattern}$")) {
         Ok(re) => re,
         Err(error) => {
-            log::warn!(
-                "Could not compile regular expression `{}`:\n{}",
-                &format!("^{pattern}$"),
-                error
-            );
+            let str_pattern = format!("^{pattern}$");
+            log::warn!("Could not compile regular expression `{str_pattern}`:\n{error}");
             return None;
         }
     };
@@ -165,7 +162,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         })
     });
 
-    if !is_kube_project.or(have_env_vars).unwrap_or(true) {
+    // A match from either the directory scan or the env vars is enough to show the module.
+    // With neither configured, it is always shown.
+    let show = match (is_kube_project, have_env_vars) {
+        (None, None) => true,
+        (scan, env) => scan.unwrap_or(false) || env.unwrap_or(false),
+    };
+    if !show {
         return None;
     }
 
@@ -195,9 +198,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }).unwrap_or_else(|| {
             // TODO: figure out if returning is more sensible. But currently we have tests depending on this
             log::warn!(
-                "Invalid KUBECONFIG: identified current-context `{}`, but couldn't find the context in any config file(s): `{}`.\n",
-                &current_kube_ctx_name,
-                &kube_cfg
+                "Invalid KUBECONFIG: identified current-context `{current_kube_ctx_name}`, but couldn't find the context in any config file(s): `{kube_cfg}`.\n"
                 );
             KubeCtxComponents::default()
         });
@@ -334,11 +335,7 @@ mod deprecated {
         match alias {
             Some(alias) => {
                 log::warn!(
-                    "Usage of '{}_aliases' is deprecated and will be removed in 2.0; Use 'contexts' with '{}_alias' instead. (`{}` -> `{}`)",
-                    &name,
-                    &name,
-                    &current_value,
-                    &alias
+                    "Usage of '{name}_aliases' is deprecated and will be removed in 2.0; Use 'contexts' with '{name}_alias' instead. (`{current_value}` -> `{alias}`)"
                 );
                 Some(alias)
             }
@@ -515,6 +512,21 @@ users: []
             })
             .collect();
 
+        // the env var alone is enough when a scan config is also set but doesn't match
+        let actual_env_var_with_scan_config = ModuleRenderer::new("kubernetes")
+            .path(empty_dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .env("TEST_K8S_ENV", "foo")
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                detect_files = ["k8s.ext"]
+                detect_extensions = ["k8s"]
+                detect_folders = ["k8s_folder"]
+                detect_env_vars = ["TEST_K8S_ENV"]
+            })
+            .collect();
+
         let actual_none = ModuleRenderer::new("kubernetes")
             .path(empty_dir.path())
             .env("KUBECONFIG", filename.to_string_lossy().as_ref())
@@ -534,6 +546,7 @@ users: []
         assert_eq!(expected, actual_ext);
         assert_eq!(expected, actual_dir);
         assert_eq!(expected, actual_env_var);
+        assert_eq!(expected, actual_env_var_with_scan_config);
         assert_eq!(None, actual_none);
 
         dir.close()

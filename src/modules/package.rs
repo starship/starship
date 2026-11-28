@@ -9,8 +9,8 @@ use quick_xml::Reader as QXReader;
 use quick_xml::events::Event as QXEvent;
 use regex::Regex;
 use serde_json as json;
+#[cfg(test)]
 use std::fs;
-use std::io::Read;
 use versions::Version;
 
 /// Creates a module with the current package version
@@ -96,7 +96,7 @@ fn get_poetry_version(pyproject: &toml::Table) -> Option<String> {
         .get("poetry")?
         .get("version")?
         .as_str()
-        .map(|s| s.to_owned())
+        .map(std::borrow::ToOwned::to_owned)
 }
 
 fn parse_file_version_for_hatchling(context: &Context, path: &str) -> Option<String> {
@@ -144,7 +144,7 @@ fn get_pep621_static_version(pyproject: &toml::Table) -> Option<String> {
         .get("project")?
         .get("version")?
         .as_str()
-        .map(|s| s.to_owned())
+        .map(std::borrow::ToOwned::to_owned)
 }
 
 fn get_pep621_version(context: &Context, pyproject: &toml::Table) -> Option<String> {
@@ -180,7 +180,9 @@ fn get_gradle_version(context: &Context, config: &PackageConfig) -> Option<Strin
             let caps = re.captures(&contents)?;
             format_version(&caps["version"], config.version_format)
         }).or_else(|| {
-            let build_file_contents = context.read_file_from_pwd("build.gradle")?;
+            let build_file_contents = context
+                .read_file_from_pwd("build.gradle")
+                .or_else(|| context.read_file_from_pwd("build.gradle.kts"))?;
             let re = Regex::new(r#"(?m)^version( |\s*=\s*)['"](?P<version>[^'"]+)['"]$"#).unwrap(); /*dark magic*/
             let caps = re.captures(&build_file_contents)?;
             format_version(&caps["version"], config.version_format)
@@ -231,7 +233,7 @@ fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String
     loop {
         match reader.read_event_into(&mut buf) {
             Ok(QXEvent::Start(ref e)) => {
-                in_ver = depth == 1 && e.name().as_ref() == b"version";
+                in_ver = depth == 1 && e.name().as_ref() == "version";
                 depth += 1;
             }
             Ok(QXEvent::End(_)) => {
@@ -239,12 +241,13 @@ fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String
                 depth -= 1;
             }
             Ok(QXEvent::Text(t)) if in_ver => {
-                let ver = t.decode().ok().map(std::borrow::Cow::into_owned);
-                return match ver {
-                    // Ignore version which is just a property reference
-                    Some(ref v) if !v.starts_with('$') => format_version(v, config.version_format),
-                    _ => None,
-                };
+                // Ignore version which is just a property reference
+                if !t.as_ref().starts_with('$') {
+                    let ver = t.as_ref();
+                    return format_version(ver, config.version_format);
+                }
+
+                return None;
             }
             Ok(QXEvent::Eof) => break,
             Ok(_) => (),
@@ -294,43 +297,39 @@ fn get_sbt_version(context: &Context, config: &PackageConfig) -> Option<String> 
 }
 
 fn get_cargo_version(context: &Context, config: &PackageConfig) -> Option<String> {
-    let mut file_contents = context.read_file_from_pwd("Cargo.toml")?;
+    let file_contents = context.read_file_from_pwd("Cargo.toml")?;
 
-    let mut cargo_toml: toml::Table = toml::from_str(&file_contents).ok()?;
+    let cargo_toml: toml::Table = toml::from_str(&file_contents).ok()?;
     let cargo_version = cargo_toml.get("package").and_then(|p| p.get("version"));
-    let raw_version = if let Some(v) = cargo_version.and_then(toml::Value::as_str) {
+    let ancestor_cargo_toml;
+    let raw_version = if let Some(version) = cargo_version.and_then(toml::Value::as_str) {
         // regular version string
-        v
+        version
     } else if cargo_version
-        .and_then(|v| v.get("workspace"))
+        .and_then(|version| version.get("workspace"))
         .and_then(toml::Value::as_bool)
         .unwrap_or_default()
     {
         // workspace version string (`package.version.workspace = true`)
         // need to read the Cargo.toml file from the workspace root
-        let mut version = None;
-        if let Some(workspace) = cargo_toml.get("workspace") {
-            // current Cargo.toml file is also the workspace root
-            version = workspace.get("package")?.get("version")?.as_str();
+        let workspace_toml = if cargo_toml.contains_key("workspace") {
+            &cargo_toml
         } else {
-            // discover the workspace root
-            for path in context.current_dir.ancestors().skip(1) {
-                // Assume the workspace root is the first ancestor that contains a Cargo.toml file
-                if let Ok(mut file) = fs::File::open(path.join("Cargo.toml")) {
-                    file_contents.clear(); // clear the buffer for reading new Cargo.toml
-                    file.read_to_string(&mut file_contents).ok()?;
-                    cargo_toml = toml::from_str(&file_contents).ok()?;
-                    // Read workspace.package.version
-                    version = cargo_toml
-                        .get("workspace")?
-                        .get("package")?
-                        .get("version")?
-                        .as_str();
-                    break;
-                }
-            }
-        }
-        version?
+            // Assume the workspace root is the first ancestor with a readable Cargo.toml.
+            let workspace_contents = context
+                .current_dir
+                .ancestors()
+                .skip(1)
+                .find_map(|path| read_file(path.join("Cargo.toml")).ok())?;
+            ancestor_cargo_toml = toml::from_str(&workspace_contents).ok()?;
+            &ancestor_cargo_toml
+        };
+
+        workspace_toml
+            .get("workspace")?
+            .get("package")?
+            .get("version")?
+            .as_str()?
     } else {
         // This might be a workspace file
         cargo_toml
@@ -402,6 +401,14 @@ fn get_galaxy_version(context: &Context, config: &PackageConfig) -> Option<Strin
     format_version(raw_version, config.version_format)
 }
 
+fn get_zig_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = context.read_file_from_pwd("build.zig.zon")?;
+    let re = Regex::new(r#"(?m)^\s*\.version\s*=\s*"(?P<version>[^"]+)""#).unwrap();
+    let caps = re.captures(&file_contents)?;
+
+    format_version(&caps["version"], config.version_format)
+}
+
 fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let package_version_fn: Vec<fn(&Context, &PackageConfig) -> Option<String>> = vec![
         get_cargo_version,
@@ -425,6 +432,7 @@ fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
         get_dart_pub_version,
         get_rlang_version,
         get_galaxy_version,
+        get_zig_version,
     ];
 
     package_version_fn.iter().find_map(|f| f(context, config))
@@ -1204,6 +1212,26 @@ java {
         expect_output(&project_dir, None, None);
         project_dir.close()
     }
+
+    #[test]
+    fn test_extract_gradle_version_kotlin_dsl() -> io::Result<()> {
+        let config_name = "build.gradle.kts";
+        let config_content = "plugins {
+    id(\"java\")
+    id(\"test.plugin\") version \"0.2.0\"
+}
+version = \"0.1.0\"
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}";
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
     #[test]
     fn test_extract_grade_version_from_properties() -> io::Result<()> {
         let config_name = "gradle.properties";
@@ -1662,6 +1690,39 @@ Title: Starship
         fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, Some("v1.2.3"), None);
 
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_zig_version() -> io::Result<()> {
+        let config_name = "build.zig.zon";
+        let config_content = r#".{
+    .name = .starship,
+    .version = "1.0.0",
+    .fingerprint = 0xc23d1996901833d9, // Changing this has security and trust implications.
+    .minimum_zig_version = "0.16.0",
+    .dependencies = .{},
+    .paths = .{ "build.zig", "build.zig.zon", "src" },
+}"#;
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, Some("v1.0.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_zig_version_without_version() -> io::Result<()> {
+        let config_name = "build.zig.zon";
+        let config_content = r#".{
+    .name = .starship,
+    .fingerprint = 0xc23d1996901833d9,
+    .paths = .{ "build.zig" },
+}"#;
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 

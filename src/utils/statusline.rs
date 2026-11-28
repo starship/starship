@@ -20,6 +20,13 @@ pub struct ClaudeCodeData {
     pub context_window: ContextWindow,
     pub cost: Option<CostInfo>,
     pub workspace: Option<Workspace>,
+    pub effort: Option<EffortInfo>,
+}
+
+#[derive(Deserialize, Debug, Clone, Default)]
+#[serde(default)]
+pub struct EffortInfo {
+    pub level: String,
 }
 
 #[derive(Deserialize, Debug, Clone, Default)]
