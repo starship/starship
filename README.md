@@ -200,30 +200,18 @@ Install Starship using any of the following package managers:
 
 </details>
 
-#### Zsh plugin manager (Zi)
+<details>
+<summary>Zsh plugin manager (Zi)</summary>
 
-If you use [Zi](https://github.com/z-shell/zi), you can install Starship directly from the latest
-GitHub release and initialize it in one step. Add the following to `~/.zshrc` after Zi itself is
-loaded, and skip the `eval "$(starship init zsh)"` line in Step 2:
+Install Starship with [Zi](https://github.com/z-shell/zi). Add one of the following to `~/.zshrc`
+after Zi itself is loaded, and skip the `eval "$(starship init zsh)"` line in Step 2:
 
-```sh
-zi ice as'program' from'gh-r' pick'starship' \
-  atclone'./starship completions zsh > _starship' \
-  atpull'%atclone' blockf \
-  atload'eval "$(starship init zsh)"'
-zi light starship/starship
-```
+| Method                       | Instructions |
+| ---------------------------- | ------------ |
+| **[GitHub release]**         | `zi ice as'program' from'gh-r' pick'starship' atclone'./starship completions zsh > _starship' atpull'%atclone' blockf atload'eval "$(starship init zsh)"'` <br /> `zi light starship/starship` |
+| [Source build (Rust/Cargo)]  | `zi ice as'program' pick'starship' src'init.zsh' blockf atclone'cargo build --release --locked && cp target/release/starship . && ./starship init zsh > init.zsh && ./starship completions zsh > _starship' atpull'%atclone'` <br /> `zi light starship/starship` |
 
-The recipe above needs a GitHub release with pre-built binaries. For a repository that has no
-release assets (for example, a fork), build from source instead. This requires Rust/Cargo, and the
-first load compiles Starship:
-
-```sh
-zi ice as'program' pick'starship' src'init.zsh' blockf \
-  atclone'cargo build --release --locked && cp target/release/starship . && ./starship init zsh > init.zsh && ./starship completions zsh > _starship' \
-  atpull'%atclone'
-zi light starship/starship
-```
+</details>
 
 ### Step 2. Set up your shell to use Starship
 
