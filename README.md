@@ -216,6 +216,20 @@ zi light starship/starship
 
 Make sure `compinit` runs after this block so the generated `_starship` completion is picked up.
 
+The recipe above needs a GitHub release with pre-built binaries. For a repository that has no
+release assets (for example, a fork), build from source instead. This requires Rust/Cargo, and the
+first load compiles Starship:
+
+```sh
+zi ice as'program' pick'starship' src'init.zsh' blockf \
+  atclone'cargo build --release --locked && cp target/release/starship . && ./starship init zsh > init.zsh && ./starship completions zsh > _starship' \
+  atpull'%atclone'
+zi light <owner>/starship
+```
+
+Replace `<owner>` with the repository owner. The generated `init.zsh` resolves the binary next to
+the sourced file or on `PATH`, so it keeps working after updates.
+
 ### Step 2. Set up your shell to use Starship
 
 Configure your shell to initialize starship. Select yours from the list below:
