@@ -3048,7 +3048,7 @@ detect_files = ['k8s']
 
 #### Kubernetes Context specific config
 
-The `contexts` configuration option is used to customise what the current Kubernetes context name looks
+The `contexts` configuration option is used to customize what the current Kubernetes context name looks
 like (style and symbol) if the name matches the defined regular expression.
 
 ```toml
