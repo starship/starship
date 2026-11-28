@@ -1,3 +1,4 @@
+use super::utils::format;
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::nix_shell::NixShellConfig;
@@ -71,22 +72,32 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         NixShellType::Unknown => config.unknown_msg,
     };
 
+    let map_variable = |variable: &str| match variable {
+        "name" => context.get_env("name"),
+        "level" => context.get_env("NIX_SHELL_LEVEL"),
+        _ => None,
+    };
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
                 "symbol" => Some(config.symbol),
-                "state" => Some(shell_type_format),
+                _ => None,
+            })
+            .map_variables_to_segments(|variable| match variable {
+                "state" => Some(format::styled(
+                    shell_type_format,
+                    config.style,
+                    context,
+                    map_variable,
+                )),
                 _ => None,
             })
             .map_style(|variable| match variable {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "name" => context.get_env("name").map(Ok),
-                "level" => context.get_env("NIX_SHELL_LEVEL").map(Ok),
-                _ => None,
-            })
+            .map(|variable| map_variable(variable).map(Ok))
             .parse(None, Some(context))
     });
 
@@ -105,6 +116,43 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod tests {
     use crate::test::ModuleRenderer;
     use nu_ansi_term::Color;
+
+    #[test]
+    fn conditional_state() {
+        for (state, expected) in [
+            ("pure", Some("pure ".to_owned())),
+            ("", None),
+            (
+                "[$name]($style)",
+                Some(format!("{} ", Color::Red.bold().paint("dev"))),
+            ),
+        ] {
+            let actual = ModuleRenderer::new("nix_shell")
+                .env("IN_NIX_SHELL", "pure")
+                .env("name", "dev")
+                .config(toml::toml! {
+                    [nix_shell]
+                    pure_msg = state
+                    format = "($state )"
+                    style = "bold red"
+                })
+                .collect();
+            assert_eq!(expected, actual, "state: {state}");
+        }
+    }
+
+    #[test]
+    fn conditional_decorative_symbol_without_name() {
+        let actual = ModuleRenderer::new("nix_shell")
+            .env("IN_NIX_SHELL", "pure")
+            .config(toml::toml! {
+                [nix_shell]
+                symbol = "nix"
+                format = "($symbol$name )"
+            })
+            .collect();
+        assert_eq!(None, actual);
+    }
 
     #[test]
     fn no_env_variables() {

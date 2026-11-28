@@ -1,6 +1,7 @@
 use gix::state::InProgress;
 use std::path::PathBuf;
 
+use super::utils::format;
 use super::{Context, Module, ModuleConfig};
 use crate::configs::git_state::GitStateConfig;
 use crate::context::GitRepo;
@@ -18,21 +19,28 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let state_description = get_state_description(repo, &config)?;
 
+    let map_variable = |variable: &str| match variable {
+        "progress_current" => state_description.current.clone(),
+        "progress_total" => state_description.total.clone(),
+        _ => None,
+    };
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
-            .map_meta(|variable, _| match variable {
-                "state" => Some(state_description.label),
+            .map_variables_to_segments(|variable| match variable {
+                "state" => Some(format::styled(
+                    state_description.label,
+                    config.style,
+                    context,
+                    map_variable,
+                )),
                 _ => None,
             })
             .map_style(|variable| match variable {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "progress_current" => state_description.current.as_ref().map(Ok),
-                "progress_total" => state_description.total.as_ref().map(Ok),
-                _ => None,
-            })
+            .map(|variable| map_variable(variable).map(Ok))
             .parse(None, Some(context))
     });
 
@@ -150,6 +158,36 @@ mod tests {
     use crate::utils::{create_command, write_file};
 
     #[test]
+    fn conditional_state() -> io::Result<()> {
+        let repo_dir = tempfile::tempdir()?;
+        let path = repo_dir.path();
+        run_git_cmd(["init"], Some(path), true)?;
+        write_file(
+            path.join(".git/MERGE_HEAD"),
+            "0123456789012345678901234567890123456789\n",
+        )?;
+        for (state, expected) in [
+            ("MERGING", Some("MERGING ".to_owned())),
+            ("", None),
+            (
+                "[MERGING]($style)",
+                Some(format!("{} ", Color::Yellow.bold().paint("MERGING"))),
+            ),
+        ] {
+            let actual = ModuleRenderer::new("git_state")
+                .path(path)
+                .config(toml::toml! {
+                    [git_state]
+                    merge = state
+                    format = "($state )"
+                })
+                .collect();
+            assert_eq!(expected, actual, "state: {state}");
+        }
+        repo_dir.close()
+    }
+
+    #[test]
     fn show_nothing_on_empty_dir() -> io::Result<()> {
         let repo_dir = tempfile::tempdir()?;
 
@@ -175,6 +213,25 @@ mod tests {
         let expected = Some(format!("({}) ", Color::Yellow.bold().paint("REBASING 1/1")));
 
         assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn conditional_state_with_progress_template() -> io::Result<()> {
+        let repo_dir = create_repo_with_conflict()?;
+        run_git_cmd(["rebase", "other-branch"], Some(repo_dir.path()), false)?;
+        let actual = ModuleRenderer::new("git_state")
+            .path(repo_dir.path())
+            .config(toml::toml! {
+                [git_state]
+                rebase = "[$progress_current/$progress_total]($style)"
+                format = "($state )"
+            })
+            .collect();
+        assert_eq!(
+            Some(format!("{} ", Color::Yellow.bold().paint("1/1"))),
+            actual
+        );
         repo_dir.close()
     }
 

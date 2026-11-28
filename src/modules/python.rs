@@ -162,6 +162,22 @@ mod tests {
     use std::io::Write;
 
     #[test]
+    fn conditional_symbol_without_virtualenv() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("main.py"))?;
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .config(toml::toml! {
+                [python]
+                symbol = "Python"
+                format = "($symbol$virtualenv )"
+            })
+            .collect();
+        assert_eq!(None, actual);
+        dir.close()
+    }
+
+    #[test]
     fn test_parse_python_version() {
         assert_eq!(
             parse_python_version("Python 3.7.2"),

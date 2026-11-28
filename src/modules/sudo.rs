@@ -1,5 +1,6 @@
 use std::env;
 
+use super::utils::format;
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::sudo::SudoConfig;
@@ -32,8 +33,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
-            .map_meta(|variable, _| match variable {
-                "symbol" => Some(config.symbol),
+            .map_variables_to_segments(|variable| match variable {
+                "symbol" => Some(format::styled(config.symbol, config.style, context, |_| {
+                    None
+                })),
                 _ => None,
             })
             .map_style(|variable| match variable {
@@ -58,6 +61,38 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod tests {
     use crate::{test::ModuleRenderer, utils::CommandOutput};
     use nu_ansi_term::Color;
+
+    #[test]
+    fn conditional_cached_symbol() {
+        for (symbol, expected) in [
+            ("sudo", Some("as sudo ".to_owned())),
+            ("", None),
+            ("[]($style)", None),
+            ("[", None),
+            (
+                "[sudo]($style)",
+                Some(format!("as {} ", Color::Blue.bold().paint("sudo"))),
+            ),
+        ] {
+            let actual = ModuleRenderer::new("sudo")
+                .cmd(
+                    "sudo -Nnv",
+                    Some(CommandOutput {
+                        stdout: String::new(),
+                        stderr: String::new(),
+                    }),
+                )
+                .config(toml::toml! {
+                    [sudo]
+                    disabled = false
+                    allow_windows = true
+                    format = "(as $symbol )"
+                    symbol = symbol
+                })
+                .collect();
+            assert_eq!(expected, actual, "symbol: {symbol}");
+        }
+    }
 
     #[test]
     fn test_sudo_not_cached() {

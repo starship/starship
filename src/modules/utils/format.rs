@@ -4,7 +4,28 @@
 
 use super::super::Context;
 use crate::formatter::StringFormatter;
+use crate::formatter::string_formatter::StringFormatterError;
 use crate::segment::Segment;
+
+/// Parse a state label or indicator before mapping it to segments. Unlike a meta
+/// variable, the resulting segments count as content in conditional groups.
+pub fn styled<F>(
+    format_str: &str,
+    style: &str,
+    context: &Context,
+    mapper: F,
+) -> Result<Vec<Segment>, StringFormatterError>
+where
+    F: Fn(&str) -> Option<String> + Sync,
+{
+    StringFormatter::new(format_str)?
+        .map_style(|variable| match variable {
+            "style" => Some(Ok(style)),
+            _ => None,
+        })
+        .map(|variable| mapper(variable).map(Ok))
+        .parse(None, Some(context))
+}
 
 pub fn text<F>(
     format_str: &str,
