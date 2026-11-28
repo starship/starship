@@ -47,6 +47,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "localip",
     "shlvl",
     "singularity",
+    "upterm",
     "kubernetes",
     "nats",
     "directory",
