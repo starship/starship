@@ -75,6 +75,9 @@ format = 'via [$symbol]($style)'
 [kotlin]
 format = 'via [$symbol]($style)'
 
+[lean]
+format = 'via [$symbol]($style)'
+
 [lua]
 format = 'via [$symbol]($style)'
 
