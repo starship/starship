@@ -251,6 +251,7 @@
         "symbol": "🤖 ",
         "style": "bold blue",
         "model_aliases": {},
+        "effort_styles": {},
         "disabled": false
       }
     },
@@ -2515,6 +2516,13 @@
           "default": "bold blue"
         },
         "model_aliases": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {}
+        },
+        "effort_styles": {
           "type": "object",
           "additionalProperties": {
             "type": "string"
