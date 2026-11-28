@@ -19,7 +19,7 @@ use crate::modules;
 use crate::painted::Painted;
 use crate::segment::Segment;
 use crate::shadow;
-use crate::utils::wrap_colorseq_for_shell;
+use crate::utils::{wrap_colorseq_for_shell, wrap_widechar_for_zsh};
 
 pub struct Grapheme<'a>(pub &'a str);
 
@@ -69,6 +69,12 @@ fn test_grapheme_aware_width() {
         "\x1b]8;;https://x\x1b\\link\x1b]8;;\x1b\\\x1b]0;title\x07\x1b[38:2::1:2:3m"
             .width_graphemes()
     );
+    // ❄️ is a snowflake (U+2744) with variation selector 16 (U+FE0F): two cells wide even
+    // though the base character is narrow. 🇬🇧 is two regional indicator symbols forming one
+    // two-cell flag.
+    assert_eq!(2, "❄️".width_graphemes());
+    assert_eq!(2, "🇬🇧".width_graphemes());
+    assert_eq!(2, "a\x1b[Jb".width_graphemes());
 }
 
 #[test]
@@ -123,6 +129,32 @@ fn controls_inside_a_grapheme_preserve_its_width() {
             }
         }
     }
+}
+
+#[test]
+fn test_zsh_wide_char_glitch_sequences() -> std::io::Result<()> {
+    use crate::context::{Shell, Target};
+    use crate::test::default_context;
+
+    let dir = tempfile::tempdir()?;
+    let mut context = default_context().set_config(toml::toml! {
+        add_newline = false
+        format = "$custom"
+        [custom.emoji_test]
+        when = true
+        format = "🥟 test 🐚 ❄️"
+    });
+    context.current_dir = dir.path().to_path_buf();
+    context.shell = Shell::Zsh;
+    context.target = Target::Main;
+
+    let result = get_prompt(&context);
+
+    // The two-cell emoji get glitch sequences; the snowflake (U+2744) followed by variation
+    // selector 16 (U+FE0F) is included because its base character is only one cell wide.
+    assert_eq!(result, "%{🥟%2G%} test %{🐚%2G%} %{❄️%2G%}");
+
+    dir.close()
 }
 
 pub fn prompt(args: Properties, target: Target) {
@@ -202,7 +234,8 @@ pub fn get_prompt(context: &Context) -> String {
     // Painting collapses redundant ANSI color sequences, so apply it before modifying the ANSI
     // color sequences for this specific shell
     let shell_wrapped_output = wrap_colorseq_for_shell(painted.to_string(), context.shell);
-    write!(buf, "{shell_wrapped_output}").unwrap();
+    let wide_char_wrapped_output = wrap_widechar_for_zsh(shell_wrapped_output, context.shell);
+    write!(buf, "{wide_char_wrapped_output}").unwrap();
 
     if context.target == Target::Right {
         // right prompts generally do not allow newlines
