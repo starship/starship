@@ -72,6 +72,14 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 
 [![Screenshot of Gruvbox Rainbow preset](/presets/img/gruvbox-rainbow.png "Click to view Gruvbox Rainbow preset")](./gruvbox-rainbow)
 
+## [Cyan Ember](./cyan-ember.md)
+
+Cyan Ember is a vibrant, two-line Powerline-style preset inspired by
+[Gruvbox Rainbow](./gruvbox-rainbow.md). It combines warm brown and
+ember tones with bold cyan and turquoise accents.
+
+[![Screenshot of Cyan Ember preset](/presets/img/cyan-ember.png "Click to view Cyan Ember preset")](./cyan-ember)
+
 ## [Jetpack](./jetpack.md)
 
 This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
