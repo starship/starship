@@ -83,7 +83,6 @@ onMounted(() => {
    zi light starship/starship
    ```
 
-   Make sure `compinit` runs after this block so the generated `_starship` completion is picked up.
    If you install with Zi, skip the Zsh init snippet below.
 
    The recipe above needs a GitHub release with pre-built binaries. For a repository that has no
@@ -94,11 +93,8 @@ onMounted(() => {
    zi ice as'program' pick'starship' src'init.zsh' blockf \
      atclone'cargo build --release --locked && cp target/release/starship . && ./starship init zsh > init.zsh && ./starship completions zsh > _starship' \
      atpull'%atclone'
-   zi light <owner>/starship
+   zi light starship/starship
    ```
-
-   Replace `<owner>` with the repository owner. The generated `init.zsh` resolves the binary next to
-   the sourced file or on `PATH`, so it keeps working after updates.
 
 1. Add the init script to your shell's config file:
 
