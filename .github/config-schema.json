@@ -1711,6 +1711,21 @@
         ]
       }
     },
+    "scaleway": {
+      "$ref": "#/$defs/ScalewayConfig",
+      "default": {
+        "format": "on [$symbol($profile )($project )(\\($zone\\) )]($style)",
+        "symbol": "☁️ ",
+        "style": "purple",
+        "organization_aliases": {},
+        "project_aliases": {},
+        "region_aliases": {},
+        "zone_aliases": {},
+        "api_url_aliases": {},
+        "force_display": false,
+        "disabled": false
+      }
+    },
     "shell": {
       "$ref": "#/$defs/ShellConfig",
       "default": {
@@ -6599,6 +6614,78 @@
           "default": [
             ".metals"
           ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "ScalewayConfig": {
+      "description": "The `scaleway` module shows the current Scaleway configuration: active\nprofile, organization, project, region, zone and API URL.\n\nThe module will display when any of the following environment variables are set:\n- `SCW_ACCESS_KEY` and `SCW_SECRET_KEY`\n- `SCW_DEFAULT_ORGANIZATION_ID`\n- `SCW_DEFAULT_PROJECT_ID`\n- `SCW_DEFAULT_REGION`\n- `SCW_DEFAULT_ZONE`\n- `SCW_PROFILE`\n- `SCW_API_URL`\n\nor when one of these settings is present in a Scaleway config file, using\nthe active profile's values (following the scaleway SDK precedence:\n`$SCW_CONFIG_PATH`, `$XDG_CONFIG_HOME`, then `$HOME/.config`).",
+      "type": "object",
+      "properties": {
+        "format": {
+          "description": "The format for the module.",
+          "type": "string",
+          "default": "on [$symbol($profile )($project )(\\($zone\\) )]($style)"
+        },
+        "symbol": {
+          "description": "The symbol used before displaying the Scaleway information.",
+          "type": "string",
+          "default": "☁️ "
+        },
+        "style": {
+          "description": "The style for the module.",
+          "type": "string",
+          "default": "purple"
+        },
+        "organization_aliases": {
+          "description": "Table of aliases for organization IDs.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {}
+        },
+        "project_aliases": {
+          "description": "Table of aliases for project IDs.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {}
+        },
+        "region_aliases": {
+          "description": "Table of aliases for regions.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {}
+        },
+        "zone_aliases": {
+          "description": "Table of aliases for zones.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {}
+        },
+        "api_url_aliases": {
+          "description": "Table of aliases for API URLs.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {}
+        },
+        "force_display": {
+          "description": "If true, displays info even if no Scaleway configuration is detected.",
+          "type": "boolean",
+          "default": false
+        },
+        "disabled": {
+          "description": "Disables the `scaleway` module.",
+          "type": "boolean",
+          "default": false
         }
       },
       "additionalProperties": false

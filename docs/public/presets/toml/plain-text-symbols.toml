@@ -26,6 +26,9 @@ symbol = "aws "
 [azure]
 symbol = "az "
 
+[scaleway]
+symbol = "scw "
+
 [battery]
 full_symbol = "full "
 charging_symbol = "charging "
